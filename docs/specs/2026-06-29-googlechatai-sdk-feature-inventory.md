@@ -1708,7 +1708,7 @@ Technical choices:
 
 - TypeScript-first.
 - ESM-first package with CJS compatibility only if demand justifies it.
-- Node 20+ baseline unless a strong deployment target requires Node 18.
+- Node 22+ baseline (Node 20 reached end-of-life in April 2026 and the pnpm 11 toolchain requires 22+).
 - Fetch-compatible transport abstraction.
 - Official Google auth/client libraries underneath where practical.
 - Zod, TypeBox, or generated JSON Schema validators for runtime validation.

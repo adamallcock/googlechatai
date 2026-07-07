@@ -7,7 +7,7 @@ short and binding.
 
 ## Development Setup
 
-Prerequisites: Node.js 20+, pnpm 11+ (via corepack), Python 3.10+.
+Prerequisites: Node.js 22+, pnpm 11+ (via corepack), Python 3.10+.
 
 ```bash
 corepack pnpm install
@@ -62,7 +62,7 @@ guarantee. Tenant-specific live evidence stays in gitignored local paths.
    release-adjacent changes).
 2. Open a pull request with a clear description of behavior changes and any
    regenerated fixtures.
-3. CI runs the full gate across Node 20/22/24 × Python 3.10/3.12/3.14.
+3. CI runs the full gate across Node 22/24 × Python 3.10/3.12/3.14.
 
 By contributing, you agree that your contributions are licensed under the
 [Apache License 2.0](LICENSE), per section 5 of the license (inbound =

@@ -20,7 +20,7 @@ without making any live Google calls.
 
 ## Prerequisites
 
-- Node.js 20 or newer.
+- Node.js 22 or newer.
 - pnpm 11.9.0 or compatible.
 - Python 3.10 or newer.
 

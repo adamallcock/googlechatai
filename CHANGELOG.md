@@ -4,6 +4,18 @@ All notable changes to googlechatai are documented here. The project follows
 semantic versioning once it reaches 0.1.0; during 0.0.x, minor surface
 changes may occur between releases.
 
+## 0.0.2 — 2026-07-07
+
+- Fix Python 3.10 compatibility: the actions and events modules imported
+  the 3.11-only `datetime.UTC` alias, which made `import googlechatai`
+  fail on Python 3.10 (0.0.1 is unusable there — upgrade).
+- Adopt Google Chat discovery revision 20260705: `users.availability.get`
+  and `users.availability.patch` replace `getAvailability` and
+  `updateAvailability` in the curated snapshot; the live drift checker now
+  treats revision-only changes as informational.
+- npm package metadata: repository/homepage/bugs links and a
+  `./package.json` export for bundler tooling.
+
 ## 0.0.1 — 2026-07-07
 
 First public release, published to npm and PyPI as `googlechatai`.

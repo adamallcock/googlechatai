@@ -12,7 +12,7 @@ kept behaviorally identical through shared fixtures and a cross-language
 conformance suite.
 
 ```bash
-npm install googlechatai        # Node.js 20+
+npm install googlechatai        # Node.js 22+
 pip install googlechatai        # Python 3.10+ (stdlib only)
 ```
 
@@ -155,7 +155,7 @@ Blocked.
 ## Development
 
 ```bash
-corepack pnpm install          # Node 20+, pnpm 11+, Python 3.10+
+corepack pnpm install          # Node 22+, pnpm 11+, Python 3.10+
 corepack pnpm test             # tools + Node + Python test suites
 corepack pnpm conformance      # cross-language conformance runner
 corepack pnpm validate         # conformance + parity + static + tests + build
