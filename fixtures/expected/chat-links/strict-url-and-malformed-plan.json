@@ -1,0 +1,153 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "ready",
+  "dryRun": true,
+  "summary": "Planned 2 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 2,
+    "parsed": 2,
+    "unknown": 0,
+    "plannedRequests": 2,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 2,
+    "plainTextUrlsScanned": 3,
+    "plainTextCharsScanned": 108,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 4,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/VALID-LINK",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/VALID-LINK",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/VALID-LINK",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": "spaces/SAFE/messages/source",
+        "relationship": "self",
+        "path": [
+          "self:spaces/SAFE/messages/source"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/VALID-LINK",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-2",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/GOOD",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/GOOD",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/GOOD",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": "spaces/SAFE/messages/source",
+        "relationship": "self",
+        "path": [
+          "self:spaces/SAFE/messages/source"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/GOOD",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    }
+  ],
+  "requests": [
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/VALID-LINK",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    },
+    {
+      "candidateId": "chat-link-2",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/GOOD",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-2"
+      ]
+    }
+  ],
+  "capability": {
+    "ok": true,
+    "authMode": "user",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.spaces.readonly"
+    ],
+    "requiresAdminApproval": false,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 2 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": []
+}

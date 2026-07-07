@@ -1,0 +1,57 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T19:00:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/INVALID",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  },
+  "action": {
+    "actionMethodName": "save_settings",
+    "parameters": [
+      {
+        "key": "settingsId",
+        "value": "settings-1"
+      },
+      {
+        "key": "missingValue"
+      }
+    ]
+  },
+  "common": {
+    "invokedFunction": "save_settings",
+    "formInputs": {
+      "badDate": {
+        "dateInput": {
+          "msSinceEpoch": "not-a-number"
+        }
+      },
+      "badStrings": {
+        "stringInputs": {
+          "value": "not-an-array"
+        }
+      },
+      "customBlob": {
+        "customWidgetInput": {
+          "payload": {
+            "vendor": "future-widget",
+            "value": 7
+          }
+        }
+      }
+    }
+  }
+}

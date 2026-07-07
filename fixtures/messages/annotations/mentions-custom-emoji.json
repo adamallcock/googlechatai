@@ -1,0 +1,54 @@
+{
+  "name": "spaces/AAA/messages/ANN",
+  "text": "Hi <users/222>, ship it :party_blob:",
+  "formattedText": "Hi <users/222>, ship it :party_blob:",
+  "argumentText": "Hi <users/222>, ship it :party_blob:",
+  "createTime": "2026-06-29T18:01:00Z",
+  "sender": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "annotations": [
+    {
+      "type": "USER_MENTION",
+      "startIndex": 3,
+      "length": 11,
+      "userMention": {
+        "user": {
+          "name": "users/222",
+          "displayName": "Grace Hopper",
+          "email": "grace@example.com",
+          "type": "HUMAN"
+        },
+        "type": "MENTION"
+      }
+    },
+    {
+      "type": "CUSTOM_EMOJI",
+      "startIndex": 24,
+      "length": 12,
+      "customEmojiMetadata": {
+        "customEmoji": {
+          "name": "customEmojis/party_blob",
+          "emojiName": ":party_blob:",
+          "temporaryImageUri": "https://example.invalid/party_blob.png"
+        }
+      }
+    }
+  ],
+  "emojiReactionSummaries": [
+    {
+      "emoji": {
+        "unicode": "👍"
+      },
+      "reactionCount": 2
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/identity.schema.json",
+  "title": "Google Chat Identity",
+  "$defs": {
+    "identityOrNull": {
+      "type": ["object", "null"],
+      "required": [
+        "displayName",
+        "email",
+        "resourceName",
+        "type",
+        "accessState",
+        "ambiguityState"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "displayName": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "resourceName": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] },
+        "accessState": {
+          "type": "string",
+          "enum": ["available", "resource_only", "partial", "anonymous", "unknown"]
+        },
+        "ambiguityState": {
+          "type": "string",
+          "enum": ["unambiguous", "ambiguous", "unresolved"]
+        }
+      }
+    }
+  },
+  "$ref": "#/$defs/identityOrNull"
+}

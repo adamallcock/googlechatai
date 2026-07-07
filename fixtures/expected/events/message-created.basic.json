@@ -1,0 +1,268 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/BBB:2026-06-29T18:00:00Z",
+  "receivedAt": "2026-06-29T18:00:00Z",
+  "source": "fixture",
+  "kind": "message.thread_reply",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": null,
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/BBB"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": null,
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "<users/123> deploy staging https://example.com",
+    "formattedText": "<users/123> deploy staging https://example.com",
+    "argumentText": "deploy staging https://example.com",
+    "segments": [
+      {
+        "kind": "userMention",
+        "startIndex": 0,
+        "length": 11,
+        "text": "@Ada Lovelace",
+        "sourceText": "<users/123>",
+        "annotationIndex": 0
+      },
+      {
+        "kind": "text",
+        "startIndex": 11,
+        "length": 35,
+        "text": " deploy staging https://example.com"
+      }
+    ],
+    "annotations": [
+      {
+        "kind": "userMention",
+        "startIndex": 0,
+        "length": 11,
+        "text": "<users/123>",
+        "renderText": "@Ada Lovelace",
+        "user": {
+          "displayName": "Ada Lovelace",
+          "email": null,
+          "resourceName": "users/123",
+          "type": "HUMAN",
+          "accessState": "available",
+          "ambiguityState": "unambiguous"
+        },
+        "mentionType": "MENTION"
+      }
+    ],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [
+      {
+        "name": "spaces/AAA/messages/BBB/attachments/att-1",
+        "contentName": "report.pdf",
+        "contentType": "application/pdf",
+        "source": "UPLOADED_CONTENT",
+        "mediaResourceName": "spaces/AAA/messages/BBB/attachments/att-1/media",
+        "thumbnailUri": null
+      }
+    ],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/BBB"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": null,
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "@Ada Lovelace deploy staging https://example.com",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [
+        {
+          "kind": "attachment",
+          "relationship": "attachment",
+          "name": "spaces/AAA/messages/BBB/attachments/att-1",
+          "contentName": "report.pdf",
+          "contentType": "application/pdf",
+          "source": "UPLOADED_CONTENT",
+          "mediaResourceName": "spaces/AAA/messages/BBB/attachments/att-1/media",
+          "accessState": "metadata_only",
+          "systemNotes": [
+            "System Note: The user attached report.pdf (application/pdf) with this message."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: The user attached report.pdf (application/pdf) with this message."
+        }
+      ],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": true,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": true,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace sent a thread reply in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/BBB:2026-06-29T18:00:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:00:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/BBB",
+      "text": "<users/123> deploy staging https://example.com",
+      "formattedText": "<users/123> deploy staging https://example.com",
+      "argumentText": "deploy staging https://example.com",
+      "createTime": "2026-06-29T18:00:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      },
+      "annotations": [
+        {
+          "type": "USER_MENTION",
+          "startIndex": 0,
+          "length": 11,
+          "userMention": {
+            "user": {
+              "name": "users/123",
+              "displayName": "Ada Lovelace",
+              "type": "HUMAN"
+            },
+            "type": "MENTION"
+          }
+        }
+      ],
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/BBB/attachments/att-1",
+          "contentName": "report.pdf",
+          "contentType": "application/pdf",
+          "source": "UPLOADED_CONTENT",
+          "attachmentDataRef": {
+            "resourceName": "spaces/AAA/messages/BBB/attachments/att-1/media"
+          }
+        }
+      ]
+    }
+  }
+}

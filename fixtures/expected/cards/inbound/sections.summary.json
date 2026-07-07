@@ -1,0 +1,60 @@
+{
+  "cards": [
+    {
+      "cardId": "release.review",
+      "title": "Release review",
+      "subtitle": "Composable sections",
+      "sections": [
+        {
+          "header": "Summary",
+          "widgetCount": 2,
+          "text": [
+            "This release is ready for approval.",
+            "Review the checks before choosing an action."
+          ],
+          "fields": [],
+          "buttons": []
+        },
+        {
+          "header": "Checks",
+          "widgetCount": 3,
+          "text": [],
+          "fields": [
+            {
+              "label": "Node tests",
+              "text": "11 passed"
+            },
+            {
+              "label": "Python tests",
+              "text": "9 passed"
+            }
+          ],
+          "buttons": [],
+          "dividers": 1
+        },
+        {
+          "header": "Actions",
+          "widgetCount": 1,
+          "text": [],
+          "fields": [],
+          "buttons": [
+            {
+              "text": "Approve",
+              "function": "approval_decision",
+              "parameters": {
+                "decision": "approve",
+                "requestId": "release-42"
+              }
+            },
+            {
+              "text": "Open details",
+              "openLink": "https://example.com/release-42",
+              "parameters": {}
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plainText": "Card release.review: Release review (Composable sections). Section Summary. Text: This release is ready for approval. Review the checks before choosing an action. Section Checks. Fields: Node tests=11 passed; Python tests=9 passed. Dividers: 1. Section Actions. Buttons: Approve -> approval_decision(decision=approve, requestId=release-42); Open details -> https://example.com/release-42."
+}

@@ -1,0 +1,20 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/one",
+      "text": "https://chat.google.com/room/AAA"
+    },
+    {
+      "name": "spaces/AAA/messages/two",
+      "text": "https://chat.google.com/room/AAA"
+    },
+    {
+      "name": "spaces/AAA/messages/three",
+      "text": "https://chat.google.com/room/AAA"
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": false,
+    "maxOccurrencesPerCandidate": 2
+  }
+}

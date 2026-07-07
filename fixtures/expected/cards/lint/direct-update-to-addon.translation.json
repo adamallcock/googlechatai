@@ -1,0 +1,35 @@
+{
+  "kind": "chat.card_translation_result",
+  "from": "direct-chat-response",
+  "to": "workspace-addon-action-response",
+  "mode": "update-message",
+  "ok": true,
+  "findings": [],
+  "payload": {
+    "hostAppDataAction": {
+      "chatDataAction": {
+        "updateMessageAction": {
+          "message": {
+            "text": "Done",
+            "fallbackText": "Done",
+            "cardsV2": [
+              {
+                "cardId": "status",
+                "card": {
+                  "header": { "title": "Status" },
+                  "sections": [
+                    {
+                      "widgets": [
+                        { "decoratedText": { "text": "Done" } }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "message": {
+    "name": "spaces/AAA/messages/TOGGLE_MATCHED",
+    "text": "Plain https://docs.google.com/document/d/plain123/edit",
+    "links": [
+      {
+        "kind": "matchedUrl",
+        "url": "https://docs.google.com/spreadsheets/d/matched456/edit"
+      },
+      {
+        "kind": "plain_url",
+        "url": "https://docs.google.com/presentation/d/plainLink789/edit"
+      }
+    ]
+  },
+  "options": {
+    "includeMatchedUrls": false,
+    "targetDirectory": "/tmp/chat-ai-sdk/toggles",
+    "env": {}
+  }
+}

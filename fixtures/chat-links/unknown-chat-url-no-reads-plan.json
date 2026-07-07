@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/dm/DM123"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/group/GROUP123"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://chat.google.com/u/0/app/chat/AAA/AAA/thread-1"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/chat/u/0/#chat/space/AAA/thread-1"
+  }
+]

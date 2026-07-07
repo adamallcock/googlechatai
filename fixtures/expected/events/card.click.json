@@ -1,0 +1,254 @@
+{
+  "eventId": "fixture:CARD_CLICKED:spaces/AAA/messages/CARD:2026-06-29T18:15:00Z",
+  "receivedAt": "2026-06-29T18:15:00Z",
+  "source": "fixture",
+  "kind": "card.clicked",
+  "rawKind": "CARD_CLICKED",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/CARD"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Google Chat AI SDK Dev",
+      "email": null,
+      "resourceName": "users/app",
+      "type": "BOT",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [
+      {
+        "cardId": "incident-card",
+        "title": null
+      }
+    ],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/CARD from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/CARD"
+      },
+      "sender": {
+        "displayName": "Google Chat AI SDK Dev",
+        "email": null,
+        "resourceName": "users/app",
+        "type": "BOT",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/CARD from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+      ],
+      "children": [
+        {
+          "kind": "card",
+          "relationship": "card",
+          "cardId": "incident-card",
+          "title": null,
+          "accessState": "metadata_only",
+          "systemNotes": [
+            "System Note: Message includes card incident-card."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: Message includes card incident-card."
+        }
+      ],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/CARD from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z.\nSystem Note: Message includes card incident-card."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/CARD from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z.\nSystem Note: Message includes card incident-card."
+  },
+  "action": {
+    "actionId": "fixture:card_click:approve_incident:spaces/AAA/messages/CARD:2026-06-29T18:15:00Z",
+    "actionType": "card_click",
+    "methodName": "approve_incident",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:15:00Z",
+    "parameters": {
+      "incident": "INC-1",
+      "source": "card"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": {
+        "actionMethodName": "approve_incident",
+        "parameters": [
+          {
+            "key": "incident",
+            "value": "INC-1"
+          }
+        ]
+      },
+      "common": {
+        "invokedFunction": "approve_incident",
+        "parameters": {
+          "source": "card"
+        }
+      },
+      "slashCommand": null,
+      "appCommandMetadata": null,
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) clicked card action \"approve_incident\" at 2026-06-29T18:15:00Z.",
+      "System Note: Action parameters: incident=INC-1, source=card."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": true,
+    "canUpdateCard": true
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": true,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace clicked card action approve_incident in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:CARD_CLICKED:spaces/AAA/messages/CARD:2026-06-29T18:15:00Z",
+  "raw": {
+    "type": "CARD_CLICKED",
+    "eventTime": "2026-06-29T18:15:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/CARD",
+      "createTime": "2026-06-29T18:00:00Z",
+      "sender": {
+        "name": "users/app",
+        "displayName": "Google Chat AI SDK Dev",
+        "type": "BOT"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "cardsV2": [
+        {
+          "cardId": "incident-card"
+        }
+      ]
+    },
+    "action": {
+      "actionMethodName": "approve_incident",
+      "parameters": [
+        {
+          "key": "incident",
+          "value": "INC-1"
+        }
+      ]
+    },
+    "common": {
+      "invokedFunction": "approve_incident",
+      "parameters": {
+        "source": "card"
+      }
+    }
+  }
+}

@@ -1,0 +1,417 @@
+[
+  {
+    "id": "verify.token.valid-chat",
+    "description": "Verify a valid Google Chat system-account bearer token.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiMTIzNDU2Nzg5MDEyIiwiaWF0IjoxNzgzMzM4NjAwLCJleHAiOjE3ODMzNDIyMDB9.OqIxMj00Kq7E8ZxWLA5R8KjU-KEpgp5hgsiR0zp1YK7vS4mADUxNxEF-4hrH0zzkc5oJybhbZSCuv7RNPSh_-KXbe--203lKd22keld1Ds6MGU7CVHGyH_GPzymwYSrqhwrQFlzhID7QbODnUoBF5EekOxxOPwLTaMqBS2U-qIGao3-C9mPN1sVITLN-TcbEjnLnRP99rVty5w3vHax9ZXT5Mmod1euG0jZmfyq5FpGsWk8_Miw1KjyzUdYN0jeeguVa8mM-nW365bQI2o1K2pkKODuC4L_isBmRwBbzCeQVA122YQTZt_sqUsoKls7AzybWVQHL5lxquvWPfDDcEQ",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": true,
+      "reason": "Token signature and claims verified.",
+      "status": "verified",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.expired-chat",
+    "description": "Reject an expired Chat token beyond clock skew.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiMTIzNDU2Nzg5MDEyIiwiaWF0IjoxNzgzMzMyMDAwLCJleHAiOjE3ODMzMzU2MDB9.WZJWdws7XBhtcdOILeRFu-urRt2TWaT1UytifVguF2dd68RQIVijMCRhONTzygf4j9ZA_KhslrD8NFjmBXdSAP2uQwqzliczkU2jpPQY4VFoxyvdpOzob76Jcm-OkRCRY3Rr-zKvvP2711UIeNxMEHJF4zoZ_M5lGiMJDmLtL7SHibiGr31JaKhQid2zlYevqnm84gSnTn_433N9aAtcHlZcyV1UTBCl7UDOPFUQbMCca-JMPqmnJSEX2fPyecEaVso1Bb0qQf8HnI2ah7QY5t9BJqJyWgWMgXw5Pr2hunpHhorVHffYhYBLiWacflPP6JlZfnkMVE9lU8_PK0Vkzw",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783335600,
+        "iat": 1783332000,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token is expired beyond allowed clock skew.",
+      "status": "expired",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.wrong-audience",
+    "description": "Reject a Chat token issued for a different project number.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiOTk5OTk5OTk5OTk5IiwiaWF0IjoxNzgzMzM4NjAwLCJleHAiOjE3ODMzNDIyMDB9.luFyja0iYkhHnwi9l4b51EWb90PpKJIQTdLZVK9_kVbblayZ9plmtw1FWeef7TzJ3dwVDUajMnY7EeiYOzqE_FNBgVo9CeYIK9rG0p5-0pdhFMg3qJ64Jptb6f7Tj6eakGDA1Mi1H4nGwDTDNnlvdYWtxFwvCAmtf7SgTpYvtzb1op6lFXW5ueuAMjyUI0BPcuDfYvsUa1MDqcxtUABcAhoKZhjzevK5_OtHpGFC24RiQqUhFyRt6ZS7oU7tD-gJUfXeYO6vNT9QZUqP1MqeEXuLv_gd4J2B3nTf0YX94jD0nfyNNWKnQZtIXwow-AYr-6lNIwkTALb1JgFzUe0D_Q",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "999999999999",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token audience 999999999999 does not match the expected audience.",
+      "status": "wrong_audience",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.wrong-issuer",
+    "description": "Reject a token from an unexpected issuer.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJhdHRhY2tlckBleGFtcGxlLmNvbSIsImF1ZCI6IjEyMzQ1Njc4OTAxMiIsImlhdCI6MTc4MzMzODYwMCwiZXhwIjoxNzgzMzQyMjAwfQ.jgIVtxSWNgTK8ZmnXg92aKfIXSl99dA_BCMuTE3hcWlsgPu7aAfTDkis8X34p9u_YM2xOIs3PI_bmQJW4NFODJseDWqhfQpdTqvhcB9XnwhgNB-MJF0pod2VAN4X67pr5SVolafOOmD9VZGTEo7S6n0rxiVcnrFMXc7gpZdUl5hj8YrML1Vf4LQdp-K3C3Rmm-kx6lDDjDwJ0F5ZWZtHz0D3mVy3e-Zy-mnWD5BVwqROaShKsefmXM7g7N3zeo1PODfENOvVGepnWpuHpf1Lq1k7F24nU1g-Uy1ia0AODBzw78FbpU_gNAOaCxS8XOZtQXWpGcYlDsO2vioBa7HrjA",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "attacker@example.com"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token issuer attacker@example.com is not an accepted issuer.",
+      "status": "wrong_issuer",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.bad-signature",
+    "description": "Reject a token whose signature does not verify.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiMTIzNDU2Nzg5MDEyIiwiaWF0IjoxNzgzMzM4NjAwLCJleHAiOjE3ODMzNDIyMDB9.OqIxMj00Kq7E8ZxWLA5R8KjU-KEpgp5hgsiR0zp1YK7vS4mADUxNxEF-4hrH0zzkc5oJybhbZSCuv7RNPSh_-KXbe--203lKd22keld1Ds6MGU7CVHGyH_GPzymwYSrqhwrQFlzhID7QbODnUoBF5EekOxxOPwLTaMqBS2U-qIGao3-C9mPN1sVITLN-TcbEjnLnRP99rVty5w3vHax9ZXT5Mmod1euG0jZmfyq5FpGsWk8_Miw1KjyzUdYN0jeeguVa8mM-nW365bQI2o1K2pkKODuC4L_isBmRwBbzCeQVA122YQTZt_sqUsoKls7AzybWVQHL5lxquvWPfDDcEA",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token signature verification failed.",
+      "status": "bad_signature",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.unknown-kid",
+    "description": "Reject a token signed with an unknown key id.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNvbWUtb3RoZXIta2V5In0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiMTIzNDU2Nzg5MDEyIiwiaWF0IjoxNzgzMzM4NjAwLCJleHAiOjE3ODMzNDIyMDB9.g00ZjWU80vDSCOWGEdlIOCw1AJLVdN-iLww5WWTYiSfPgrjB2NBQxo34HJA341ht6_PIVUa8lFwf96YwvCJ-ZXUWpzaUvcdacTs9ZcaR0Q1_1w5Pd9rSt3CVioh3XADLrhMPlcOsVCEAO6MbereSHK7hkpb2t1_C--CaMqtf3RAXR5OxxWysQ2UzXTLp5vKwDheNca4TqapC6YfxUoJyP3nD62ljzAQwBsDmDZLzkkTdAzgckUb-oO1YgbJKez2uktGhXIUpgGemmyG2TnffAikNYSnVYhrsVtq-VVJe8shuU2uet_2qIGVGsgzt5Eo3iP8CrqYNOCVsWNFpOcnecA",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": "some-other-key",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "No JWKS key matches kid some-other-key.",
+      "status": "unknown_key",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.alg-none",
+    "description": "Reject alg=none tokens.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJjaGF0QHN5c3RlbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiMTIzNDU2Nzg5MDEyIiwiaWF0IjoxNzgzMzM4NjAwLCJleHAiOjE3ODMzNDIyMDB9.",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "123456789012",
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "chat@system.gserviceaccount.com"
+      },
+      "keyId": null,
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token algorithm none is not RS256.",
+      "status": "unsupported_algorithm",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.malformed",
+    "description": "Reject strings that are not structurally JWTs.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "not-a-jwt",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": null,
+      "keyId": null,
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token is not a structurally valid JWT.",
+      "status": "malformed",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.missing-token",
+    "description": "Report missing bearer tokens explicitly.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": null,
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "123456789012",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": null,
+      "keyId": null,
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "No bearer token was provided.",
+      "status": "missing_token",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.pubsub-valid",
+    "description": "Verify a Pub/Sub push OIDC token with audience and service-account email.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdWQiOiJodHRwczovL2V4YW1wbGUuY29tL2NoYXQvZXZlbnRzIiwiYXpwIjoiMTAzNDU2Nzg5MDEyMzQ1Njc4OTAxIiwic3ViIjoiMTAzNDU2Nzg5MDEyMzQ1Njc4OTAxIiwiZW1haWwiOiJjaGF0LXB1c2hAc2RrLXRlc3QtcHJvamVjdC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpYXQiOjE3ODMzMzg2MDAsImV4cCI6MTc4MzM0MjIwMH0.Z5dJkdWk8gsu4NQcXajTRO1IzyR4hXr6gPo6wU0VPd7hc3OxvRD5hhUFQ14ueHs6QiDatFezje7o4mkik8EKltqnU0mydkWxzNYi5i3WjT8eICgmIEyAq2AVcdFkLtsUA_Pst9RlxrilrJYZLXniTs6hNotPt_F9ahMx0I3sZckotknmyvHJPRkxriBmyzXyrqYp9TYNajSoDx5TvpHeYO1yYV0fJjLBF5RHRchBcP0mncdL5uEFlvqBqxNoIiSkpmEywn2WgHSJQKZOCKervvwEbmJsSzZSn4ilPd97GqGQkTpe4Xx90y6f5BcXOWEp82bxfejzz4Gh6c_8NxYqhQ",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "https://example.com/chat/events",
+        "issuers": [
+          "https://accounts.google.com",
+          "accounts.google.com"
+        ],
+        "expectedEmail": "chat-push@sdk-test-project.iam.gserviceaccount.com",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "https://example.com/chat/events",
+        "azp": "103456789012345678901",
+        "email": "chat-push@sdk-test-project.iam.gserviceaccount.com",
+        "email_verified": true,
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "https://accounts.google.com",
+        "sub": "103456789012345678901"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": true,
+      "reason": "Token signature and claims verified.",
+      "status": "verified",
+      "warnings": []
+    }
+  },
+  {
+    "id": "verify.token.pubsub-wrong-email",
+    "description": "Reject a push token from an unexpected service account.",
+    "operation": "verify.verifyToken",
+    "input": {
+      "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Imdvb2dsZWNoYXRhaS10ZXN0LWtleS0xIn0.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdWQiOiJodHRwczovL2V4YW1wbGUuY29tL2NoYXQvZXZlbnRzIiwiYXpwIjoiMTAzNDU2Nzg5MDEyMzQ1Njc4OTAxIiwic3ViIjoiMTAzNDU2Nzg5MDEyMzQ1Njc4OTAxIiwiZW1haWwiOiJzb21lb25lLWVsc2VAc2RrLXRlc3QtcHJvamVjdC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpYXQiOjE3ODMzMzg2MDAsImV4cCI6MTc4MzM0MjIwMH0.kVhgMsQCimdfx9fjuYXM2EmZFUuHDC4qkpP8iW4G1J6dIVNNE-BVS-c62mmQT2jaER3YvEdTRjMW2kUg-CbonRInEEQtqG73Ba1xE2f99HTxP1kwpi8fpVJd5hOVMxHTrWVHT_LwSdIcl6g6S9B7oeBXwsy8puL9_5E0r-IqFmeRM4eTzMhBR-eYc9iSf3WoFLNHdwXBDw3_x1YnWsE8mD66TJk8N-xUcZR0AQ6m5Gx-TicxgKP39e_Op43RF1By9MuXmC5k5VCS6tiseZ4MSgnAcLDssexjiDD6yr_gwRsP47qU9h3B6RB8KhtbHpaVxCXG3Da5oTaXk9NMeAF3SQ",
+      "options": {
+        "keys": [
+          {
+            "kty": "RSA",
+            "alg": "RS256",
+            "use": "sig",
+            "kid": "googlechatai-test-key-1",
+            "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+            "e": "AQAB"
+          }
+        ],
+        "audience": "https://example.com/chat/events",
+        "issuers": [
+          "https://accounts.google.com",
+          "accounts.google.com"
+        ],
+        "expectedEmail": "chat-push@sdk-test-project.iam.gserviceaccount.com",
+        "nowMs": 1783339200000
+      }
+    },
+    "expect": {
+      "checkedAt": "2026-07-06T12:00:00.000Z",
+      "claims": {
+        "aud": "https://example.com/chat/events",
+        "azp": "103456789012345678901",
+        "email": "someone-else@sdk-test-project.iam.gserviceaccount.com",
+        "email_verified": true,
+        "exp": 1783342200,
+        "iat": 1783338600,
+        "iss": "https://accounts.google.com",
+        "sub": "103456789012345678901"
+      },
+      "keyId": "googlechatai-test-key-1",
+      "kind": "chat.request_verification",
+      "ok": false,
+      "reason": "Token email does not match the expected service account.",
+      "status": "wrong_email",
+      "warnings": []
+    }
+  }
+]

@@ -1,0 +1,174 @@
+{
+  "eventId": "workspace_events:workspace-pubsub-event-1",
+  "receivedAt": "2026-06-29T18:36:00Z",
+  "source": "workspace_events",
+  "kind": "message.updated",
+  "rawKind": "google.workspace.chat.message.v1.updated",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": "2026-06-29T18:36:00Z",
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "workspace pubsub edited copy",
+    "formattedText": null,
+    "argumentText": "workspace pubsub edited copy",
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 28,
+        "text": "workspace pubsub edited copy"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:36:00Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": "2026-06-29T18:36:00Z",
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "workspace pubsub edited copy",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:36:00Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:36:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nworkspace pubsub edited copy"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:36:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nworkspace pubsub edited copy"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": true,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": true,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": true,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "A message in Engineering was edited."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": "1002",
+    "pubsubPublishTime": "2026-06-29T18:36:01Z",
+    "pubsubSubscription": "projects/chat-ai-sdk/subscriptions/workspace-events",
+    "pubsubDeliveryAttempt": "1",
+    "workspaceEventId": "workspace-pubsub-event-1",
+    "workspaceEventType": "google.workspace.chat.message.v1.updated",
+    "workspaceEventSource": "//chat.googleapis.com/spaces/AAA",
+    "workspaceEventSubject": "spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED"
+  },
+  "idempotencyKey": "workspace_events:workspace-pubsub-event-1",
+  "raw": {
+    "message": {
+      "messageId": "1002",
+      "publishTime": "2026-06-29T18:36:01Z",
+      "attributes": {
+        "ce-id": "workspace-pubsub-event-1",
+        "ce-source": "//chat.googleapis.com/spaces/AAA",
+        "ce-subject": "spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED",
+        "ce-time": "2026-06-29T18:36:00Z",
+        "ce-type": "google.workspace.chat.message.v1.updated",
+        "googclient_deliveryattempt": "1"
+      },
+      "data": "eyJtZXNzYWdlIjp7Im5hbWUiOiJzcGFjZXMvQUFBL21lc3NhZ2VzL1BVQlNVQl9XT1JLU1BBQ0VfRURJVEVEIiwidGV4dCI6IndvcmtzcGFjZSBwdWJzdWIgZWRpdGVkIGNvcHkiLCJhcmd1bWVudFRleHQiOiJ3b3Jrc3BhY2UgcHVic3ViIGVkaXRlZCBjb3B5IiwiY3JlYXRlVGltZSI6IjIwMjYtMDYtMjlUMTg6MDA6MDBaIiwibGFzdFVwZGF0ZVRpbWUiOiIyMDI2LTA2LTI5VDE4OjM2OjAwWiIsInNlbmRlciI6eyJuYW1lIjoidXNlcnMvMTIzIiwiZGlzcGxheU5hbWUiOiJBZGEgTG92ZWxhY2UiLCJlbWFpbCI6ImFkYUBleGFtcGxlLmNvbSIsInR5cGUiOiJIVU1BTiJ9LCJzcGFjZSI6eyJuYW1lIjoic3BhY2VzL0FBQSIsInR5cGUiOiJST09NIiwiZGlzcGxheU5hbWUiOiJFbmdpbmVlcmluZyJ9LCJ0aHJlYWQiOnsibmFtZSI6InNwYWNlcy9BQUEvdGhyZWFkcy90aHJlYWQtMSJ9fX0="
+    },
+    "subscription": "projects/chat-ai-sdk/subscriptions/workspace-events"
+  }
+}

@@ -1,0 +1,389 @@
+[
+  {
+    "id": "events.message-created.basic",
+    "description": "Parse a Google Chat thread reply message event into the normalized event envelope.",
+    "input": {
+      "fixture": "fixtures/events/message-created/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.basic.json"
+    }
+  },
+  {
+    "id": "events.message-created.missing-text",
+    "description": "Preserve empty text for a message event without text.",
+    "input": {
+      "fixture": "fixtures/events/message-created/missing-text.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.missing-text.json"
+    }
+  },
+  {
+    "id": "events.message-created.missing-user",
+    "description": "Represent missing actor and sender identity explicitly.",
+    "input": {
+      "fixture": "fixtures/events/message-created/missing-user.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.missing-user.json"
+    }
+  },
+  {
+    "id": "events.message-created.quoted-reply",
+    "description": "Preserve quoted-message and direct-reply relationship metadata.",
+    "input": {
+      "fixture": "fixtures/events/message-created/quoted-reply.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.quoted-reply.json"
+    }
+  },
+  {
+    "id": "events.message-created.mentioned-app",
+    "description": "Classify a human message that mentions the Chat app.",
+    "input": {
+      "fixture": "fixtures/events/message-created/mentioned-app.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.mentioned-app.json"
+    }
+  },
+  {
+    "id": "events.message-created.slash-command",
+    "description": "Normalize a slash command message into an action envelope.",
+    "input": {
+      "fixture": "fixtures/events/message-created/slash-command.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.slash-command.json"
+    }
+  },
+  {
+    "id": "events.message-created.app-command",
+    "description": "Normalize an app command event into an action envelope.",
+    "input": {
+      "fixture": "fixtures/events/message-created/app-command.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.app-command.json"
+    }
+  },
+  {
+    "id": "events.space.added-to-space",
+    "description": "Normalize an added-to-space event.",
+    "input": {
+      "fixture": "fixtures/events/space/added-to-space.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/space.added-to-space.json"
+    }
+  },
+  {
+    "id": "events.space.removed-from-space",
+    "description": "Normalize a removed-from-space event.",
+    "input": {
+      "fixture": "fixtures/events/space/removed-from-space.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/space.removed-from-space.json"
+    }
+  },
+  {
+    "id": "events.card.click",
+    "description": "Normalize a card click action event.",
+    "input": {
+      "fixture": "fixtures/events/card/click.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card.click.json"
+    }
+  },
+  {
+    "id": "events.card.dialog-opened",
+    "description": "Normalize a dialog open request event.",
+    "input": {
+      "fixture": "fixtures/events/card/dialog-opened.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card.dialog-opened.json"
+    }
+  },
+  {
+    "id": "events.card.dialog-submit",
+    "description": "Normalize a dialog submission event and form inputs.",
+    "input": {
+      "fixture": "fixtures/events/card/dialog-submit.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card.dialog-submit.json"
+    }
+  },
+  {
+    "id": "events.card.dialog-cancelled",
+    "description": "Normalize a dialog cancellation event.",
+    "input": {
+      "fixture": "fixtures/events/card/dialog-cancelled.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card.dialog-cancelled.json"
+    }
+  },
+  {
+    "id": "events.card.widget-update",
+    "description": "Normalize a widget update event.",
+    "input": {
+      "fixture": "fixtures/events/card/widget-update.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card.widget-update.json"
+    }
+  },
+  {
+    "id": "events.pubsub.direct-message",
+    "description": "Unwrap a Pub/Sub push message containing a direct Chat event.",
+    "input": {
+      "fixture": "fixtures/events/pubsub/direct-message.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/pubsub.direct-message.json"
+    }
+  },
+  {
+    "id": "events.pubsub.workspace-message-updated",
+    "description": "Unwrap a Pub/Sub push message containing a Workspace Events CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/pubsub/workspace-message-updated.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/pubsub.workspace-message-updated.json"
+    }
+  },
+  {
+    "id": "events.workspace.message-updated",
+    "description": "Normalize a Workspace Events message update CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/message-updated.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.message-updated.json"
+    }
+  },
+  {
+    "id": "events.workspace.message-deleted",
+    "description": "Normalize a Workspace Events message deletion CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/message-deleted.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.message-deleted.json"
+    }
+  },
+  {
+    "id": "events.workspace.reaction-created",
+    "description": "Normalize a Workspace Events reaction creation CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/reaction-created.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.reaction-created.json"
+    }
+  },
+  {
+    "id": "events.workspace.reaction-deleted",
+    "description": "Normalize a Workspace Events reaction deletion CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/reaction-deleted.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.reaction-deleted.json"
+    }
+  },
+  {
+    "id": "events.workspace.membership-created",
+    "description": "Normalize a Workspace Events membership creation CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/membership-created.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.membership-created.json"
+    }
+  },
+  {
+    "id": "events.workspace.membership-updated",
+    "description": "Normalize a Workspace Events membership update CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/membership-updated.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.membership-updated.json"
+    }
+  },
+  {
+    "id": "events.workspace.membership-deleted",
+    "description": "Normalize a Workspace Events membership deletion CloudEvent.",
+    "input": {
+      "fixture": "fixtures/events/workspace/membership-deleted.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/workspace.membership-deleted.json"
+    }
+  },
+  {
+    "id": "events.unknown.unknown-type",
+    "description": "Return event.unknown for an unknown direct Chat event type.",
+    "input": {
+      "fixture": "fixtures/events/unknown/unknown-type.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/unknown.unknown-type.json"
+    }
+  },
+  {
+    "id": "events.message-created.plain",
+    "description": "Parse a plain user message with no mentions, commands, cards, or attachments.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-created/plain.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.plain.json"
+    }
+  },
+  {
+    "id": "events.message-mentioned-app.basic",
+    "description": "Parse a message that mentions the Chat app and render the bot identity for AI context.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-mentioned-app/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-mentioned-app.basic.json"
+    }
+  },
+  {
+    "id": "events.message-slash-command.basic",
+    "description": "Parse a slash command message into a message event plus normalized command action.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-slash-command/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-slash-command.basic.json"
+    }
+  },
+  {
+    "id": "events.card-click.basic",
+    "description": "Parse a card click into a normalized card action with parameters and form inputs.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/card-click/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card-click.basic.json"
+    }
+  },
+  {
+    "id": "events.message-created.attachment",
+    "description": "Parse a message with an uploaded attachment and deterministic AI-facing metadata note.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-created/attachment.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.attachment.json"
+    }
+  },
+  {
+    "id": "events.message-created.attachment-size-boundary",
+    "description": "Render attachment size using shared half-up KB rounding across languages.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-created/attachment-size-boundary.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.attachment-size-boundary.json"
+    }
+  },
+  {
+    "id": "events.message-mentioned-app.boolean-offsets",
+    "description": "Reject boolean mention offsets while still identifying an app mention.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-mentioned-app/boolean-offsets.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-mentioned-app.boolean-offsets.json"
+    }
+  },
+  {
+    "id": "events.message-slash-command.boolean-command-id",
+    "description": "Reject boolean slash command IDs instead of serializing them as language-specific values.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/message-slash-command/boolean-command-id.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-slash-command.boolean-command-id.json"
+    }
+  },
+  {
+    "id": "events.app-command.basic",
+    "description": "Parse an app command event into a normalized app command action.",
+    "operation": "event.normalize",
+    "input": {
+      "fixture": "fixtures/events/app-command/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/app-command.basic.json"
+    }
+  },
+  {
+    "id": "events.message-created.bot-mention",
+    "behavior": "events.parse",
+    "description": "Render a bot mention as human-readable model text.",
+    "input": {
+      "fixture": "fixtures/events/message-created/bot-mention.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/message-created.bot-mention.json"
+    }
+  },
+  {
+    "id": "events.card-clicked.basic",
+    "behavior": "events.parse",
+    "description": "Classify a card click event while preserving message context.",
+    "input": {
+      "fixture": "fixtures/events/card-clicked/basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/events/card-clicked.basic.json"
+    }
+  }
+]

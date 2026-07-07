@@ -1,0 +1,19 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:06:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/NO_USER",
+    "text": "I arrived without user metadata",
+    "createTime": "2026-06-29T18:06:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  }
+}

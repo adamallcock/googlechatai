@@ -1,0 +1,280 @@
+{
+  "kind": "chat.ingestion_batch",
+  "mode": "polling",
+  "source": "spaces.messages.list",
+  "space": "spaces/AAA",
+  "receivedAt": "2026-07-04T00:10:00.000Z",
+  "events": [
+    {
+      "kind": "chat.ingestion_event",
+      "source": "polling",
+      "sequence": 0,
+      "normalized": {
+        "eventId": "fixture:MESSAGE:spaces/AAA/messages/msg-1:2026-07-04T00:10:00.000Z",
+        "kind": "message.thread_reply",
+        "source": "fixture",
+        "receivedAt": "2026-07-04T00:10:00.000Z",
+        "actor": {
+          "name": "users/ada",
+          "displayName": "Ada Lovelace",
+          "email": "ada@example.com",
+          "type": "HUMAN",
+          "access": null
+        },
+        "space": {
+          "name": "spaces/AAA",
+          "displayName": "Engineering",
+          "type": "ROOM"
+        },
+        "message": {
+          "name": null,
+          "text": "First passive message.",
+          "plainTextForModel": "System Note: Message spaces/AAA/messages/msg-1 from Ada Lovelace <ada@example.com> (HUMAN, users/ada) created at 2026-07-04T00:01:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nFirst passive message.",
+          "createTime": null,
+          "sender": {
+            "name": null,
+            "displayName": "Ada Lovelace",
+            "email": "ada@example.com",
+            "type": "HUMAN",
+            "access": null
+          },
+          "thread": {
+            "name": "spaces/AAA/threads/thread-1"
+          },
+          "state": {
+            "deleted": false,
+            "threadReply": true,
+            "directMessage": false
+          }
+        },
+        "relationship": {
+          "isThreadReply": true,
+          "isDeletion": false,
+          "systemNotes": [
+            "Ada Lovelace sent a thread reply in Engineering."
+          ]
+        }
+      },
+      "snapshot": {
+        "kind": "created_snapshot",
+        "messageName": "spaces/AAA/messages/msg-1",
+        "effectiveTime": "2026-07-04T00:01:00Z",
+        "duplicateKey": "polling:spaces/AAA/messages/msg-1:2026-07-04T00:01:00Z",
+        "skippedAsDuplicate": false
+      }
+    },
+    {
+      "kind": "chat.ingestion_event",
+      "source": "polling",
+      "sequence": 1,
+      "normalized": {
+        "eventId": "fixture:MESSAGE:spaces/AAA/messages/msg-2:2026-07-04T00:10:00.000Z",
+        "kind": "message.thread_reply",
+        "source": "fixture",
+        "receivedAt": "2026-07-04T00:10:00.000Z",
+        "actor": {
+          "name": "users/grace",
+          "displayName": "Grace Hopper",
+          "email": "grace@example.com",
+          "type": "HUMAN",
+          "access": null
+        },
+        "space": {
+          "name": "spaces/AAA",
+          "displayName": "Engineering",
+          "type": "ROOM"
+        },
+        "message": {
+          "name": null,
+          "text": "Edited passive message.",
+          "plainTextForModel": "System Note: Message spaces/AAA/messages/msg-2 from Grace Hopper <grace@example.com> (HUMAN, users/grace) created at 2026-07-04T00:02:00Z and updated at 2026-07-04T00:05:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-2.\nEdited passive message.",
+          "createTime": null,
+          "sender": {
+            "name": null,
+            "displayName": "Grace Hopper",
+            "email": "grace@example.com",
+            "type": "HUMAN",
+            "access": null
+          },
+          "thread": {
+            "name": "spaces/AAA/threads/thread-2"
+          },
+          "state": {
+            "deleted": false,
+            "threadReply": true,
+            "directMessage": false
+          }
+        },
+        "relationship": {
+          "isThreadReply": true,
+          "isDeletion": false,
+          "systemNotes": [
+            "Grace Hopper sent a thread reply in Engineering."
+          ]
+        }
+      },
+      "snapshot": {
+        "kind": "updated_snapshot",
+        "messageName": "spaces/AAA/messages/msg-2",
+        "effectiveTime": "2026-07-04T00:05:00Z",
+        "duplicateKey": "polling:spaces/AAA/messages/msg-2:2026-07-04T00:05:00Z",
+        "skippedAsDuplicate": false
+      }
+    },
+    {
+      "kind": "chat.ingestion_event",
+      "source": "polling",
+      "sequence": 2,
+      "normalized": {
+        "eventId": "fixture:MESSAGE:spaces/AAA/messages/old:2026-07-04T00:10:00.000Z",
+        "kind": "message.thread_reply",
+        "source": "fixture",
+        "receivedAt": "2026-07-04T00:10:00.000Z",
+        "actor": {
+          "name": "users/mary",
+          "displayName": "Mary Jackson",
+          "email": "mary@example.com",
+          "type": "HUMAN",
+          "access": null
+        },
+        "space": {
+          "name": "spaces/AAA",
+          "displayName": "Engineering",
+          "type": "ROOM"
+        },
+        "message": {
+          "name": null,
+          "text": "",
+          "plainTextForModel": "System Note: Message spaces/AAA/messages/old from Mary Jackson <mary@example.com> (HUMAN, users/mary) created at 2026-07-04T00:03:00Z.\nSystem Note: Message was deleted at 2026-07-04T00:04:00Z (USER_DELETED).\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-3.",
+          "createTime": null,
+          "sender": {
+            "name": null,
+            "displayName": "Mary Jackson",
+            "email": "mary@example.com",
+            "type": "HUMAN",
+            "access": null
+          },
+          "thread": {
+            "name": "spaces/AAA/threads/thread-3"
+          },
+          "state": {
+            "deleted": true,
+            "threadReply": true,
+            "directMessage": false
+          }
+        },
+        "relationship": {
+          "isThreadReply": true,
+          "isDeletion": true,
+          "systemNotes": [
+            "Mary Jackson sent a thread reply in Engineering."
+          ]
+        }
+      },
+      "snapshot": {
+        "kind": "deleted_snapshot",
+        "messageName": "spaces/AAA/messages/old",
+        "effectiveTime": "2026-07-04T00:04:00Z",
+        "duplicateKey": "polling:spaces/AAA/messages/old:2026-07-04T00:04:00Z",
+        "skippedAsDuplicate": true
+      }
+    }
+  ],
+  "checkpoint": {
+    "type": "polling",
+    "scope": "spaces/AAA#messages",
+    "cursor": "cursor-2",
+    "pageToken": "cursor-2",
+    "nextPageToken": "cursor-2",
+    "highWatermarkTime": "2026-07-04T00:05:00Z",
+    "seenKeys": [
+      "polling:spaces/AAA/messages/old:2026-07-04T00:04:00Z",
+      "polling:spaces/AAA/messages/msg-1:2026-07-04T00:01:00Z",
+      "polling:spaces/AAA/messages/msg-2:2026-07-04T00:05:00Z"
+    ]
+  },
+  "pagination": {
+    "nextPageToken": "cursor-2",
+    "hasMore": true,
+    "resultCount": 3
+  },
+  "idempotency": {
+    "duplicateStrategy": "skip_seen_polling_snapshots",
+    "skippedCount": 1
+  },
+  "nextRequest": {
+    "kind": "chat.ingestion_plan",
+    "mode": "polling",
+    "status": "planned",
+    "capability": {
+      "authMode": "user",
+      "requiredScopes": [
+        "https://www.googleapis.com/auth/chat.messages.readonly"
+      ],
+      "requiresAdminApproval": false,
+      "requiresMembership": true,
+      "readOnly": true,
+      "writeCapable": false,
+      "notes": [
+        "User-auth polling reads messages visible to the installing user."
+      ]
+    },
+    "polling": {
+      "space": "spaces/AAA",
+      "thread": null,
+      "pageSize": 100,
+      "filter": null,
+      "orderBy": "createTime ASC",
+      "showDeleted": false,
+      "backoff": {
+        "initialMs": 1000,
+        "maxMs": 60000,
+        "multiplier": 2,
+        "jitter": true
+      }
+    },
+    "requests": [
+      {
+        "resource": "spaces.messages.list",
+        "method": "GET",
+        "path": "/v1/spaces/AAA/messages",
+        "query": {
+          "pageSize": 100,
+          "pageToken": "cursor-2",
+          "orderBy": "createTime ASC"
+        },
+        "body": null
+      }
+    ],
+    "checkpoint": {
+      "type": "polling",
+      "scope": "spaces/AAA#messages",
+      "cursor": null,
+      "pageToken": "cursor-2",
+      "highWatermarkTime": "2026-07-04T00:05:00Z"
+    },
+    "idempotency": {
+      "duplicateStrategy": "skip_seen_polling_snapshots",
+      "keyFields": [
+        "message.name",
+        "lastUpdateTime",
+        "deleteTime",
+        "createTime"
+      ]
+    },
+    "safety": {
+      "liveAllowed": false,
+      "writesMessages": false,
+      "notes": [
+        "Polling is read-only and should target spaces the principal can already read."
+      ]
+    },
+    "warnings": [
+      "Polling emits snapshots, not authoritative real-time create/update/delete events."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Polling read 3 message snapshot(s) from spaces/AAA.",
+    "System Note: Polling snapshots can lag real-time Chat events and should be deduplicated before side effects."
+  ]
+}

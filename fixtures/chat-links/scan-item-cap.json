@@ -1,0 +1,29 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/BBB"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/CCC"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/DDD"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/EEE"
+    }
+  ],
+  "text": "This should not be reached https://chat.google.com/room/TEXT",
+  "options": {
+    "maxLinkScanItems": 2,
+    "allowSpaceLevelContext": false
+  }
+}

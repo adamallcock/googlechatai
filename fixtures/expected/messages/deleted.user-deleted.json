@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/DEL"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "resourceName": "users/222",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:07:00Z",
+  "updatedAt": null,
+  "deletedAt": "2026-06-29T18:08:00Z",
+  "state": {
+    "deleted": true,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "",
+  "formattedText": null,
+  "argumentText": null,
+  "segments": [],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/DEL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:07:00Z.",
+    "System Note: Message was deleted at 2026-06-29T18:08:00Z (USER_DELETED)."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/DEL"
+    },
+    "sender": {
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "resourceName": "users/222",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:07:00Z",
+    "updatedAt": null,
+    "deletedAt": "2026-06-29T18:08:00Z",
+    "accessState": "deleted",
+    "text": "",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/DEL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:07:00Z.",
+      "System Note: Message was deleted at 2026-06-29T18:08:00Z (USER_DELETED)."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/DEL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:07:00Z.\nSystem Note: Message was deleted at 2026-06-29T18:08:00Z (USER_DELETED)."
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/DEL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:07:00Z.\nSystem Note: Message was deleted at 2026-06-29T18:08:00Z (USER_DELETED)."
+}

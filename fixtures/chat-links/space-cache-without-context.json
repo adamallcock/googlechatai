@@ -1,0 +1,20 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA"
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": false,
+    "cache": {
+      "entriesByResourceName": {
+        "spaces/AAA": {
+          "hit": true,
+          "key": "chat-link:space-cache",
+          "lastUpdateTime": "2026-07-05T19:00:00Z"
+        }
+      }
+    }
+  }
+}

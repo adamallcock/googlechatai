@@ -1,0 +1,221 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/attachment-boundary-1:2026-06-29T18:26:00Z",
+  "receivedAt": "2026-06-29T18:26:00Z",
+  "source": "fixture",
+  "kind": "message.created",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/attachment-boundary-1"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "resourceName": "users/456",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:26:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "Tiny log attached.",
+    "formattedText": "Tiny log attached.",
+    "argumentText": null,
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 18,
+        "text": "Tiny log attached."
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [
+      {
+        "name": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1",
+        "contentName": "tiny.log",
+        "contentType": "text/plain",
+        "source": "UPLOADED_CONTENT",
+        "mediaResourceName": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1/media",
+        "thumbnailUri": null
+      }
+    ],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/attachment-boundary-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:26:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/attachment-boundary-1"
+      },
+      "sender": {
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "resourceName": "users/456",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:26:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "Tiny log attached.",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/attachment-boundary-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:26:00Z."
+      ],
+      "children": [
+        {
+          "kind": "attachment",
+          "relationship": "attachment",
+          "name": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1",
+          "contentName": "tiny.log",
+          "contentType": "text/plain",
+          "source": "UPLOADED_CONTENT",
+          "mediaResourceName": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1/media",
+          "accessState": "metadata_only",
+          "systemNotes": [
+            "System Note: The user attached tiny.log (text/plain) with this message."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: The user attached tiny.log (text/plain) with this message."
+        }
+      ],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/attachment-boundary-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:26:00Z.\nTiny log attached.\nSystem Note: The user attached tiny.log (text/plain) with this message."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/attachment-boundary-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:26:00Z.\nTiny log attached.\nSystem Note: The user attached tiny.log (text/plain) with this message."
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Grace Hopper sent a message in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/attachment-boundary-1:2026-06-29T18:26:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:26:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/attachment-boundary-1",
+      "text": "Tiny log attached.",
+      "formattedText": "Tiny log attached.",
+      "createTime": "2026-06-29T18:26:00Z",
+      "sender": {
+        "name": "users/456",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1",
+          "contentName": "tiny.log",
+          "contentType": "text/plain",
+          "source": "UPLOADED_CONTENT",
+          "sizeBytes": 2500,
+          "attachmentDataRef": {
+            "resourceName": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1/media"
+          }
+        }
+      ]
+    }
+  }
+}

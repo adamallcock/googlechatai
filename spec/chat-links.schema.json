@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/chat-links.schema.json",
+  "title": "Google Chat Link Retrieval Plan",
+  "type": "object",
+  "required": [
+    "kind",
+    "status",
+    "dryRun",
+    "summary",
+    "counts",
+    "truncation",
+    "candidates",
+    "requests",
+    "capability",
+    "safety",
+    "systemNotes",
+    "warnings"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "kind": { "const": "chat.chat_link_retrieval_plan" },
+    "status": { "type": "string", "enum": ["ready", "partial", "blocked"] },
+    "dryRun": { "type": "boolean" },
+    "summary": { "type": "string" },
+    "counts": {
+      "type": "object",
+      "required": [
+        "candidates",
+        "parsed",
+        "unknown",
+        "plannedRequests",
+        "cacheHits",
+        "cappedCandidates",
+        "cappedPlainTextUrls",
+        "cappedPlainTextScanChars",
+        "cappedOversizedUrls",
+        "cappedOccurrences",
+        "cappedTraversalNodes",
+        "cappedLinkScanItems"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "candidates": { "type": "integer", "minimum": 0 },
+        "parsed": { "type": "integer", "minimum": 0 },
+        "unknown": { "type": "integer", "minimum": 0 },
+        "plannedRequests": { "type": "integer", "minimum": 0 },
+        "cacheHits": { "type": "integer", "minimum": 0 },
+        "cappedCandidates": { "type": "integer", "minimum": 0 },
+        "cappedPlainTextUrls": { "type": "integer", "minimum": 0 },
+        "cappedPlainTextScanChars": { "type": "integer", "minimum": 0 },
+        "cappedOversizedUrls": { "type": "integer", "minimum": 0 },
+        "cappedOccurrences": { "type": "integer", "minimum": 0 },
+        "cappedTraversalNodes": { "type": "integer", "minimum": 0 },
+        "cappedLinkScanItems": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "truncation": { "$ref": "#/$defs/chatLinkTruncation" },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/chatLinkCandidate" }
+    },
+    "requests": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/chatLinkRequest" }
+    },
+    "capability": { "$ref": "#/$defs/chatLinkCapability" },
+    "safety": { "$ref": "#/$defs/chatLinkSafety" },
+    "systemNotes": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "chatLinkContext": {
+      "type": "object",
+      "required": ["messageName", "relationship", "path"],
+      "additionalProperties": true,
+      "properties": {
+        "messageName": { "type": ["string", "null"] },
+        "relationship": { "type": "string" },
+        "path": { "type": "array", "items": { "type": "string" } },
+        "sender": {
+          "type": ["object", "null"],
+          "required": [
+            "displayName",
+            "email",
+            "resourceName",
+            "type",
+            "accessState",
+            "ambiguityState"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "displayName": { "type": ["string", "null"] },
+            "email": { "type": ["string", "null"] },
+            "resourceName": { "type": ["string", "null"] },
+            "type": { "type": ["string", "null"] },
+            "accessState": {
+              "type": "string",
+              "enum": ["available", "resource_only", "partial", "anonymous", "unknown"]
+            },
+            "ambiguityState": {
+              "type": "string",
+              "enum": ["unambiguous", "ambiguous", "unresolved"]
+            }
+          }
+        },
+        "createdAt": { "type": ["string", "null"] },
+        "updatedAt": { "type": ["string", "null"] },
+        "deletedAt": { "type": ["string", "null"] },
+        "accessState": { "type": ["string", "null"] }
+      }
+    },
+    "chatLinkTruncation": {
+      "type": "object",
+      "required": [
+        "status",
+        "maxChatLinks",
+        "maxPlainTextUrls",
+        "maxTraversalDepth",
+        "maxTraversalNodes",
+        "maxLinkScanItems",
+        "maxPlainTextScanChars",
+        "maxUrlLength",
+        "maxOccurrencesPerCandidate",
+        "candidatesVisited",
+        "plainTextUrlsScanned",
+        "plainTextCharsScanned",
+        "traversalNodesVisited",
+        "linkScanItemsVisited",
+        "cappedCandidates",
+        "cappedPlainTextUrls",
+        "cappedPlainTextScanChars",
+        "cappedOversizedUrls",
+        "cappedOccurrences",
+        "cappedTraversalNodes",
+        "cappedLinkScanItems"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "type": "string", "enum": ["complete", "truncated"] },
+        "maxChatLinks": { "type": "integer", "minimum": 1 },
+        "maxPlainTextUrls": { "type": "integer", "minimum": 1 },
+        "maxTraversalDepth": { "type": "integer", "minimum": 1 },
+        "maxTraversalNodes": { "type": "integer", "minimum": 1 },
+        "maxLinkScanItems": { "type": "integer", "minimum": 1 },
+        "maxPlainTextScanChars": { "type": "integer", "minimum": 1 },
+        "maxUrlLength": { "type": "integer", "minimum": 1 },
+        "maxOccurrencesPerCandidate": { "type": "integer", "minimum": 1 },
+        "candidatesVisited": { "type": "integer", "minimum": 0 },
+        "plainTextUrlsScanned": { "type": "integer", "minimum": 0 },
+        "plainTextCharsScanned": { "type": "integer", "minimum": 0 },
+        "traversalNodesVisited": { "type": "integer", "minimum": 0 },
+        "linkScanItemsVisited": { "type": "integer", "minimum": 0 },
+        "cappedCandidates": { "type": "integer", "minimum": 0 },
+        "cappedPlainTextUrls": { "type": "integer", "minimum": 0 },
+        "cappedPlainTextScanChars": { "type": "integer", "minimum": 0 },
+        "cappedOversizedUrls": { "type": "integer", "minimum": 0 },
+        "cappedOccurrences": { "type": "integer", "minimum": 0 },
+        "cappedTraversalNodes": { "type": "integer", "minimum": 0 },
+        "cappedLinkScanItems": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "chatLinkCapability": {
+      "type": "object",
+      "required": ["ok", "authMode", "requiredScopes", "requiresAdminApproval", "reasons"],
+      "additionalProperties": true,
+      "properties": {
+        "ok": { "type": "boolean" },
+        "authMode": { "type": "string" },
+        "requiredScopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "https://www.googleapis.com/auth/chat.messages.readonly",
+              "https://www.googleapis.com/auth/chat.spaces.readonly",
+              "https://www.googleapis.com/auth/chat.app.messages.readonly",
+              "https://www.googleapis.com/auth/chat.bot"
+            ]
+          }
+        },
+        "requiresAdminApproval": { "type": "boolean" },
+        "reasons": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "chatLinkSafety": {
+      "type": "object",
+      "required": ["liveAllowed", "notes"],
+      "additionalProperties": true,
+      "properties": {
+        "liveAllowed": { "const": false },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "chatLinkCandidate": {
+      "type": "object",
+      "required": [
+        "kind",
+        "candidateId",
+        "source",
+        "originalUrl",
+        "title",
+        "parseStatus",
+        "confidence",
+        "scope",
+        "space",
+        "thread",
+        "message",
+        "resourceName",
+        "urlShape",
+        "context",
+        "warnings",
+        "cache"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat_link" },
+        "candidateId": { "type": "string" },
+        "source": {
+          "type": "string",
+          "enum": ["chat_space_link_data", "rich_link_url", "matched_url", "plain_url"]
+        },
+        "originalUrl": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] },
+        "parseStatus": { "type": "string", "enum": ["parsed", "unknown", "invalid"] },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low", "unknown"] },
+        "scope": { "type": "string", "enum": ["space", "thread", "message", "unknown"] },
+        "space": { "type": ["string", "null"] },
+        "thread": { "type": ["string", "null"] },
+        "message": { "type": ["string", "null"] },
+        "resourceName": { "type": ["string", "null"] },
+        "urlShape": { "type": "string" },
+        "context": { "$ref": "#/$defs/chatLinkContext" },
+        "occurrences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/chatLinkContext" }
+        },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "cache": {
+          "type": "object",
+          "required": [
+            "status",
+            "strategy",
+            "key",
+            "resourceName",
+            "lastUpdateTime",
+            "revalidateWith"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "status": { "type": "string", "enum": ["hit", "metadata_required", "unavailable"] },
+            "strategy": { "const": "resource_last_update_time" },
+            "key": { "type": ["string", "null"] },
+            "resourceName": { "type": ["string", "null"] },
+            "lastUpdateTime": { "type": ["string", "null"] },
+            "revalidateWith": { "type": ["string", "null"] }
+          }
+        }
+      }
+    },
+    "chatLinkRequest": {
+      "type": "object",
+      "required": ["candidateId", "resource", "method", "path", "query", "body", "purpose"],
+      "additionalProperties": true,
+      "properties": {
+        "candidateId": { "type": "string" },
+        "resource": {
+          "type": "string",
+          "enum": ["spaces.messages.get", "spaces.messages.list", "spaces.get"]
+        },
+        "method": { "type": "string", "enum": ["GET"] },
+        "path": { "type": "string" },
+        "query": { "type": "object", "additionalProperties": true },
+        "body": { "type": "null" },
+        "candidateIds": { "type": "array", "items": { "type": "string" } },
+        "purpose": {
+          "type": "string",
+          "enum": [
+            "read_message_or_revalidate_cache",
+            "read_thread_context",
+            "read_space_context",
+            "read_space_breadcrumb"
+          ]
+        }
+      }
+    }
+  }
+}

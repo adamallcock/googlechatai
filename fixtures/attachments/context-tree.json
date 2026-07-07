@@ -1,0 +1,68 @@
+{
+  "relationship": "current_message",
+  "message": {
+    "name": "spaces/AAA/messages/root",
+    "attachment": [
+      {
+        "name": "spaces/AAA/messages/root/attachments/pdf-1",
+        "contentName": "../Q2 Final?.pdf",
+        "contentType": "application/pdf",
+        "source": "UPLOADED_CONTENT",
+        "contentSize": 124000,
+        "thumbnailUri": "https://chat.googleusercontent.com/thumb/pdf-1",
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/root/attachments/pdf-1/media"
+        }
+      },
+      {
+        "name": "spaces/AAA/messages/root/attachments/block-1",
+        "contentName": "../../malware.exe",
+        "contentType": "application/x-msdownload",
+        "source": "UPLOADED_CONTENT",
+        "sizeBytes": 1024,
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/root/attachments/block-1/media"
+        }
+      }
+    ]
+  },
+  "children": [
+    {
+      "relationship": "quoted_message",
+      "message": {
+        "name": "spaces/AAA/messages/quoted",
+        "attachment": [
+          {
+            "name": "spaces/AAA/messages/quoted/attachments/audio-1",
+            "contentName": "voice note?.ogg",
+            "contentType": "audio/ogg",
+            "source": "UPLOADED_CONTENT",
+            "contentSize": "2048",
+            "attachmentDataRef": {
+              "resourceName": "spaces/AAA/messages/quoted/attachments/audio-1/media"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "relationship": "thread_history",
+      "message": {
+        "name": "spaces/AAA/messages/history",
+        "attachment": [
+          {
+            "name": "spaces/AAA/messages/history/attachments/image-1",
+            "contentName": "design/sketch.png",
+            "contentType": "image/png",
+            "source": "DRIVE_FILE",
+            "thumbnailUri": "https://chat.googleusercontent.com/thumb/image-1",
+            "driveDataRef": {
+              "driveFileId": "drive-file-123",
+              "resourceKey": "rk"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

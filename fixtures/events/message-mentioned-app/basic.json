@@ -1,0 +1,48 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:10:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/mention-1",
+    "text": "<users/app-bot> summarize launch notes",
+    "formattedText": "<users/app-bot> summarize launch notes",
+    "argumentText": "summarize launch notes",
+    "createTime": "2026-06-29T18:10:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "annotations": [
+      {
+        "type": "USER_MENTION",
+        "startIndex": 0,
+        "length": 15,
+        "userMention": {
+          "user": {
+            "name": "users/app-bot",
+            "displayName": "Range Bot",
+            "type": "BOT"
+          },
+          "type": "MENTION"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "actionType": "card_click",
+    "methodName": "approval_decision",
+    "parameters": {
+      "decision": "approve",
+      "requestId": "release-42"
+    },
+    "formInputs": {
+      "comment": {
+        "kind": "string",
+        "values": [
+          "Looks good"
+        ],
+        "value": "Looks good"
+      },
+      "notify": {
+        "kind": "string",
+        "values": [
+          "true"
+        ],
+        "value": "true"
+      },
+      "reviewers": {
+        "kind": "string",
+        "values": [
+          "users/456",
+          "users/789"
+        ],
+        "value": "users/456"
+      }
+    },
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T19:00:00Z"
+  },
+  "note": "System Note: Ada Lovelace (users/123) clicked card action approval_decision at 2026-06-29T19:00:00Z. Button choice: decision=approve. Parameters: decision=approve, requestId=release-42. Form values: comment=Looks good; notify=true; reviewers=users/456, users/789."
+}

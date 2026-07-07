@@ -1,0 +1,12 @@
+{
+  "cardId": "error.export",
+  "title": "Export failed",
+  "message": "Sheets API returned PERMISSION_DENIED.",
+  "details": "Missing chat.bot scope.",
+  "retryAction": {
+    "function": "retry_export",
+    "parameters": {
+      "jobId": "export-7"
+    }
+  }
+}

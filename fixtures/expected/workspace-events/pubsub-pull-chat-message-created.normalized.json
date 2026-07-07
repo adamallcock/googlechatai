@@ -1,0 +1,244 @@
+[
+  {
+    "eventId": "workspace_events:workspace-events-chat-message-created-1",
+    "receivedAt": "2026-06-29T19:00:01Z",
+    "source": "workspace_events",
+    "kind": "message.created",
+    "rawKind": "google.workspace.chat.message.v1.created",
+    "actor": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "email": null,
+      "type": "HUMAN",
+      "isApp": false,
+      "access": {
+        "status": "available",
+        "reason": null
+      }
+    },
+    "actorState": {
+      "status": "available",
+      "reason": null
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM",
+      "spaceType": null
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-2"
+    },
+    "message": {
+      "schemaVersion": "message-ast.v1",
+      "ref": {
+        "name": "spaces/AAA/messages/CCC"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-2"
+      },
+      "sender": {
+        "displayName": "Grace Hopper",
+        "email": null,
+        "resourceName": "users/456",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T19:00:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "state": {
+        "deleted": false,
+        "private": false,
+        "threadReply": true,
+        "directMessage": false
+      },
+      "privateMessageViewer": null,
+      "text": "Ship W11",
+      "formattedText": null,
+      "argumentText": "Ship W11",
+      "segments": [
+        {
+          "kind": "text",
+          "startIndex": 0,
+          "length": 8,
+          "text": "Ship W11"
+        }
+      ],
+      "annotations": [],
+      "links": [],
+      "slashCommand": null,
+      "customEmojis": [],
+      "attachments": [],
+      "attachedGifs": [],
+      "cards": [],
+      "reactions": [],
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/CCC from Grace Hopper (HUMAN, users/456) created at 2026-06-29T19:00:00Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-2."
+      ],
+      "contextNode": {
+        "kind": "message",
+        "relationship": "root",
+        "ref": {
+          "name": "spaces/AAA/messages/CCC"
+        },
+        "sender": {
+          "displayName": "Grace Hopper",
+          "email": null,
+          "resourceName": "users/456",
+          "type": "HUMAN",
+          "accessState": "available",
+          "ambiguityState": "unambiguous"
+        },
+        "createdAt": "2026-06-29T19:00:00Z",
+        "updatedAt": null,
+        "deletedAt": null,
+        "accessState": "available",
+        "text": "Ship W11",
+        "systemNotes": [
+          "System Note: Message spaces/AAA/messages/CCC from Grace Hopper (HUMAN, users/456) created at 2026-06-29T19:00:00Z.",
+          "System Note: This message is a thread reply in spaces/AAA/threads/thread-2."
+        ],
+        "children": [],
+        "plainTextForModel": "System Note: Message spaces/AAA/messages/CCC from Grace Hopper (HUMAN, users/456) created at 2026-06-29T19:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-2.\nShip W11"
+      },
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/CCC from Grace Hopper (HUMAN, users/456) created at 2026-06-29T19:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-2.\nShip W11"
+    },
+    "action": null,
+    "dialog": null,
+    "membership": null,
+    "reaction": null,
+    "locale": null,
+    "timeZone": null,
+    "authContext": {
+      "authType": null,
+      "scopes": [],
+      "responseMode": "none"
+    },
+    "capabilities": {
+      "canRespondSynchronously": false,
+      "canRespondAsynchronously": false,
+      "canReplyInThread": true,
+      "canOpenDialog": false,
+      "canUpdateCard": false
+    },
+    "relationship": {
+      "isQuote": false,
+      "isDirectReply": false,
+      "isThreadReply": true,
+      "isCardAction": false,
+      "isReaction": false,
+      "isEdit": false,
+      "isDeletion": false,
+      "isMembershipEvent": false,
+      "isSpaceEvent": false,
+      "isUserAction": true,
+      "systemNotes": [
+        "Grace Hopper sent a message in Engineering."
+      ]
+    },
+    "transport": {
+      "kind": "workspace_events",
+      "pubsubMessageId": null,
+      "pubsubPublishTime": null,
+      "pubsubSubscription": null,
+      "pubsubDeliveryAttempt": null,
+      "workspaceEventId": "workspace-events-chat-message-created-1",
+      "workspaceEventType": "google.workspace.chat.message.v1.created",
+      "workspaceEventSource": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "workspaceEventSubject": "//chat.googleapis.com/spaces/AAA/messages/CCC"
+    },
+    "idempotencyKey": "workspace_events:workspace-events-chat-message-created-1",
+    "raw": {
+      "id": "workspace-events-chat-message-created-1",
+      "source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "specversion": "1.0",
+      "type": "google.workspace.chat.message.v1.created",
+      "time": "2026-06-29T19:00:01Z",
+      "subject": "//chat.googleapis.com/spaces/AAA/messages/CCC",
+      "datacontenttype": "application/json",
+      "data": {
+        "message": {
+          "name": "spaces/AAA/messages/CCC",
+          "sender": {
+            "name": "users/456",
+            "displayName": "Grace Hopper",
+            "type": "HUMAN"
+          },
+          "createTime": "2026-06-29T19:00:00Z",
+          "text": "Ship W11",
+          "thread": {
+            "name": "spaces/AAA/threads/thread-2"
+          },
+          "space": {
+            "name": "spaces/AAA",
+            "displayName": "Engineering",
+            "type": "ROOM"
+          },
+          "argumentText": "Ship W11"
+        }
+      }
+    },
+    "workspaceEvent": {
+      "id": "workspace-events-chat-message-created-1",
+      "type": "google.workspace.chat.message.v1.created",
+      "source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "subject": "//chat.googleapis.com/spaces/AAA/messages/CCC",
+      "time": "2026-06-29T19:00:01Z",
+      "subscription": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "resource": {
+        "type": "message",
+        "name": "spaces/AAA/messages/CCC",
+        "service": "chat.googleapis.com",
+        "availability": "available"
+      },
+      "actor": {
+        "name": "users/456",
+        "displayName": "Grace Hopper",
+        "email": null,
+        "type": "HUMAN",
+        "isApp": false,
+        "access": {
+          "status": "available",
+          "reason": null
+        }
+      },
+      "actorAvailability": "available",
+      "resourceDataAvailability": "available"
+    },
+    "pubSub": {
+      "messageId": "pubsub-message-2",
+      "publishTime": "2026-06-29T19:00:03Z",
+      "subscription": "projects/chat-ai-sdk/subscriptions/chat-ai-sdk-workspace-events-dev-pull",
+      "orderingKey": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "deliveryAttempt": 2,
+      "attributes": {
+        "ce-id": "workspace-events-chat-message-created-1",
+        "ce-source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+        "ce-specversion": "1.0",
+        "ce-type": "google.workspace.chat.message.v1.created",
+        "ce-time": "2026-06-29T19:00:01Z",
+        "ce-subject": "//chat.googleapis.com/spaces/AAA/messages/CCC",
+        "content-type": "application/json",
+        "synthetic": "true"
+      },
+      "checkpoint": {
+        "type": "pubsub",
+        "cursor": "projects/chat-ai-sdk/subscriptions/chat-ai-sdk-workspace-events-dev-pull#pubsub-message-2",
+        "ackId": "ack-workspace-events-chat-message-created-1",
+        "messageId": "pubsub-message-2",
+        "subscription": "projects/chat-ai-sdk/subscriptions/chat-ai-sdk-workspace-events-dev-pull",
+        "publishTime": "2026-06-29T19:00:03Z",
+        "deliveryAttempt": 2,
+        "orderingKey": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev"
+      }
+    }
+  }
+]

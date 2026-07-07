@@ -1,0 +1,65 @@
+{
+  "eventId": "fixture:MYSTERY_EVENT:no-resource:2026-06-29T18:40:00Z",
+  "receivedAt": "2026-06-29T18:40:00Z",
+  "source": "fixture",
+  "kind": "event.unknown",
+  "rawKind": "MYSTERY_EVENT",
+  "actor": null,
+  "actorState": {
+    "status": "missing",
+    "reason": "event_payload_missing_user"
+  },
+  "space": null,
+  "thread": null,
+  "message": null,
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": false,
+    "systemNotes": []
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MYSTERY_EVENT:no-resource:2026-06-29T18:40:00Z",
+  "raw": {
+    "type": "MYSTERY_EVENT",
+    "eventTime": "2026-06-29T18:40:00Z",
+    "mystery": {
+      "value": true
+    }
+  }
+}

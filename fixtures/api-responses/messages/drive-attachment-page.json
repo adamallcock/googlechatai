@@ -1,0 +1,29 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/drive-1",
+      "sender": {
+        "name": "users/ada",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "createTime": "2026-07-01T21:58:16Z",
+      "text": "Please review the Drive doc.",
+      "thread": {
+        "name": "spaces/AAA/threads/drive-1"
+      },
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/drive-1/attachments/doc-1",
+          "contentName": "roadmap",
+          "contentType": "application/vnd.google-apps.document",
+          "source": "DRIVE_FILE",
+          "driveDataRef": {
+            "driveFileId": "drive-file-123"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "message": {
+    "name": "spaces/AAA/messages/attachments-1",
+    "senderDisplayName": "Ada Lovelace",
+    "createdAt": "2026-06-29T21:00:00Z",
+    "text": "Here are the inputs."
+  },
+  "attachments": [
+    {
+      "fileName": "diagram.png",
+      "contentType": "image/png",
+      "sizeBytes": 102400,
+      "extraction": {
+        "status": "skipped",
+        "reason": "image_ocr_disabled"
+      }
+    },
+    {
+      "fileName": "voice-note.ogg",
+      "contentType": "audio/ogg",
+      "sizeBytes": 409600,
+      "transcription": {
+        "status": "disabled",
+        "provider": null
+      }
+    },
+    {
+      "fileName": "brief.docx",
+      "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "sizeBytes": 51200,
+      "extraction": {
+        "status": "partial",
+        "text": "Launch checklist excerpt..."
+      }
+    }
+  ]
+}

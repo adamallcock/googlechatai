@@ -1,0 +1,231 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/SLASH:2026-06-29T18:10:00Z",
+  "receivedAt": "2026-06-29T18:10:00Z",
+  "source": "fixture",
+  "kind": "message.slash_command",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/SLASH"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:10:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "/deploy staging",
+    "formattedText": null,
+    "argumentText": "staging",
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 15,
+        "text": "/deploy staging"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": {
+      "commandName": null,
+      "commandId": "1",
+      "type": null,
+      "triggersDialog": null,
+      "bot": null
+    },
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/SLASH from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:10:00Z.",
+      "System Note: Slash command 1 invoked."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/SLASH"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:10:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "/deploy staging",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/SLASH from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:10:00Z.",
+        "System Note: Slash command 1 invoked."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/SLASH from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:10:00Z.\nSystem Note: Slash command 1 invoked.\n/deploy staging"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/SLASH from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:10:00Z.\nSystem Note: Slash command 1 invoked.\n/deploy staging"
+  },
+  "action": {
+    "actionId": "fixture:slash_command:/deploy:spaces/AAA/messages/SLASH:2026-06-29T18:10:00Z",
+    "actionType": "slash_command",
+    "methodName": "/deploy",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:10:00Z",
+    "parameters": {
+      "commandId": "1",
+      "commandName": "/deploy",
+      "argumentText": "staging"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": null,
+      "common": null,
+      "slashCommand": {
+        "commandId": "1",
+        "commandName": "/deploy",
+        "type": "INVOKE"
+      },
+      "appCommandMetadata": null,
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) ran slash command \"/deploy\" at 2026-06-29T18:10:00Z.",
+      "System Note: Action parameters: argumentText=staging, commandId=1, commandName=/deploy."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace invoked slash command /deploy."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/SLASH:2026-06-29T18:10:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:10:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/SLASH",
+      "text": "/deploy staging",
+      "argumentText": "staging",
+      "createTime": "2026-06-29T18:10:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "slashCommand": {
+        "commandId": "1",
+        "commandName": "/deploy",
+        "type": "INVOKE"
+      }
+    }
+  }
+}

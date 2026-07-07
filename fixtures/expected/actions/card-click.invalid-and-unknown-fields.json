@@ -1,0 +1,119 @@
+{
+  "actionId": "fixture:card_click:save_settings:spaces/AAA/messages/INVALID:2026-06-29T19:00:00Z",
+  "actionType": "card_click",
+  "methodName": "save_settings",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "eventTime": "2026-06-29T19:00:00Z",
+  "parameters": {
+    "settingsId": "settings-1"
+  },
+  "formInputs": {
+    "badDate": {
+      "kind": "date",
+      "value": null,
+      "msSinceEpoch": "not-a-number",
+      "raw": {
+        "dateInput": {
+          "msSinceEpoch": "not-a-number"
+        }
+      }
+    },
+    "badStrings": {
+      "kind": "string",
+      "value": null,
+      "values": [],
+      "raw": {
+        "stringInputs": {
+          "value": "not-an-array"
+        }
+      }
+    },
+    "customBlob": {
+      "kind": "unknown",
+      "value": null,
+      "raw": {
+        "customWidgetInput": {
+          "payload": {
+            "vendor": "future-widget",
+            "value": 7
+          }
+        }
+      }
+    }
+  },
+  "selectedUsers": [],
+  "selectedSpaces": [],
+  "validationErrors": [
+    {
+      "field": "parameters.missingValue",
+      "code": "invalid_parameter",
+      "message": "Action parameter missingValue is missing a string value."
+    },
+    {
+      "field": "badDate",
+      "code": "invalid_date",
+      "message": "Date input badDate has invalid msSinceEpoch."
+    },
+    {
+      "field": "badStrings",
+      "code": "invalid_string_values",
+      "message": "String input badStrings must contain a string array."
+    },
+    {
+      "field": "customBlob",
+      "code": "unsupported_form_input",
+      "message": "Form input customBlob has no supported Google Chat input value."
+    }
+  ],
+  "systemNotes": [
+    "System Note: Ada Lovelace (users/123) clicked card action \"save_settings\" at 2026-06-29T19:00:00Z.",
+    "System Note: Action parameters: settingsId=settings-1.",
+    "System Note: Form field badDate contains invalid date input.",
+    "System Note: Form field badStrings contains invalid string input.",
+    "System Note: Form field customBlob contains unsupported or unknown data."
+  ],
+  "raw": {
+    "action": {
+      "actionMethodName": "save_settings",
+      "parameters": [
+        {
+          "key": "settingsId",
+          "value": "settings-1"
+        },
+        {
+          "key": "missingValue"
+        }
+      ]
+    },
+    "common": {
+      "invokedFunction": "save_settings",
+      "formInputs": {
+        "badDate": {
+          "dateInput": {
+            "msSinceEpoch": "not-a-number"
+          }
+        },
+        "badStrings": {
+          "stringInputs": {
+            "value": "not-an-array"
+          }
+        },
+        "customBlob": {
+          "customWidgetInput": {
+            "payload": {
+              "vendor": "future-widget",
+              "value": 7
+            }
+          }
+        }
+      }
+    },
+    "slashCommand": null,
+    "appCommandMetadata": null,
+    "dialogEventType": null
+  }
+}

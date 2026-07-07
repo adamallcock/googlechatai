@@ -1,0 +1,46 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T19:01:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/bot-mention-1",
+    "text": "<users/app> summarize this",
+    "formattedText": "<users/app> summarize this",
+    "argumentText": "summarize this",
+    "createTime": "2026-06-29T19:01:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "annotations": [
+      {
+        "type": "USER_MENTION",
+        "startIndex": 0,
+        "length": 11,
+        "userMention": {
+          "user": {
+            "name": "users/app",
+            "displayName": "Google Chat AI SDK Dev",
+            "type": "BOT"
+          },
+          "type": "MENTION"
+        }
+      }
+    ]
+  }
+}

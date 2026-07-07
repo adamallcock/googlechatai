@@ -1,0 +1,27 @@
+{
+  "specversion": "1.0",
+  "id": "workspace-event-7",
+  "source": "//chat.googleapis.com/spaces/AAA",
+  "type": "google.workspace.chat.membership.v1.updated",
+  "subject": "spaces/AAA/members/users/777",
+  "time": "2026-06-29T18:36:00Z",
+  "datacontenttype": "application/json",
+  "data": {
+    "membership": {
+      "name": "spaces/AAA/members/users/777",
+      "state": "JOINED",
+      "member": {
+        "name": "users/777",
+        "displayName": "Katherine Johnson",
+        "email": "katherine@example.com",
+        "type": "HUMAN"
+      },
+      "createTime": "2026-06-29T18:35:00Z"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  }
+}

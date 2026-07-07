@@ -1,0 +1,60 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:00:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/BBB",
+    "text": "<users/123> deploy staging https://example.com",
+    "formattedText": "<users/123> deploy staging https://example.com",
+    "argumentText": "deploy staging https://example.com",
+    "createTime": "2026-06-29T18:00:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "annotations": [
+      {
+        "type": "USER_MENTION",
+        "startIndex": 0,
+        "length": 11,
+        "userMention": {
+          "user": {
+            "name": "users/123",
+            "displayName": "Ada Lovelace",
+            "type": "HUMAN"
+          },
+          "type": "MENTION"
+        }
+      }
+    ],
+    "attachment": [
+      {
+        "name": "spaces/AAA/messages/BBB/attachments/att-1",
+        "contentName": "report.pdf",
+        "contentType": "application/pdf",
+        "source": "UPLOADED_CONTENT",
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/BBB/attachments/att-1/media"
+        }
+      }
+    ]
+  }
+}

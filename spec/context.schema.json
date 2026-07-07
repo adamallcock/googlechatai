@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/context.schema.json",
+  "title": "Google Chat AI Context",
+  "anyOf": [
+    { "$ref": "#/$defs/contextNode" },
+    { "$ref": "#/$defs/contextGraph" },
+    { "$ref": "#/$defs/aiContext" }
+  ],
+  "$defs": {
+    "aiContext": {
+      "type": "object",
+      "required": [
+        "contextId",
+        "schemaVersion",
+        "kind",
+        "source",
+        "createdAt",
+        "timeZone",
+        "limits",
+        "pagination",
+        "systemNotes",
+        "nodes"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "contextId": { "type": "string" },
+        "schemaVersion": { "type": "string" },
+        "kind": { "type": "string", "const": "ai_context" },
+        "source": {
+          "type": "object",
+          "required": ["type"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "type": "string" },
+            "fixtureId": { "type": ["string", "null"] }
+          }
+        },
+        "createdAt": { "type": "string" },
+        "timeZone": { "type": ["string", "null"] },
+        "limits": { "$ref": "#/$defs/aiContextLimits" },
+        "pagination": { "$ref": "#/$defs/aiContextPagination" },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/aiContextNode" }
+        }
+      }
+    },
+    "aiContextNode": {
+      "type": "object",
+      "required": [
+        "nodeId",
+        "nodeType",
+        "role",
+        "text",
+        "identity",
+        "timestamps",
+        "relationships",
+        "metadata",
+        "availability",
+        "truncation",
+        "systemNotes",
+        "children"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "nodeId": { "type": "string" },
+        "nodeType": {
+          "type": "string",
+          "enum": [
+            "message",
+            "attachment",
+            "derived_content",
+            "system_note",
+            "thread",
+            "action",
+            "reaction",
+            "card",
+            "error",
+            "unknown"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant", "system", "tool", "unknown"]
+        },
+        "text": { "type": ["string", "null"] },
+        "identity": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/aiContextIdentity" }
+          ]
+        },
+        "timestamps": { "$ref": "#/$defs/aiContextTimestamps" },
+        "relationships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/aiContextRelationship" }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "attachment": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "message": { "type": ["string", "null"] },
+            "space": { "type": ["string", "null"] },
+            "thread": { "type": ["string", "null"] }
+          }
+        },
+        "availability": { "$ref": "#/$defs/aiContextAvailability" },
+        "truncation": { "$ref": "#/$defs/aiContextTruncation" },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/aiContextNode" }
+        }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["quotedMessage"] },
+          { "required": ["quotedMessages"] },
+          { "required": ["quotedAttachment"] },
+          { "required": ["quotedAttachments"] }
+        ]
+      }
+    },
+    "aiContextIdentity": {
+      "type": "object",
+      "required": ["displayName", "email", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "userResource": { "type": ["string", "null"] },
+        "displayName": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "actorType": { "type": ["string", "null"] },
+        "isBot": { "type": "boolean" },
+        "isApp": { "type": "boolean" },
+        "isHuman": { "type": "boolean" },
+        "type": { "type": ["string", "null"] }
+      }
+    },
+    "aiContextTimestamps": {
+      "type": "object",
+      "required": ["createdAt", "updatedAt", "timeZone"],
+      "additionalProperties": true,
+      "properties": {
+        "createdAt": { "type": ["string", "null"] },
+        "updatedAt": { "type": ["string", "null"] },
+        "timeZone": { "type": ["string", "null"] }
+      }
+    },
+    "aiContextRelationship": {
+      "type": "object",
+      "required": ["type", "targetNodeId", "note"],
+      "additionalProperties": true,
+      "properties": {
+        "type": { "type": "string" },
+        "targetNodeId": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "aiContextAvailability": {
+      "type": "object",
+      "required": ["state", "reason", "note"],
+      "additionalProperties": true,
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": ["available", "truncated", "inaccessible", "access_limited", "unavailable", "unknown"]
+        },
+        "reason": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "aiContextTruncation": {
+      "type": "object",
+      "required": ["isTruncated", "reason", "includedBytes", "originalBytes", "omittedNodeCount"],
+      "additionalProperties": true,
+      "properties": {
+        "isTruncated": { "type": "boolean" },
+        "reason": { "type": ["string", "null"] },
+        "includedBytes": { "type": ["number", "null"], "minimum": 0 },
+        "originalBytes": { "type": ["number", "null"], "minimum": 0 },
+        "omittedNodeCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "aiContextLimits": {
+      "type": "object",
+      "required": ["maxMessages", "maxBytes", "dateRange"],
+      "additionalProperties": true,
+      "properties": {
+        "maxMessages": { "type": ["integer", "null"], "minimum": 0 },
+        "maxBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "dateRange": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["startTime", "endTime"],
+              "additionalProperties": true,
+              "properties": {
+                "startTime": { "type": ["string", "null"] },
+                "endTime": { "type": ["string", "null"] }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "aiContextPagination": {
+      "type": "object",
+      "required": ["pageToken", "nextPageToken", "hasMore"],
+      "additionalProperties": true,
+      "properties": {
+        "pageToken": { "type": ["string", "null"] },
+        "nextPageToken": { "type": ["string", "null"] },
+        "hasMore": { "type": "boolean" }
+      }
+    },
+    "contextNode": {
+      "type": "object",
+      "required": [
+        "kind",
+        "relationship",
+        "accessState",
+        "systemNotes",
+        "children",
+        "plainTextForModel"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["message", "attachment", "gif", "card"]
+        },
+        "relationship": {
+          "type": "string",
+          "enum": ["root", "quoted_message", "attachment", "card"]
+        },
+        "ref": {
+          "type": "object",
+          "required": ["name"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" }
+          }
+        },
+        "sender": { "$ref": "identity.schema.json#/$defs/identityOrNull" },
+        "createdAt": { "type": ["string", "null"] },
+        "updatedAt": { "type": ["string", "null"] },
+        "deletedAt": { "type": ["string", "null"] },
+        "accessState": {
+          "type": "string",
+          "enum": ["available", "metadata_only", "inaccessible", "deleted"]
+        },
+        "text": { "type": "string" },
+        "systemNotes": { "type": "array", "items": { "type": "string" } },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contextNode" }
+        },
+        "plainTextForModel": { "type": "string" }
+      }
+    },
+    "contextGraph": {
+      "type": "object",
+      "required": ["relationship"],
+      "additionalProperties": true,
+      "properties": {
+        "relationship": { "type": "string" },
+        "message": { "$ref": "#/$defs/messageNode" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contextGraph" }
+        }
+      }
+    },
+    "attachmentContextRef": {
+      "type": "object",
+      "required": ["messageName", "relationship", "path"],
+      "additionalProperties": true,
+      "properties": {
+        "messageName": { "type": ["string", "null"] },
+        "relationship": { "type": "string" },
+        "path": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "messageNode": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "attachment": {
+          "type": "array",
+          "items": { "$ref": "attachments.schema.json" }
+        },
+        "attachments": {
+          "type": "array",
+          "items": { "$ref": "attachments.schema.json" }
+        },
+        "quotedMessage": { "$ref": "#/$defs/messageNode" }
+      }
+    },
+    "contextPart": {
+      "type": "object",
+      "required": ["type", "text"],
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["system_note", "attachment_content"]
+        },
+        "text": { "type": ["string", "null"] },
+        "status": {
+          "type": "string",
+          "enum": ["complete", "skipped", "partial", "blocked", "disabled", "failed"]
+        },
+        "note": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/quote-snapshot",
+      "sender": {
+        "name": "users/grace",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "createTime": "2026-07-01T12:05:00Z",
+      "thread": {
+        "name": "spaces/AAA/threads/quote-snapshot"
+      },
+      "text": "Can you inspect this quoted audio?",
+      "quotedMessageMetadata": {
+        "name": "spaces/AAA/messages/audio-root",
+        "lastUpdateTime": "2026-07-01T12:00:00Z",
+        "quoteType": "REPLY",
+        "quotedMessageSnapshot": {
+          "sender": "users/ada",
+          "text": "Here is the audio note."
+        }
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/audio-root",
+      "sender": {
+        "name": "users/ada",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "createTime": "2026-07-01T12:00:00Z",
+      "thread": {
+        "name": "spaces/AAA/threads/audio-root"
+      },
+      "text": "Here is the audio note.",
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/audio-root/attachments/audio-1",
+          "contentName": "note.wav",
+          "contentType": "audio/wav",
+          "source": "UPLOADED_CONTENT",
+          "attachmentDataRef": {
+            "resourceName": "spaces/AAA/messages/audio-root/attachments/audio-1/media"
+          },
+          "sizeBytes": 4096
+        }
+      ]
+    }
+  ]
+}

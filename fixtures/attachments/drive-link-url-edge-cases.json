@@ -1,0 +1,49 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "http://[bad"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/e/PUBLISHED_DOC_ID/pub"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/forms/d/form123/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://drive.google.com/file/d/blob123/view"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://drive.google.com/open?id=open456"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://drive.google.com/drive/folders/folder789"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/u/0/"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/doc-denied/edit"
+    }
+  ],
+  "options": {
+    "targetDirectory": "/tmp/chat-ai-sdk/edge-links",
+    "env": {},
+    "cache": {
+      "entriesByFileId": {
+        "doc-denied": {
+          "negative": true,
+          "key": "drive-link:doc-denied",
+          "reason": "permission_denied"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "eventId": "workspace_events:workspace-event-5",
+  "receivedAt": "2026-06-29T18:34:00Z",
+  "source": "workspace_events",
+  "kind": "reaction.deleted",
+  "rawKind": "google.workspace.chat.reaction.v1.deleted",
+  "actor": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": null,
+  "thread": null,
+  "message": null,
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": {
+    "ref": {
+      "name": "spaces/AAA/messages/BBB/reactions/reaction-1"
+    },
+    "user": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "type": "HUMAN",
+      "isApp": false,
+      "access": {
+        "status": "available",
+        "reason": null
+      }
+    },
+    "emoji": {
+      "unicode": "👍",
+      "customEmoji": null
+    },
+    "messageRef": {
+      "name": "spaces/AAA/messages/BBB"
+    },
+    "createdAt": "2026-06-29T18:32:00Z",
+    "deletedAt": "2026-06-29T18:34:00Z"
+  },
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": true,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Grace Hopper removed 👍."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": "workspace-event-5",
+    "workspaceEventType": "google.workspace.chat.reaction.v1.deleted",
+    "workspaceEventSource": "//chat.googleapis.com/spaces/AAA",
+    "workspaceEventSubject": "spaces/AAA/messages/BBB/reactions/reaction-1"
+  },
+  "idempotencyKey": "workspace_events:workspace-event-5",
+  "raw": {
+    "specversion": "1.0",
+    "id": "workspace-event-5",
+    "source": "//chat.googleapis.com/spaces/AAA",
+    "type": "google.workspace.chat.reaction.v1.deleted",
+    "subject": "spaces/AAA/messages/BBB/reactions/reaction-1",
+    "time": "2026-06-29T18:34:00Z",
+    "datacontenttype": "application/json",
+    "data": {
+      "reaction": {
+        "name": "spaces/AAA/messages/BBB/reactions/reaction-1",
+        "user": {
+          "name": "users/456",
+          "displayName": "Grace Hopper",
+          "email": "grace@example.com",
+          "type": "HUMAN"
+        },
+        "emoji": {
+          "unicode": "👍"
+        },
+        "createTime": "2026-06-29T18:32:00Z",
+        "deleteTime": "2026-06-29T18:34:00Z",
+        "message": "spaces/AAA/messages/BBB"
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "kind": "chat.call_plan",
+  "operation": "pins.list",
+  "dryRun": true,
+  "capability": {
+    "ok": true,
+    "authMode": "app",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.messages"
+    ],
+    "reasons": []
+  },
+  "requests": [
+    {
+      "resource": "spaces.messagePins.list",
+      "method": "GET",
+      "path": "/v1/spaces/AAA/messagePins",
+      "query": {
+        "pageSize": 100
+      },
+      "body": null
+    }
+  ],
+  "idempotency": {
+    "requestId": null,
+    "clientMessageId": null
+  },
+  "pin": {
+    "action": "list",
+    "space": "spaces/AAA",
+    "pageSize": 100,
+    "pageToken": null
+  },
+  "safety": {
+    "liveAllowed": false,
+    "directMessage": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "warnings": [
+    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+  ]
+}

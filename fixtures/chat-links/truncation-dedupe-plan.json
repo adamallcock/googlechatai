@@ -1,0 +1,33 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/bbb",
+      "text": "https://chat.google.com/room/BBB"
+    },
+    {
+      "name": "spaces/AAA/messages/aaa-duplicate",
+      "text": "https://chat.google.com/room/AAA"
+    },
+    {
+      "name": "spaces/AAA/messages/aaa-primary",
+      "text": "https://chat.google.com/room/AAA"
+    },
+    {
+      "name": "spaces/AAA/messages/old-0",
+      "text": "https://chat.google.com/room/OLD0"
+    },
+    {
+      "name": "spaces/AAA/messages/old-1",
+      "text": "https://chat.google.com/room/OLD1"
+    },
+    {
+      "name": "spaces/AAA/messages/old-2",
+      "text": "https://chat.google.com/room/OLD2"
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": true,
+    "maxTraversalNodes": 4,
+    "maxChatLinks": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "provider": "openai",
+  "model": "gpt-4o-transcribe",
+  "status": "complete",
+  "audioSha256": "6ed8919ce20490a5e3ad8630a4fab69475297abd07db73918dd5f36fcfaeb11b",
+  "audioSizeBytes": 5,
+  "transcriptLength": 16,
+  "transcriptSha256": "e2cb600338632c29a8db6708095bde5628f7bd8b1e59239661dfb9ffac9505af",
+  "transcriptText": null,
+  "redacted": true
+}

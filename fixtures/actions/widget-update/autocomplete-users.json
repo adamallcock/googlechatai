@@ -1,0 +1,39 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T18:30:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/WIDGET",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  },
+  "action": {
+    "actionMethodName": "assignee_autocomplete"
+  },
+  "common": {
+    "invokedFunction": "assignee_autocomplete",
+    "parameters": {
+      "autocomplete_widget_query": "ada",
+      "widget": "assignee"
+    },
+    "formInputs": {
+      "assignee": {
+        "stringInputs": {
+          "value": ["users/123"]
+        }
+      }
+    }
+  }
+}

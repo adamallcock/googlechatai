@@ -1,0 +1,48 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:08:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/QUOTE",
+    "text": "Yes, ship it.",
+    "createTime": "2026-06-29T18:08:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "quotedMessageMetadata": {
+      "name": "spaces/AAA/messages/ROOT",
+      "quotedMessage": {
+        "name": "spaces/AAA/messages/ROOT",
+        "text": "Should we ship this?",
+        "sender": {
+          "name": "users/456",
+          "displayName": "Grace Hopper",
+          "email": "grace@example.com",
+          "type": "HUMAN"
+        },
+        "createTime": "2026-06-29T18:07:00Z"
+      }
+    }
+  }
+}

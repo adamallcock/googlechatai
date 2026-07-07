@@ -1,0 +1,153 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "ready",
+  "dryRun": true,
+  "summary": "Planned 2 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 2,
+    "parsed": 2,
+    "unknown": 0,
+    "plannedRequests": 2,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 2,
+    "plainTextUrlsScanned": 0,
+    "plainTextCharsScanned": 0,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 4,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "matched_url",
+      "originalUrl": "https://chat.google.com/room/MATCHED",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/MATCHED",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/MATCHED",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/MATCHED",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-2",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/PLAIN",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/PLAIN",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/PLAIN",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/PLAIN",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    }
+  ],
+  "requests": [
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/MATCHED",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    },
+    {
+      "candidateId": "chat-link-2",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/PLAIN",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-2"
+      ]
+    }
+  ],
+  "capability": {
+    "ok": true,
+    "authMode": "user",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.spaces.readonly"
+    ],
+    "requiresAdminApproval": false,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 2 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": []
+}

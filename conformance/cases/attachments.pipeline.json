@@ -1,0 +1,90 @@
+[
+  {
+    "id": "attachments.pipeline.basic",
+    "description": "Plan Chat-hosted, Drive-hosted, blocked, cached, parser-ready, and upload fallback attachment work.",
+    "operation": "attachments.planPipeline",
+    "input": {
+      "fixture": "fixtures/attachments/pipeline-basic.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/pipeline-basic.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.retrieval-plan",
+    "description": "Promote Drive rich links and pasted Drive URLs into a user-auth retrieval plan.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-retrieval.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-retrieval.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.context-relationships",
+    "description": "Preserve quoted and thread-history relationships while planning Drive links from context trees.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-context.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-context.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.url-edge-cases",
+    "description": "Keep Drive URL parser edge cases, negative cache, and fallback policy aligned across runtimes.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-url-edge-cases.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-url-edge-cases.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.toggle-plain-disabled",
+    "description": "Suppress explicit plain_url entries and scanned text URLs without suppressing matchedUrl links.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-toggle-plain-disabled.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-toggle-plain-disabled.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.toggle-matched-disabled",
+    "description": "Suppress matchedUrl links without suppressing plain_url entries or scanned text URLs.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-toggle-matched-disabled.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-toggle-matched-disabled.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.snake-options-and-limits",
+    "description": "Honor snake_case JSON options and expose Drive-link traversal/link caps.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-snake-options-and-limits.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-snake-options-and-limits.json"
+    }
+  },
+  {
+    "id": "attachments.drive-links.wide-budget-caps",
+    "description": "Bound wide shallow link scans and context traversal while reporting skipped work.",
+    "operation": "attachments.planDriveLinks",
+    "input": {
+      "fixture": "fixtures/attachments/drive-link-wide-budget-caps.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/drive-link-wide-budget-caps.json"
+    }
+  }
+]

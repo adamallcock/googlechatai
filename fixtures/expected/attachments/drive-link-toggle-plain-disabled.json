@@ -1,0 +1,86 @@
+{
+  "kind": "chat.drive_link_retrieval_plan",
+  "status": "ready",
+  "summary": "1 Drive link candidates, 1 ready exports, 0 fallback or blocked paths.",
+  "counts": {
+    "candidates": 1,
+    "driveExports": 1,
+    "blocked": 0,
+    "cacheHits": 0,
+    "fallbacks": 0,
+    "ignored": 0
+  },
+  "links": [
+    {
+      "candidate": {
+        "kind": "drive_link",
+        "candidateId": "drive-link:0:matched456",
+        "source": "matched_url",
+        "url": "https://docs.google.com/spreadsheets/d/matched456/edit",
+        "title": null,
+        "richLinkType": null,
+        "mimeType": "application/vnd.google-apps.spreadsheet",
+        "driveFileId": "matched456",
+        "driveFileKind": "spreadsheet",
+        "retrievable": true,
+        "blockedReasons": [],
+        "context": {
+          "messageName": "spaces/AAA/messages/TOGGLE_PLAIN",
+          "relationship": "message",
+          "path": [
+            "message:spaces/AAA/messages/TOGGLE_PLAIN"
+          ]
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "key": null,
+        "negative": false,
+        "reason": null,
+        "metadata": {}
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": [
+            "env_flag_missing"
+          ]
+        },
+        "attachmentName": "driveLinks/matched456",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/matched456/export?mimeType=text%2Fcsv",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.spreadsheet",
+        "exportMimeType": "text/csv",
+        "destinationPath": "/tmp/chat-ai-sdk/toggles/matched456.csv",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly"
+          ]
+        }
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "drive_export",
+        "reason": "Drive link can be exported with Google Drive user auth."
+      },
+      "systemNote": "System Note: Drive link https://docs.google.com/spreadsheets/d/matched456/edit is planned with drive.files.export using Google Drive user auth."
+    }
+  ],
+  "ignoredLinks": [],
+  "systemNotes": [
+    "System Note: Drive link https://docs.google.com/spreadsheets/d/matched456/edit is planned with drive.files.export using Google Drive user auth."
+  ]
+}

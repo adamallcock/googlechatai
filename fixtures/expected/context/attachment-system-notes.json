@@ -1,0 +1,257 @@
+{
+  "contextId": "context.attachment-system-notes",
+  "schemaVersion": "0.1",
+  "kind": "ai_context",
+  "source": {
+    "type": "fixture",
+    "fixtureId": "context.attachment-system-notes"
+  },
+  "createdAt": "2026-06-29T18:40:00Z",
+  "timeZone": "America/New_York",
+  "limits": {
+    "maxMessages": 1,
+    "maxBytes": 200000,
+    "dateRange": null
+  },
+  "pagination": {
+    "pageToken": null,
+    "nextPageToken": null,
+    "hasMore": false
+  },
+  "systemNotes": [
+    "System Note: Attachment metadata is included before derived attachment content."
+  ],
+  "nodes": [
+    {
+      "nodeId": "msg.attachments-mixed",
+      "nodeType": "message",
+      "role": "user",
+      "text": "Here are the launch artifacts.",
+      "identity": {
+        "status": "resolved",
+        "name": "users/456",
+        "userResource": "users/456",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "actorType": "human",
+        "isBot": false,
+        "isApp": false,
+        "isHuman": true,
+        "type": "HUMAN"
+      },
+      "timestamps": {
+        "createdAt": "2026-06-29T18:40:00Z",
+        "updatedAt": null,
+        "timeZone": "America/New_York"
+      },
+      "relationships": [
+        {
+          "type": "current_message",
+          "targetNodeId": null,
+          "note": "Message that supplied three attachment nodes."
+        }
+      ],
+      "metadata": {
+        "message": "spaces/AAA/messages/attachments-mixed",
+        "space": "spaces/AAA"
+      },
+      "availability": {
+        "state": "available",
+        "reason": null,
+        "note": null
+      },
+      "truncation": {
+        "isTruncated": false,
+        "reason": null,
+        "includedBytes": null,
+        "originalBytes": null,
+        "omittedNodeCount": 0
+      },
+      "systemNotes": [],
+      "children": [
+        {
+          "nodeId": "att.launch-image",
+          "nodeType": "attachment",
+          "role": "system",
+          "text": null,
+          "identity": null,
+          "timestamps": {
+            "createdAt": "2026-06-29T18:40:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "attached_to",
+              "targetNodeId": "msg.attachments-mixed",
+              "note": "Image attachment on the launch artifacts message."
+            }
+          ],
+          "metadata": {
+            "attachment": {
+              "name": "spaces/AAA/messages/attachments-mixed/attachments/image-1",
+              "contentName": "launch.png",
+              "contentType": "image/png",
+              "sizeBytes": 2400000,
+              "source": "UPLOADED_CONTENT"
+            }
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": null
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [
+            "System Note: Grace Hopper attached launch.png (image/png, 2.4 MB) with this message."
+          ],
+          "children": []
+        },
+        {
+          "nodeId": "att.launch-audio",
+          "nodeType": "attachment",
+          "role": "system",
+          "text": null,
+          "identity": null,
+          "timestamps": {
+            "createdAt": "2026-06-29T18:40:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "attached_to",
+              "targetNodeId": "msg.attachments-mixed",
+              "note": "Audio attachment on the launch artifacts message."
+            }
+          ],
+          "metadata": {
+            "attachment": {
+              "name": "spaces/AAA/messages/attachments-mixed/attachments/audio-1",
+              "contentName": "standup.m4a",
+              "contentType": "audio/mp4",
+              "sizeBytes": 2100000,
+              "source": "UPLOADED_CONTENT"
+            },
+            "transcription": {
+              "enabled": false,
+              "provider": null,
+              "status": "disabled",
+              "text": null,
+              "auth": {
+                "secretRef": null,
+                "envVar": null,
+                "containsSecret": false
+              }
+            }
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": "Audio bytes are available, but transcription is disabled by default."
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [
+            "System Note: Grace Hopper attached standup.m4a (audio/mp4, 2.1 MB) with this message.",
+            "System Note: Audio transcription is disabled; no transcript is included."
+          ],
+          "children": []
+        },
+        {
+          "nodeId": "att.launch-doc",
+          "nodeType": "attachment",
+          "role": "system",
+          "text": null,
+          "identity": null,
+          "timestamps": {
+            "createdAt": "2026-06-29T18:40:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "attached_to",
+              "targetNodeId": "msg.attachments-mixed",
+              "note": "Document attachment on the launch artifacts message."
+            }
+          ],
+          "metadata": {
+            "attachment": {
+              "name": "spaces/AAA/messages/attachments-mixed/attachments/doc-1",
+              "contentName": "launch-brief.pdf",
+              "contentType": "application/pdf",
+              "sizeBytes": 890000,
+              "source": "UPLOADED_CONTENT"
+            }
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": null
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [
+            "System Note: Grace Hopper attached launch-brief.pdf (application/pdf, 890 KB) with this message."
+          ],
+          "children": [
+            {
+              "nodeId": "derived.launch-doc-summary",
+              "nodeType": "derived_content",
+              "role": "system",
+              "text": "Document preview: launch brief includes rollout checklist and owner table.",
+              "identity": null,
+              "timestamps": {
+                "createdAt": "2026-06-29T18:40:00Z",
+                "updatedAt": null,
+                "timeZone": "America/New_York"
+              },
+              "relationships": [
+                {
+                  "type": "derived_from",
+                  "targetNodeId": "att.launch-doc",
+                  "note": "Preview text extracted from the PDF attachment."
+                }
+              ],
+              "metadata": {
+                "contentType": "text/plain",
+                "extraction": "fixture"
+              },
+              "availability": {
+                "state": "available",
+                "reason": null,
+                "note": null
+              },
+              "truncation": {
+                "isTruncated": false,
+                "reason": null,
+                "includedBytes": 72,
+                "originalBytes": 72,
+                "omittedNodeCount": 0
+              },
+              "systemNotes": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/CMD"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:02:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "/deploy staging",
+  "formattedText": "/deploy staging",
+  "argumentText": "staging",
+  "segments": [
+    {
+      "kind": "slashCommand",
+      "startIndex": 0,
+      "length": 7,
+      "text": "/deploy",
+      "sourceText": "/deploy",
+      "annotationIndex": 0
+    },
+    {
+      "kind": "text",
+      "startIndex": 7,
+      "length": 8,
+      "text": " staging"
+    }
+  ],
+  "annotations": [
+    {
+      "kind": "slashCommand",
+      "startIndex": 0,
+      "length": 7,
+      "text": "/deploy",
+      "renderText": "/deploy",
+      "slashCommand": {
+        "commandName": "/deploy",
+        "commandId": "deploy-staging",
+        "type": "INVOKE",
+        "triggersDialog": false,
+        "bot": {
+          "displayName": "Deploy Bot",
+          "email": null,
+          "resourceName": "users/app-bot",
+          "type": "BOT",
+          "accessState": "available",
+          "ambiguityState": "unambiguous"
+        }
+      }
+    }
+  ],
+  "links": [],
+  "slashCommand": {
+    "commandName": "/deploy",
+    "commandId": "deploy-staging",
+    "type": "INVOKE",
+    "triggersDialog": false,
+    "bot": {
+      "displayName": "Deploy Bot",
+      "email": null,
+      "resourceName": "users/app-bot",
+      "type": "BOT",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    }
+  },
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/CMD from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:02:00Z.",
+    "System Note: Slash command /deploy (deploy-staging) invoked for Deploy Bot (BOT, users/app-bot)."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/CMD"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/111",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:02:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "/deploy staging",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/CMD from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:02:00Z.",
+      "System Note: Slash command /deploy (deploy-staging) invoked for Deploy Bot (BOT, users/app-bot)."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/CMD from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:02:00Z.\nSystem Note: Slash command /deploy (deploy-staging) invoked for Deploy Bot (BOT, users/app-bot).\n/deploy staging"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/CMD from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:02:00Z.\nSystem Note: Slash command /deploy (deploy-staging) invoked for Deploy Bot (BOT, users/app-bot).\n/deploy staging"
+}

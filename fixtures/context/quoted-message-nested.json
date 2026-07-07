@@ -1,0 +1,62 @@
+{
+  "rootNodeId": "msg-current",
+  "nodes": [
+    {
+      "id": "msg-current",
+      "type": "message",
+      "relationship": "thread_reply",
+      "sender": {
+        "resourceName": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "human",
+        "access": "resolved"
+      },
+      "createdAt": "2026-06-29T20:00:00Z",
+      "text": "Can you summarize the quoted plan?",
+      "children": ["quote-1"]
+    },
+    {
+      "id": "quote-1",
+      "type": "message",
+      "relationship": "quote",
+      "sender": {
+        "resourceName": "users/456",
+        "displayName": "Grace Hopper",
+        "email": null,
+        "type": "human",
+        "access": "profile_limited"
+      },
+      "createdAt": "2026-06-29T19:45:00Z",
+      "text": "The rollout depends on the attached checklist.",
+      "children": ["attachment-1", "quote-2"]
+    },
+    {
+      "id": "attachment-1",
+      "type": "attachment",
+      "relationship": "attached_to_message",
+      "fileName": "rollout-checklist.pdf",
+      "contentType": "application/pdf",
+      "sizeBytes": 204800,
+      "extraction": {
+        "status": "not_requested"
+      },
+      "children": []
+    },
+    {
+      "id": "quote-2",
+      "type": "message",
+      "relationship": "quote",
+      "sender": {
+        "resourceName": "users/789",
+        "displayName": "Lin Chen",
+        "email": null,
+        "type": "human",
+        "access": "profile_limited"
+      },
+      "createdAt": "2026-06-29T19:30:00Z",
+      "text": "Please keep the deploy reversible.",
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,467 @@
+[
+  {
+    "id": "execute.dryRun.send-to-space",
+    "description": "Dry-run execution of a simple send-to-space plan.",
+    "operation": "execute.dryRun",
+    "input": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "messages.sendToSpace",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.bot"
+          ],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.create",
+            "method": "POST",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "requestId": "req-fixed",
+              "messageId": "client-fixed"
+            },
+            "body": {
+              "text": "Hello"
+            }
+          }
+        ],
+        "idempotency": {
+          "requestId": "req-fixed",
+          "clientMessageId": "client-fixed"
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed."
+          ]
+        },
+        "warnings": []
+      }
+    },
+    "expect": {
+      "kind": "chat.plan_execution",
+      "operation": "messages.sendToSpace",
+      "planKind": "chat.call_plan",
+      "mode": "dryRun",
+      "ok": true,
+      "authMode": "app",
+      "blocked": null,
+      "steps": [
+        {
+          "index": 0,
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messages?requestId=req-fixed&messageId=client-fixed",
+          "query": {
+            "requestId": "req-fixed",
+            "messageId": "client-fixed"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        }
+      ],
+      "resolvedPlaceholders": {},
+      "createdMessages": [],
+      "warnings": []
+    }
+  },
+  {
+    "id": "execute.dryRun.send-to-user-blocked",
+    "description": "Dry-run execution reports the capability block and unresolved DM placeholder.",
+    "operation": "execute.dryRun",
+    "input": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "messages.sendToUser",
+        "dryRun": true,
+        "capability": {
+          "ok": false,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.bot"
+          ],
+          "reasons": [
+            "Direct-message live sends are disabled by W9 safety policy; this plan is dry-run only."
+          ]
+        },
+        "requests": [
+          {
+            "resource": "spaces.findDirectMessage",
+            "method": "GET",
+            "path": "/v1/spaces:findDirectMessage",
+            "query": {
+              "name": "users/ada@example.com"
+            },
+            "body": null
+          },
+          {
+            "resource": "spaces.messages.create",
+            "method": "POST",
+            "path": "/v1/{resolvedDirectMessageSpace}/messages",
+            "query": {
+              "requestId": "req-fixed",
+              "messageId": "client-fixed"
+            },
+            "body": {
+              "text": "hi"
+            }
+          }
+        ],
+        "idempotency": {
+          "requestId": "req-fixed",
+          "clientMessageId": "client-fixed"
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": true,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed.",
+            "Direct messages are planned only; W9 never executes DM operations."
+          ]
+        },
+        "warnings": [
+          "Direct message targets must be explicitly approved in a live smoke harness."
+        ]
+      }
+    },
+    "expect": {
+      "kind": "chat.plan_execution",
+      "operation": "messages.sendToUser",
+      "planKind": "chat.call_plan",
+      "mode": "dryRun",
+      "ok": false,
+      "authMode": "app",
+      "blocked": {
+        "reason": "capability",
+        "details": [
+          "Direct-message live sends are disabled by W9 safety policy; this plan is dry-run only."
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "resource": "spaces.findDirectMessage",
+          "method": "GET",
+          "path": "/v1/spaces:findDirectMessage",
+          "url": "https://chat.googleapis.com/v1/spaces:findDirectMessage?name=users%2Fada%40example.com",
+          "query": {
+            "name": "users/ada@example.com"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        },
+        {
+          "index": 1,
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/{resolvedDirectMessageSpace}/messages",
+          "url": "https://chat.googleapis.com/v1/{resolvedDirectMessageSpace}/messages?requestId=req-fixed&messageId=client-fixed",
+          "query": {
+            "requestId": "req-fixed",
+            "messageId": "client-fixed"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": "unresolved_placeholder",
+          "fallback": null
+        }
+      ],
+      "resolvedPlaceholders": {},
+      "createdMessages": [],
+      "warnings": [
+        "Direct message targets must be explicitly approved in a live smoke harness."
+      ]
+    }
+  },
+  {
+    "id": "execute.dryRun.stream-throttle",
+    "description": "Dry-run execution of a create-then-patch stream plan preserves patch order.",
+    "operation": "execute.dryRun",
+    "input": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "messages.stream",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.bot"
+          ],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.create",
+            "method": "POST",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "requestId": "req-fixed",
+              "messageId": "client-fixed"
+            },
+            "body": {
+              "text": "Thinking..."
+            }
+          },
+          {
+            "resource": "spaces.messages.patch",
+            "method": "PATCH",
+            "path": "/v1/spaces/AAA/messages/M1",
+            "query": {
+              "updateMask": "text"
+            },
+            "body": {
+              "text": "first"
+            },
+            "throttle": {
+              "minDelayMs": 750,
+              "final": false
+            }
+          },
+          {
+            "resource": "spaces.messages.patch",
+            "method": "PATCH",
+            "path": "/v1/spaces/AAA/messages/M1",
+            "query": {
+              "updateMask": "text"
+            },
+            "body": {
+              "text": "first second"
+            },
+            "throttle": {
+              "minDelayMs": 0,
+              "final": true
+            }
+          }
+        ],
+        "idempotency": {
+          "requestId": "req-fixed",
+          "clientMessageId": "client-fixed"
+        },
+        "streaming": {
+          "strategy": "create-then-patch",
+          "throttleMs": 750,
+          "patchCount": 2
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed."
+          ]
+        },
+        "warnings": []
+      }
+    },
+    "expect": {
+      "kind": "chat.plan_execution",
+      "operation": "messages.stream",
+      "planKind": "chat.call_plan",
+      "mode": "dryRun",
+      "ok": true,
+      "authMode": "app",
+      "blocked": null,
+      "steps": [
+        {
+          "index": 0,
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messages?requestId=req-fixed&messageId=client-fixed",
+          "query": {
+            "requestId": "req-fixed",
+            "messageId": "client-fixed"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        },
+        {
+          "index": 1,
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/M1",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messages/M1?updateMask=text",
+          "query": {
+            "updateMask": "text"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        },
+        {
+          "index": 2,
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/M1",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messages/M1?updateMask=text",
+          "query": {
+            "updateMask": "text"
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        }
+      ],
+      "resolvedPlaceholders": {},
+      "createdMessages": [],
+      "warnings": []
+    }
+  },
+  {
+    "id": "execute.dryRun.unpin-seeded-placeholder",
+    "description": "Dry-run execution resolves a seeded messagePin placeholder.",
+    "operation": "execute.dryRun",
+    "input": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "pins.unpin",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.messages"
+          ],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messagePins.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messagePins",
+            "query": {
+              "pageSize": 100
+            },
+            "body": null
+          },
+          {
+            "resource": "spaces.messagePins.delete",
+            "method": "DELETE",
+            "path": "/v1/{resolvedMessagePin}",
+            "query": {},
+            "body": null
+          }
+        ],
+        "idempotency": {
+          "requestId": null,
+          "clientMessageId": null
+        },
+        "pin": {
+          "action": "unpin",
+          "strategy": "list-then-delete",
+          "space": "spaces/AAA",
+          "message": "spaces/AAA/messages/BBB",
+          "resolvedMessagePinPlaceholder": "/v1/{resolvedMessagePin}"
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed."
+          ]
+        },
+        "warnings": [
+          "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
+          "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+        ]
+      },
+      "options": {
+        "placeholderValues": {
+          "resolvedMessagePin": "spaces/AAA/messagePins/CCC"
+        }
+      }
+    },
+    "expect": {
+      "kind": "chat.plan_execution",
+      "operation": "pins.unpin",
+      "planKind": "chat.call_plan",
+      "mode": "dryRun",
+      "ok": true,
+      "authMode": "app",
+      "blocked": null,
+      "steps": [
+        {
+          "index": 0,
+          "resource": "spaces.messagePins.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messagePins",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messagePins?pageSize=100",
+          "query": {
+            "pageSize": 100
+          },
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        },
+        {
+          "index": 1,
+          "resource": "spaces.messagePins.delete",
+          "method": "DELETE",
+          "path": "/v1/{resolvedMessagePin}",
+          "url": "https://chat.googleapis.com/v1/spaces/AAA/messagePins/CCC",
+          "query": {},
+          "status": "planned",
+          "httpStatus": null,
+          "attempts": 0,
+          "throttleAppliedMs": 0,
+          "response": null,
+          "error": null,
+          "skippedReason": null,
+          "fallback": null
+        }
+      ],
+      "resolvedPlaceholders": {
+        "resolvedMessagePin": "spaces/AAA/messagePins/CCC"
+      },
+      "createdMessages": [],
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
+        "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+      ]
+    }
+  }
+]

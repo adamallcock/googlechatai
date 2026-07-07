@@ -1,0 +1,16 @@
+{
+  "kind": "chat.card_lint_result",
+  "surface": "chat-message",
+  "ok": true,
+  "summary": "0 errors, 0 warnings",
+  "stats": {
+    "cards": 1,
+    "sections": 1,
+    "widgets": 2,
+    "buttons": 1,
+    "images": 0,
+    "bytes": 331
+  },
+  "findings": [],
+  "translated": null
+}

@@ -1,0 +1,39 @@
+{
+  "kind": "context_source_fixture",
+  "scenario": "thread-reader-truncated",
+  "description": "Thread reader requested a date-bounded page with a message limit and received a next page token.",
+  "source": {
+    "type": "fixture",
+    "request": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/thread-reader",
+      "startTime": "2026-06-28T00:00:00Z",
+      "endTime": "2026-06-30T00:00:00Z",
+      "limit": 2,
+      "pageToken": "page-1",
+      "order": "chronological"
+    },
+    "pagination": {
+      "pageToken": "page-1",
+      "nextPageToken": "page-2",
+      "hasMore": true
+    },
+    "omittedNodeCount": 3,
+    "messages": [
+      {
+        "id": "msg.thread-reader-1",
+        "name": "spaces/AAA/messages/thread-reader-1",
+        "sender": "users/123",
+        "text": "Can we ship the beta today?",
+        "createdAt": "2026-06-29T14:00:00Z"
+      },
+      {
+        "id": "msg.thread-reader-2",
+        "name": "spaces/AAA/messages/thread-reader-2",
+        "sender": "users/app-bot",
+        "text": "I need the test summary before answering.",
+        "createdAt": "2026-06-29T14:01:00Z"
+      }
+    ]
+  }
+}

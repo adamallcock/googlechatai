@@ -1,0 +1,7 @@
+{
+  "name": "chat-ai-sdk-cloud-run-webhook",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Cloud Run webhook for Google Chat AI SDK development."
+}

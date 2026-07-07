@@ -1,0 +1,89 @@
+{
+  "fallbackText": "Release review: ready for approval. Node tests passed. Python tests passed. Actions: Approve, Open details.",
+  "text": "Release review: ready for approval. Node tests passed. Python tests passed. Actions: Approve, Open details.",
+  "cardsV2": [
+    {
+      "cardId": "release.review",
+      "card": {
+        "header": {
+          "title": "Release review",
+          "subtitle": "Composable sections"
+        },
+        "sections": [
+          {
+            "header": "Summary",
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "This release is ready for approval."
+                }
+              },
+              {
+                "textParagraph": {
+                  "text": "Review the checks before choosing an action."
+                }
+              }
+            ]
+          },
+          {
+            "header": "Checks",
+            "widgets": [
+              {
+                "decoratedText": {
+                  "topLabel": "Node tests",
+                  "text": "11 passed"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "Python tests",
+                  "text": "9 passed"
+                }
+              },
+              {
+                "divider": {}
+              }
+            ]
+          },
+          {
+            "header": "Actions",
+            "widgets": [
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Approve",
+                      "onClick": {
+                        "action": {
+                          "function": "approval_decision",
+                          "parameters": [
+                            {
+                              "key": "decision",
+                              "value": "approve"
+                            },
+                            {
+                              "key": "requestId",
+                              "value": "release-42"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text": "Open details",
+                      "onClick": {
+                        "openLink": {
+                          "url": "https://example.com/release-42"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-07-06T12:00:00.000Z",
+  "claims": {
+    "aud": "https://example.com/chat/events",
+    "azp": "103456789012345678901",
+    "email": "someone-else@sdk-test-project.iam.gserviceaccount.com",
+    "email_verified": true,
+    "exp": 1783342200,
+    "iat": 1783338600,
+    "iss": "https://accounts.google.com",
+    "sub": "103456789012345678901"
+  },
+  "keyId": "googlechatai-test-key-1",
+  "kind": "chat.request_verification",
+  "ok": false,
+  "reason": "Token email does not match the expected service account.",
+  "status": "wrong_email",
+  "warnings": []
+}

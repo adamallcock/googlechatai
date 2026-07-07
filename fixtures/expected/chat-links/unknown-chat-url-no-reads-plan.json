@@ -1,0 +1,201 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "partial",
+  "dryRun": true,
+  "summary": "Planned 4 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 4,
+    "parsed": 0,
+    "unknown": 4,
+    "plannedRequests": 0,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 4,
+    "plainTextUrlsScanned": 0,
+    "plainTextCharsScanned": 0,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 4,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/dm/DM123",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-2",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/group/GROUP123",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-3",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/u/0/app/chat/AAA/AAA/thread-1",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-4",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/chat/u/0/#chat/space/AAA/thread-1",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    }
+  ],
+  "requests": [],
+  "capability": {
+    "ok": true,
+    "authMode": "user",
+    "requiredScopes": [],
+    "requiresAdminApproval": false,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 4 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": [
+    "chat-link-1: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-2: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-3: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-4: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+  ]
+}

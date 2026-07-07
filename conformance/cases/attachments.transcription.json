@@ -1,0 +1,13 @@
+[
+  {
+    "id": "attachments.transcription.evidence-redacted",
+    "description": "Build redacted transcription evidence with stable hashes and provider defaults.",
+    "operation": "attachments.summarizeTranscriptionEvidence",
+    "input": {
+      "fixture": "fixtures/attachments/transcription-evidence.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/attachments/transcription-evidence.json"
+    }
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "name": "spaces/AAA/messages/GIF",
+  "text": "Here is the launch gif",
+  "formattedText": "Here is the launch gif",
+  "argumentText": "Here is the launch gif",
+  "createTime": "2026-06-29T18:10:00Z",
+  "sender": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "attachedGifs": [
+    {
+      "uri": "https://tenor.googleapis.com/v2/featured?gif=launch"
+    }
+  ]
+}

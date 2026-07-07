@@ -1,0 +1,38 @@
+[
+  {
+    "id": "context.quoted-recursive",
+    "description": "Represent quoted messages, nested quoted content, and nested attachments with recursive context nodes.",
+    "operation": "context.contract",
+    "execution": "schema_only_until_context_builders",
+    "input": {
+      "fixture": "fixtures/context/quoted-recursive/input.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/quoted-recursive.json"
+    }
+  },
+  {
+    "id": "context.thread-reader.truncated",
+    "description": "Represent thread reader date range, message limit, pagination, and truncation notes.",
+    "operation": "context.contract",
+    "execution": "schema_only_until_context_builders",
+    "input": {
+      "fixture": "fixtures/context/thread-reader-truncated/input.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/thread-reader-truncated.json"
+    }
+  },
+  {
+    "id": "context.attachment-system-notes",
+    "description": "Represent image, audio, and document attachment metadata as system-note context nodes.",
+    "operation": "context.contract",
+    "execution": "schema_only_until_context_builders",
+    "input": {
+      "fixture": "fixtures/context/attachment-system-notes/input.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/attachment-system-notes.json"
+    }
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/source"
+  },
+  "text": "Root https://chat.google.com/room/AAA",
+  "links": [],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "self",
+    "ref": {
+      "name": "spaces/AAA/messages/source"
+    },
+    "text": "Root https://chat.google.com/room/AAA",
+    "children": [
+      {
+        "kind": "message",
+        "relationship": "quoted-message",
+        "ref": {
+          "name": "spaces/AAA/messages/quoted"
+        },
+        "text": "Quoted https://chat.google.com/room/BBB"
+      }
+    ]
+  },
+  "options": {
+    "maxPlainTextUrls": 2,
+    "allowSpaceLevelContext": false
+  }
+}

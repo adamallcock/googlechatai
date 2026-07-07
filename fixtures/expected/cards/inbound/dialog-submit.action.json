@@ -1,0 +1,39 @@
+{
+  "summary": {
+    "actionType": "dialog_submit",
+    "methodName": "submit_review",
+    "parameters": {
+      "draftId": "draft-17"
+    },
+    "formInputs": {
+      "risk": {
+        "kind": "string",
+        "values": [
+          "low"
+        ],
+        "value": "low"
+      },
+      "send_copy": {
+        "kind": "string",
+        "values": [
+          "true"
+        ],
+        "value": "true"
+      },
+      "summary": {
+        "kind": "string",
+        "values": [
+          "Ship it"
+        ],
+        "value": "Ship it"
+      }
+    },
+    "actor": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T19:05:00Z"
+  },
+  "note": "System Note: Grace Hopper (users/456) submitted dialog submit_review at 2026-06-29T19:05:00Z. Parameters: draftId=draft-17. Form values: risk=low; send_copy=true; summary=Ship it."
+}

@@ -1,0 +1,53 @@
+{
+  "kind": "chat.call_plan",
+  "operation": "pins.unpin",
+  "dryRun": true,
+  "capability": {
+    "ok": true,
+    "authMode": "app",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.messages"
+    ],
+    "reasons": []
+  },
+  "requests": [
+    {
+      "resource": "spaces.messagePins.list",
+      "method": "GET",
+      "path": "/v1/spaces/AAA/messagePins",
+      "query": {
+        "pageSize": 100
+      },
+      "body": null
+    },
+    {
+      "resource": "spaces.messagePins.delete",
+      "method": "DELETE",
+      "path": "/v1/{resolvedMessagePin}",
+      "query": {},
+      "body": null
+    }
+  ],
+  "idempotency": {
+    "requestId": null,
+    "clientMessageId": null
+  },
+  "pin": {
+    "action": "unpin",
+    "strategy": "list-then-delete",
+    "space": "spaces/AAA",
+    "message": "spaces/AAA/messages/BBB",
+    "resolvedMessagePinPlaceholder": "/v1/{resolvedMessagePin}"
+  },
+  "safety": {
+    "liveAllowed": false,
+    "directMessage": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "warnings": [
+    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
+    "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+  ]
+}

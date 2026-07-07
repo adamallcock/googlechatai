@@ -1,0 +1,37 @@
+{
+  "type": "APP_COMMAND",
+  "eventTime": "2026-06-29T18:12:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "appCommandMetadata": {
+    "appCommandId": "summarize-thread",
+    "appCommandName": "Summarize thread",
+    "appCommandType": "USER"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/APP_COMMAND",
+    "text": "Summarize thread",
+    "argumentText": "thread",
+    "createTime": "2026-06-29T18:12:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  }
+}

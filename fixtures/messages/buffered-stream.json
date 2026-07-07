@@ -1,0 +1,10 @@
+{
+  "space": "spaces/AAA",
+  "initialText": "Thinking...",
+  "chunks": ["Hel", "lo ", "world", ". ", "This ", "is ", "buffered."],
+  "minPatchChars": 10,
+  "maxPatches": 3,
+  "throttleMs": 250,
+  "requestId": "req-buffered",
+  "clientMessageId": "client-buffered"
+}

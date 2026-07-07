@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/LINK"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "resourceName": "users/222",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:03:00Z",
+  "updatedAt": "2026-06-29T18:04:00Z",
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "formattedText": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "argumentText": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 38,
+      "text": "Review https://example.com/design and "
+    },
+    {
+      "kind": "richLink",
+      "startIndex": 38,
+      "length": 35,
+      "text": "https://drive.google.com/file/d/abc",
+      "sourceText": "https://drive.google.com/file/d/abc",
+      "annotationIndex": 0
+    }
+  ],
+  "annotations": [
+    {
+      "kind": "richLink",
+      "startIndex": 38,
+      "length": 35,
+      "text": "https://drive.google.com/file/d/abc",
+      "renderText": "https://drive.google.com/file/d/abc",
+      "url": "https://drive.google.com/file/d/abc",
+      "richLinkType": "DRIVE_FILE",
+      "mimeType": "application/vnd.google-apps.document",
+      "title": "Launch Plan"
+    }
+  ],
+  "links": [
+    {
+      "kind": "matchedUrl",
+      "url": "https://example.com/design",
+      "startIndex": 7,
+      "length": 26,
+      "text": "https://example.com/design"
+    },
+    {
+      "kind": "richLink",
+      "url": "https://drive.google.com/file/d/abc",
+      "startIndex": 38,
+      "length": 35,
+      "text": "https://drive.google.com/file/d/abc",
+      "richLinkType": "DRIVE_FILE",
+      "mimeType": "application/vnd.google-apps.document",
+      "title": "Launch Plan"
+    }
+  ],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/LINK from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:03:00Z and updated at 2026-06-29T18:04:00Z.",
+    "System Note: Matched URL: https://example.com/design.",
+    "System Note: Rich link DRIVE_FILE: Launch Plan at https://drive.google.com/file/d/abc (application/vnd.google-apps.document)."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/LINK"
+    },
+    "sender": {
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "resourceName": "users/222",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:03:00Z",
+    "updatedAt": "2026-06-29T18:04:00Z",
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/LINK from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:03:00Z and updated at 2026-06-29T18:04:00Z.",
+      "System Note: Matched URL: https://example.com/design.",
+      "System Note: Rich link DRIVE_FILE: Launch Plan at https://drive.google.com/file/d/abc (application/vnd.google-apps.document)."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/LINK from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:03:00Z and updated at 2026-06-29T18:04:00Z.\nSystem Note: Matched URL: https://example.com/design.\nSystem Note: Rich link DRIVE_FILE: Launch Plan at https://drive.google.com/file/d/abc (application/vnd.google-apps.document).\nReview https://example.com/design and https://drive.google.com/file/d/abc"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/LINK from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:03:00Z and updated at 2026-06-29T18:04:00Z.\nSystem Note: Matched URL: https://example.com/design.\nSystem Note: Rich link DRIVE_FILE: Launch Plan at https://drive.google.com/file/d/abc (application/vnd.google-apps.document).\nReview https://example.com/design and https://drive.google.com/file/d/abc"
+}

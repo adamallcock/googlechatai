@@ -1,0 +1,64 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/budget-1",
+      "createTime": "2026-07-03T10:00:00Z",
+      "thread": {"name": "spaces/AAA/threads/budget"},
+      "sender": {
+        "name": "users/ada",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "text": "Oldest planning note with enough detail to consume part of the model context window."
+    },
+    {
+      "name": "spaces/AAA/messages/budget-2",
+      "createTime": "2026-07-03T10:01:00Z",
+      "thread": {"name": "spaces/AAA/threads/budget"},
+      "sender": {
+        "name": "users/grace",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "text": "Second planning note explaining that historical details should be dropped first."
+    },
+    {
+      "name": "spaces/AAA/messages/budget-3",
+      "createTime": "2026-07-03T10:02:00Z",
+      "thread": {"name": "spaces/AAA/threads/budget"},
+      "sender": {
+        "name": "users/lin",
+        "displayName": "Lin Chen",
+        "email": "lin@example.com",
+        "type": "HUMAN"
+      },
+      "text": "Middle planning note with an attachment mention and several contextual details."
+    },
+    {
+      "name": "spaces/AAA/messages/budget-4",
+      "createTime": "2026-07-03T10:03:00Z",
+      "thread": {"name": "spaces/AAA/threads/budget"},
+      "sender": {
+        "name": "users/katherine",
+        "displayName": "Katherine Johnson",
+        "email": "katherine@example.com",
+        "type": "HUMAN"
+      },
+      "text": "Recent planning note that should fit before the oldest messages when order is desc."
+    },
+    {
+      "name": "spaces/AAA/messages/budget-5",
+      "createTime": "2026-07-03T10:04:00Z",
+      "thread": {"name": "spaces/AAA/threads/budget"},
+      "sender": {
+        "name": "users/margaret",
+        "displayName": "Margaret Hamilton",
+        "email": "margaret@example.com",
+        "type": "HUMAN"
+      },
+      "text": "Most recent planning note that should be retained first for a descending context read."
+    }
+  ]
+}

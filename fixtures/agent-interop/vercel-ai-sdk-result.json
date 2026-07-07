@@ -1,0 +1,57 @@
+{
+  "text": "I found two docs.",
+  "sources": [
+    {
+      "id": "src1",
+      "sourceType": "url",
+      "url": "https://example.com/api",
+      "title": "API docs",
+      "providerMetadata": {
+        "provider": "perplexity"
+      }
+    }
+  ],
+  "toolCalls": [
+    {
+      "toolCallId": "call_1",
+      "toolName": "search_docs",
+      "input": {
+        "query": "chat api"
+      }
+    }
+  ],
+  "toolResults": [
+    {
+      "toolCallId": "call_1",
+      "toolName": "search_docs",
+      "output": {
+        "count": 2
+      }
+    }
+  ],
+  "reasoningText": "Searched docs and compared the endpoints.",
+  "usage": {
+    "inputTokens": 300,
+    "outputTokens": 75,
+    "totalTokens": 375
+  },
+  "totalUsage": {
+    "inputTokens": 420,
+    "outputTokens": 120,
+    "totalTokens": 540
+  },
+  "warnings": [
+    {
+      "type": "unsupported-setting",
+      "message": "temperature ignored"
+    }
+  ],
+  "providerMetadata": {
+    "aicost": {
+      "totalCostUsd": 0.0123,
+      "currency": "USD",
+      "source": "ai-sdk-cost"
+    }
+  }
+}
+

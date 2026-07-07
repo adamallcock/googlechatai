@@ -1,0 +1,26 @@
+{
+  "specversion": "1.0",
+  "id": "workspace-event-5",
+  "source": "//chat.googleapis.com/spaces/AAA",
+  "type": "google.workspace.chat.reaction.v1.deleted",
+  "subject": "spaces/AAA/messages/BBB/reactions/reaction-1",
+  "time": "2026-06-29T18:34:00Z",
+  "datacontenttype": "application/json",
+  "data": {
+    "reaction": {
+      "name": "spaces/AAA/messages/BBB/reactions/reaction-1",
+      "user": {
+        "name": "users/456",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "emoji": {
+        "unicode": "👍"
+      },
+      "createTime": "2026-06-29T18:32:00Z",
+      "deleteTime": "2026-06-29T18:34:00Z",
+      "message": "spaces/AAA/messages/BBB"
+    }
+  }
+}

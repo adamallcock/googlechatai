@@ -1,0 +1,53 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T19:00:00Z",
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "common": {
+    "invokedFunction": "approval_decision",
+    "parameters": {
+      "requestId": "release-42",
+      "decision": "approve"
+    },
+    "formInputs": {
+      "comment": {
+        "stringInputs": {
+          "value": [
+            "Looks good"
+          ]
+        }
+      },
+      "notify": {
+        "stringInputs": {
+          "value": [
+            "true"
+          ]
+        }
+      },
+      "reviewers": {
+        "stringInputs": {
+          "value": [
+            "users/456",
+            "users/789"
+          ]
+        }
+      }
+    }
+  },
+  "action": {
+    "actionMethodName": "approval_decision",
+    "parameters": [
+      {
+        "key": "requestId",
+        "value": "release-42"
+      },
+      {
+        "key": "decision",
+        "value": "approve"
+      }
+    ]
+  }
+}

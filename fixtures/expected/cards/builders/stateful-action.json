@@ -1,0 +1,30 @@
+{
+  "stateParameterName": "__googleChatAiState",
+  "encodedState": "v1.eyJjdXJzb3IiOiJwYWdlLTIiLCJhcHByb3ZhbCI6eyJpZCI6ImV4cC00MiIsInZlcnNpb24iOjN9fQ",
+  "actionWithState": {
+    "function": "approve_expense",
+    "parameters": {
+      "requestId": "exp-42",
+      "__googleChatAiState": "v1.eyJjdXJzb3IiOiJwYWdlLTIiLCJhcHByb3ZhbCI6eyJpZCI6ImV4cC00MiIsInZlcnNpb24iOjN9fQ"
+    }
+  },
+  "route": {
+    "matched": true,
+    "route": "method:approve_expense",
+    "result": {
+      "response": "approved",
+      "requestId": "exp-42",
+      "cursor": "page-2"
+    }
+  },
+  "fallbackRoute": {
+    "matched": true,
+    "route": "cardClick",
+    "result": "card-click-fallback"
+  },
+  "unknownRoute": {
+    "matched": true,
+    "route": "unknown",
+    "result": "unknown-action"
+  }
+}

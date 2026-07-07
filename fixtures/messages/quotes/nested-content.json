@@ -1,0 +1,60 @@
+{
+  "name": "spaces/AAA/messages/QUOTE",
+  "text": "Quoting this for context",
+  "formattedText": "Quoting this for context",
+  "argumentText": "Quoting this for context",
+  "createTime": "2026-06-29T18:06:00Z",
+  "sender": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "quotedMessageMetadata": {
+    "name": "spaces/AAA/messages/ORIGINAL",
+    "lastUpdateTime": "2026-06-29T17:59:00Z",
+    "message": {
+      "name": "spaces/AAA/messages/ORIGINAL",
+      "text": "Original answer",
+      "formattedText": "Original answer",
+      "createTime": "2026-06-29T17:55:00Z",
+      "lastUpdateTime": "2026-06-29T17:59:00Z",
+      "sender": {
+        "name": "users/222",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/ORIGINAL/attachments/spec",
+          "contentName": "original-spec.txt",
+          "contentType": "text/plain",
+          "source": "UPLOADED_CONTENT",
+          "attachmentDataRef": {
+            "resourceName": "spaces/AAA/messages/ORIGINAL/attachments/spec/media"
+          }
+        }
+      ],
+      "cardsV2": [
+        {
+          "cardId": "approval",
+          "card": {
+            "header": {
+              "title": "Approval Needed"
+            }
+          }
+        }
+      ],
+      "quotedMessageMetadata": {
+        "name": "spaces/AAA/messages/OLDER",
+        "lastUpdateTime": "2026-06-29T17:40:00Z"
+      }
+    }
+  }
+}

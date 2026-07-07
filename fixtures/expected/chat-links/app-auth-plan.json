@@ -1,0 +1,131 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "ready",
+  "dryRun": true,
+  "summary": "Planned 1 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 1,
+    "parsed": 1,
+    "unknown": 0,
+    "plannedRequests": 2,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 1,
+    "plainTextUrlsScanned": 0,
+    "plainTextCharsScanned": 0,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 1,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/AAA/thread-1",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "low",
+      "scope": "thread",
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/thread-1",
+      "message": null,
+      "resourceName": "spaces/AAA/threads/thread-1",
+      "urlShape": "chat_room_thread",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Thread URL shape is empirical; verify with live corpus before treating as a stable Google contract."
+      ],
+      "cache": {
+        "status": "metadata_required",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/AAA/threads/thread-1",
+        "lastUpdateTime": null,
+        "revalidateWith": "spaces.messages.list"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.messages.list",
+      "method": "GET",
+      "path": "/v1/spaces/AAA/messages",
+      "query": {
+        "pageSize": 50,
+        "filter": "thread.name = \"spaces/AAA/threads/thread-1\"",
+        "orderBy": "createTime asc"
+      },
+      "body": null,
+      "purpose": "read_thread_context",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    },
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/AAA",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    }
+  ],
+  "capability": {
+    "ok": true,
+    "authMode": "app",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.app.messages.readonly",
+      "https://www.googleapis.com/auth/chat.bot"
+    ],
+    "requiresAdminApproval": true,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 1 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": [
+    "chat-link-1: Thread URL shape is empirical; verify with live corpus before treating as a stable Google contract."
+  ]
+}

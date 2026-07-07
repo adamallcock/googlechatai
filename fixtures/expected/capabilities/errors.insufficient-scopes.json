@@ -1,0 +1,19 @@
+{
+  "kind": "chat.error_explanation",
+  "code": "insufficient_scopes",
+  "category": "permission",
+  "httpStatus": 403,
+  "retryable": false,
+  "principal": "user",
+  "intent": "messages.read_context",
+  "summary": "The user token is missing a required Google Chat scope.",
+  "remediation": [
+    "Re-run installed-user OAuth consent with https://www.googleapis.com/auth/chat.messages.readonly.",
+    "Keep this on the installed-user path; do not switch to domain-wide delegation by default."
+  ],
+  "debug": {
+    "redacted": true,
+    "googleStatus": "PERMISSION_DENIED",
+    "messageLength": 47
+  }
+}

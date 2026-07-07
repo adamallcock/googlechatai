@@ -1,0 +1,229 @@
+{
+  "kind": "agent_response_message_plan",
+  "schemaVersion": "2026-07-06",
+  "responseId": "resp_vercel_1",
+  "text": "I found two docs.",
+  "summary": {
+    "provider": "vercel-ai",
+    "sdk": "vercel-ai-sdk",
+    "sourceCount": 1,
+    "toolCallCount": 1,
+    "toolResultCount": 1,
+    "thinkingSummaryCount": 1,
+    "hasCost": true
+  },
+  "cards": {
+    "sources": {
+      "fallbackText": "Sources for response resp_vercel_1: API docs.",
+      "text": "Sources for response resp_vercel_1: API docs.",
+      "cardsV2": [
+        {
+          "cardId": "agent-sources",
+          "card": {
+            "header": {
+              "title": "Sources",
+              "subtitle": "1 source"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "decoratedText": {
+                      "topLabel": "URL",
+                      "text": "API docs",
+                      "button": {
+                        "text": "Open",
+                        "onClick": {
+                          "openLink": {
+                            "url": "https://example.com/api"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "thinking": {
+      "fallbackText": "Thinking: Thinking. Searched docs and compared the endpoints.",
+      "text": "Thinking: Thinking. Searched docs and compared the endpoints.",
+      "cardsV2": [
+        {
+          "cardId": "agent-thinking",
+          "card": {
+            "header": {
+              "title": "Thinking",
+              "subtitle": "Thinking"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "decoratedText": {
+                      "topLabel": "STATUS",
+                      "text": "available"
+                    }
+                  },
+                  {
+                    "textParagraph": {
+                      "text": "Searched docs and compared the endpoints."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "toolStatus": {
+      "fallbackText": "Tool status: search_docs completed.",
+      "text": "Tool status: search_docs completed.",
+      "cardsV2": [
+        {
+          "cardId": "agent-tool-status",
+          "card": {
+            "header": {
+              "title": "Tool calls",
+              "subtitle": "1 tool call"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "decoratedText": {
+                      "topLabel": "COMPLETED",
+                      "text": "search_docs",
+                      "bottomLabel": "{\"count\":2}"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "messageSequence": [
+    {
+      "purpose": "final_text",
+      "payload": {
+        "text": "I found two docs."
+      }
+    },
+    {
+      "purpose": "sources",
+      "payload": {
+        "fallbackText": "Sources for response resp_vercel_1: API docs.",
+        "text": "Sources for response resp_vercel_1: API docs.",
+        "cardsV2": [
+          {
+            "cardId": "agent-sources",
+            "card": {
+              "header": {
+                "title": "Sources",
+                "subtitle": "1 source"
+              },
+              "sections": [
+                {
+                  "widgets": [
+                    {
+                      "decoratedText": {
+                        "topLabel": "URL",
+                        "text": "API docs",
+                        "button": {
+                          "text": "Open",
+                          "onClick": {
+                            "openLink": {
+                              "url": "https://example.com/api"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "thinking",
+      "payload": {
+        "fallbackText": "Thinking: Thinking. Searched docs and compared the endpoints.",
+        "text": "Thinking: Thinking. Searched docs and compared the endpoints.",
+        "cardsV2": [
+          {
+            "cardId": "agent-thinking",
+            "card": {
+              "header": {
+                "title": "Thinking",
+                "subtitle": "Thinking"
+              },
+              "sections": [
+                {
+                  "widgets": [
+                    {
+                      "decoratedText": {
+                        "topLabel": "STATUS",
+                        "text": "available"
+                      }
+                    },
+                    {
+                      "textParagraph": {
+                        "text": "Searched docs and compared the endpoints."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "purpose": "tool_status",
+      "payload": {
+        "fallbackText": "Tool status: search_docs completed.",
+        "text": "Tool status: search_docs completed.",
+        "cardsV2": [
+          {
+            "cardId": "agent-tool-status",
+            "card": {
+              "header": {
+                "title": "Tool calls",
+                "subtitle": "1 tool call"
+              },
+              "sections": [
+                {
+                  "widgets": [
+                    {
+                      "decoratedText": {
+                        "topLabel": "COMPLETED",
+                        "text": "search_docs",
+                        "bottomLabel": "{\"count\":2}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "systemNotes": [
+    "Agent response normalized from Vercel AI SDK result.",
+    "Thinking summaries are provider-provided summaries only; hidden chain-of-thought is not inferred."
+  ]
+}
+

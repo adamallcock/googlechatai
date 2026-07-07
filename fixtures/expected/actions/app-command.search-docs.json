@@ -1,0 +1,39 @@
+{
+  "actionId": "fixture:app_command:search_docs:spaces/AAA/messages/APP_COMMAND:2026-06-29T18:50:00Z",
+  "actionType": "app_command",
+  "methodName": "search_docs",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "eventTime": "2026-06-29T18:50:00Z",
+  "parameters": {
+    "query": "roadmap",
+    "appCommandId": "42",
+    "appCommandType": "USER_APP_COMMAND"
+  },
+  "formInputs": {},
+  "selectedUsers": [],
+  "selectedSpaces": [],
+  "validationErrors": [],
+  "systemNotes": [
+    "System Note: Ada Lovelace (users/123) ran app command \"search_docs\" at 2026-06-29T18:50:00Z.",
+    "System Note: Action parameters: appCommandId=42, appCommandType=USER_APP_COMMAND, query=roadmap."
+  ],
+  "raw": {
+    "action": null,
+    "common": {
+      "invokedFunction": "search_docs",
+      "parameters": {
+        "query": "roadmap"
+      }
+    },
+    "slashCommand": null,
+    "appCommandMetadata": {
+      "appCommandId": "42",
+      "appCommandType": "USER_APP_COMMAND"
+    },
+    "dialogEventType": null
+  }
+}

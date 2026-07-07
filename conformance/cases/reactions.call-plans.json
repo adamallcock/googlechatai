@@ -1,0 +1,300 @@
+[
+  {
+    "id": "reactions.add.unicode-user-auth",
+    "description": "Plan adding a visible unicode reaction to a message with user auth.",
+    "operation": "reactions.add",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "emoji": "\ud83d\udc4d",
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "reactions.add",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.reactions"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.reactions.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/BBB/reactions",
+          "query": {},
+          "body": {
+            "emoji": {
+              "unicode": "\ud83d\udc4d"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "reaction": {
+        "action": "add",
+        "message": "spaces/AAA/messages/BBB",
+        "emoji": {
+          "type": "unicode",
+          "unicode": "\ud83d\udc4d",
+          "customEmoji": null
+        },
+        "filter": "emoji.unicode = \"\ud83d\udc4d\"",
+        "userVisible": true
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "reactions.feedback.thumbs-up",
+    "description": "Plan the default feedback-visible thumbs-up reaction.",
+    "operation": "reactions.feedback",
+    "input": {
+      "message": "spaces/AAA/messages/answer-1",
+      "rating": "helpful",
+      "responseId": "resp_123",
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "reactions.feedback",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.reactions"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.reactions.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/answer-1/reactions",
+          "query": {},
+          "body": {
+            "emoji": {
+              "unicode": "\ud83d\udc4d"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "reaction": {
+        "action": "add",
+        "message": "spaces/AAA/messages/answer-1",
+        "emoji": {
+          "type": "unicode",
+          "unicode": "\ud83d\udc4d",
+          "customEmoji": null
+        },
+        "filter": "emoji.unicode = \"\ud83d\udc4d\"",
+        "userVisible": true
+      },
+      "feedback": {
+        "rating": "helpful",
+        "responseId": "resp_123",
+        "visibleReaction": true,
+        "systemNotes": [
+          "System Note: Feedback rating helpful will also add a visible \ud83d\udc4d reaction from the submitting user."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "reactions.feedback.thumbs-down",
+    "description": "Plan the default feedback-visible thumbs-down reaction.",
+    "operation": "reactions.feedback",
+    "input": {
+      "message": "spaces/AAA/messages/answer-2",
+      "rating": "not_helpful",
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "reactions.feedback",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.reactions"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.reactions.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/answer-2/reactions",
+          "query": {},
+          "body": {
+            "emoji": {
+              "unicode": "\ud83d\udc4e"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "reaction": {
+        "action": "add",
+        "message": "spaces/AAA/messages/answer-2",
+        "emoji": {
+          "type": "unicode",
+          "unicode": "\ud83d\udc4e",
+          "customEmoji": null
+        },
+        "filter": "emoji.unicode = \"\ud83d\udc4e\"",
+        "userVisible": true
+      },
+      "feedback": {
+        "rating": "not_helpful",
+        "responseId": null,
+        "visibleReaction": true,
+        "systemNotes": [
+          "System Note: Feedback rating not_helpful will also add a visible \ud83d\udc4e reaction from the submitting user."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "reactions.list.filtered-paginated",
+    "description": "Plan a paginated readonly reaction list filtered by emoji and user.",
+    "operation": "reactions.list",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "filter": "emoji.unicode = \"\ud83d\udc4d\" AND user.name = \"users/123\"",
+      "pageSize": 50,
+      "pageToken": "next-page",
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "reactions.list",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.reactions.readonly"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.reactions.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messages/BBB/reactions",
+          "query": {
+            "pageSize": 50,
+            "pageToken": "next-page",
+            "filter": "emoji.unicode = \"\ud83d\udc4d\" AND user.name = \"users/123\""
+          },
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "reaction": {
+        "action": "list",
+        "message": "spaces/AAA/messages/BBB",
+        "filter": "emoji.unicode = \"\ud83d\udc4d\" AND user.name = \"users/123\"",
+        "pageSize": 50,
+        "pageToken": "next-page"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "reactions.delete.user-auth",
+    "description": "Plan deleting a user-owned reaction.",
+    "operation": "reactions.delete",
+    "input": {
+      "reaction": "spaces/AAA/messages/BBB/reactions/CCC",
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "reactions.delete",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.reactions"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.reactions.delete",
+          "method": "DELETE",
+          "path": "/v1/spaces/AAA/messages/BBB/reactions/CCC",
+          "query": {},
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "reaction": {
+        "action": "delete",
+        "name": "spaces/AAA/messages/BBB/reactions/CCC"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  }
+]

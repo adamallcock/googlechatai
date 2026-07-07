@@ -1,0 +1,52 @@
+{
+  "attachment": {
+    "name": "spaces/AAA/messages/root/attachments/audio-1",
+    "contentName": "voice-note.wav",
+    "safeFilename": "voice-note.wav",
+    "contentType": "audio/wav",
+    "mediaKind": "audio",
+    "source": "UPLOADED_CONTENT",
+    "contentSizeBytes": 5,
+    "mediaResourceName": "spaces/AAA/messages/root/attachments/audio-1/media",
+    "attachmentDataRef": {
+      "resourceName": "spaces/AAA/messages/root/attachments/audio-1/media",
+      "attachmentUploadToken": null
+    },
+    "driveDataRef": null,
+    "thumbnailUri": null,
+    "downloadUri": null,
+    "context": {
+      "messageName": "spaces/AAA/messages/root",
+      "relationship": "current_message",
+      "path": ["current_message:spaces/AAA/messages/root"]
+    },
+    "policy": {
+      "status": "allowed",
+      "reasons": [],
+      "maxDownloadBytes": 26214400,
+      "maxUploadBytes": 209715200
+    },
+    "processing": {
+      "extraction": {
+        "status": "skipped",
+        "parser": null,
+        "text": null,
+        "reason": "No parser has run."
+      },
+      "transcription": {
+        "status": "complete",
+        "provider": "openai",
+        "text": "hello from audio",
+        "reason": null
+      }
+    }
+  },
+  "dataUtf8": "audio",
+  "result": {
+    "status": "complete",
+    "provider": "openai",
+    "text": "hello from audio",
+    "reason": null
+  },
+  "includeTranscriptText": false
+}

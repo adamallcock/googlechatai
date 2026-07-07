@@ -1,0 +1,215 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/mention-bool-1:2026-06-29T18:11:00Z",
+  "receivedAt": "2026-06-29T18:11:00Z",
+  "source": "fixture",
+  "kind": "message.mentioned_app",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/mention-bool-1"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:11:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "<users/app-bot> help",
+    "formattedText": "<users/app-bot> help",
+    "argumentText": "help",
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 20,
+        "text": "<users/app-bot> help"
+      }
+    ],
+    "annotations": [
+      {
+        "kind": "userMention",
+        "startIndex": null,
+        "length": null,
+        "text": "",
+        "renderText": "@Range Bot",
+        "user": {
+          "displayName": "Range Bot",
+          "email": null,
+          "resourceName": "users/app-bot",
+          "type": "BOT",
+          "accessState": "available",
+          "ambiguityState": "unambiguous"
+        },
+        "mentionType": "MENTION"
+      }
+    ],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/mention-bool-1 from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:11:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/mention-bool-1"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:11:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "<users/app-bot> help",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/mention-bool-1 from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:11:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/mention-bool-1 from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:11:00Z.\n<users/app-bot> help"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/mention-bool-1 from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:11:00Z.\n<users/app-bot> help"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": []
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/mention-bool-1:2026-06-29T18:11:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:11:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/mention-bool-1",
+      "text": "<users/app-bot> help",
+      "formattedText": "<users/app-bot> help",
+      "argumentText": "help",
+      "createTime": "2026-06-29T18:11:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "annotations": [
+        {
+          "type": "USER_MENTION",
+          "startIndex": true,
+          "length": true,
+          "userMention": {
+            "user": {
+              "name": "users/app-bot",
+              "displayName": "Range Bot",
+              "type": "BOT"
+            },
+            "type": "MENTION"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:15:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/slash-1",
+    "text": "/deploy staging",
+    "formattedText": "/deploy staging",
+    "argumentText": "staging",
+    "createTime": "2026-06-29T18:15:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "slashCommand": {
+      "commandId": 7
+    }
+  }
+}

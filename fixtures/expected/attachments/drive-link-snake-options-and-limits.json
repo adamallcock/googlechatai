@@ -1,0 +1,160 @@
+{
+  "kind": "chat.drive_link_retrieval_plan",
+  "status": "partial",
+  "summary": "2 Drive link candidates, 2 ready exports, 0 fallback or blocked paths.",
+  "counts": {
+    "candidates": 2,
+    "driveExports": 2,
+    "blocked": 0,
+    "cacheHits": 0,
+    "fallbacks": 0,
+    "ignored": 0
+  },
+  "links": [
+    {
+      "candidate": {
+        "kind": "drive_link",
+        "candidateId": "drive-link:0:snakeDoc1",
+        "source": "plain_url",
+        "url": "https://docs.google.com/document/d/snakeDoc1/edit",
+        "title": null,
+        "richLinkType": null,
+        "mimeType": "application/vnd.google-apps.document",
+        "driveFileId": "snakeDoc1",
+        "driveFileKind": "document",
+        "retrievable": true,
+        "blockedReasons": [],
+        "context": {
+          "messageName": null,
+          "relationship": "message",
+          "path": []
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "key": null,
+        "negative": false,
+        "reason": null,
+        "metadata": {}
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": true,
+        "liveGate": {
+          "allowed": true,
+          "reasons": []
+        },
+        "attachmentName": "driveLinks/snakeDoc1",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/snakeDoc1/export?mimeType=application%2Fpdf",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.document",
+        "exportMimeType": "application/pdf",
+        "destinationPath": "/tmp/chat-ai-sdk/snake-links/snakeDoc1.pdf",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly"
+          ]
+        }
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "drive_export",
+        "reason": "Drive link can be exported with Google Drive user auth."
+      },
+      "systemNote": "System Note: Drive link https://docs.google.com/document/d/snakeDoc1/edit is planned with drive.files.export using Google Drive user auth."
+    },
+    {
+      "candidate": {
+        "kind": "drive_link",
+        "candidateId": "drive-link:1:snakeDoc2",
+        "source": "plain_url",
+        "url": "https://docs.google.com/document/d/snakeDoc2/edit",
+        "title": null,
+        "richLinkType": null,
+        "mimeType": "application/vnd.google-apps.document",
+        "driveFileId": "snakeDoc2",
+        "driveFileKind": "document",
+        "retrievable": true,
+        "blockedReasons": [],
+        "context": {
+          "messageName": null,
+          "relationship": "message",
+          "path": []
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "key": null,
+        "negative": false,
+        "reason": null,
+        "metadata": {}
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": true,
+        "liveGate": {
+          "allowed": true,
+          "reasons": []
+        },
+        "attachmentName": "driveLinks/snakeDoc2",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/snakeDoc2/export?mimeType=application%2Fpdf",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.document",
+        "exportMimeType": "application/pdf",
+        "destinationPath": "/tmp/chat-ai-sdk/snake-links/snakeDoc2.pdf",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly"
+          ]
+        }
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "drive_export",
+        "reason": "Drive link can be exported with Google Drive user auth."
+      },
+      "systemNote": "System Note: Drive link https://docs.google.com/document/d/snakeDoc2/edit is planned with drive.files.export using Google Drive user auth."
+    }
+  ],
+  "ignoredLinks": [],
+  "traversal": {
+    "status": "truncated",
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxDriveLinks": 2,
+    "maxPlainTextUrls": 200,
+    "truncatedBranches": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0,
+    "cappedDriveLinks": 1,
+    "cappedPlainTextUrls": 0
+  },
+  "systemNotes": [
+    "System Note: Drive link https://docs.google.com/document/d/snakeDoc1/edit is planned with drive.files.export using Google Drive user auth.",
+    "System Note: Drive link https://docs.google.com/document/d/snakeDoc2/edit is planned with drive.files.export using Google Drive user auth.",
+    "System Note: Drive link traversal was capped; skipped 0 deep or cyclic branch(es), 0 traversal node(s), 0 link scan item(s), 1 link candidate(s), and 0 plain-text URL(s)."
+  ]
+}

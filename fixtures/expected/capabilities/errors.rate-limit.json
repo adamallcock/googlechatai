@@ -1,0 +1,20 @@
+{
+  "kind": "chat.error_explanation",
+  "code": "rate_limited",
+  "category": "rate_limit",
+  "httpStatus": 429,
+  "retryable": true,
+  "retryAfterMs": 3000,
+  "principal": "app",
+  "intent": "messages.send",
+  "summary": "Google Chat rate limited the request.",
+  "remediation": [
+    "Retry after the Retry-After delay with the central retry policy.",
+    "Do not replay unsafe writes unless the request has a stable idempotency key."
+  ],
+  "debug": {
+    "redacted": true,
+    "googleStatus": "RESOURCE_EXHAUSTED",
+    "messageLength": 15
+  }
+}

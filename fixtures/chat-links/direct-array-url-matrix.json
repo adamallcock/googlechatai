@@ -1,0 +1,50 @@
+[
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/space/AAA?ignored=1"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/dm/AAA"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/space/AAA%2FBBB"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/#chat/space/AAA/thread-1"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://chat.google.com/room/AAA%2FBBB"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://chat.google.com/u/2/app/chat/BBB"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/0/extra/#chat/space/AAA"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/chat/u/0/extra/#chat/space/AAA"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://mail.google.com/mail/u/notnum/#chat/space/AAA"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://chat.google.com/u/notnum/app/chat/BBB"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://chat.google.com/room/AAA/thread%22x"
+  },
+  {
+    "kind": "plain_url",
+    "url": "https://[::1"
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "kind": "context_source_fixture",
+  "scenario": "quoted-recursive",
+  "description": "A current message quotes Grace's estimate, which quotes Ada's QA-buffer question and includes nested attachments.",
+  "source": {
+    "type": "fixture",
+    "space": "spaces/AAA",
+    "thread": "spaces/AAA/threads/thread-quote",
+    "messages": [
+      {
+        "id": "msg.current",
+        "name": "spaces/AAA/messages/current",
+        "sender": "users/123",
+        "text": "Can you compare this to Grace's earlier estimate?",
+        "createdAt": "2026-06-29T18:30:00Z",
+        "quotes": ["msg.grace-estimate"]
+      },
+      {
+        "id": "msg.grace-estimate",
+        "name": "spaces/AAA/messages/grace-estimate",
+        "sender": "users/456",
+        "text": "Initial estimate is 4 weeks.",
+        "createdAt": "2026-06-28T21:00:00Z",
+        "quotes": ["msg.ada-qa-buffer"],
+        "attachments": ["att.grace-estimate-sheet"]
+      },
+      {
+        "id": "msg.ada-qa-buffer",
+        "name": "spaces/AAA/messages/ada-qa-buffer",
+        "sender": "users/123",
+        "text": "Can you include QA buffer?",
+        "createdAt": "2026-06-28T20:55:00Z",
+        "attachments": ["att.ada-qa-image"]
+      }
+    ],
+    "attachments": [
+      {
+        "id": "att.grace-estimate-sheet",
+        "contentName": "estimate.xlsx",
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "sizeBytes": 48000
+      },
+      {
+        "id": "att.ada-qa-image",
+        "contentName": "qa-buffer.png",
+        "contentType": "image/png",
+        "sizeBytes": 1300000
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "MYSTERY_EVENT",
+  "eventTime": "2026-06-29T18:40:00Z",
+  "mystery": {
+    "value": true
+  }
+}

@@ -1,0 +1,717 @@
+[
+  {
+    "id": "messages.placeholder.create.event-reply-routing",
+    "description": "Plan an immediate placeholder from event reply-routing metadata without an explicit space/thread input.",
+    "operation": "messages.placeholder.create",
+    "input": {
+      "event": {
+        "kind": "message.mentioned_app",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "ref": {
+            "name": "spaces/AAA/messages/ROOT"
+          },
+          "state": {
+            "threadReply": false,
+            "directMessage": false
+          }
+        }
+      },
+      "placeholderText": "Thinking...",
+      "authMode": "app",
+      "requestId": "req-event-placeholder",
+      "clientMessageId": "client-event-placeholder",
+      "correlationId": "event-root"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.placeholder.create",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-event-placeholder",
+            "messageId": "client-event-placeholder",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "body": {
+            "text": "Thinking...",
+            "thread": {
+              "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-event-placeholder",
+        "clientMessageId": "client-event-placeholder"
+      },
+      "placeholder": {
+        "strategy": "create-then-edit",
+        "state": "pending",
+        "systemNotes": [
+          "System Note: A placeholder response will be posted immediately and later edited with the final answer.",
+          "System Note: Reply routing selected a thread reply target."
+        ],
+        "textSelection": {
+          "kind": "chat.placeholder_text_selection",
+          "text": "Thinking...",
+          "mode": "first",
+          "index": 0,
+          "count": 1,
+          "source": "placeholderText",
+          "nextCursor": null,
+          "randomSeed": null,
+          "warnings": []
+        },
+        "replyTarget": {
+          "kind": "chat.reply_target",
+          "status": "ready",
+          "source": "event",
+          "policy": {
+            "strategy": "mimic",
+            "dm": "topLevel",
+            "roomTopLevel": "thread",
+            "roomThreadReply": "thread",
+            "missingThread": "threadKey",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "conversation": "space",
+          "route": "thread",
+          "space": "spaces/AAA",
+          "threadName": null,
+          "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+          "reason": "room_top_level_thread_key",
+          "warnings": [
+            "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+          ],
+          "systemNotes": [
+            "System Note: Reply routing selected a thread reply target."
+          ]
+        },
+        "handle": {
+          "kind": "chat.placeholder_response_handle",
+          "space": "spaces/AAA",
+          "messageName": null,
+          "threadName": null,
+          "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+          "requestId": "req-event-placeholder",
+          "clientMessageId": "client-event-placeholder",
+          "correlationId": "event-root",
+          "authMode": "app",
+          "createdAt": null,
+          "editable": false,
+          "allowedUpdateMasks": [
+            "text",
+            "cardsV2",
+            "accessoryWidgets"
+          ],
+          "replyTarget": {
+            "kind": "chat.reply_target",
+            "status": "ready",
+            "source": "event",
+            "policy": {
+              "strategy": "mimic",
+              "dm": "topLevel",
+              "roomTopLevel": "thread",
+              "roomThreadReply": "thread",
+              "missingThread": "threadKey",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "conversation": "space",
+            "route": "thread",
+            "space": "spaces/AAA",
+            "threadName": null,
+            "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "reason": "room_top_level_thread_key",
+            "warnings": [
+              "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+            ],
+            "systemNotes": [
+              "System Note: Reply routing selected a thread reply target."
+            ]
+          }
+        }
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+      ]
+    }
+  },
+  {
+    "id": "messages.async.event-placeholder-reply-routing",
+    "description": "Plan placeholder-plus-queue async work with reply target metadata carried through every handoff object.",
+    "operation": "messages.async.plan",
+    "input": {
+      "event": {
+        "kind": "message.mentioned_app",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "ref": {
+            "name": "spaces/AAA/messages/ROOT"
+          },
+          "state": {
+            "threadReply": false,
+            "directMessage": false
+          }
+        }
+      },
+      "eventId": "event-root",
+      "correlationId": "event-root",
+      "authMode": "app",
+      "expectedWorkMs": 45000,
+      "receivedAt": "2026-07-04T00:00:00.000Z",
+      "now": "2026-07-04T00:00:03.000Z",
+      "respondWithPlaceholder": true,
+      "placeholderText": "Thinking...",
+      "requestId": "req-async-route",
+      "clientMessageId": "client-async-route",
+      "createdMessage": {
+        "name": "spaces/AAA/messages/placeholder",
+        "createTime": "2026-07-04T00:00:03.500Z",
+        "thread": {
+          "name": "spaces/AAA/threads/generated"
+        }
+      },
+      "queue": {
+        "adapter": "cloudTasks",
+        "target": "projects/p/locations/us-central1/queues/chat-ai"
+      },
+      "payloadRef": "gs://chat-ai-sdk/tasks/event-root.json"
+    },
+    "expect": {
+      "kind": "chat.async_response_plan",
+      "status": "defer",
+      "strategy": "placeholder_then_queue",
+      "deadline": {
+        "syncDeadlineMs": 30000,
+        "safetyMarginMs": 5000,
+        "elapsedMs": 3000,
+        "remainingMs": 27000,
+        "workBudgetMs": 22000,
+        "expectedWorkMs": 45000,
+        "shouldDefer": true,
+        "reason": "expected_work_exceeds_sync_budget"
+      },
+      "idempotency": {
+        "idempotencyKey": "chat-event:event-root",
+        "duplicateStrategy": "guard_before_placeholder",
+        "replaySafe": true
+      },
+      "replyTarget": {
+        "kind": "chat.reply_target",
+        "status": "ready",
+        "source": "event",
+        "policy": {
+          "strategy": "mimic",
+          "dm": "topLevel",
+          "roomTopLevel": "thread",
+          "roomThreadReply": "thread",
+          "missingThread": "threadKey",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+        },
+        "conversation": "space",
+        "route": "thread",
+        "space": "spaces/AAA",
+        "threadName": null,
+        "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+        "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+        "reason": "room_top_level_thread_key",
+        "warnings": [
+          "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+        ],
+        "systemNotes": [
+          "System Note: Reply routing selected a thread reply target."
+        ]
+      },
+      "placeholderPlan": {
+        "kind": "chat.call_plan",
+        "operation": "messages.placeholder.create",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.bot"
+          ],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.create",
+            "method": "POST",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "requestId": "req-async-route",
+              "messageId": "client-async-route",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "body": {
+              "text": "Thinking...",
+              "thread": {
+                "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root"
+              }
+            }
+          }
+        ],
+        "idempotency": {
+          "requestId": "req-async-route",
+          "clientMessageId": "client-async-route"
+        },
+        "placeholder": {
+          "strategy": "create-then-edit",
+          "state": "pending",
+          "systemNotes": [
+            "System Note: A placeholder response will be posted immediately and later edited with the final answer.",
+            "System Note: Reply routing selected a thread reply target."
+          ],
+          "textSelection": {
+            "kind": "chat.placeholder_text_selection",
+            "text": "Thinking...",
+            "mode": "first",
+            "index": 0,
+            "count": 1,
+            "source": "placeholderText",
+            "nextCursor": null,
+            "randomSeed": null,
+            "warnings": []
+          },
+          "replyTarget": {
+            "kind": "chat.reply_target",
+            "status": "ready",
+            "source": "event",
+            "policy": {
+              "strategy": "mimic",
+              "dm": "topLevel",
+              "roomTopLevel": "thread",
+              "roomThreadReply": "thread",
+              "missingThread": "threadKey",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "conversation": "space",
+            "route": "thread",
+            "space": "spaces/AAA",
+            "threadName": null,
+            "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "reason": "room_top_level_thread_key",
+            "warnings": [
+              "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+            ],
+            "systemNotes": [
+              "System Note: Reply routing selected a thread reply target."
+            ]
+          },
+          "handle": {
+            "kind": "chat.placeholder_response_handle",
+            "space": "spaces/AAA",
+            "messageName": null,
+            "threadName": null,
+            "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+            "requestId": "req-async-route",
+            "clientMessageId": "client-async-route",
+            "correlationId": "event-root",
+            "authMode": "app",
+            "createdAt": null,
+            "editable": false,
+            "allowedUpdateMasks": [
+              "text",
+              "cardsV2",
+              "accessoryWidgets"
+            ],
+            "replyTarget": {
+              "kind": "chat.reply_target",
+              "status": "ready",
+              "source": "event",
+              "policy": {
+                "strategy": "mimic",
+                "dm": "topLevel",
+                "roomTopLevel": "thread",
+                "roomThreadReply": "thread",
+                "missingThread": "threadKey",
+                "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+              },
+              "conversation": "space",
+              "route": "thread",
+              "space": "spaces/AAA",
+              "threadName": null,
+              "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+              "reason": "room_top_level_thread_key",
+              "warnings": [
+                "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+              ],
+              "systemNotes": [
+                "System Note: Reply routing selected a thread reply target."
+              ]
+            }
+          }
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed."
+          ]
+        },
+        "warnings": [
+          "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+        ]
+      },
+      "replyHandle": {
+        "kind": "chat.placeholder_response_handle",
+        "space": "spaces/AAA",
+        "messageName": "spaces/AAA/messages/placeholder",
+        "threadName": "spaces/AAA/threads/generated",
+        "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+        "requestId": "req-async-route",
+        "clientMessageId": "client-async-route",
+        "correlationId": "event-root",
+        "authMode": "app",
+        "createdAt": "2026-07-04T00:00:03.500Z",
+        "editable": true,
+        "allowedUpdateMasks": [
+          "text",
+          "cardsV2",
+          "accessoryWidgets"
+        ],
+        "replyTarget": {
+          "kind": "chat.reply_target",
+          "status": "ready",
+          "source": "event",
+          "policy": {
+            "strategy": "mimic",
+            "dm": "topLevel",
+            "roomTopLevel": "thread",
+            "roomThreadReply": "thread",
+            "missingThread": "threadKey",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "conversation": "space",
+          "route": "thread",
+          "space": "spaces/AAA",
+          "threadName": null,
+          "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+          "reason": "room_top_level_thread_key",
+          "warnings": [
+            "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+          ],
+          "systemNotes": [
+            "System Note: Reply routing selected a thread reply target."
+          ]
+        }
+      },
+      "queue": {
+        "adapter": "cloudTasks",
+        "target": "projects/p/locations/us-central1/queues/chat-ai",
+        "status": "planned",
+        "task": {
+          "kind": "chat.async_response_task",
+          "taskId": "task-event-root",
+          "eventId": "event-root",
+          "correlationId": "event-root",
+          "idempotencyKey": "chat-event:event-root",
+          "authMode": "app",
+          "space": "spaces/AAA",
+          "payloadRef": "gs://chat-ai-sdk/tasks/event-root.json",
+          "replyTarget": {
+            "kind": "chat.reply_target",
+            "status": "ready",
+            "source": "event",
+            "policy": {
+              "strategy": "mimic",
+              "dm": "topLevel",
+              "roomTopLevel": "thread",
+              "roomThreadReply": "thread",
+              "missingThread": "threadKey",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "conversation": "space",
+            "route": "thread",
+            "space": "spaces/AAA",
+            "threadName": null,
+            "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "reason": "room_top_level_thread_key",
+            "warnings": [
+              "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+            ],
+            "systemNotes": [
+              "System Note: Reply routing selected a thread reply target."
+            ]
+          },
+          "replyHandle": {
+            "kind": "chat.placeholder_response_handle",
+            "space": "spaces/AAA",
+            "messageName": "spaces/AAA/messages/placeholder",
+            "threadName": "spaces/AAA/threads/generated",
+            "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+            "requestId": "req-async-route",
+            "clientMessageId": "client-async-route",
+            "correlationId": "event-root",
+            "authMode": "app",
+            "createdAt": "2026-07-04T00:00:03.500Z",
+            "editable": true,
+            "allowedUpdateMasks": [
+              "text",
+              "cardsV2",
+              "accessoryWidgets"
+            ],
+            "replyTarget": {
+              "kind": "chat.reply_target",
+              "status": "ready",
+              "source": "event",
+              "policy": {
+                "strategy": "mimic",
+                "dm": "topLevel",
+                "roomTopLevel": "thread",
+                "roomThreadReply": "thread",
+                "missingThread": "threadKey",
+                "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+              },
+              "conversation": "space",
+              "route": "thread",
+              "space": "spaces/AAA",
+              "threadName": null,
+              "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+              "reason": "room_top_level_thread_key",
+              "warnings": [
+                "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+              ],
+              "systemNotes": [
+                "System Note: Reply routing selected a thread reply target."
+              ]
+            }
+          },
+          "requiresReplyHandleHydration": false,
+          "createdAt": "2026-07-04T00:00:03.000Z",
+          "deadlineMs": 30000,
+          "finalDelivery": {
+            "strategy": "edit_placeholder",
+            "successOperation": "messages.placeholder.complete",
+            "errorOperation": "messages.placeholder.complete",
+            "onPatchFailure": "createNewMessage"
+          }
+        },
+        "productionAdapters": [
+          {
+            "adapter": "cloudTasks",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "bullmq",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "pubsub",
+            "language": "node-python",
+            "status": "planned"
+          },
+          {
+            "adapter": "celery",
+            "language": "python",
+            "status": "planned"
+          }
+        ]
+      },
+      "completion": {
+        "successOperation": "messages.placeholder.complete",
+        "errorOperation": "messages.placeholder.complete",
+        "finalDeliveryStrategy": "edit_placeholder",
+        "errorText": "Sorry, something went wrong while preparing the response."
+      },
+      "systemNotes": [
+        "System Note: This interaction should respond with a placeholder immediately and enqueue final AI work.",
+        "System Note: The queued worker should edit spaces/AAA/messages/placeholder instead of creating a second final-answer message.",
+        "System Note: Reply routing selected a thread reply target."
+      ]
+    }
+  },
+  {
+    "id": "messages.async.queue-only-reply-to-event",
+    "description": "Plan queue-only async work so final delivery still targets the triggering event instead of a generic space send.",
+    "operation": "messages.async.plan",
+    "input": {
+      "event": {
+        "kind": "message.thread_reply",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "thread": {
+            "name": "spaces/AAA/threads/T1"
+          },
+          "state": {
+            "threadReply": true,
+            "directMessage": false
+          }
+        }
+      },
+      "eventId": "event-thread",
+      "authMode": "app",
+      "expectedWorkMs": 45000,
+      "respondWithPlaceholder": false,
+      "receivedAt": "2026-07-04T00:00:00.000Z",
+      "now": "2026-07-04T00:00:03.000Z",
+      "payloadRef": "gs://chat-ai-sdk/tasks/event-thread.json"
+    },
+    "expect": {
+      "kind": "chat.async_response_plan",
+      "status": "defer",
+      "strategy": "queue_only",
+      "deadline": {
+        "syncDeadlineMs": 30000,
+        "safetyMarginMs": 5000,
+        "elapsedMs": 3000,
+        "remainingMs": 27000,
+        "workBudgetMs": 22000,
+        "expectedWorkMs": 45000,
+        "shouldDefer": true,
+        "reason": "expected_work_exceeds_sync_budget"
+      },
+      "idempotency": {
+        "idempotencyKey": "chat-event:event-thread",
+        "duplicateStrategy": "guard_before_placeholder",
+        "replaySafe": true
+      },
+      "replyTarget": {
+        "kind": "chat.reply_target",
+        "status": "ready",
+        "source": "event",
+        "policy": {
+          "strategy": "mimic",
+          "dm": "topLevel",
+          "roomTopLevel": "thread",
+          "roomThreadReply": "thread",
+          "missingThread": "threadKey",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+        },
+        "conversation": "space",
+        "route": "thread",
+        "space": "spaces/AAA",
+        "threadName": "spaces/AAA/threads/T1",
+        "threadKey": null,
+        "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+        "reason": "room_thread_reply",
+        "warnings": [],
+        "systemNotes": [
+          "System Note: Reply routing selected a thread reply target."
+        ]
+      },
+      "placeholderPlan": null,
+      "replyHandle": null,
+      "queue": {
+        "adapter": "localMemory",
+        "target": null,
+        "status": "planned",
+        "task": {
+          "kind": "chat.async_response_task",
+          "taskId": "task-event-thread",
+          "eventId": "event-thread",
+          "correlationId": null,
+          "idempotencyKey": "chat-event:event-thread",
+          "authMode": "app",
+          "space": "spaces/AAA",
+          "payloadRef": "gs://chat-ai-sdk/tasks/event-thread.json",
+          "replyTarget": {
+            "kind": "chat.reply_target",
+            "status": "ready",
+            "source": "event",
+            "policy": {
+              "strategy": "mimic",
+              "dm": "topLevel",
+              "roomTopLevel": "thread",
+              "roomThreadReply": "thread",
+              "missingThread": "threadKey",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "conversation": "space",
+            "route": "thread",
+            "space": "spaces/AAA",
+            "threadName": "spaces/AAA/threads/T1",
+            "threadKey": null,
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "reason": "room_thread_reply",
+            "warnings": [],
+            "systemNotes": [
+              "System Note: Reply routing selected a thread reply target."
+            ]
+          },
+          "replyHandle": null,
+          "requiresReplyHandleHydration": false,
+          "createdAt": "2026-07-04T00:00:03.000Z",
+          "deadlineMs": 30000,
+          "finalDelivery": {
+            "strategy": "create_reply_to_event",
+            "successOperation": "messages.replyToEvent",
+            "errorOperation": "messages.replyToEvent",
+            "onPatchFailure": "createNewMessage"
+          }
+        },
+        "productionAdapters": [
+          {
+            "adapter": "cloudTasks",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "bullmq",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "pubsub",
+            "language": "node-python",
+            "status": "planned"
+          },
+          {
+            "adapter": "celery",
+            "language": "python",
+            "status": "planned"
+          }
+        ]
+      },
+      "completion": {
+        "successOperation": "messages.replyToEvent",
+        "errorOperation": "messages.replyToEvent",
+        "finalDeliveryStrategy": "create_reply_to_event",
+        "errorText": "Sorry, something went wrong while preparing the response."
+      },
+      "systemNotes": [
+        "System Note: This interaction should enqueue final AI work and respond asynchronously because no placeholder was requested.",
+        "System Note: Reply routing selected a thread reply target."
+      ]
+    }
+  }
+]

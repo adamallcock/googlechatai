@@ -1,0 +1,38 @@
+[
+  {
+    "id": "context.quoted-message.nested",
+    "behavior": "context.render",
+    "operation": "context.render",
+    "description": "Recursive quote rendering contract with nested attachment metadata.",
+    "input": {
+      "fixture": "fixtures/context/quoted-message-nested.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/quoted-message-nested.json"
+    }
+  },
+  {
+    "id": "context.thread-reader.truncated",
+    "behavior": "context.render",
+    "operation": "context.render",
+    "description": "Thread reader contract for date bounds, limits, pagination, and truncation notes.",
+    "input": {
+      "fixture": "fixtures/context/thread-reader-truncated.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/thread-reader-truncated.render.json"
+    }
+  },
+  {
+    "id": "context.attachment-system-note.image-audio-document",
+    "behavior": "context.render",
+    "operation": "context.render",
+    "description": "Attachment system-note contract for image, audio, and document metadata.",
+    "input": {
+      "fixture": "fixtures/context/attachment-system-note.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/context/attachment-system-note.json"
+    }
+  }
+]

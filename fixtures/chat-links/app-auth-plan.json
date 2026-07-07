@@ -1,0 +1,11 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA/thread-1"
+    }
+  ],
+  "options": {
+    "authMode": "app"
+  }
+}

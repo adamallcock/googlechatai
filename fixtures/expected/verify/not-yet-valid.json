@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-07-06T12:00:00.000Z",
+  "claims": {
+    "aud": "123456789012",
+    "exp": 1783346400,
+    "iat": 1783342800,
+    "iss": "chat@system.gserviceaccount.com",
+    "nbf": 1783342800
+  },
+  "keyId": "googlechatai-test-key-1",
+  "kind": "chat.request_verification",
+  "ok": false,
+  "reason": "Token is not valid yet beyond allowed clock skew.",
+  "status": "not_yet_valid",
+  "warnings": []
+}

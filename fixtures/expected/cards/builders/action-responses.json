@@ -1,0 +1,131 @@
+{
+  "updateCardResponse": {
+    "hostAppDataAction": {
+      "chatDataAction": {
+        "updateMessageAction": {
+          "message": {
+            "fallbackText": "Action updated.",
+            "text": "Action updated.",
+            "cardsV2": [
+              {
+                "cardId": "action-update",
+                "card": {
+                  "header": {
+                    "title": "Action Update"
+                  },
+                  "sections": [
+                    {
+                      "widgets": [
+                        {
+                          "decoratedText": {
+                            "text": "Button action received."
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "createTextMessageResponse": {
+    "hostAppDataAction": {
+      "chatDataAction": {
+        "createMessageAction": {
+          "message": {
+            "text": "Created from a card action."
+          }
+        }
+      }
+    }
+  },
+  "createMessageResponse": {
+    "hostAppDataAction": {
+      "chatDataAction": {
+        "createMessageAction": {
+          "message": {
+            "text": "Created from a message object.",
+            "thread": {
+              "name": "spaces/AAA/threads/BBB"
+            }
+          }
+        }
+      }
+    }
+  },
+  "openDialogResponse": {
+    "action": {
+      "navigations": [
+        {
+          "pushCard": {
+            "header": {
+              "title": "Action Details"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "textInput": {
+                      "name": "note",
+                      "label": "Note",
+                      "type": "SINGLE_LINE",
+                      "value": "Looks good"
+                    }
+                  },
+                  {
+                    "buttonList": {
+                      "buttons": [
+                        {
+                          "text": "Send",
+                          "onClick": {
+                            "action": {
+                              "function": "submit_action_details",
+                              "parameters": [
+                                {
+                                  "key": "runId",
+                                  "value": "fixture-run"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "openRawDialogResponse": {
+    "action": {
+      "navigations": [
+        {
+          "pushCard": {
+            "header": {
+              "title": "Raw Dialog"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "textParagraph": {
+                      "text": "Raw card body"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

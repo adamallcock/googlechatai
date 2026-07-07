@@ -1,0 +1,66 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/msg-1",
+      "text": "First passive message.",
+      "createTime": "2026-07-04T00:01:00Z",
+      "sender": {
+        "name": "users/ada",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/msg-2",
+      "text": "Edited passive message.",
+      "createTime": "2026-07-04T00:02:00Z",
+      "lastUpdateTime": "2026-07-04T00:05:00Z",
+      "sender": {
+        "name": "users/grace",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-2"
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/old",
+      "createTime": "2026-07-04T00:03:00Z",
+      "deleteTime": "2026-07-04T00:04:00Z",
+      "deletionMetadata": {
+        "deletionType": "USER_DELETED"
+      },
+      "sender": {
+        "name": "users/mary",
+        "displayName": "Mary Jackson",
+        "email": "mary@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-3"
+      }
+    }
+  ],
+  "nextPageToken": "cursor-2"
+}

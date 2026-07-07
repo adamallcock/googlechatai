@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/transcription.schema.json",
+  "title": "Attachment Transcription",
+  "type": "object",
+  "required": ["provider", "model", "status"],
+  "additionalProperties": true,
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": ["openai", "gemini"]
+    },
+    "model": { "type": "string" },
+    "status": { "$ref": "#/$defs/processingStatus" },
+    "text": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "processingStatus": {
+      "type": "string",
+      "enum": ["complete", "skipped", "partial", "blocked", "disabled", "failed"]
+    },
+    "transcriptionState": {
+      "type": "object",
+      "required": ["status", "provider", "text", "reason"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "$ref": "#/$defs/processingStatus" },
+        "provider": { "type": ["string", "null"], "enum": ["openai", "gemini", null] },
+        "text": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "providerConfig": {
+      "type": "object",
+      "required": ["provider", "enabled", "authRequired"],
+      "additionalProperties": true,
+      "properties": {
+        "provider": { "type": "string", "enum": ["openai", "gemini"] },
+        "enabled": { "type": "boolean" },
+        "authRequired": { "type": "boolean" },
+        "model": { "type": "string" }
+      }
+    }
+  }
+}

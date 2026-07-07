@@ -1,0 +1,59 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T18:16:00Z",
+  "dialogEventType": "SUBMIT_DIALOG",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/DIALOG",
+    "createTime": "2026-06-29T18:00:00Z",
+    "sender": {
+      "name": "users/app",
+      "displayName": "Google Chat AI SDK Dev",
+      "type": "BOT"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  },
+  "action": {
+    "actionMethodName": "submit_incident_dialog",
+    "parameters": [
+      {
+        "key": "incident",
+        "value": "INC-1"
+      }
+    ]
+  },
+  "common": {
+    "invokedFunction": "submit_incident_dialog",
+    "formInputs": {
+      "decision": {
+        "stringInputs": {
+          "value": ["approve"]
+        }
+      },
+      "notes": {
+        "stringInputs": {
+          "value": ["Ship it"]
+        }
+      }
+    },
+    "userLocale": "en-US",
+    "timeZone": {
+      "id": "America/New_York",
+      "offset": -14400000
+    }
+  }
+}

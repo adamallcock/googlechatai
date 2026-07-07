@@ -1,0 +1,232 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/QUOTE:2026-06-29T18:08:00Z",
+  "receivedAt": "2026-06-29T18:08:00Z",
+  "source": "fixture",
+  "kind": "message.thread_reply",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/QUOTE"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:08:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "Yes, ship it.",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 13,
+        "text": "Yes, ship it."
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:08:00Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/QUOTE"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:08:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "Yes, ship it.",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:08:00Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [
+        {
+          "kind": "message",
+          "relationship": "quoted_message",
+          "ref": {
+            "name": "spaces/AAA/messages/ROOT"
+          },
+          "sender": {
+            "displayName": "Grace Hopper",
+            "email": "grace@example.com",
+            "resourceName": "users/456",
+            "type": "HUMAN",
+            "accessState": "available",
+            "ambiguityState": "unambiguous"
+          },
+          "createdAt": "2026-06-29T18:07:00Z",
+          "updatedAt": null,
+          "deletedAt": null,
+          "accessState": "available",
+          "text": "Should we ship this?",
+          "systemNotes": [
+            "System Note: Quoted message spaces/AAA/messages/ROOT from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:07:00Z."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: Quoted message spaces/AAA/messages/ROOT from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:07:00Z.\nShould we ship this?"
+        }
+      ],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:08:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nYes, ship it.\nSystem Note: Quoted message spaces/AAA/messages/ROOT from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:07:00Z.\nShould we ship this?"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:08:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nYes, ship it.\nSystem Note: Quoted message spaces/AAA/messages/ROOT from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:07:00Z.\nShould we ship this?"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": true,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": true,
+    "isDirectReply": true,
+    "isThreadReply": true,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace sent a thread reply in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/QUOTE:2026-06-29T18:08:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:08:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/QUOTE",
+      "text": "Yes, ship it.",
+      "createTime": "2026-06-29T18:08:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      },
+      "quotedMessageMetadata": {
+        "name": "spaces/AAA/messages/ROOT",
+        "quotedMessage": {
+          "name": "spaces/AAA/messages/ROOT",
+          "text": "Should we ship this?",
+          "sender": {
+            "name": "users/456",
+            "displayName": "Grace Hopper",
+            "email": "grace@example.com",
+            "type": "HUMAN"
+          },
+          "createTime": "2026-06-29T18:07:00Z"
+        }
+      }
+    }
+  }
+}

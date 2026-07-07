@@ -1,0 +1,19 @@
+{
+  "type": "APP_COMMAND",
+  "eventTime": "2026-06-29T18:45:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "appCommandMetadata": {
+    "appCommandId": 42,
+    "appCommandType": "QUERY"
+  }
+}

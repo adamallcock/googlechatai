@@ -1,0 +1,30 @@
+{
+  "name": "spaces/AAA/messages/ATT",
+  "text": "See attached report",
+  "formattedText": "See attached report",
+  "argumentText": "See attached report",
+  "createTime": "2026-06-29T18:05:00Z",
+  "sender": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "attachment": [
+    {
+      "name": "spaces/AAA/messages/ATT/attachments/report",
+      "contentName": "launch-report.pdf",
+      "contentType": "application/pdf",
+      "source": "UPLOADED_CONTENT",
+      "thumbnailUri": "https://example.invalid/report-thumb.png",
+      "attachmentDataRef": {
+        "resourceName": "spaces/AAA/messages/ATT/attachments/report/media"
+      }
+    }
+  ]
+}

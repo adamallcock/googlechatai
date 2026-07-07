@@ -1,0 +1,80 @@
+name: Discovery drift
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Check live discovery drift
+        id: drift
+        run: |
+          set +e
+          node tools/discovery/check-live-drift.mjs > drift.txt 2>&1
+          exit_code=$?
+          set -e
+          echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
+          cat drift.txt
+          if [ "${exit_code}" -eq 0 ]; then
+            echo "DRIFT=0" >> "$GITHUB_ENV"
+          elif [ "${exit_code}" -eq 1 ]; then
+            echo "DRIFT=1" >> "$GITHUB_ENV"
+            exit 1
+          else
+            echo "DRIFT=0" >> "$GITHUB_ENV"
+            echo "::error::Failed to fetch or parse the live Google Chat discovery document (exit code ${exit_code}). Not opening a drift issue for a network/fetch failure."
+            exit "${exit_code}"
+          fi
+      - name: Open or update drift issue
+        if: ${{ failure() && steps.drift.outputs.exit_code == '1' }}
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require("fs");
+            const title = "Google Chat discovery drift detected";
+            const body = fs.readFileSync("drift.txt", "utf8");
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const issueBody = [
+              "Automated weekly discovery-drift check found a difference between the",
+              "curated Google Chat v1 method snapshot and the live discovery document.",
+              "",
+              `Workflow run: ${runUrl}`,
+              "",
+              "```",
+              body.trim(),
+              "```",
+            ].join("\n");
+
+            const existing = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} type:issue state:open in:title "${title}"`,
+            });
+
+            const match = existing.data.items.find((issue) => issue.title === title);
+
+            if (match) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: match.number,
+                body: issueBody,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: issueBody,
+                labels: ["discovery-drift"],
+              });
+            }

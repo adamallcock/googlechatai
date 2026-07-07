@@ -1,0 +1,97 @@
+{
+  "kind": "message",
+  "relationship": "root",
+  "ref": {
+    "name": "spaces/AAA/messages/QUOTE"
+  },
+  "sender": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:06:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "accessState": "available",
+  "text": "Quoting this for context",
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:06:00Z."
+  ],
+  "children": [
+    {
+      "kind": "message",
+      "relationship": "quoted_message",
+      "ref": {
+        "name": "spaces/AAA/messages/ORIGINAL"
+      },
+      "sender": {
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "resourceName": "users/222",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T17:55:00Z",
+      "updatedAt": "2026-06-29T17:59:00Z",
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "Original answer",
+      "systemNotes": [
+        "System Note: Quoted message spaces/AAA/messages/ORIGINAL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T17:55:00Z and updated at 2026-06-29T17:59:00Z."
+      ],
+      "children": [
+        {
+          "kind": "attachment",
+          "relationship": "attachment",
+          "name": "spaces/AAA/messages/ORIGINAL/attachments/spec",
+          "contentName": "original-spec.txt",
+          "contentType": "text/plain",
+          "source": "UPLOADED_CONTENT",
+          "mediaResourceName": "spaces/AAA/messages/ORIGINAL/attachments/spec/media",
+          "accessState": "metadata_only",
+          "systemNotes": [
+            "System Note: The user attached original-spec.txt (text/plain) with this message."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: The user attached original-spec.txt (text/plain) with this message."
+        },
+        {
+          "kind": "card",
+          "relationship": "card",
+          "cardId": "approval",
+          "title": "Approval Needed",
+          "accessState": "metadata_only",
+          "systemNotes": [
+            "System Note: Message includes card approval: Approval Needed."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: Message includes card approval: Approval Needed."
+        },
+        {
+          "kind": "message",
+          "relationship": "quoted_message",
+          "ref": {
+            "name": "spaces/AAA/messages/OLDER"
+          },
+          "sender": null,
+          "createdAt": null,
+          "updatedAt": "2026-06-29T17:40:00Z",
+          "deletedAt": null,
+          "accessState": "inaccessible",
+          "text": "",
+          "systemNotes": [
+            "System Note: Quoted message spaces/AAA/messages/OLDER was referenced but content is inaccessible; last known update 2026-06-29T17:40:00Z."
+          ],
+          "children": [],
+          "plainTextForModel": "System Note: Quoted message spaces/AAA/messages/OLDER was referenced but content is inaccessible; last known update 2026-06-29T17:40:00Z."
+        }
+      ],
+      "plainTextForModel": "System Note: Quoted message spaces/AAA/messages/ORIGINAL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T17:55:00Z and updated at 2026-06-29T17:59:00Z.\nOriginal answer\nSystem Note: The user attached original-spec.txt (text/plain) with this message.\nSystem Note: Message includes card approval: Approval Needed.\nSystem Note: Quoted message spaces/AAA/messages/OLDER was referenced but content is inaccessible; last known update 2026-06-29T17:40:00Z."
+    }
+  ],
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/QUOTE from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:06:00Z.\nQuoting this for context\nSystem Note: Quoted message spaces/AAA/messages/ORIGINAL from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T17:55:00Z and updated at 2026-06-29T17:59:00Z.\nOriginal answer\nSystem Note: The user attached original-spec.txt (text/plain) with this message.\nSystem Note: Message includes card approval: Approval Needed.\nSystem Note: Quoted message spaces/AAA/messages/OLDER was referenced but content is inaccessible; last known update 2026-06-29T17:40:00Z."
+}

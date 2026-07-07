@@ -1,0 +1,39 @@
+{
+  "type": "APP_COMMAND",
+  "eventTime": "2026-06-29T18:50:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/APP_COMMAND",
+    "text": "roadmap",
+    "argumentText": "roadmap",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  },
+  "appCommandMetadata": {
+    "appCommandId": "42",
+    "appCommandType": "USER_APP_COMMAND"
+  },
+  "common": {
+    "invokedFunction": "search_docs",
+    "parameters": {
+      "query": "roadmap"
+    }
+  }
+}

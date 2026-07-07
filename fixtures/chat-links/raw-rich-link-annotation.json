@@ -1,0 +1,18 @@
+{
+  "name": "spaces/AAA/messages/source",
+  "createTime": "2026-07-05T16:00:00Z",
+  "annotations": [
+    {
+      "type": "RICH_LINK",
+      "richLinkMetadata": {
+        "uri": "https://chat.google.com/u/0/app/chat/AAA/AAA/thread-1?cls=7",
+        "title": "Launch message",
+        "chatSpaceLinkData": {
+          "space": "spaces/AAA",
+          "thread": "spaces/AAA/threads/thread-1",
+          "message": "spaces/AAA/messages/msg-1"
+        }
+      }
+    }
+  ]
+}

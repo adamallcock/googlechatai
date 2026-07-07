@@ -1,0 +1,31 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA/thread-1"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/u/2/app/chat/BBB"
+    }
+  ],
+  "options": {
+    "auth_mode": "app",
+    "allow_space_level_context": true,
+    "max_thread_messages": 7,
+    "max_space_messages": 3,
+    "cache": {
+      "entries_by_resource_name": {
+        "spaces/AAA/threads/thread-1": {
+          "hit": true,
+          "key": "chat-link:cached-thread",
+          "last_update_time": "2026-07-05T15:10:00Z"
+        },
+        "spaces/BBB": {
+          "hit": true,
+          "last_update_time": "2026-07-05T15:20:00Z"
+        }
+      }
+    }
+  }
+}

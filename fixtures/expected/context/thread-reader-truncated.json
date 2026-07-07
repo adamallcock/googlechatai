@@ -1,0 +1,158 @@
+{
+  "contextId": "context.thread-reader-truncated",
+  "schemaVersion": "0.1",
+  "kind": "ai_context",
+  "source": {
+    "type": "fixture",
+    "fixtureId": "context.thread-reader.truncated"
+  },
+  "createdAt": "2026-06-29T18:35:00Z",
+  "timeZone": "America/New_York",
+  "limits": {
+    "maxMessages": 2,
+    "maxBytes": 120000,
+    "dateRange": {
+      "startTime": "2026-06-28T00:00:00Z",
+      "endTime": "2026-06-30T00:00:00Z"
+    }
+  },
+  "pagination": {
+    "pageToken": "page-1",
+    "nextPageToken": "page-2",
+    "hasMore": true
+  },
+  "systemNotes": [
+    "System Note: Thread history was truncated after 2 messages. More messages are available with page token page-2."
+  ],
+  "nodes": [
+    {
+      "nodeId": "thread.thread-reader",
+      "nodeType": "thread",
+      "role": "system",
+      "text": "Thread spaces/AAA/threads/thread-reader loaded from 2026-06-28T00:00:00Z to 2026-06-30T00:00:00Z with limit 2.",
+      "identity": null,
+      "timestamps": {
+        "createdAt": null,
+        "updatedAt": null,
+        "timeZone": "America/New_York"
+      },
+      "relationships": [],
+      "metadata": {
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/thread-reader",
+        "order": "chronological"
+      },
+      "availability": {
+        "state": "truncated",
+        "reason": "limit",
+        "note": "Only the first 2 messages in this page are included."
+      },
+      "truncation": {
+        "isTruncated": true,
+        "reason": "message_limit",
+        "includedBytes": null,
+        "originalBytes": null,
+        "omittedNodeCount": 3
+      },
+      "systemNotes": [
+        "System Note: Additional thread history is not included in this context page."
+      ],
+      "children": [
+        {
+          "nodeId": "msg.thread-reader-1",
+          "nodeType": "message",
+          "role": "user",
+          "text": "Can we ship the beta today?",
+          "identity": {
+            "status": "resolved",
+            "name": "users/123",
+            "userResource": "users/123",
+            "displayName": "Ada Lovelace",
+            "email": "ada@example.com",
+            "actorType": "human",
+            "isBot": false,
+            "isApp": false,
+            "isHuman": true,
+            "type": "HUMAN"
+          },
+          "timestamps": {
+            "createdAt": "2026-06-29T14:00:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "thread_message",
+              "targetNodeId": "thread.thread-reader",
+              "note": "First included message in the requested thread page."
+            }
+          ],
+          "metadata": {
+            "message": "spaces/AAA/messages/thread-reader-1"
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": null
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [],
+          "children": []
+        },
+        {
+          "nodeId": "msg.thread-reader-2",
+          "nodeType": "message",
+          "role": "assistant",
+          "text": "I need the test summary before answering.",
+          "identity": {
+            "status": "resolved",
+            "name": "users/app-bot",
+            "userResource": "users/app-bot",
+            "displayName": "Range Bot",
+            "email": null,
+            "actorType": "bot",
+            "isBot": true,
+            "isApp": true,
+            "isHuman": false,
+            "type": "BOT"
+          },
+          "timestamps": {
+            "createdAt": "2026-06-29T14:01:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "thread_message",
+              "targetNodeId": "thread.thread-reader",
+              "note": "Second included message in the requested thread page."
+            }
+          ],
+          "metadata": {
+            "message": "spaces/AAA/messages/thread-reader-2"
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": null
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

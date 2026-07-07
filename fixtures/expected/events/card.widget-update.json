@@ -1,0 +1,218 @@
+{
+  "eventId": "fixture:WIDGET_UPDATED:spaces/AAA/messages/WIDGET:2026-06-29T18:17:00Z",
+  "receivedAt": "2026-06-29T18:17:00Z",
+  "source": "fixture",
+  "kind": "widget.updated",
+  "rawKind": "WIDGET_UPDATED",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/WIDGET"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Google Chat AI SDK Dev",
+      "email": null,
+      "resourceName": "users/app",
+      "type": "BOT",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/WIDGET from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/WIDGET"
+      },
+      "sender": {
+        "displayName": "Google Chat AI SDK Dev",
+        "email": null,
+        "resourceName": "users/app",
+        "type": "BOT",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/WIDGET from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/WIDGET from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/WIDGET from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+  },
+  "action": {
+    "actionId": "fixture:widget_update:assignee_autocomplete:spaces/AAA/messages/WIDGET:2026-06-29T18:17:00Z",
+    "actionType": "widget_update",
+    "methodName": "assignee_autocomplete",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:17:00Z",
+    "parameters": {
+      "query": "ada"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": {
+        "actionMethodName": "assignee_autocomplete"
+      },
+      "common": {
+        "invokedFunction": "assignee_autocomplete",
+        "parameters": {
+          "query": "ada"
+        }
+      },
+      "slashCommand": null,
+      "appCommandMetadata": null,
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) updated widget action \"assignee_autocomplete\" at 2026-06-29T18:17:00Z.",
+      "System Note: Action parameters: query=ada."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": true
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": true,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace updated widget assignee_autocomplete in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:WIDGET_UPDATED:spaces/AAA/messages/WIDGET:2026-06-29T18:17:00Z",
+  "raw": {
+    "type": "WIDGET_UPDATED",
+    "eventTime": "2026-06-29T18:17:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/WIDGET",
+      "createTime": "2026-06-29T18:00:00Z",
+      "sender": {
+        "name": "users/app",
+        "displayName": "Google Chat AI SDK Dev",
+        "type": "BOT"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      }
+    },
+    "action": {
+      "actionMethodName": "assignee_autocomplete"
+    },
+    "common": {
+      "invokedFunction": "assignee_autocomplete",
+      "parameters": {
+        "query": "ada"
+      }
+    }
+  }
+}

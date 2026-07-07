@@ -1,0 +1,22 @@
+{
+  "cardId": "approval.release-42",
+  "title": "Approve release 42?",
+  "subtitle": "Release approval",
+  "body": "Deploy version 42 to production.",
+  "approveLabel": "Approve",
+  "rejectLabel": "Reject",
+  "approveAction": {
+    "function": "approval_decision",
+    "parameters": {
+      "requestId": "release-42",
+      "decision": "approve"
+    }
+  },
+  "rejectAction": {
+    "function": "approval_decision",
+    "parameters": {
+      "requestId": "release-42",
+      "decision": "reject"
+    }
+  }
+}

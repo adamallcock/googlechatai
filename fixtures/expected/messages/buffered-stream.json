@@ -1,0 +1,104 @@
+{
+  "kind": "chat.call_plan",
+  "operation": "messages.stream",
+  "dryRun": true,
+  "capability": {
+    "ok": true,
+    "authMode": "app",
+    "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+    "reasons": []
+  },
+  "requests": [
+    {
+      "resource": "spaces.messages.create",
+      "method": "POST",
+      "path": "/v1/spaces/AAA/messages",
+      "query": {
+        "requestId": "req-buffered",
+        "messageId": "client-buffered"
+      },
+      "body": {
+        "text": "Thinking..."
+      }
+    },
+    {
+      "resource": "spaces.messages.patch",
+      "method": "PATCH",
+      "path": "/v1/spaces/AAA/messages/client-buffered",
+      "query": {
+        "updateMask": "text"
+      },
+      "body": {
+        "text": "Hello world"
+      },
+      "throttle": {
+        "minDelayMs": 250,
+        "final": false
+      }
+    },
+    {
+      "resource": "spaces.messages.patch",
+      "method": "PATCH",
+      "path": "/v1/spaces/AAA/messages/client-buffered",
+      "query": {
+        "updateMask": "text"
+      },
+      "body": {
+        "text": "Hello world. This is "
+      },
+      "throttle": {
+        "minDelayMs": 250,
+        "final": false
+      }
+    },
+    {
+      "resource": "spaces.messages.patch",
+      "method": "PATCH",
+      "path": "/v1/spaces/AAA/messages/client-buffered",
+      "query": {
+        "updateMask": "text"
+      },
+      "body": {
+        "text": "Hello world. This is buffered."
+      },
+      "throttle": {
+        "minDelayMs": 0,
+        "final": true
+      }
+    }
+  ],
+  "idempotency": {
+    "requestId": "req-buffered",
+    "clientMessageId": "client-buffered"
+  },
+  "streaming": {
+    "strategy": "create-then-patch",
+    "throttleMs": 250,
+    "patchCount": 3,
+    "buffering": {
+      "kind": "chat.stream_buffer_plan",
+      "strategy": "buffered-text",
+      "inputChunkCount": 7,
+      "initialText": "Thinking...",
+      "finalText": "Hello world. This is buffered.",
+      "patchTexts": [
+        "Hello world",
+        "Hello world. This is ",
+        "Hello world. This is buffered."
+      ],
+      "patchCount": 3,
+      "cadence": {
+        "minPatchChars": 10,
+        "maxPatches": 3,
+        "throttleMs": 250
+      },
+      "warnings": []
+    }
+  },
+  "safety": {
+    "liveAllowed": false,
+    "directMessage": false,
+    "notes": ["Dry run only; no Google Chat API call was executed."]
+  },
+  "warnings": []
+}

@@ -1,0 +1,220 @@
+{
+  "cardsV2": [
+    {
+      "cardId": "rich.inventory",
+      "card": {
+        "header": {
+          "title": "Rich Widget Inventory",
+          "subtitle": "Cards V2"
+        },
+        "sections": [
+          {
+            "header": "Visuals",
+            "widgets": [
+              {
+                "image": {
+                  "imageUrl": "https://developers.google.com/workspace/chat/images/quickstart-app-avatar.png",
+                  "altText": "Google Chat SDK avatar",
+                  "onClick": {
+                    "openLink": {
+                      "url": "https://developers.google.com/workspace/chat"
+                    }
+                  }
+                }
+              },
+              {
+                "divider": {}
+              },
+              {
+                "grid": {
+                  "title": "Artifacts",
+                  "columnCount": 2,
+                  "items": [
+                    {
+                      "id": "pdf",
+                      "title": "PDF",
+                      "subtitle": "Parsed",
+                      "image": {
+                        "imageUri": "https://example.com/pdf.png",
+                        "altText": "PDF icon"
+                      }
+                    },
+                    {
+                      "id": "audio",
+                      "title": "Voice note",
+                      "subtitle": "Transcribed"
+                    }
+                  ],
+                  "onClick": {
+                    "action": {
+                      "function": "open_artifact",
+                      "parameters": [
+                        {
+                          "key": "source",
+                          "value": "grid"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "columns": {
+                  "columnItems": [
+                    {
+                      "horizontalSizeStyle": "FILL_AVAILABLE_SPACE",
+                      "horizontalAlignment": "START",
+                      "verticalAlignment": "CENTER",
+                      "widgets": [
+                        {
+                          "decoratedText": {
+                            "topLabel": "Owner",
+                            "text": "Ada Lovelace"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "horizontalSizeStyle": "FILL_AVAILABLE_SPACE",
+                      "horizontalAlignment": "END",
+                      "verticalAlignment": "CENTER",
+                      "widgets": [
+                        {
+                          "textParagraph": {
+                            "text": "Ready for review"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "carousel": {
+                  "carouselCards": [
+                    {
+                      "widgets": [
+                        {
+                          "textParagraph": {
+                            "text": "First carousel panel"
+                          }
+                        }
+                      ],
+                      "footerWidgets": [
+                        {
+                          "buttonList": {
+                            "buttons": [
+                              {
+                                "text": "Open first",
+                                "onClick": {
+                                  "openLink": {
+                                    "url": "https://developers.google.com/workspace/chat"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "widgets": [
+                        {
+                          "image": {
+                            "imageUrl": "https://example.com/carousel.png",
+                            "altText": "Carousel image"
+                          }
+                        },
+                        {
+                          "textParagraph": {
+                            "text": "Second carousel panel"
+                          }
+                        }
+                      ],
+                      "footerWidgets": [
+                        {
+                          "buttonList": {
+                            "buttons": [
+                              {
+                                "text": "Select second",
+                                "onClick": {
+                                  "action": {
+                                    "function": "select_carousel",
+                                    "parameters": [
+                                      {
+                                        "key": "panel",
+                                        "value": "second"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "header": "Inputs",
+            "widgets": [
+              {
+                "chipList": {
+                  "chips": [
+                    {
+                      "label": "urgent"
+                    },
+                    {
+                      "label": "research",
+                      "onClick": {
+                        "action": {
+                          "function": "filter_tag",
+                          "parameters": [
+                            {
+                              "key": "tag",
+                              "value": "research"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "dateTimePicker": {
+                  "name": "due",
+                  "label": "Due date",
+                  "type": "DATE_ONLY",
+                  "valueMsEpoch": "1783209600000"
+                }
+              },
+              {
+                "selectionInput": {
+                  "name": "priority",
+                  "label": "Priority",
+                  "type": "DROPDOWN",
+                  "items": [
+                    {
+                      "text": "High",
+                      "value": "high",
+                      "selected": true
+                    },
+                    {
+                      "text": "Normal",
+                      "value": "normal"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "chat.permission_plan",
+  "intent": "reactions.add",
+  "googleMethod": "spaces.messages.reactions.create",
+  "ok": false,
+  "status": "unavailable",
+  "principal": "app",
+  "requestedPrincipal": "app",
+  "supportedPrincipals": ["user"],
+  "requiredScopes": ["https://www.googleapis.com/auth/chat.messages.reactions"],
+  "adminApproval": "user_consent_required",
+  "membership": "user_must_have_access",
+  "readWriteRisk": "write",
+  "idempotency": "not_idempotent",
+  "retryPolicy": "retry_reads_or_idempotent_writes_only",
+  "liveSafe": false,
+  "knownLimitations": [
+    "Google Chat reactions are visible as the reacting user and should not be created with app auth."
+  ],
+  "reasons": ["unsupported_principal"],
+  "remediation": [
+    "Use the submitting user's OAuth token with https://www.googleapis.com/auth/chat.messages.reactions.",
+    "Keep visible feedback reactions user-owned; do not silently create them as the app."
+  ]
+}

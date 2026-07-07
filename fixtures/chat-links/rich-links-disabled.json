@@ -1,0 +1,27 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/RICH"
+    },
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/STRUCTURED",
+      "chatSpaceLinkData": {
+        "space": "spaces/STRUCTURED"
+      }
+    },
+    {
+      "kind": "matchedUrl",
+      "url": "https://chat.google.com/room/MATCHED"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/PLAIN"
+    }
+  ],
+  "options": {
+    "includeRichLinks": false,
+    "allowSpaceLevelContext": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/u/0/app/chat/AAA/AAA/thread-1",
+      "title": "Structured thread",
+      "chatSpaceLinkData": {
+        "thread": "spaces/AAA/threads/thread-1"
+      }
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA/thread-1"
+    }
+  ],
+  "options": {
+    "maxThreadMessages": 5
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/capabilities.schema.json",
+  "title": "Google Chat Capability Explanation",
+  "type": "object",
+  "required": ["kind", "intent", "googleMethod", "ok", "status", "principal", "supportedPrincipals", "requiredScopes", "reasons", "remediation"],
+  "additionalProperties": true,
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": ["chat.capability_explanation", "chat.permission_plan"]
+    },
+    "intent": { "type": "string" },
+    "googleMethod": { "type": "string" },
+    "capabilityId": { "type": "string" },
+    "ok": { "type": "boolean" },
+    "status": {
+      "type": "string",
+      "enum": ["available", "unavailable", "preview", "unknown", "access_limited"]
+    },
+    "principal": {
+      "type": ["string", "null"],
+      "enum": ["app", "user", "admin", "none", null]
+    },
+    "requestedPrincipal": {
+      "type": ["string", "null"],
+      "enum": ["app", "user", "admin", "none", null]
+    },
+    "supportedPrincipals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["app", "user", "admin", "none", "import"]
+      }
+    },
+    "reason": { "type": ["string", "null"] },
+    "requiredAuthModes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["app", "user", "admin", "import"]
+      }
+    },
+    "authMode": {
+      "type": ["string", "null"],
+      "enum": ["app", "user", "admin", "import", null]
+    },
+    "requiredScopes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "adminApproval": { "type": "string" },
+    "membership": { "type": "string" },
+    "readWriteRisk": { "type": "string" },
+    "idempotency": { "type": "string" },
+    "retryPolicy": { "type": "string" },
+    "liveSafe": { "type": "boolean" },
+    "knownLimitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "remediation": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "previewOnly": { "type": "boolean" },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Discovery, docs, fixture, or live-smoke source used to derive the snapshot."
+    },
+    "checkedAt": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

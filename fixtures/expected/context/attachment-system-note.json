@@ -1,0 +1,24 @@
+{
+  "contextItems": [
+    {
+      "kind": "message_text",
+      "text": "2026-06-29T21:00:00Z Ada Lovelace: Here are the inputs."
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: Ada Lovelace attached diagram.png (image/png, 102400 bytes). Extraction was skipped because image_ocr_disabled."
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: Ada Lovelace attached voice-note.ogg (audio/ogg, 409600 bytes). Transcription is disabled and no provider was selected."
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: Ada Lovelace attached brief.docx (application/vnd.openxmlformats-officedocument.wordprocessingml.document, 51200 bytes). Extraction was partial."
+    },
+    {
+      "kind": "attachment_text",
+      "text": "Launch checklist excerpt..."
+    }
+  ]
+}

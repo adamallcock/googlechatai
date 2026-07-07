@@ -1,0 +1,223 @@
+{
+  "eventId": "fixture:APP_COMMAND:spaces/AAA/messages/APP_COMMAND:2026-06-29T18:12:00Z",
+  "receivedAt": "2026-06-29T18:12:00Z",
+  "source": "fixture",
+  "kind": "message.app_command",
+  "rawKind": "APP_COMMAND",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/APP_COMMAND"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:12:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "Summarize thread",
+    "formattedText": null,
+    "argumentText": "thread",
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 16,
+        "text": "Summarize thread"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/APP_COMMAND from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:12:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/APP_COMMAND"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:12:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "Summarize thread",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/APP_COMMAND from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:12:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/APP_COMMAND from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:12:00Z.\nSummarize thread"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/APP_COMMAND from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:12:00Z.\nSummarize thread"
+  },
+  "action": {
+    "actionId": "fixture:app_command:Summarize thread:spaces/AAA/messages/APP_COMMAND:2026-06-29T18:12:00Z",
+    "actionType": "app_command",
+    "methodName": "Summarize thread",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:12:00Z",
+    "parameters": {
+      "appCommandId": "summarize-thread",
+      "appCommandType": "USER",
+      "appCommandName": "Summarize thread"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": null,
+      "common": null,
+      "slashCommand": null,
+      "appCommandMetadata": {
+        "appCommandId": "summarize-thread",
+        "appCommandName": "Summarize thread",
+        "appCommandType": "USER"
+      },
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) ran app command \"Summarize thread\" at 2026-06-29T18:12:00Z.",
+      "System Note: Action parameters: appCommandId=summarize-thread, appCommandName=Summarize thread, appCommandType=USER."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace invoked app command Summarize thread."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:APP_COMMAND:spaces/AAA/messages/APP_COMMAND:2026-06-29T18:12:00Z",
+  "raw": {
+    "type": "APP_COMMAND",
+    "eventTime": "2026-06-29T18:12:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "appCommandMetadata": {
+      "appCommandId": "summarize-thread",
+      "appCommandName": "Summarize thread",
+      "appCommandType": "USER"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/APP_COMMAND",
+      "text": "Summarize thread",
+      "argumentText": "thread",
+      "createTime": "2026-06-29T18:12:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      }
+    }
+  }
+}

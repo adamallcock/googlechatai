@@ -1,0 +1,7 @@
+{
+  "name": "googlechatai-node-local-runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local fixture POST example for the Google Chat AI SDK Node runtime."
+}

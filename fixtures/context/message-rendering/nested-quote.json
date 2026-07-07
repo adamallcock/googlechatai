@@ -1,0 +1,6 @@
+{
+  "id": "messages.quoted-nested.context",
+  "description": "Recursive AI context rendering for a message that quotes a hydrated message with an attachment, card, and inaccessible nested quote.",
+  "messageFixture": "fixtures/messages/quotes/nested-content.json",
+  "expectedContextFixture": "fixtures/expected/context/messages.quoted-nested.context.json"
+}

@@ -1,0 +1,49 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T18:15:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/CARD",
+    "createTime": "2026-06-29T18:00:00Z",
+    "sender": {
+      "name": "users/app",
+      "displayName": "Google Chat AI SDK Dev",
+      "type": "BOT"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "cardsV2": [
+      {
+        "cardId": "incident-card"
+      }
+    ]
+  },
+  "action": {
+    "actionMethodName": "approve_incident",
+    "parameters": [
+      {
+        "key": "incident",
+        "value": "INC-1"
+      }
+    ]
+  },
+  "common": {
+    "invokedFunction": "approve_incident",
+    "parameters": {
+      "source": "card"
+    }
+  }
+}

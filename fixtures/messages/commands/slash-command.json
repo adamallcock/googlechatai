@@ -1,0 +1,39 @@
+{
+  "name": "spaces/AAA/messages/CMD",
+  "text": "/deploy staging",
+  "formattedText": "/deploy staging",
+  "argumentText": "staging",
+  "createTime": "2026-06-29T18:02:00Z",
+  "sender": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "annotations": [
+    {
+      "type": "SLASH_COMMAND",
+      "startIndex": 0,
+      "length": 7,
+      "slashCommand": {
+        "bot": {
+          "name": "users/app-bot",
+          "displayName": "Deploy Bot",
+          "type": "BOT"
+        },
+        "type": "INVOKE",
+        "commandName": "/deploy",
+        "commandId": "deploy-staging",
+        "triggersDialog": false
+      }
+    }
+  ],
+  "slashCommand": {
+    "commandId": "deploy-staging"
+  }
+}

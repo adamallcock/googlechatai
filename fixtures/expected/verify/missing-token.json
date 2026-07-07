@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-07-06T12:00:00.000Z",
+  "claims": null,
+  "keyId": null,
+  "kind": "chat.request_verification",
+  "ok": false,
+  "reason": "No bearer token was provided.",
+  "status": "missing_token",
+  "warnings": []
+}

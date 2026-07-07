@@ -1,0 +1,902 @@
+[
+  {
+    "id": "messages.read-thread-context.pagination-date-limit-order",
+    "description": "Plan and render a paginated thread context with date filters, limits, ordering, truncation, quotes, attachments, actions, edits, and reactions.",
+    "operation": "threads.readContext",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/thread-1",
+      "authMode": "app",
+      "startTime": "2026-06-29T17:00:00Z",
+      "endTime": "2026-06-29T19:00:00Z",
+      "limit": 3,
+      "pageSize": 2,
+      "pageToken": "thread-cursor-1",
+      "order": "asc",
+      "maxQuoteDepth": 2
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/thread-page-1.json"},
+      {"fixture": "fixtures/api-responses/messages/thread-page-2.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 2,
+              "pageToken": "thread-cursor-1",
+              "filter": "createTime > \"2026-06-29T17:00:00Z\" AND createTime < \"2026-06-29T19:00:00Z\" AND thread.name = \"spaces/AAA/threads/thread-1\"",
+              "orderBy": "createTime asc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "thread",
+          "space": "spaces/AAA",
+          "thread": "spaces/AAA/threads/thread-1",
+          "limit": 3,
+          "pageSize": 2,
+          "order": "asc",
+          "pageToken": "thread-cursor-1",
+          "startTime": "2026-06-29T17:00:00Z",
+          "endTime": "2026-06-29T19:00:00Z",
+          "maxQuoteDepth": 2
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "thread",
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/thread-1",
+        "order": "asc",
+        "requestedLimit": 3,
+        "returnedMessages": 3,
+        "pageCursors": {
+          "next": "thread-cursor-3"
+        },
+        "partial": true,
+        "truncated": true,
+        "inaccessible": false,
+        "systemNotes": [
+          "System Note: More thread history is available after cursor thread-cursor-3.",
+          "System Note: Thread history was truncated at the requested limit of 3 messages."
+        ],
+        "messages": [
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/root"
+            },
+            "sender": {
+              "name": "users/ada",
+              "displayName": "Ada Lovelace",
+              "email": "ada@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-06-29T18:00:00Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "thread_root",
+              "thread": "spaces/AAA/threads/thread-1",
+              "parentMessage": null
+            },
+            "text": "Deploy window starts now.",
+            "plainTextForModel": "Deploy window starts now.",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-06-29T18:00:00Z.",
+              "System Note: This message is the root message in thread spaces/AAA/threads/thread-1."
+            ]
+          },
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/reply-1"
+            },
+            "sender": {
+              "name": "users/grace",
+              "displayName": "Grace Hopper",
+              "email": "grace@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-06-29T18:03:00Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "thread_reply",
+              "thread": "spaces/AAA/threads/thread-1",
+              "parentMessage": "spaces/AAA/messages/root"
+            },
+            "text": "I checked the rollout card.",
+            "plainTextForModel": "I checked the rollout card.",
+            "attachments": [
+              {
+                "name": "spaces/AAA/messages/reply-1/attachments/diagram",
+                "contentName": "diagram.png",
+                "contentType": "image/png",
+                "source": "UPLOADED_CONTENT",
+                "mediaResourceName": "spaces/AAA/messages/reply-1/attachments/diagram/media",
+                "sizeBytes": 2048
+              }
+            ],
+            "quotedMessages": [
+              {
+                "ref": {
+                  "name": "spaces/AAA/messages/root"
+                },
+                "sender": {
+                  "name": "users/ada",
+                  "displayName": "Ada Lovelace",
+                  "email": "ada@example.com",
+                  "type": "HUMAN",
+                  "access": "available"
+                },
+                "createdAt": "2026-06-29T18:00:00Z",
+                "updatedAt": null,
+                "deletedAt": null,
+                "relationship": {
+                  "kind": "quote",
+                  "thread": "spaces/AAA/threads/thread-1",
+                  "parentMessage": null
+                },
+                "text": "Deploy window starts now.",
+                "plainTextForModel": "Deploy window starts now.",
+                "attachments": [],
+                "quotedMessages": [
+                  {
+                    "ref": {
+                      "name": "spaces/AAA/messages/reply-1"
+                    },
+                    "sender": {
+                      "name": null,
+                      "displayName": "Unknown sender",
+                      "email": null,
+                      "type": "UNKNOWN",
+                      "access": "inaccessible"
+                    },
+                    "createdAt": null,
+                    "updatedAt": null,
+                    "deletedAt": null,
+                    "relationship": {
+                      "kind": "quote",
+                      "thread": null,
+                      "parentMessage": null
+                    },
+                    "text": "",
+                    "plainTextForModel": "",
+                    "attachments": [],
+                    "quotedMessages": [],
+                    "systemNotes": [
+                      "System Note: Quoted message spaces/AAA/messages/reply-1 was skipped because it would create a cycle."
+                    ]
+                  }
+                ],
+                "systemNotes": [
+                  "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-06-29T18:00:00Z.",
+                  "System Note: This message was included as quoted context."
+                ]
+              }
+            ],
+            "systemNotes": [
+              "System Note: Grace Hopper (grace@example.com) sent this message at 2026-06-29T18:03:00Z.",
+              "System Note: This message is a reply in thread spaces/AAA/threads/thread-1 to spaces/AAA/messages/root.",
+              "System Note: Grace Hopper quoted spaces/AAA/messages/root in this message.",
+              "System Note: The user attached diagram.png (image/png, 2048 bytes) with this message.",
+              "System Note: This message includes 1 card object.",
+              "System Note: Grace Hopper clicked card action approve_deploy at 2026-06-29T18:04:30Z."
+            ]
+          },
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/reply-2"
+            },
+            "sender": {
+              "name": "users/bot",
+              "displayName": "Build Bot",
+              "email": "chat-app@apps.googleusercontent.com",
+              "type": "BOT",
+              "access": "available"
+            },
+            "createdAt": "2026-06-29T18:06:00Z",
+            "updatedAt": "2026-06-29T18:06:20Z",
+            "deletedAt": null,
+            "relationship": {
+              "kind": "thread_reply",
+              "thread": "spaces/AAA/threads/thread-1",
+              "parentMessage": "spaces/AAA/messages/root"
+            },
+            "text": "Final answer posted.",
+            "plainTextForModel": "Final answer posted.",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Build Bot (chat-app@apps.googleusercontent.com) sent this message at 2026-06-29T18:06:00Z.",
+              "System Note: This message is a reply in thread spaces/AAA/threads/thread-1 to spaces/AAA/messages/root.",
+              "System Note: This message was edited at 2026-06-29T18:06:20Z.",
+              "System Note: Reaction 👍 appears 2 times on this message."
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "messages.read-space-context.inaccessible-history",
+    "description": "Plan a room reader and report inaccessible history from a mocked API error.",
+    "operation": "threads.readSpaceContext",
+    "input": {
+      "space": "spaces/AAA",
+      "authMode": "app",
+      "startTime": "2026-06-29T00:00:00Z",
+      "endTime": "2026-06-30T00:00:00Z",
+      "limit": 10,
+      "pageSize": 10,
+      "order": "desc",
+      "maxQuoteDepth": 1
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/space-inaccessible.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readSpaceContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 10,
+              "filter": "createTime > \"2026-06-29T00:00:00Z\" AND createTime < \"2026-06-30T00:00:00Z\"",
+              "orderBy": "createTime desc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "space",
+          "space": "spaces/AAA",
+          "thread": null,
+          "limit": 10,
+          "pageSize": 10,
+          "order": "desc",
+          "pageToken": null,
+          "startTime": "2026-06-29T00:00:00Z",
+          "endTime": "2026-06-30T00:00:00Z",
+          "maxQuoteDepth": 1
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "space",
+        "space": "spaces/AAA",
+        "thread": null,
+        "order": "desc",
+        "requestedLimit": 10,
+        "returnedMessages": 0,
+        "pageCursors": {
+          "next": null
+        },
+        "partial": true,
+        "truncated": false,
+        "inaccessible": true,
+        "systemNotes": [
+          "System Note: Space history is inaccessible: PERMISSION_DENIED The app cannot read messages before it was added."
+        ],
+        "messages": []
+      }
+    }
+  },
+  {
+    "id": "messages.read-space-context.quote-snapshot-attachments",
+    "description": "Render Google REST quotedMessageMetadata snapshots with nested attachment metadata.",
+    "operation": "threads.readSpaceContext",
+    "input": {
+      "space": "spaces/AAA",
+      "authMode": "app",
+      "startTime": "2026-07-01T12:00:00Z",
+      "endTime": "2026-07-01T13:00:00Z",
+      "limit": 2,
+      "pageSize": 2,
+      "order": "desc",
+      "maxQuoteDepth": 2
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/quote-snapshot-page.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readSpaceContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 2,
+              "filter": "createTime > \"2026-07-01T12:00:00Z\" AND createTime < \"2026-07-01T13:00:00Z\"",
+              "orderBy": "createTime desc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "space",
+          "space": "spaces/AAA",
+          "thread": null,
+          "limit": 2,
+          "pageSize": 2,
+          "order": "desc",
+          "pageToken": null,
+          "startTime": "2026-07-01T12:00:00Z",
+          "endTime": "2026-07-01T13:00:00Z",
+          "maxQuoteDepth": 2
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "space",
+        "space": "spaces/AAA",
+        "thread": null,
+        "order": "desc",
+        "requestedLimit": 2,
+        "returnedMessages": 2,
+        "pageCursors": {
+          "next": null
+        },
+        "partial": false,
+        "truncated": false,
+        "inaccessible": false,
+        "systemNotes": [],
+        "messages": [
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/quote-snapshot"
+            },
+            "sender": {
+              "name": "users/grace",
+              "displayName": "Grace Hopper",
+              "email": "grace@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-07-01T12:05:00Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "space_message",
+              "thread": "spaces/AAA/threads/quote-snapshot",
+              "parentMessage": null
+            },
+            "text": "Can you inspect this quoted audio?",
+            "plainTextForModel": "Can you inspect this quoted audio?",
+            "attachments": [],
+            "quotedMessages": [
+              {
+                "ref": {
+                  "name": "spaces/AAA/messages/audio-root"
+                },
+                "sender": {
+                  "name": "users/ada",
+                  "displayName": "Ada Lovelace",
+                  "email": "ada@example.com",
+                  "type": "HUMAN",
+                  "access": "available"
+                },
+                "createdAt": "2026-07-01T12:00:00Z",
+                "updatedAt": null,
+                "deletedAt": null,
+                "relationship": {
+                  "kind": "quote",
+                  "thread": "spaces/AAA/threads/audio-root",
+                  "parentMessage": null
+                },
+                "text": "Here is the audio note.",
+                "plainTextForModel": "Here is the audio note.",
+                "attachments": [
+                  {
+                    "name": "spaces/AAA/messages/audio-root/attachments/audio-1",
+                    "contentName": "note.wav",
+                    "contentType": "audio/wav",
+                    "source": "UPLOADED_CONTENT",
+                    "mediaResourceName": "spaces/AAA/messages/audio-root/attachments/audio-1/media",
+                    "sizeBytes": 4096
+                  }
+                ],
+                "quotedMessages": [],
+                "systemNotes": [
+                  "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-07-01T12:00:00Z.",
+                  "System Note: This message was included as quoted context.",
+                  "System Note: The user attached note.wav (audio/wav, 4096 bytes) with this message."
+                ]
+              }
+            ],
+            "systemNotes": [
+              "System Note: Grace Hopper (grace@example.com) sent this message at 2026-07-01T12:05:00Z.",
+              "System Note: Grace Hopper quoted spaces/AAA/messages/audio-root in this message."
+            ]
+          },
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/audio-root"
+            },
+            "sender": {
+              "name": "users/ada",
+              "displayName": "Ada Lovelace",
+              "email": "ada@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-07-01T12:00:00Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "space_message",
+              "thread": "spaces/AAA/threads/audio-root",
+              "parentMessage": null
+            },
+            "text": "Here is the audio note.",
+            "plainTextForModel": "Here is the audio note.",
+            "attachments": [
+              {
+                "name": "spaces/AAA/messages/audio-root/attachments/audio-1",
+                "contentName": "note.wav",
+                "contentType": "audio/wav",
+                "source": "UPLOADED_CONTENT",
+                "mediaResourceName": "spaces/AAA/messages/audio-root/attachments/audio-1/media",
+                "sizeBytes": 4096
+              }
+            ],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-07-01T12:00:00Z.",
+              "System Note: The user attached note.wav (audio/wav, 4096 bytes) with this message."
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "messages.read-space-context.drive-attachment",
+    "description": "Render a Drive-backed Google Chat attachment with Drive metadata preserved when the API provides it.",
+    "operation": "threads.readSpaceContext",
+    "input": {
+      "space": "spaces/AAA",
+      "authMode": "user",
+      "startTime": "2026-07-01T21:00:00Z",
+      "endTime": "2026-07-01T22:30:00Z",
+      "limit": 2,
+      "pageSize": 2,
+      "order": "desc",
+      "maxQuoteDepth": 1
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/drive-attachment-page.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readSpaceContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "user",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.messages.readonly"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 2,
+              "filter": "createTime > \"2026-07-01T21:00:00Z\" AND createTime < \"2026-07-01T22:30:00Z\"",
+              "orderBy": "createTime desc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "space",
+          "space": "spaces/AAA",
+          "thread": null,
+          "limit": 2,
+          "pageSize": 2,
+          "order": "desc",
+          "pageToken": null,
+          "startTime": "2026-07-01T21:00:00Z",
+          "endTime": "2026-07-01T22:30:00Z",
+          "maxQuoteDepth": 1
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "space",
+        "space": "spaces/AAA",
+        "thread": null,
+        "order": "desc",
+        "requestedLimit": 2,
+        "returnedMessages": 1,
+        "pageCursors": {
+          "next": null
+        },
+        "partial": false,
+        "truncated": false,
+        "inaccessible": false,
+        "systemNotes": [],
+        "messages": [
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/drive-1"
+            },
+            "sender": {
+              "name": "users/ada",
+              "displayName": "Ada Lovelace",
+              "email": "ada@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-07-01T21:58:16Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "space_message",
+              "thread": "spaces/AAA/threads/drive-1",
+              "parentMessage": null
+            },
+            "text": "Please review the Drive doc.",
+            "plainTextForModel": "Please review the Drive doc.",
+            "attachments": [
+              {
+                "name": "spaces/AAA/messages/drive-1/attachments/doc-1",
+                "contentName": "roadmap",
+                "contentType": "application/vnd.google-apps.document",
+                "source": "DRIVE_FILE",
+                "mediaResourceName": null,
+                "driveDataRef": {
+                  "driveFileId": "drive-file-123"
+                }
+              }
+            ],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-07-01T21:58:16Z.",
+              "System Note: The user attached roadmap (application/vnd.google-apps.document, unknown size) with this message."
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "messages.read-thread-context.deleted-reply-without-reply-to",
+    "description": "Infer deleted thread replies from Google Chat resource names when replyTo is omitted by the API.",
+    "operation": "threads.readContext",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/root",
+      "authMode": "app",
+      "limit": 10,
+      "pageSize": 10,
+      "order": "desc",
+      "maxQuoteDepth": 1
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/thread-deleted-reply-without-reply-to.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 10,
+              "filter": "thread.name = \"spaces/AAA/threads/root\"",
+              "orderBy": "createTime desc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "thread",
+          "space": "spaces/AAA",
+          "thread": "spaces/AAA/threads/root",
+          "limit": 10,
+          "pageSize": 10,
+          "order": "desc",
+          "pageToken": null,
+          "startTime": null,
+          "endTime": null,
+          "maxQuoteDepth": 1
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "thread",
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/root",
+        "order": "desc",
+        "requestedLimit": 10,
+        "returnedMessages": 2,
+        "pageCursors": {
+          "next": null
+        },
+        "partial": false,
+        "truncated": false,
+        "inaccessible": false,
+        "systemNotes": [],
+        "messages": [
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/root.reply-1"
+            },
+            "sender": {
+              "name": "users/bot",
+              "displayName": "Build Bot",
+              "email": "chat-app@apps.googleusercontent.com",
+              "type": "BOT",
+              "access": "available"
+            },
+            "createdAt": "2026-07-02T18:37:07Z",
+            "updatedAt": null,
+            "deletedAt": "2026-07-02T18:38:39Z",
+            "relationship": {
+              "kind": "thread_reply",
+              "thread": "spaces/AAA/threads/root",
+              "parentMessage": "spaces/AAA/messages/root.root"
+            },
+            "text": "",
+            "plainTextForModel": "",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Build Bot (chat-app@apps.googleusercontent.com) sent this message at 2026-07-02T18:37:07Z.",
+              "System Note: This message is a reply in thread spaces/AAA/threads/root to spaces/AAA/messages/root.root.",
+              "System Note: This message was deleted and content is unavailable."
+            ]
+          },
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/root.root"
+            },
+            "sender": {
+              "name": "users/ada",
+              "displayName": "Ada Lovelace",
+              "email": "ada@example.com",
+              "type": "HUMAN",
+              "access": "available"
+            },
+            "createdAt": "2026-07-02T18:30:00Z",
+            "updatedAt": null,
+            "deletedAt": null,
+            "relationship": {
+              "kind": "thread_root",
+              "thread": "spaces/AAA/threads/root",
+              "parentMessage": null
+            },
+            "text": "Thread root",
+            "plainTextForModel": "Thread root",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Ada Lovelace (ada@example.com) sent this message at 2026-07-02T18:30:00Z.",
+              "System Note: This message is the root message in thread spaces/AAA/threads/root."
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "messages.read-thread-context.deleted-custom-root-and-reply",
+    "description": "Keep app-created deleted thread roots as roots when custom messageId makes the root name differ from the thread id.",
+    "operation": "threads.readContext",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/custom-thread",
+      "authMode": "app",
+      "limit": 10,
+      "pageSize": 10,
+      "order": "desc",
+      "maxQuoteDepth": 1
+    },
+    "apiResponses": [
+      {"fixture": "fixtures/api-responses/messages/thread-custom-root-and-reply.json"}
+    ],
+    "expect": {
+      "plan": {
+        "kind": "chat.call_plan",
+        "operation": "threads.readContext",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.list",
+            "method": "GET",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "pageSize": 10,
+              "filter": "thread.name = \"spaces/AAA/threads/custom-thread\"",
+              "orderBy": "createTime desc"
+            },
+            "body": null
+          }
+        ],
+        "reader": {
+          "scope": "thread",
+          "space": "spaces/AAA",
+          "thread": "spaces/AAA/threads/custom-thread",
+          "limit": 10,
+          "pageSize": 10,
+          "order": "desc",
+          "pageToken": null,
+          "startTime": null,
+          "endTime": null,
+          "maxQuoteDepth": 1
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": ["Dry run only; no Google Chat API call was executed."]
+        },
+        "warnings": []
+      },
+      "context": {
+        "kind": "chat.context",
+        "scope": "thread",
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/custom-thread",
+        "order": "desc",
+        "requestedLimit": 10,
+        "returnedMessages": 2,
+        "pageCursors": {
+          "next": null
+        },
+        "partial": false,
+        "truncated": false,
+        "inaccessible": false,
+        "systemNotes": [],
+        "messages": [
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/custom-thread.reply-1"
+            },
+            "sender": {
+              "name": "users/bot",
+              "displayName": "Build Bot",
+              "email": "chat-app@apps.googleusercontent.com",
+              "type": "BOT",
+              "access": "available"
+            },
+            "createdAt": "2026-07-02T19:02:00Z",
+            "updatedAt": null,
+            "deletedAt": "2026-07-02T19:04:00Z",
+            "relationship": {
+              "kind": "thread_reply",
+              "thread": "spaces/AAA/threads/custom-thread",
+              "parentMessage": "spaces/AAA/messages/custom-thread.custom-root"
+            },
+            "text": "",
+            "plainTextForModel": "",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Build Bot (chat-app@apps.googleusercontent.com) sent this message at 2026-07-02T19:02:00Z.",
+              "System Note: This message is a reply in thread spaces/AAA/threads/custom-thread to spaces/AAA/messages/custom-thread.custom-root.",
+              "System Note: This message was deleted and content is unavailable."
+            ]
+          },
+          {
+            "ref": {
+              "name": "spaces/AAA/messages/custom-thread.custom-root"
+            },
+            "sender": {
+              "name": "users/bot",
+              "displayName": "Build Bot",
+              "email": "chat-app@apps.googleusercontent.com",
+              "type": "BOT",
+              "access": "available"
+            },
+            "createdAt": "2026-07-02T19:00:00Z",
+            "updatedAt": null,
+            "deletedAt": "2026-07-02T19:05:00Z",
+            "relationship": {
+              "kind": "thread_root",
+              "thread": "spaces/AAA/threads/custom-thread",
+              "parentMessage": null
+            },
+            "text": "",
+            "plainTextForModel": "",
+            "attachments": [],
+            "quotedMessages": [],
+            "systemNotes": [
+              "System Note: Build Bot (chat-app@apps.googleusercontent.com) sent this message at 2026-07-02T19:00:00Z.",
+              "System Note: This message is the root message in thread spaces/AAA/threads/custom-thread.",
+              "System Note: This message was deleted and content is unavailable."
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

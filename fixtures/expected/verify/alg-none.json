@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-07-06T12:00:00.000Z",
+  "claims": {
+    "aud": "123456789012",
+    "exp": 1783342200,
+    "iat": 1783338600,
+    "iss": "chat@system.gserviceaccount.com"
+  },
+  "keyId": null,
+  "kind": "chat.request_verification",
+  "ok": false,
+  "reason": "Token algorithm none is not RS256.",
+  "status": "unsupported_algorithm",
+  "warnings": []
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "cards.lint.valid-chat-message",
+    "description": "Lint a valid Chat REST message card payload.",
+    "operation": "cards.lintCardPayload",
+    "input": {
+      "options": { "surface": "chat-message" },
+      "payload": {
+        "fallbackText": "Order approved.",
+        "text": "Order approved.",
+        "cardsV2": [
+          {
+            "cardId": "approval-card",
+            "card": {
+              "header": { "title": "Approval" },
+              "sections": [
+                {
+                  "widgets": [
+                    {
+                      "decoratedText": {
+                        "topLabel": "STATUS",
+                        "text": "Approved"
+                      }
+                    },
+                    {
+                      "buttonList": {
+                        "buttons": [
+                          {
+                            "text": "Open",
+                            "onClick": {
+                              "openLink": {
+                                "url": "https://example.com/orders/123"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/lint/valid-chat-message.json"
+    }
+  },
+  {
+    "id": "cards.lint.chat-message-mixed-envelope",
+    "description": "Reject common Chat message casing, add-on envelope, and accessory conflicts.",
+    "operation": "cards.lintCardPayload",
+    "input": {
+      "options": { "surface": "chat-message" },
+      "payload": {
+        "text": "Broken mixed payload",
+        "cards_v2": [{ "card_id": "legacy" }],
+        "hostAppDataAction": {
+          "chatDataAction": {
+            "createMessageAction": {
+              "message": { "text": "wrong envelope" }
+            }
+          }
+        },
+        "attachment": [
+          { "name": "spaces/AAA/messages/BBB/attachments/1" }
+        ],
+        "accessoryWidgets": [
+          { "buttonList": { "buttons": [{ "text": "Ack" }] } }
+        ]
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/lint/chat-message-mixed-envelope.json"
+    }
+  },
+  {
+    "id": "cards.lint.addon-named-function",
+    "description": "Reject add-on card actions that use named functions instead of endpoint URLs.",
+    "operation": "cards.lintCardPayload",
+    "input": {
+      "options": { "surface": "workspace-addon-action-response" },
+      "payload": {
+        "hostAppDataAction": {
+          "chatDataAction": {
+            "updateMessageAction": {
+              "message": {
+                "text": "Updated",
+                "cardsV2": [
+                  {
+                    "cardId": "addon-card",
+                    "card": {
+                      "header": { "title": "Add-on" },
+                      "sections": [
+                        {
+                          "widgets": [
+                            {
+                              "buttonList": {
+                                "buttons": [
+                                  {
+                                    "text": "Done",
+                                    "onClick": {
+                                      "action": {
+                                        "function": "mark_done"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/lint/addon-named-function.json"
+    }
+  },
+  {
+    "id": "cards.translate.direct-update-to-addon",
+    "description": "Translate a direct Chat UPDATE_MESSAGE response to the Workspace add-on action envelope.",
+    "operation": "cards.translateCardPayload",
+    "input": {
+      "options": {
+        "from": "direct-chat-response",
+        "to": "workspace-addon-action-response",
+        "mode": "update-message"
+      },
+      "payload": {
+        "actionResponse": { "type": "UPDATE_MESSAGE" },
+        "text": "Done",
+        "fallbackText": "Done",
+        "cardsV2": [
+          {
+            "cardId": "status",
+            "card": {
+              "header": { "title": "Status" },
+              "sections": [
+                {
+                  "widgets": [
+                    { "decoratedText": { "text": "Done" } }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/lint/direct-update-to-addon.translation.json"
+    }
+  }
+]

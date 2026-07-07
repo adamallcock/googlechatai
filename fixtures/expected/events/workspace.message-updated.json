@@ -1,0 +1,189 @@
+{
+  "eventId": "workspace_events:workspace-event-1",
+  "receivedAt": "2026-06-29T18:30:00Z",
+  "source": "workspace_events",
+  "kind": "message.updated",
+  "rawKind": "google.workspace.chat.message.v1.updated",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": null,
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/EDITED"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": null,
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": "2026-06-29T18:30:00Z",
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "edited copy",
+    "formattedText": null,
+    "argumentText": "edited copy",
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 11,
+        "text": "edited copy"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/EDITED from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:30:00Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/EDITED"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": null,
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": "2026-06-29T18:30:00Z",
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "edited copy",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/EDITED from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:30:00Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/EDITED from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:30:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nedited copy"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/EDITED from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z and updated at 2026-06-29T18:30:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nedited copy"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": true,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": true,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": true,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "A message in Engineering was edited."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": "workspace-event-1",
+    "workspaceEventType": "google.workspace.chat.message.v1.updated",
+    "workspaceEventSource": "//chat.googleapis.com/spaces/AAA",
+    "workspaceEventSubject": "spaces/AAA/messages/EDITED"
+  },
+  "idempotencyKey": "workspace_events:workspace-event-1",
+  "raw": {
+    "specversion": "1.0",
+    "id": "workspace-event-1",
+    "source": "//chat.googleapis.com/spaces/AAA",
+    "type": "google.workspace.chat.message.v1.updated",
+    "subject": "spaces/AAA/messages/EDITED",
+    "time": "2026-06-29T18:30:00Z",
+    "datacontenttype": "application/json",
+    "data": {
+      "message": {
+        "name": "spaces/AAA/messages/EDITED",
+        "text": "edited copy",
+        "argumentText": "edited copy",
+        "createTime": "2026-06-29T18:00:00Z",
+        "lastUpdateTime": "2026-06-29T18:30:00Z",
+        "sender": {
+          "name": "users/123",
+          "displayName": "Ada Lovelace",
+          "type": "HUMAN"
+        },
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM",
+          "displayName": "Engineering"
+        },
+        "thread": {
+          "name": "spaces/AAA/threads/thread-1"
+        }
+      }
+    }
+  }
+}

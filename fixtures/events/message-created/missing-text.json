@@ -1,0 +1,28 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:05:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/789",
+    "displayName": "No Text User",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/NO_TEXT",
+    "createTime": "2026-06-29T18:05:00Z",
+    "sender": {
+      "name": "users/789",
+      "displayName": "No Text User",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  }
+}

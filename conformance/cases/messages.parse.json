@@ -1,0 +1,82 @@
+[
+  {
+    "id": "messages.annotations.mentions-custom-emoji",
+    "description": "Parse user mentions, custom emoji, and reaction summaries into the message AST.",
+    "input": {
+      "fixture": "fixtures/messages/annotations/mentions-custom-emoji.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/annotations.mentions-custom-emoji.json"
+    }
+  },
+  {
+    "id": "messages.commands.slash-command",
+    "description": "Parse slash command annotations and top-level slash command metadata.",
+    "input": {
+      "fixture": "fixtures/messages/commands/slash-command.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/commands.slash-command.json"
+    }
+  },
+  {
+    "id": "messages.links.matched-url-rich-link",
+    "description": "Parse matched URLs and rich links while preserving occurrence order.",
+    "input": {
+      "fixture": "fixtures/messages/links/matched-url-rich-link.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/links.matched-url-rich-link.json"
+    }
+  },
+  {
+    "id": "messages.attachments.uploaded-file",
+    "description": "Parse uploaded attachment metadata and render an AI-facing attachment note.",
+    "input": {
+      "fixture": "fixtures/messages/attachments/uploaded-file.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/attachments.uploaded-file.json"
+    }
+  },
+  {
+    "id": "messages.quotes.nested-content",
+    "description": "Parse hydrated quoted message contents with recursive attachment, card, and nested quote nodes.",
+    "input": {
+      "fixture": "fixtures/messages/quotes/nested-content.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/quotes.nested-content.json"
+    }
+  },
+  {
+    "id": "messages.deleted.user-deleted",
+    "description": "Parse deleted message metadata without exposing deleted text as model text.",
+    "input": {
+      "fixture": "fixtures/messages/deleted/user-deleted.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/deleted.user-deleted.json"
+    }
+  },
+  {
+    "id": "messages.private.thread-reply",
+    "description": "Parse private thread reply metadata and render relationship notes.",
+    "input": {
+      "fixture": "fixtures/messages/private/thread-reply.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/private.thread-reply.json"
+    }
+  },
+  {
+    "id": "messages.gifs.attached-gif",
+    "description": "Parse attached GIF metadata and render an AI-facing GIF note.",
+    "input": {
+      "fixture": "fixtures/messages/gifs/attached-gif.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/gifs.attached-gif.json"
+    }
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "message": {
+    "ref": {
+      "name": "spaces/AAA/messages/LINKS"
+    },
+    "links": [
+      {
+        "kind": "matchedUrl",
+        "url": "https://example.com/design",
+        "startIndex": 7,
+        "length": 26,
+        "text": "https://example.com/design"
+      },
+      {
+        "kind": "richLink",
+        "url": "https://docs.google.com/document/d/doc123/edit",
+        "startIndex": 38,
+        "length": 46,
+        "text": "https://docs.google.com/document/d/doc123/edit",
+        "richLinkType": "DRIVE_FILE",
+        "mimeType": "application/vnd.google-apps.document",
+        "title": "Launch Plan"
+      },
+      {
+        "kind": "matchedUrl",
+        "url": "https://docs.google.com/spreadsheets/d/sheet456/edit#gid=0",
+        "startIndex": 89,
+        "length": 59,
+        "text": "https://docs.google.com/spreadsheets/d/sheet456/edit#gid=0"
+      },
+      {
+        "kind": "matchedUrl",
+        "url": "https://drive.google.com/drive/folders/folder789",
+        "startIndex": 153,
+        "length": 47,
+        "text": "https://drive.google.com/drive/folders/folder789"
+      }
+    ]
+  },
+  "options": {
+    "targetDirectory": "/tmp/chat-ai-sdk/drive-links",
+    "env": {},
+    "cache": {
+      "entriesByFileId": {
+        "doc123": {
+          "hit": true,
+          "negative": false,
+          "key": "drive-link:doc123",
+          "metadata": {
+            "contentSha256": "doc-sha"
+          }
+        }
+      }
+    }
+  }
+}

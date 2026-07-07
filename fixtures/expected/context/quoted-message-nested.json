@@ -1,0 +1,32 @@
+{
+  "contextItems": [
+    {
+      "kind": "system_note",
+      "text": "System Note: Ada Lovelace replied in a thread at 2026-06-29T20:00:00Z."
+    },
+    {
+      "kind": "message_text",
+      "text": "Can you summarize the quoted plan?"
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: The message quotes Grace Hopper from 2026-06-29T19:45:00Z. Email is unavailable because profile access is limited."
+    },
+    {
+      "kind": "message_text",
+      "text": "The rollout depends on the attached checklist."
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: Grace Hopper attached rollout-checklist.pdf (application/pdf, 204800 bytes). Extraction was not requested."
+    },
+    {
+      "kind": "system_note",
+      "text": "System Note: The quoted message also quotes Lin Chen from 2026-06-29T19:30:00Z. Email is unavailable because profile access is limited."
+    },
+    {
+      "kind": "message_text",
+      "text": "Please keep the deploy reversible."
+    }
+  ]
+}

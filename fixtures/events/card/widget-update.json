@@ -1,0 +1,38 @@
+{
+  "type": "WIDGET_UPDATED",
+  "eventTime": "2026-06-29T18:17:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/WIDGET",
+    "createTime": "2026-06-29T18:00:00Z",
+    "sender": {
+      "name": "users/app",
+      "displayName": "Google Chat AI SDK Dev",
+      "type": "BOT"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    }
+  },
+  "action": {
+    "actionMethodName": "assignee_autocomplete"
+  },
+  "common": {
+    "invokedFunction": "assignee_autocomplete",
+    "parameters": {
+      "query": "ada"
+    }
+  }
+}

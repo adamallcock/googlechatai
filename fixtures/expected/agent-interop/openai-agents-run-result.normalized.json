@@ -1,0 +1,69 @@
+{
+  "kind": "agent_response",
+  "schemaVersion": "2026-07-06",
+  "provider": "openai",
+  "sdk": "openai-agents-sdk",
+  "responseId": null,
+  "finalText": "The deploy is green.",
+  "sources": [],
+  "toolCalls": [
+    {
+      "id": "call_abc",
+      "name": "run_tests",
+      "status": "requested",
+      "inputSummary": "{\"suite\":\"smoke\"}",
+      "stepIndex": null,
+      "provider": "openai"
+    }
+  ],
+  "toolResults": [
+    {
+      "id": "call_abc",
+      "name": "run_tests",
+      "status": "completed",
+      "outputSummary": "12 tests passed",
+      "stepIndex": null,
+      "provider": "openai"
+    }
+  ],
+  "thinkingSummaries": [
+    {
+      "text": "Checked tests and deployment status.",
+      "provider": "openai",
+      "stepIndex": null
+    }
+  ],
+  "usage": {
+    "inputTokens": 700,
+    "outputTokens": 130,
+    "totalTokens": 830,
+    "cachedInputTokens": null,
+    "reasoningTokens": 30,
+    "provider": "openai"
+  },
+  "cost": null,
+  "warnings": [],
+  "systemNotes": [
+    "Agent response normalized from OpenAI Agents SDK run result.",
+    "Thinking summaries are provider-provided summaries only; hidden chain-of-thought is not inferred."
+  ],
+  "rawShape": {
+    "topLevelKeys": [
+      "finalOutput",
+      "lastAgent",
+      "newItems",
+      "rawResponses"
+    ],
+    "contentTypes": [
+      "output_text"
+    ],
+    "stepTypes": [],
+    "itemTypes": [
+      "tool_call_item",
+      "tool_call_output_item",
+      "reasoning_item",
+      "message_output_item"
+    ]
+  }
+}
+

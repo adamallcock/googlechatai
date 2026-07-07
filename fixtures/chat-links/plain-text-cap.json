@@ -1,0 +1,7 @@
+{
+  "text": "A https://chat.google.com/room/AAA B https://chat.google.com/room/BBB C https://chat.google.com/room/CCC D https://chat.google.com/room/DDD",
+  "options": {
+    "maxPlainTextUrls": 2,
+    "allowSpaceLevelContext": false
+  }
+}

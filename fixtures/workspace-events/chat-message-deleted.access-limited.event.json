@@ -1,0 +1,12 @@
+{
+  "id": "workspace-events-chat-message-deleted-access-limited-1",
+  "source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+  "specversion": "1.0",
+  "type": "google.workspace.chat.message.v1.deleted",
+  "time": "2026-06-29T20:00:01Z",
+  "subject": "//chat.googleapis.com/spaces/AAA/messages/DDD",
+  "datacontenttype": "application/json",
+  "data": {
+    "resourceName": "spaces/AAA/messages/DDD"
+  }
+}

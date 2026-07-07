@@ -1,0 +1,61 @@
+[
+  {
+    "id": "agentInterop.anthropic.contentBlocks",
+    "description": "Normalize Anthropic SDK content blocks into Google Chat agent response context.",
+    "operation": "agentInterop.normalize",
+    "input": {
+      "fixture": "fixtures/agent-interop/anthropic-content-blocks.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/agent-interop/anthropic-content-blocks.normalized.json"
+    }
+  },
+  {
+    "id": "agentInterop.openaiAgents.runResult",
+    "description": "Normalize OpenAI Agents run results into Google Chat agent response context.",
+    "operation": "agentInterop.normalize",
+    "input": {
+      "fixture": "fixtures/agent-interop/openai-agents-run-result.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/agent-interop/openai-agents-run-result.normalized.json"
+    }
+  },
+  {
+    "id": "agentInterop.vercelAi.result",
+    "description": "Normalize Vercel AI SDK result objects including sources, tools, usage, warnings, and cost.",
+    "operation": "agentInterop.normalize",
+    "input": {
+      "fixture": "fixtures/agent-interop/vercel-ai-sdk-result.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/agent-interop/vercel-ai-sdk-result.normalized.json"
+    }
+  },
+  {
+    "id": "agentInterop.googleGenai.grounding",
+    "description": "Normalize Google GenAI Interactions grounding steps into Google Chat agent response context.",
+    "operation": "agentInterop.normalize",
+    "input": {
+      "fixture": "fixtures/agent-interop/google-genai-grounding.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/agent-interop/google-genai-grounding.normalized.json"
+    }
+  },
+  {
+    "id": "agentInterop.vercelAi.messagePlan",
+    "description": "Plan Google Chat text, source, thinking, and tool status messages from a normalized agent response.",
+    "operation": "agentInterop.planMessage",
+    "input": {
+      "fixture": "fixtures/agent-interop/vercel-ai-sdk-result.json",
+      "options": {
+        "responseId": "resp_vercel_1"
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/agent-interop/vercel-ai-sdk-result.message-plan.json"
+    }
+  }
+]
+

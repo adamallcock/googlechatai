@@ -1,0 +1,196 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "ready",
+  "dryRun": true,
+  "summary": "Planned 3 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 3,
+    "parsed": 3,
+    "unknown": 0,
+    "plannedRequests": 3,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 3,
+    "plainTextUrlsScanned": 4,
+    "plainTextCharsScanned": 147,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 1,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "matched_url",
+      "originalUrl": "https://chat.google.com/room/AAA",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/AAA",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/AAA",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": "spaces/AAA/messages/source",
+        "relationship": "self",
+        "path": [
+          "self:spaces/AAA/messages/source"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/AAA",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-2",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/BBB",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/BBB",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/BBB",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": "spaces/AAA/messages/source",
+        "relationship": "self",
+        "path": [
+          "self:spaces/AAA/messages/source"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/BBB",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-3",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/CCC",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/CCC",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/CCC",
+      "urlShape": "chat_room_space",
+      "context": {
+        "messageName": "spaces/AAA/messages/source",
+        "relationship": "self",
+        "path": [
+          "self:spaces/AAA/messages/source"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/CCC",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    }
+  ],
+  "requests": [
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/AAA",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    },
+    {
+      "candidateId": "chat-link-2",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/BBB",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-2"
+      ]
+    },
+    {
+      "candidateId": "chat-link-3",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/CCC",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-3"
+      ]
+    }
+  ],
+  "capability": {
+    "ok": true,
+    "authMode": "user",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.spaces.readonly"
+    ],
+    "requiresAdminApproval": false,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 3 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": []
+}

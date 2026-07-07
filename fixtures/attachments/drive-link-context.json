@@ -1,0 +1,28 @@
+{
+  "context": {
+    "message": {
+      "name": "spaces/AAA/messages/ROOT",
+      "text": "Root context message"
+    },
+    "children": [
+      {
+        "relationship": "quoted_message",
+        "message": {
+          "name": "spaces/AAA/messages/QUOTE",
+          "text": "Quoted doc https://docs.google.com/document/d/quote123/edit"
+        }
+      },
+      {
+        "relationship": "thread_history",
+        "message": {
+          "name": "spaces/AAA/messages/THREAD",
+          "text": "Thread sheet https://docs.google.com/spreadsheets/d/thread456/edit"
+        }
+      }
+    ]
+  },
+  "options": {
+    "targetDirectory": "/tmp/chat-ai-sdk/context-links",
+    "env": {}
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/actions.schema.json",
+  "title": "Normalized Google Chat Action",
+  "type": "object",
+  "required": [
+    "actionId",
+    "actionType",
+    "methodName",
+    "actor",
+    "eventTime",
+    "parameters",
+    "formInputs",
+    "selectedUsers",
+    "selectedSpaces",
+    "validationErrors",
+    "systemNotes",
+    "raw"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "actionId": { "type": "string" },
+    "actionType": {
+      "type": "string",
+      "enum": [
+        "slash_command",
+        "app_command",
+        "card_click",
+        "dialog_submit",
+        "dialog_cancel",
+        "widget_update",
+        "link_preview"
+      ]
+    },
+    "methodName": { "type": ["string", "null"] },
+    "actor": { "$ref": "#/$defs/userRef" },
+    "eventTime": { "type": ["string", "null"] },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "formInputs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/formInputValue" }
+    },
+    "selectedUsers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/userRefNonNull" }
+    },
+    "selectedSpaces": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/spaceRefNonNull" }
+    },
+    "validationErrors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/validationError" }
+    },
+    "systemNotes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "raw": true
+  },
+  "$defs": {
+    "userRef": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/userRefNonNull" }
+      ]
+    },
+    "userRefNonNull": {
+      "type": "object",
+      "required": ["name", "displayName", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "displayName": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] }
+      }
+    },
+    "spaceRefNonNull": {
+      "type": "object",
+      "required": ["name", "displayName", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "displayName": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "required": ["field", "code", "message"],
+      "additionalProperties": true,
+      "properties": {
+        "field": { "type": ["string", "null"] },
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    },
+    "formInputValue": {
+      "type": "object",
+      "required": ["kind", "value", "raw"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "string",
+            "multi_select",
+            "boolean",
+            "date",
+            "time",
+            "date_time",
+            "user_picker",
+            "space_picker",
+            "unknown"
+          ]
+        },
+        "value": true,
+        "values": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "msSinceEpoch": { "type": ["string", "null"] },
+        "raw": true
+      }
+    }
+  }
+}

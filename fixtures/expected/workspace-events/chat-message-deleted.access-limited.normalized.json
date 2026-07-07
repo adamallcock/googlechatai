@@ -1,0 +1,89 @@
+{
+  "eventId": "workspace_events:workspace-events-chat-message-deleted-access-limited-1",
+  "receivedAt": "2026-06-29T20:00:01Z",
+  "source": "workspace_events",
+  "kind": "message.deleted",
+  "rawKind": "google.workspace.chat.message.v1.deleted",
+  "actor": null,
+  "actorState": {
+    "status": "missing",
+    "reason": "workspace_event_missing_actor"
+  },
+  "space": null,
+  "thread": null,
+  "message": null,
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": true,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "A message in an unknown space was deleted."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": "workspace-events-chat-message-deleted-access-limited-1",
+    "workspaceEventType": "google.workspace.chat.message.v1.deleted",
+    "workspaceEventSource": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+    "workspaceEventSubject": "//chat.googleapis.com/spaces/AAA/messages/DDD"
+  },
+  "idempotencyKey": "workspace_events:workspace-events-chat-message-deleted-access-limited-1",
+  "raw": {
+    "id": "workspace-events-chat-message-deleted-access-limited-1",
+    "source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+    "specversion": "1.0",
+    "type": "google.workspace.chat.message.v1.deleted",
+    "time": "2026-06-29T20:00:01Z",
+    "subject": "//chat.googleapis.com/spaces/AAA/messages/DDD",
+    "datacontenttype": "application/json",
+    "data": {
+      "resourceName": "spaces/AAA/messages/DDD"
+    }
+  },
+  "workspaceEvent": {
+    "id": "workspace-events-chat-message-deleted-access-limited-1",
+    "type": "google.workspace.chat.message.v1.deleted",
+    "source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+    "subject": "//chat.googleapis.com/spaces/AAA/messages/DDD",
+    "time": "2026-06-29T20:00:01Z",
+    "subscription": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+    "resource": {
+      "type": "message",
+      "name": "spaces/AAA/messages/DDD",
+      "service": "chat.googleapis.com",
+      "availability": "access_limited"
+    },
+    "actor": null,
+    "actorAvailability": "unavailable",
+    "resourceDataAvailability": "access_limited"
+  }
+}

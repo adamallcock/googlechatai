@@ -1,0 +1,42 @@
+{
+  "id": "msg_01SDKCompatAnthropic",
+  "model": "claude-sonnet-4-5",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 1200,
+    "output_tokens": 220,
+    "cache_read_input_tokens": 500
+  },
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "I should check the release plan and summarize only the public conclusion.",
+      "signature": "sig_redacted"
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01",
+      "name": "drive_search",
+      "input": {
+        "query": "release plan",
+        "limit": 5
+      }
+    },
+    {
+      "type": "text",
+      "text": "The launch plan is ready once legal signs off.",
+      "citations": [
+        {
+          "type": "url_citation",
+          "url": "https://docs.google.com/document/d/doc123/edit",
+          "title": "Launch plan",
+          "start_index": 4,
+          "end_index": 15
+        }
+      ]
+    }
+  ],
+  "_request_id": "req_redacted"
+}
+

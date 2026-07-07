@@ -1,0 +1,49 @@
+{
+  "name": "spaces/AAA/messages/source",
+  "createTime": "2026-07-05T15:00:00Z",
+  "lastUpdateTime": "2026-07-05T15:05:00Z",
+  "sender": {
+    "name": "users/ada",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/u/0/app/chat/AAA",
+      "title": "Message",
+      "chatSpaceLinkData": {
+        "space": "spaces/AAA",
+        "message": "spaces/AAA/messages/msg-1"
+      }
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA/thread-1"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/u/2/app/chat/BBB"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/u/2/app/chat/BBB/BBB/thread-9"
+    }
+  ],
+  "options": {
+    "authMode": "user",
+    "allowSpaceLevelContext": true,
+    "maxThreadMessages": 12,
+    "maxSpaceMessages": 5,
+    "cache": {
+      "entriesByResourceName": {
+        "spaces/AAA/messages/msg-1": {
+          "hit": true,
+          "key": "chat-link:cached-message",
+          "lastUpdateTime": "2026-07-05T15:10:00Z"
+        }
+      }
+    }
+  }
+}

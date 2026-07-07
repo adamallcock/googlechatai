@@ -1,0 +1,182 @@
+[
+  {
+    "id": "messages.search.basic",
+    "description": "Plan a docs-listed message search with defaults.",
+    "operation": "messages.search",
+    "input": {
+      "space": "spaces/AAA",
+      "query": "from:ada@example.com attachment:drive"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.search",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.search",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messages:search",
+          "query": {
+            "query": "from:ada@example.com attachment:drive",
+            "pageSize": 25
+          },
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "search": {
+        "space": "spaces/AAA",
+        "query": "from:ada@example.com attachment:drive",
+        "pageSize": 25,
+        "pageToken": null,
+        "orderBy": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messages.search is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "messages.search.paged",
+    "description": "Plan a paged, ordered message search.",
+    "operation": "messages.search",
+    "input": {
+      "space": "spaces/AAA",
+      "query": "topic",
+      "pageSize": 5000,
+      "pageToken": "tok-2",
+      "orderBy": "createTime desc"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.search",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.search",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messages:search",
+          "query": {
+            "query": "topic",
+            "pageSize": 1000,
+            "pageToken": "tok-2",
+            "orderBy": "createTime desc"
+          },
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "search": {
+        "space": "spaces/AAA",
+        "query": "topic",
+        "pageSize": 1000,
+        "pageToken": "tok-2",
+        "orderBy": "createTime desc"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messages.search is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "messages.replaceCards.basic",
+    "description": "Plan a docs-listed replaceCards call.",
+    "operation": "messages.replaceCards",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "cardsV2": [
+        {
+          "cardId": "summary",
+          "card": {
+            "sections": []
+          }
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replaceCards",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.replaceCards",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/BBB:replaceCards",
+          "query": {},
+          "body": {
+            "cardsV2": [
+              {
+                "cardId": "summary",
+                "card": {
+                  "sections": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "replaceCards": {
+        "message": "spaces/AAA/messages/BBB",
+        "cardCount": 1
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messages.replaceCards is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  }
+]

@@ -1,0 +1,485 @@
+{
+  "kind": "chat.attachment_pipeline_plan",
+  "status": "partial",
+  "summary": "3 attachments, 2 uploads, 2 ready operations, 4 fallback or blocked paths.",
+  "counts": {
+    "attachments": 3,
+    "uploads": 2,
+    "downloads": 1,
+    "driveExports": 1,
+    "blocked": 2,
+    "cacheHits": 1,
+    "parserReady": 1,
+    "transcriptionReady": 0,
+    "fallbacks": 4
+  },
+  "attachments": [
+    {
+      "attachment": {
+        "name": "spaces/AAA/messages/root/attachments/pdf-1",
+        "contentName": "report.pdf",
+        "safeFilename": "report.pdf",
+        "contentType": "application/pdf",
+        "mediaKind": "pdf",
+        "source": "UPLOADED_CONTENT",
+        "contentSizeBytes": 1200,
+        "mediaResourceName": "spaces/AAA/messages/root/attachments/pdf-1/media",
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/root/attachments/pdf-1/media",
+          "attachmentUploadToken": null
+        },
+        "driveDataRef": null,
+        "thumbnailUri": null,
+        "downloadUri": null,
+        "context": {
+          "messageName": null,
+          "relationship": "message",
+          "path": []
+        },
+        "policy": {
+          "status": "allowed",
+          "reasons": [],
+          "maxDownloadBytes": 26214400,
+          "maxUploadBytes": 209715200
+        },
+        "processing": {
+          "extraction": {
+            "status": "skipped",
+            "parser": null,
+            "text": null,
+            "reason": "No parser has run."
+          },
+          "transcription": {
+            "status": "skipped",
+            "provider": null,
+            "text": null,
+            "reason": "Attachment is not audio."
+          }
+        }
+      },
+      "cache": {
+        "status": "hit",
+        "lookupKey": "spaces/AAA/messages/root/attachments/pdf-1",
+        "key": "attachment:pdf-hit",
+        "negative": false,
+        "metadata": {
+          "contentSha256": "pdf-sha"
+        }
+      },
+      "downloadPlan": {
+        "kind": "download",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["w7_not_complete", "env_flag_missing"]
+        },
+        "attachmentName": "spaces/AAA/messages/root/attachments/pdf-1",
+        "mediaResourceName": "spaces/AAA/messages/root/attachments/pdf-1/media",
+        "method": "GET",
+        "url": "https://chat.googleapis.com/v1/media/spaces/AAA/messages/root/attachments/pdf-1/media?alt=media",
+        "destinationPath": "/tmp/chat-ai-sdk/report.pdf",
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "modes": ["app", "user"],
+          "scopes": [
+            "https://www.googleapis.com/auth/chat.bot",
+            "https://www.googleapis.com/auth/chat.messages",
+            "https://www.googleapis.com/auth/chat.messages.readonly"
+          ]
+        },
+        "alternateContentApi": null
+      },
+      "driveExportPlan": null,
+      "parsePlan": {
+        "status": "ready",
+        "mediaKind": "pdf",
+        "parser": "pdf-parse",
+        "reason": null
+      },
+      "transcriptionPlan": {
+        "status": "skipped",
+        "provider": null,
+        "model": null,
+        "reason": "Attachment is not audio."
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "download_chat_media",
+        "reason": "Chat-hosted media can be downloaded with Chat media.download."
+      },
+      "contextParts": [
+        {
+          "type": "system_note",
+          "text": "System Note: The user attached report.pdf (application/pdf, 1200 bytes) from UPLOADED_CONTENT in message. Extraction status: skipped. Transcription status: skipped."
+        },
+        {
+          "type": "attachment_content",
+          "status": "skipped",
+          "text": null,
+          "note": "No parser has run."
+        }
+      ]
+    },
+    {
+      "attachment": {
+        "name": "spaces/AAA/messages/root/attachments/drive-doc",
+        "contentName": "roadmap",
+        "safeFilename": "roadmap",
+        "contentType": "application/vnd.google-apps.document",
+        "mediaKind": "unknown",
+        "source": "DRIVE_FILE",
+        "contentSizeBytes": null,
+        "mediaResourceName": null,
+        "attachmentDataRef": null,
+        "driveDataRef": {
+          "driveFileId": "drive-file-123"
+        },
+        "thumbnailUri": null,
+        "downloadUri": null,
+        "context": {
+          "messageName": null,
+          "relationship": "message",
+          "path": []
+        },
+        "policy": {
+          "status": "allowed",
+          "reasons": [],
+          "maxDownloadBytes": 26214400,
+          "maxUploadBytes": 209715200
+        },
+        "processing": {
+          "extraction": {
+            "status": "skipped",
+            "parser": null,
+            "text": null,
+            "reason": "No parser has run."
+          },
+          "transcription": {
+            "status": "skipped",
+            "provider": null,
+            "text": null,
+            "reason": "Attachment is not audio."
+          }
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "lookupKey": "spaces/AAA/messages/root/attachments/drive-doc",
+        "key": null,
+        "negative": false,
+        "metadata": {}
+      },
+      "downloadPlan": {
+        "kind": "download",
+        "status": "blocked",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["w7_not_complete", "env_flag_missing"]
+        },
+        "attachmentName": "spaces/AAA/messages/root/attachments/drive-doc",
+        "mediaResourceName": null,
+        "method": "GET",
+        "url": null,
+        "destinationPath": "/tmp/chat-ai-sdk/roadmap",
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "modes": ["app", "user"],
+          "scopes": [
+            "https://www.googleapis.com/auth/chat.bot",
+            "https://www.googleapis.com/auth/chat.messages",
+            "https://www.googleapis.com/auth/chat.messages.readonly"
+          ]
+        },
+        "alternateContentApi": {
+          "kind": "drive",
+          "required": true,
+          "driveFileIdAvailable": true,
+          "method": "GET",
+          "reason": "Drive-backed Google Chat attachments must be read with the Google Drive API.",
+          "auth": {
+            "required": true,
+            "modes": ["user"],
+            "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
+          }
+        },
+        "blockedReasons": ["drive_api_required"]
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["env_flag_missing"]
+        },
+        "attachmentName": "spaces/AAA/messages/root/attachments/drive-doc",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/drive-file-123/export?mimeType=text%2Fplain",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.document",
+        "exportMimeType": "text/plain",
+        "destinationPath": "/tmp/chat-ai-sdk/drive/roadmap.txt",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
+        }
+      },
+      "parsePlan": {
+        "status": "skipped",
+        "mediaKind": "unknown",
+        "parser": null,
+        "reason": "No parser registered for this attachment type."
+      },
+      "transcriptionPlan": {
+        "status": "skipped",
+        "provider": null,
+        "model": null,
+        "reason": "Attachment is not audio."
+      },
+      "fallback": {
+        "status": "fallback",
+        "action": "drive_export_required",
+        "reason": "Drive-backed attachments require Google Drive user auth; use the Drive export plan or render metadata only."
+      },
+      "contextParts": [
+        {
+          "type": "system_note",
+          "text": "System Note: The user attached roadmap (application/vnd.google-apps.document, size unknown) from DRIVE_FILE in message. Extraction status: skipped. Transcription status: skipped."
+        },
+        {
+          "type": "attachment_content",
+          "status": "skipped",
+          "text": null,
+          "note": "No parser has run."
+        }
+      ]
+    },
+    {
+      "attachment": {
+        "name": "spaces/AAA/messages/root/attachments/block-1",
+        "contentName": "malware.exe",
+        "safeFilename": "malware.exe",
+        "contentType": "application/x-msdownload",
+        "mediaKind": "unknown",
+        "source": "UPLOADED_CONTENT",
+        "contentSizeBytes": 1024,
+        "mediaResourceName": "spaces/AAA/messages/root/attachments/block-1/media",
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/root/attachments/block-1/media",
+          "attachmentUploadToken": null
+        },
+        "driveDataRef": null,
+        "thumbnailUri": null,
+        "downloadUri": null,
+        "context": {
+          "messageName": null,
+          "relationship": "message",
+          "path": []
+        },
+        "policy": {
+          "status": "blocked",
+          "reasons": ["content_type_blocked", "extension_blocked"],
+          "maxDownloadBytes": 26214400,
+          "maxUploadBytes": 209715200
+        },
+        "processing": {
+          "extraction": {
+            "status": "blocked",
+            "parser": null,
+            "text": null,
+            "reason": "Attachment is blocked by policy."
+          },
+          "transcription": {
+            "status": "skipped",
+            "provider": null,
+            "text": null,
+            "reason": "Attachment is blocked by policy."
+          }
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "lookupKey": "spaces/AAA/messages/root/attachments/block-1",
+        "key": null,
+        "negative": false,
+        "metadata": {}
+      },
+      "downloadPlan": {
+        "kind": "download",
+        "status": "blocked",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["w7_not_complete", "env_flag_missing"]
+        },
+        "attachmentName": "spaces/AAA/messages/root/attachments/block-1",
+        "mediaResourceName": "spaces/AAA/messages/root/attachments/block-1/media",
+        "method": "GET",
+        "url": "https://chat.googleapis.com/v1/media/spaces/AAA/messages/root/attachments/block-1/media?alt=media",
+        "destinationPath": "/tmp/chat-ai-sdk/malware.exe",
+        "policy": {
+          "status": "blocked",
+          "reasons": ["content_type_blocked", "extension_blocked"]
+        },
+        "auth": {
+          "required": true,
+          "modes": ["app", "user"],
+          "scopes": [
+            "https://www.googleapis.com/auth/chat.bot",
+            "https://www.googleapis.com/auth/chat.messages",
+            "https://www.googleapis.com/auth/chat.messages.readonly"
+          ]
+        },
+        "alternateContentApi": null,
+        "blockedReasons": ["content_type_blocked", "extension_blocked"]
+      },
+      "driveExportPlan": null,
+      "parsePlan": {
+        "status": "blocked",
+        "mediaKind": "unknown",
+        "parser": null,
+        "reason": "Attachment is blocked by policy."
+      },
+      "transcriptionPlan": {
+        "status": "skipped",
+        "provider": null,
+        "model": null,
+        "reason": "Attachment is blocked by policy."
+      },
+      "fallback": {
+        "status": "blocked",
+        "action": "metadata_only",
+        "reason": "Attachment bytes are blocked by policy; render metadata only."
+      },
+      "contextParts": [
+        {
+          "type": "system_note",
+          "text": "System Note: The user attached malware.exe (application/x-msdownload, 1024 bytes) from UPLOADED_CONTENT in message. Extraction status: blocked. Transcription status: skipped."
+        },
+        {
+          "type": "attachment_content",
+          "status": "blocked",
+          "text": null,
+          "note": "Attachment is blocked by policy."
+        }
+      ]
+    }
+  ],
+  "uploads": [
+    {
+      "uploadPlan": {
+        "kind": "upload",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["w7_not_complete", "env_flag_missing"]
+        },
+        "parent": "spaces/AAA",
+        "safeFilename": "answer.txt",
+        "contentType": "text/plain",
+        "sizeBytes": 42,
+        "method": "POST",
+        "url": "https://chat.googleapis.com/upload/v1/spaces/AAA/attachments:upload?uploadType=multipart",
+        "uploadProtocol": "simple",
+        "maxBytes": 209715200,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/chat.messages.create",
+            "https://www.googleapis.com/auth/chat.messages",
+            "https://www.googleapis.com/auth/chat.import"
+          ]
+        }
+      },
+      "sendStrategy": {
+        "kind": "separate_attachment_message",
+        "requiresSeparateMessage": true,
+        "reason": "Google Chat attachment messages cannot include accessory widgets."
+      },
+      "fallback": {
+        "status": "fallback",
+        "action": "separate_attachment_message",
+        "reason": "Send accessory widgets and the attachment as separate messages."
+      }
+    },
+    {
+      "uploadPlan": {
+        "kind": "upload",
+        "status": "blocked",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": ["w7_not_complete", "env_flag_missing"]
+        },
+        "parent": "spaces/AAA",
+        "safeFilename": "blocked.exe",
+        "contentType": "application/x-msdownload",
+        "sizeBytes": 10,
+        "method": "POST",
+        "url": "https://chat.googleapis.com/upload/v1/spaces/AAA/attachments:upload?uploadType=multipart",
+        "uploadProtocol": "simple",
+        "maxBytes": 209715200,
+        "policy": {
+          "status": "blocked",
+          "reasons": ["content_type_blocked", "extension_blocked"]
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/chat.messages.create",
+            "https://www.googleapis.com/auth/chat.messages",
+            "https://www.googleapis.com/auth/chat.import"
+          ]
+        },
+        "blockedReasons": ["content_type_blocked", "extension_blocked"]
+      },
+      "sendStrategy": {
+        "kind": "drive_link_card_fallback",
+        "requiresSeparateMessage": false,
+        "reason": "Upload is blocked by attachment policy."
+      },
+      "fallback": {
+        "status": "blocked",
+        "action": "drive_link_card_fallback",
+        "reason": "Upload is blocked; use a Drive link/card fallback or text-only summary."
+      }
+    }
+  ],
+  "systemNotes": [
+    "System Note: The user attached report.pdf (application/pdf, 1200 bytes) from UPLOADED_CONTENT in message. Extraction status: skipped. Transcription status: skipped.",
+    "System Note: The user attached roadmap (application/vnd.google-apps.document, size unknown) from DRIVE_FILE in message. Extraction status: skipped. Transcription status: skipped.",
+    "System Note: The user attached malware.exe (application/x-msdownload, 1024 bytes) from UPLOADED_CONTENT in message. Extraction status: blocked. Transcription status: skipped.",
+    "System Note: Upload answer.txt requires a separate attachment message because Google Chat attachment messages cannot include accessory widgets.",
+    "System Note: Upload blocked.exe is blocked by policy; use a Drive link/card fallback or text-only summary."
+  ]
+}

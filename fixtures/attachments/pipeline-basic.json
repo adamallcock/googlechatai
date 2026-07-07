@@ -1,0 +1,72 @@
+{
+  "attachments": [
+    {
+      "name": "spaces/AAA/messages/root/attachments/pdf-1",
+      "contentName": "report.pdf",
+      "contentType": "application/pdf",
+      "source": "UPLOADED_CONTENT",
+      "contentSizeBytes": 1200,
+      "attachmentDataRef": {
+        "resourceName": "spaces/AAA/messages/root/attachments/pdf-1/media"
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/root/attachments/drive-doc",
+      "contentName": "roadmap",
+      "contentType": "application/vnd.google-apps.document",
+      "source": "DRIVE_FILE",
+      "driveDataRef": {
+        "driveFileId": "drive-file-123"
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/root/attachments/block-1",
+      "contentName": "malware.exe",
+      "contentType": "application/x-msdownload",
+      "source": "UPLOADED_CONTENT",
+      "contentSizeBytes": 1024,
+      "attachmentDataRef": {
+        "resourceName": "spaces/AAA/messages/root/attachments/block-1/media"
+      }
+    }
+  ],
+  "uploads": [
+    {
+      "parent": "spaces/AAA",
+      "filename": "answer.txt",
+      "contentType": "text/plain",
+      "sizeBytes": 42,
+      "sendOptions": {
+        "hasAccessoryWidgets": true
+      }
+    },
+    {
+      "parent": "spaces/AAA",
+      "filename": "blocked.exe",
+      "contentType": "application/x-msdownload",
+      "sizeBytes": 10
+    }
+  ],
+  "options": {
+    "targetDirectory": "/tmp/chat-ai-sdk",
+    "driveExportDirectory": "/tmp/chat-ai-sdk/drive",
+    "cache": {
+      "entriesByAttachmentName": {
+        "spaces/AAA/messages/root/attachments/pdf-1": {
+          "hit": true,
+          "negative": false,
+          "key": "attachment:pdf-hit",
+          "metadata": {
+            "contentSha256": "pdf-sha"
+          }
+        }
+      }
+    },
+    "parsers": {
+      "pdf": "pdf-parse"
+    },
+    "transcription": {
+      "enabled": false
+    }
+  }
+}

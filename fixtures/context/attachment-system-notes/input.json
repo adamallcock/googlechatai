@@ -1,0 +1,40 @@
+{
+  "kind": "context_source_fixture",
+  "scenario": "attachment-system-notes",
+  "description": "A message carries image, audio, and document attachments that each become AI-facing system notes.",
+  "source": {
+    "type": "fixture",
+    "message": {
+      "id": "msg.attachments-mixed",
+      "name": "spaces/AAA/messages/attachments-mixed",
+      "sender": "users/456",
+      "text": "Here are the launch artifacts.",
+      "createdAt": "2026-06-29T18:40:00Z",
+      "attachments": [
+        {
+          "id": "att.launch-image",
+          "contentName": "launch.png",
+          "contentType": "image/png",
+          "sizeBytes": 2400000
+        },
+        {
+          "id": "att.launch-audio",
+          "contentName": "standup.m4a",
+          "contentType": "audio/mp4",
+          "sizeBytes": 2100000,
+          "transcription": {
+            "enabled": false,
+            "provider": null,
+            "status": "disabled"
+          }
+        },
+        {
+          "id": "att.launch-doc",
+          "contentName": "launch-brief.pdf",
+          "contentType": "application/pdf",
+          "sizeBytes": 890000
+        }
+      ]
+    }
+  }
+}

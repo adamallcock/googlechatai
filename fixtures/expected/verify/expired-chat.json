@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-07-06T12:00:00.000Z",
+  "claims": {
+    "aud": "123456789012",
+    "exp": 1783335600,
+    "iat": 1783332000,
+    "iss": "chat@system.gserviceaccount.com"
+  },
+  "keyId": "googlechatai-test-key-1",
+  "kind": "chat.request_verification",
+  "ok": false,
+  "reason": "Token is expired beyond allowed clock skew.",
+  "status": "expired",
+  "warnings": []
+}

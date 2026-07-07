@@ -1,0 +1,147 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/NO_USER:2026-06-29T18:06:00Z",
+  "receivedAt": "2026-06-29T18:06:00Z",
+  "source": "fixture",
+  "kind": "message.created",
+  "rawKind": "MESSAGE",
+  "actor": null,
+  "actorState": {
+    "status": "missing",
+    "reason": "event_payload_missing_user"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/NO_USER"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": null,
+    "createdAt": "2026-06-29T18:06:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "I arrived without user metadata",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 31,
+        "text": "I arrived without user metadata"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/NO_USER from Unknown sender (unknown access) created at 2026-06-29T18:06:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/NO_USER"
+      },
+      "sender": null,
+      "createdAt": "2026-06-29T18:06:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "I arrived without user metadata",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/NO_USER from Unknown sender (unknown access) created at 2026-06-29T18:06:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/NO_USER from Unknown sender (unknown access) created at 2026-06-29T18:06:00Z.\nI arrived without user metadata"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/NO_USER from Unknown sender (unknown access) created at 2026-06-29T18:06:00Z.\nI arrived without user metadata"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Unknown actor sent a message in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/NO_USER:2026-06-29T18:06:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:06:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/NO_USER",
+      "text": "I arrived without user metadata",
+      "createTime": "2026-06-29T18:06:00Z",
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      }
+    }
+  }
+}

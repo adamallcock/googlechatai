@@ -1,0 +1,15 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/AAA"
+    }
+  ],
+  "matchedUrl": {
+    "url": "https://chat.google.com/room/BBB"
+  },
+  "options": {
+    "maxLinkScanItems": 1,
+    "allowSpaceLevelContext": false
+  }
+}

@@ -1,0 +1,29 @@
+name: Bug report
+description: Something in googlechatai behaves incorrectly
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Package and version
+      placeholder: googlechatai 0.0.1 (npm) / googlechatai 0.0.1 (PyPI)
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Smallest input/code that shows the problem. Use fixture-style fake identifiers (spaces/AAA) — never paste real workspace data, tokens, or live payloads.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Environment
+      description: Node/Python version, runtime (Cloud Run, local, etc.)

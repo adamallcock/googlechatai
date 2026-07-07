@@ -1,0 +1,44 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T18:20:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  },
+  "action": {
+    "actionMethodName": "approve_request",
+    "parameters": [
+      {
+        "key": "requestId",
+        "value": "req-9"
+      },
+      {
+        "key": "decision",
+        "value": "approve"
+      }
+    ],
+    "formInputs": {
+      "comment": {
+        "stringInputs": {
+          "value": [
+            "Ship it"
+          ]
+        }
+      },
+      "reviewer": {
+        "stringInputs": {
+          "value": [
+            "users/123"
+          ]
+        }
+      }
+    }
+  }
+}

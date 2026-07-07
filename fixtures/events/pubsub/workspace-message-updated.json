@@ -1,0 +1,16 @@
+{
+  "message": {
+    "messageId": "1002",
+    "publishTime": "2026-06-29T18:36:01Z",
+    "attributes": {
+      "ce-id": "workspace-pubsub-event-1",
+      "ce-source": "//chat.googleapis.com/spaces/AAA",
+      "ce-subject": "spaces/AAA/messages/PUBSUB_WORKSPACE_EDITED",
+      "ce-time": "2026-06-29T18:36:00Z",
+      "ce-type": "google.workspace.chat.message.v1.updated",
+      "googclient_deliveryattempt": "1"
+    },
+    "data": "eyJtZXNzYWdlIjp7Im5hbWUiOiJzcGFjZXMvQUFBL21lc3NhZ2VzL1BVQlNVQl9XT1JLU1BBQ0VfRURJVEVEIiwidGV4dCI6IndvcmtzcGFjZSBwdWJzdWIgZWRpdGVkIGNvcHkiLCJhcmd1bWVudFRleHQiOiJ3b3Jrc3BhY2UgcHVic3ViIGVkaXRlZCBjb3B5IiwiY3JlYXRlVGltZSI6IjIwMjYtMDYtMjlUMTg6MDA6MDBaIiwibGFzdFVwZGF0ZVRpbWUiOiIyMDI2LTA2LTI5VDE4OjM2OjAwWiIsInNlbmRlciI6eyJuYW1lIjoidXNlcnMvMTIzIiwiZGlzcGxheU5hbWUiOiJBZGEgTG92ZWxhY2UiLCJlbWFpbCI6ImFkYUBleGFtcGxlLmNvbSIsInR5cGUiOiJIVU1BTiJ9LCJzcGFjZSI6eyJuYW1lIjoic3BhY2VzL0FBQSIsInR5cGUiOiJST09NIiwiZGlzcGxheU5hbWUiOiJFbmdpbmVlcmluZyJ9LCJ0aHJlYWQiOnsibmFtZSI6InNwYWNlcy9BQUEvdGhyZWFkcy90aHJlYWQtMSJ9fX0="
+  },
+  "subscription": "projects/chat-ai-sdk/subscriptions/workspace-events"
+}

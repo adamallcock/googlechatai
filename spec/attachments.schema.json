@@ -1,0 +1,502 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/attachments.schema.json",
+  "title": "Normalized Google Chat Attachment",
+  "type": "object",
+  "required": [
+    "name",
+    "contentName",
+    "safeFilename",
+    "contentType",
+    "mediaKind",
+    "source",
+    "contentSizeBytes",
+    "mediaResourceName",
+    "attachmentDataRef",
+    "driveDataRef",
+    "context",
+    "policy",
+    "processing"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "name": { "type": "string" },
+    "contentName": { "type": ["string", "null"] },
+    "safeFilename": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "contentType": { "type": ["string", "null"] },
+    "mediaKind": {
+      "type": "string",
+      "enum": ["text", "json", "pdf", "image", "audio", "video", "archive", "unknown"]
+    },
+    "source": { "type": ["string", "null"] },
+    "contentSizeBytes": { "type": ["integer", "null"], "minimum": 0 },
+    "mediaResourceName": { "type": ["string", "null"] },
+    "attachmentDataRef": {
+      "type": ["object", "null"],
+      "required": ["resourceName", "attachmentUploadToken"],
+      "additionalProperties": true,
+      "properties": {
+        "resourceName": { "type": ["string", "null"] },
+        "attachmentUploadToken": { "type": ["string", "null"] }
+      }
+    },
+    "driveDataRef": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "thumbnailUri": { "type": ["string", "null"] },
+    "downloadUri": { "type": ["string", "null"] },
+    "context": { "$ref": "context.schema.json#/$defs/attachmentContextRef" },
+    "policy": { "$ref": "#/$defs/attachmentPolicy" },
+    "processing": { "$ref": "#/$defs/attachmentProcessing" }
+  },
+  "$defs": {
+    "attachmentPolicy": {
+      "type": "object",
+      "required": ["status", "reasons", "maxDownloadBytes", "maxUploadBytes"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "type": "string", "enum": ["allowed", "blocked"] },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "maxDownloadBytes": { "type": "integer", "minimum": 0 },
+        "maxUploadBytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "attachmentProcessing": {
+      "type": "object",
+      "required": ["extraction", "transcription"],
+      "additionalProperties": true,
+      "properties": {
+        "extraction": { "$ref": "#/$defs/extractionState" },
+        "transcription": { "$ref": "transcription.schema.json#/$defs/transcriptionState" }
+      }
+    },
+    "processingStatus": {
+      "type": "string",
+      "enum": ["complete", "skipped", "partial", "blocked", "disabled", "failed"]
+    },
+    "extractionState": {
+      "type": "object",
+      "required": ["status", "parser", "text", "reason"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "$ref": "#/$defs/processingStatus" },
+        "parser": { "type": ["string", "null"] },
+        "text": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "attachmentPipelinePlan": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "summary",
+        "counts",
+        "attachments",
+        "uploads",
+        "systemNotes"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.attachment_pipeline_plan" },
+        "status": { "type": "string", "enum": ["ready", "partial", "blocked"] },
+        "summary": { "type": "string" },
+        "counts": {
+          "type": "object",
+          "required": [
+            "attachments",
+            "uploads",
+            "downloads",
+            "driveExports",
+            "blocked",
+            "cacheHits",
+            "parserReady",
+            "transcriptionReady",
+            "fallbacks"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "attachments": { "type": "integer", "minimum": 0 },
+            "uploads": { "type": "integer", "minimum": 0 },
+            "downloads": { "type": "integer", "minimum": 0 },
+            "driveExports": { "type": "integer", "minimum": 0 },
+            "blocked": { "type": "integer", "minimum": 0 },
+            "cacheHits": { "type": "integer", "minimum": 0 },
+            "parserReady": { "type": "integer", "minimum": 0 },
+            "transcriptionReady": { "type": "integer", "minimum": 0 },
+            "fallbacks": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "attachments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/attachmentPipelineItem" }
+        },
+        "uploads": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/attachmentPipelineUploadItem" }
+        },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "attachmentPipelineItem": {
+      "type": "object",
+      "required": [
+        "attachment",
+        "cache",
+        "downloadPlan",
+        "driveExportPlan",
+        "parsePlan",
+        "transcriptionPlan",
+        "fallback",
+        "contextParts"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "attachment": { "$ref": "#" },
+        "cache": { "$ref": "#/$defs/cachePlan" },
+        "downloadPlan": { "type": "object" },
+        "driveExportPlan": { "$ref": "#/$defs/nullableDriveExportPlan" },
+        "parsePlan": { "$ref": "#/$defs/processingPlan" },
+        "transcriptionPlan": { "$ref": "#/$defs/transcriptionPlan" },
+        "fallback": { "$ref": "#/$defs/fallbackPlan" },
+        "contextParts": {
+          "type": "array",
+          "items": { "$ref": "context.schema.json#/$defs/contextPart" }
+        }
+      }
+    },
+    "attachmentPipelineUploadItem": {
+      "type": "object",
+      "required": ["uploadPlan", "sendStrategy", "fallback"],
+      "additionalProperties": true,
+      "properties": {
+        "uploadPlan": { "type": "object" },
+        "sendStrategy": { "type": "object" },
+        "fallback": { "$ref": "#/$defs/fallbackPlan" }
+      }
+    },
+    "driveLinkRetrievalPlan": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "summary",
+        "counts",
+        "links",
+        "ignoredLinks",
+        "systemNotes"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.drive_link_retrieval_plan" },
+        "status": { "type": "string", "enum": ["ready", "partial", "blocked"] },
+        "summary": { "type": "string" },
+        "counts": {
+          "type": "object",
+          "required": [
+            "candidates",
+            "driveExports",
+            "blocked",
+            "cacheHits",
+            "fallbacks",
+            "ignored"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "candidates": { "type": "integer", "minimum": 0 },
+            "driveExports": { "type": "integer", "minimum": 0 },
+            "blocked": { "type": "integer", "minimum": 0 },
+            "cacheHits": { "type": "integer", "minimum": 0 },
+            "fallbacks": { "type": "integer", "minimum": 0 },
+            "ignored": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/driveLinkPlanItem" }
+        },
+        "ignoredLinks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ignoredDriveLink" }
+        },
+        "traversal": { "$ref": "#/$defs/driveLinkTraversalSummary" },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "driveLinkPlanItem": {
+      "type": "object",
+      "required": ["candidate", "cache", "driveExportPlan", "fallback", "systemNote"],
+      "additionalProperties": true,
+      "properties": {
+        "candidate": { "$ref": "#/$defs/driveLinkCandidate" },
+        "cache": { "$ref": "#/$defs/driveLinkCachePlan" },
+        "driveExportPlan": { "$ref": "#/$defs/nullableDriveExportPlan" },
+        "fallback": { "$ref": "#/$defs/fallbackPlan" },
+        "systemNote": { "type": "string" }
+      }
+    },
+    "driveLinkCandidate": {
+      "type": "object",
+      "required": [
+        "kind",
+        "candidateId",
+        "source",
+        "url",
+        "title",
+        "richLinkType",
+        "mimeType",
+        "driveFileId",
+        "driveFileKind",
+        "retrievable",
+        "blockedReasons",
+        "context"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "drive_link" },
+        "candidateId": { "type": "string" },
+        "source": { "type": "string", "enum": ["rich_link", "matched_url", "plain_url"] },
+        "url": { "type": "string" },
+        "title": { "type": ["string", "null"] },
+        "richLinkType": { "type": ["string", "null"] },
+        "mimeType": { "type": ["string", "null"] },
+        "driveFileId": { "type": ["string", "null"] },
+        "driveFileKind": {
+          "type": "string",
+          "enum": ["document", "spreadsheet", "presentation", "drawing", "blob", "folder", "unknown"]
+        },
+        "retrievable": { "type": "boolean" },
+        "blockedReasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "context": { "$ref": "#/$defs/driveLinkContextRef" }
+      }
+    },
+    "ignoredDriveLink": {
+      "type": "object",
+      "required": ["source", "url", "reason", "context"],
+      "additionalProperties": true,
+      "properties": {
+        "source": { "type": "string", "enum": ["rich_link", "matched_url", "plain_url"] },
+        "url": { "type": "string" },
+        "reason": { "type": "string" },
+        "context": { "$ref": "#/$defs/driveLinkContextRef" }
+      }
+    },
+    "nullableDriveExportPlan": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/driveExportPlan" }
+      ]
+    },
+    "driveExportPlan": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "dryRun",
+        "canExecuteLive",
+        "liveGate",
+        "attachmentName",
+        "contentApi",
+        "method",
+        "url",
+        "driveFileIdAvailable",
+        "sourceContentType",
+        "exportMimeType",
+        "destinationPath",
+        "maxExportBytes",
+        "policy",
+        "auth"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "drive_export" },
+        "status": { "type": "string", "enum": ["dry_run", "blocked"] },
+        "dryRun": { "type": "boolean" },
+        "canExecuteLive": { "type": "boolean" },
+        "liveGate": {
+          "type": "object",
+          "required": ["allowed", "reasons"],
+          "additionalProperties": false,
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "reasons": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "attachmentName": { "type": ["string", "null"] },
+        "contentApi": {
+          "type": "string",
+          "enum": ["drive.files.export", "drive.files.get_media"]
+        },
+        "method": { "const": "GET" },
+        "url": { "type": ["string", "null"] },
+        "driveFileIdAvailable": { "type": "boolean" },
+        "sourceContentType": { "type": ["string", "null"] },
+        "exportMimeType": { "type": ["string", "null"] },
+        "destinationPath": { "type": "string" },
+        "maxExportBytes": { "type": "integer", "minimum": 0 },
+        "policy": {
+          "type": "object",
+          "required": ["status", "reasons"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "type": "string", "enum": ["allowed", "blocked"] },
+            "reasons": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "auth": {
+          "type": "object",
+          "required": ["required", "mode", "scopes"],
+          "additionalProperties": false,
+          "properties": {
+            "required": { "type": "boolean" },
+            "mode": { "const": "user" },
+            "scopes": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "blockedReasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "driveLinkTraversalSummary": {
+      "type": "object",
+      "required": [
+        "status",
+        "maxTraversalDepth",
+        "maxTraversalNodes",
+        "maxLinkScanItems",
+        "maxDriveLinks",
+        "maxPlainTextUrls",
+        "truncatedBranches",
+        "cappedTraversalNodes",
+        "cappedLinkScanItems",
+        "cappedDriveLinks",
+        "cappedPlainTextUrls"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "const": "truncated" },
+        "maxTraversalDepth": { "type": "integer", "minimum": 0 },
+        "maxTraversalNodes": { "type": "integer", "minimum": 0 },
+        "maxLinkScanItems": { "type": "integer", "minimum": 0 },
+        "maxDriveLinks": { "type": "integer", "minimum": 0 },
+        "maxPlainTextUrls": { "type": "integer", "minimum": 0 },
+        "truncatedBranches": { "type": "integer", "minimum": 0 },
+        "cappedTraversalNodes": { "type": "integer", "minimum": 0 },
+        "cappedLinkScanItems": { "type": "integer", "minimum": 0 },
+        "cappedDriveLinks": { "type": "integer", "minimum": 0 },
+        "cappedPlainTextUrls": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "driveLinkContextRef": {
+      "type": "object",
+      "required": ["messageName", "relationship", "path"],
+      "additionalProperties": true,
+      "properties": {
+        "messageName": { "type": ["string", "null"] },
+        "relationship": { "type": "string" },
+        "path": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "driveLinkCachePlan": {
+      "type": "object",
+      "required": ["status", "key", "negative", "reason", "metadata"],
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["miss", "hit", "negative_hit"]
+        },
+        "key": { "type": ["string", "null"] },
+        "negative": { "type": "boolean" },
+        "reason": { "type": ["string", "null"] },
+        "metadata": { "type": "object" }
+      }
+    },
+    "cachePlan": {
+      "type": "object",
+      "required": ["status", "lookupKey", "key", "negative", "metadata"],
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["disabled", "miss", "hit", "negative_hit"]
+        },
+        "lookupKey": { "type": "string" },
+        "key": { "type": ["string", "null"] },
+        "negative": { "type": "boolean" },
+        "metadata": { "type": "object" }
+      }
+    },
+    "processingPlan": {
+      "type": "object",
+      "required": ["status", "mediaKind", "parser", "reason"],
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready", "complete", "skipped", "partial", "blocked", "disabled", "failed"]
+        },
+        "mediaKind": {
+          "type": "string",
+          "enum": ["text", "json", "pdf", "image", "audio", "video", "archive", "unknown"]
+        },
+        "parser": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "transcriptionPlan": {
+      "type": "object",
+      "required": ["status", "provider", "model", "reason"],
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready", "complete", "skipped", "partial", "blocked", "disabled", "failed"]
+        },
+        "provider": { "type": ["string", "null"] },
+        "model": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "fallbackPlan": {
+      "type": "object",
+      "required": ["status", "action", "reason"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "type": "string", "enum": ["ready", "partial", "fallback", "blocked"] },
+        "action": { "type": "string" },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}

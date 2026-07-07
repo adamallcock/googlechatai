@@ -1,0 +1,37 @@
+{
+  "cards": [
+    {
+      "cardId": "approval.release-42",
+      "title": "Approve release 42?",
+      "subtitle": "Release approval",
+      "sections": [
+        {
+          "widgetCount": 2,
+          "text": [
+            "Deploy version 42 to production."
+          ],
+          "fields": [],
+          "buttons": [
+            {
+              "text": "Approve",
+              "function": "approval_decision",
+              "parameters": {
+                "decision": "approve",
+                "requestId": "release-42"
+              }
+            },
+            {
+              "text": "Reject",
+              "function": "approval_decision",
+              "parameters": {
+                "decision": "reject",
+                "requestId": "release-42"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plainText": "Card approval.release-42: Approve release 42? (Release approval). Text: Deploy version 42 to production. Buttons: Approve -> approval_decision(decision=approve, requestId=release-42); Reject -> approval_decision(decision=reject, requestId=release-42)."
+}

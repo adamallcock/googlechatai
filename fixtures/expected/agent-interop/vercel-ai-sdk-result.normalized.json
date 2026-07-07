@@ -1,0 +1,85 @@
+{
+  "kind": "agent_response",
+  "schemaVersion": "2026-07-06",
+  "provider": "vercel-ai",
+  "sdk": "vercel-ai-sdk",
+  "responseId": null,
+  "finalText": "I found two docs.",
+  "sources": [
+    {
+      "id": "src1",
+      "title": "API docs",
+      "url": "https://example.com/api",
+      "sourceType": "url",
+      "provider": "vercel-ai",
+      "referenceText": null,
+      "startIndex": null,
+      "endIndex": null
+    }
+  ],
+  "toolCalls": [
+    {
+      "id": "call_1",
+      "name": "search_docs",
+      "status": "requested",
+      "inputSummary": "{\"query\":\"chat api\"}",
+      "stepIndex": null,
+      "provider": "vercel-ai"
+    }
+  ],
+  "toolResults": [
+    {
+      "id": "call_1",
+      "name": "search_docs",
+      "status": "completed",
+      "outputSummary": "{\"count\":2}",
+      "stepIndex": null,
+      "provider": "vercel-ai"
+    }
+  ],
+  "thinkingSummaries": [
+    {
+      "text": "Searched docs and compared the endpoints.",
+      "provider": "vercel-ai",
+      "stepIndex": null
+    }
+  ],
+  "usage": {
+    "inputTokens": 420,
+    "outputTokens": 120,
+    "totalTokens": 540,
+    "cachedInputTokens": null,
+    "reasoningTokens": null,
+    "provider": "vercel-ai"
+  },
+  "cost": {
+    "amountUsd": 0.0123,
+    "currency": "USD",
+    "source": "ai-sdk-cost",
+    "note": null
+  },
+  "warnings": [
+    "unsupported-setting: temperature ignored"
+  ],
+  "systemNotes": [
+    "Agent response normalized from Vercel AI SDK result.",
+    "Thinking summaries are provider-provided summaries only; hidden chain-of-thought is not inferred."
+  ],
+  "rawShape": {
+    "topLevelKeys": [
+      "providerMetadata",
+      "reasoningText",
+      "sources",
+      "text",
+      "toolCalls",
+      "toolResults",
+      "totalUsage",
+      "usage",
+      "warnings"
+    ],
+    "contentTypes": [],
+    "stepTypes": [],
+    "itemTypes": []
+  }
+}
+

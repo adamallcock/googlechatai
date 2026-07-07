@@ -1,0 +1,52 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/scanDoc1/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/scanDoc2/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/scanDoc3/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/scanDoc4/edit"
+    }
+  ],
+  "context": {
+    "message": {
+      "name": "spaces/AAA/messages/WIDE_ROOT",
+      "text": "Root message"
+    },
+    "children": [
+      {
+        "message": {
+          "name": "spaces/AAA/messages/WIDE_CHILD_1",
+          "text": "First child https://docs.google.com/document/d/wideDoc1/edit"
+        }
+      },
+      {
+        "message": {
+          "name": "spaces/AAA/messages/WIDE_CHILD_2",
+          "text": "Second child https://docs.google.com/document/d/wideDoc2/edit"
+        }
+      },
+      {
+        "message": {
+          "name": "spaces/AAA/messages/WIDE_CHILD_3",
+          "text": "Third child https://docs.google.com/document/d/wideDoc3/edit"
+        }
+      }
+    ]
+  },
+  "options": {
+    "targetDirectory": "/tmp/chat-ai-sdk/wide-links",
+    "env": {},
+    "max_traversal_nodes": 3,
+    "max_link_scan_items": 2
+  }
+}

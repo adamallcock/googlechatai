@@ -1,0 +1,20 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/AAA/thread-1",
+      "title": "Unsafe structured thread",
+      "chatSpaceLinkData": {
+        "thread": "spaces/AAA/threads/thread\"bad"
+      }
+    },
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/BBB",
+      "title": "Unsafe structured message",
+      "chatSpaceLinkData": {
+        "message": "spaces/BBB/messages/msg?bad"
+      }
+    }
+  ]
+}

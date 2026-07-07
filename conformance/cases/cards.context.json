@@ -1,0 +1,71 @@
+[
+  {
+    "id": "cards.context.summary.message-with-card",
+    "description": "Summarize an inbound message card for model context.",
+    "operation": "cards.summarizeCards",
+    "input": {
+      "fixture": "fixtures/cards/inbound/message-with-card.json",
+      "path": "cardsV2"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/message-with-card.summary.json"
+    }
+  },
+  {
+    "id": "cards.context.summary.sections",
+    "description": "Summarize optional section headers, fields, buttons, and links.",
+    "operation": "cards.summarizeCards",
+    "input": {
+      "fixture": "fixtures/expected/cards/builders/sections.message.json",
+      "path": "cardsV2"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/sections.summary.json"
+    }
+  },
+  {
+    "id": "cards.context.summary.rich-widgets",
+    "description": "Summarize rich Cards V2 widgets for model context.",
+    "operation": "cards.summarizeCards",
+    "input": {
+      "fixture": "fixtures/cards/inbound/rich-widgets.json",
+      "path": "cardsV2"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/rich-widgets.summary.json"
+    }
+  },
+  {
+    "id": "cards.context.action-note.card-click",
+    "description": "Render deterministic AI context notes for card clicks.",
+    "operation": "cards.summarizeCardAction",
+    "input": {
+      "fixture": "fixtures/cards/inbound/card-click.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/card-click.action.json"
+    }
+  },
+  {
+    "id": "cards.context.action-note.dialog-submit",
+    "description": "Render deterministic AI context notes for dialog submissions.",
+    "operation": "cards.summarizeCardAction",
+    "input": {
+      "fixture": "fixtures/cards/inbound/dialog-submit.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/dialog-submit.action.json"
+    }
+  },
+  {
+    "id": "cards.context.action-note.widget-update",
+    "description": "Render deterministic AI context notes for widget updates.",
+    "operation": "cards.summarizeCardAction",
+    "input": {
+      "fixture": "fixtures/cards/inbound/widget-update.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/inbound/widget-update.action.json"
+    }
+  }
+]

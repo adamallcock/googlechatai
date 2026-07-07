@@ -1,0 +1,176 @@
+{
+  "eventId": "fixture:CARD_CLICKED:spaces/AAA:2026-06-29T18:20:00Z",
+  "receivedAt": "2026-06-29T18:20:00Z",
+  "source": "fixture",
+  "kind": "card.clicked",
+  "rawKind": "CARD_CLICKED",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": null,
+  "action": {
+    "actionId": "fixture:card_click:approve_request:no-message:2026-06-29T18:20:00Z",
+    "actionType": "card_click",
+    "methodName": "approve_request",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:20:00Z",
+    "parameters": {
+      "requestId": "req-9",
+      "decision": "approve"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": {
+        "actionMethodName": "approve_request",
+        "parameters": [
+          {
+            "key": "requestId",
+            "value": "req-9"
+          },
+          {
+            "key": "decision",
+            "value": "approve"
+          }
+        ],
+        "formInputs": {
+          "comment": {
+            "stringInputs": {
+              "value": [
+                "Ship it"
+              ]
+            }
+          },
+          "reviewer": {
+            "stringInputs": {
+              "value": [
+                "users/123"
+              ]
+            }
+          }
+        }
+      },
+      "common": null,
+      "slashCommand": null,
+      "appCommandMetadata": null,
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) clicked card action \"approve_request\" at 2026-06-29T18:20:00Z.",
+      "System Note: Action parameters: decision=approve, requestId=req-9."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": true,
+    "canUpdateCard": true
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": true,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace clicked card action approve_request in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:CARD_CLICKED:spaces/AAA:2026-06-29T18:20:00Z",
+  "raw": {
+    "type": "CARD_CLICKED",
+    "eventTime": "2026-06-29T18:20:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "action": {
+      "actionMethodName": "approve_request",
+      "parameters": [
+        {
+          "key": "requestId",
+          "value": "req-9"
+        },
+        {
+          "key": "decision",
+          "value": "approve"
+        }
+      ],
+      "formInputs": {
+        "comment": {
+          "stringInputs": {
+            "value": [
+              "Ship it"
+            ]
+          }
+        },
+        "reviewer": {
+          "stringInputs": {
+            "value": [
+              "users/123"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

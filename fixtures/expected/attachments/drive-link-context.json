@@ -1,0 +1,156 @@
+{
+  "kind": "chat.drive_link_retrieval_plan",
+  "status": "ready",
+  "summary": "2 Drive link candidates, 2 ready exports, 0 fallback or blocked paths.",
+  "counts": {
+    "candidates": 2,
+    "driveExports": 2,
+    "blocked": 0,
+    "cacheHits": 0,
+    "fallbacks": 0,
+    "ignored": 0
+  },
+  "links": [
+    {
+      "candidate": {
+        "kind": "drive_link",
+        "candidateId": "drive-link:0:quote123",
+        "source": "plain_url",
+        "url": "https://docs.google.com/document/d/quote123/edit",
+        "title": null,
+        "richLinkType": null,
+        "mimeType": "application/vnd.google-apps.document",
+        "driveFileId": "quote123",
+        "driveFileKind": "document",
+        "retrievable": true,
+        "blockedReasons": [],
+        "context": {
+          "messageName": "spaces/AAA/messages/QUOTE",
+          "relationship": "quoted_message",
+          "path": [
+            "message:spaces/AAA/messages/ROOT",
+            "quoted_message:spaces/AAA/messages/QUOTE"
+          ]
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "key": null,
+        "negative": false,
+        "reason": null,
+        "metadata": {}
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": [
+            "env_flag_missing"
+          ]
+        },
+        "attachmentName": "driveLinks/quote123",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/quote123/export?mimeType=text%2Fplain",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.document",
+        "exportMimeType": "text/plain",
+        "destinationPath": "/tmp/chat-ai-sdk/context-links/quote123.txt",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly"
+          ]
+        }
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "drive_export",
+        "reason": "Drive link can be exported with Google Drive user auth."
+      },
+      "systemNote": "System Note: Drive link https://docs.google.com/document/d/quote123/edit is planned with drive.files.export using Google Drive user auth."
+    },
+    {
+      "candidate": {
+        "kind": "drive_link",
+        "candidateId": "drive-link:1:thread456",
+        "source": "plain_url",
+        "url": "https://docs.google.com/spreadsheets/d/thread456/edit",
+        "title": null,
+        "richLinkType": null,
+        "mimeType": "application/vnd.google-apps.spreadsheet",
+        "driveFileId": "thread456",
+        "driveFileKind": "spreadsheet",
+        "retrievable": true,
+        "blockedReasons": [],
+        "context": {
+          "messageName": "spaces/AAA/messages/THREAD",
+          "relationship": "thread_history",
+          "path": [
+            "message:spaces/AAA/messages/ROOT",
+            "thread_history:spaces/AAA/messages/THREAD"
+          ]
+        }
+      },
+      "cache": {
+        "status": "miss",
+        "key": null,
+        "negative": false,
+        "reason": null,
+        "metadata": {}
+      },
+      "driveExportPlan": {
+        "kind": "drive_export",
+        "status": "dry_run",
+        "dryRun": true,
+        "canExecuteLive": false,
+        "liveGate": {
+          "allowed": false,
+          "reasons": [
+            "env_flag_missing"
+          ]
+        },
+        "attachmentName": "driveLinks/thread456",
+        "contentApi": "drive.files.export",
+        "method": "GET",
+        "url": "https://www.googleapis.com/drive/v3/files/thread456/export?mimeType=text%2Fcsv",
+        "driveFileIdAvailable": true,
+        "sourceContentType": "application/vnd.google-apps.spreadsheet",
+        "exportMimeType": "text/csv",
+        "destinationPath": "/tmp/chat-ai-sdk/context-links/thread456.csv",
+        "maxExportBytes": 10485760,
+        "policy": {
+          "status": "allowed",
+          "reasons": []
+        },
+        "auth": {
+          "required": true,
+          "mode": "user",
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.readonly"
+          ]
+        }
+      },
+      "fallback": {
+        "status": "ready",
+        "action": "drive_export",
+        "reason": "Drive link can be exported with Google Drive user auth."
+      },
+      "systemNote": "System Note: Drive link https://docs.google.com/spreadsheets/d/thread456/edit is planned with drive.files.export using Google Drive user auth."
+    }
+  ],
+  "ignoredLinks": [],
+  "systemNotes": [
+    "System Note: Drive link https://docs.google.com/document/d/quote123/edit is planned with drive.files.export using Google Drive user auth.",
+    "System Note: Drive link https://docs.google.com/spreadsheets/d/thread456/edit is planned with drive.files.export using Google Drive user auth."
+  ]
+}

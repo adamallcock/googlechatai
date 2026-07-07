@@ -1,0 +1,165 @@
+{
+  "eventId": "pubsub:1001",
+  "receivedAt": "2026-06-29T18:20:00Z",
+  "source": "pubsub",
+  "kind": "message.direct",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/DM1",
+    "displayName": null,
+    "type": "DM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/DM1/messages/msg-1"
+    },
+    "space": {
+      "name": "spaces/DM1",
+      "displayName": null,
+      "type": "DM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "resourceName": "users/456",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:20:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": true
+    },
+    "privateMessageViewer": null,
+    "text": "hello from pubsub",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [
+      {
+        "kind": "text",
+        "startIndex": 0,
+        "length": 17,
+        "text": "hello from pubsub"
+      }
+    ],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/DM1/messages/msg-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:20:00Z.",
+      "System Note: This message was sent in a direct message space."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/DM1/messages/msg-1"
+      },
+      "sender": {
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "resourceName": "users/456",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:20:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "hello from pubsub",
+      "systemNotes": [
+        "System Note: Message spaces/DM1/messages/msg-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:20:00Z.",
+        "System Note: This message was sent in a direct message space."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/DM1/messages/msg-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:20:00Z.\nSystem Note: This message was sent in a direct message space.\nhello from pubsub"
+    },
+    "plainTextForModel": "System Note: Message spaces/DM1/messages/msg-1 from Grace Hopper <grace@example.com> (HUMAN, users/456) created at 2026-06-29T18:20:00Z.\nSystem Note: This message was sent in a direct message space.\nhello from pubsub"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "async"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Grace Hopper sent a direct message."
+    ]
+  },
+  "transport": {
+    "kind": "pubsub",
+    "pubsubMessageId": "1001",
+    "pubsubPublishTime": "2026-06-29T18:20:01Z",
+    "pubsubSubscription": "projects/chat-ai-sdk/subscriptions/events",
+    "pubsubDeliveryAttempt": "1",
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "pubsub:1001",
+  "raw": {
+    "message": {
+      "messageId": "1001",
+      "publishTime": "2026-06-29T18:20:01Z",
+      "attributes": {
+        "googclient_deliveryattempt": "1"
+      },
+      "data": "eyJ0eXBlIjoiTUVTU0FHRSIsImV2ZW50VGltZSI6IjIwMjYtMDYtMjlUMTg6MjA6MDBaIiwic3BhY2UiOnsibmFtZSI6InNwYWNlcy9ETTEiLCJ0eXBlIjoiRE0ifSwidXNlciI6eyJuYW1lIjoidXNlcnMvNDU2IiwiZGlzcGxheU5hbWUiOiJHcmFjZSBIb3BwZXIiLCJlbWFpbCI6ImdyYWNlQGV4YW1wbGUuY29tIiwidHlwZSI6IkhVTUFOIn0sIm1lc3NhZ2UiOnsibmFtZSI6InNwYWNlcy9ETTEvbWVzc2FnZXMvbXNnLTEiLCJ0ZXh0IjoiaGVsbG8gZnJvbSBwdWJzdWIiLCJjcmVhdGVUaW1lIjoiMjAyNi0wNi0yOVQxODoyMDowMFoiLCJzZW5kZXIiOnsibmFtZSI6InVzZXJzLzQ1NiIsImRpc3BsYXlOYW1lIjoiR3JhY2UgSG9wcGVyIiwiZW1haWwiOiJncmFjZUBleGFtcGxlLmNvbSIsInR5cGUiOiJIVU1BTiJ9LCJzcGFjZSI6eyJuYW1lIjoic3BhY2VzL0RNMSIsInR5cGUiOiJETSJ9fX0="
+    },
+    "subscription": "projects/chat-ai-sdk/subscriptions/events"
+  }
+}

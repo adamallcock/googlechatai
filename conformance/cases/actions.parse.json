@@ -1,0 +1,68 @@
+[
+  {
+    "id": "actions.card-click.approve-basic",
+    "description": "Parse a card click with hidden parameters and string/boolean form inputs.",
+    "input": {
+      "fixture": "fixtures/actions/card-click/approve-basic.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/card-click.approve-basic.json"
+    }
+  },
+  {
+    "id": "actions.dialog-submit.complex-form",
+    "description": "Parse a dialog submission with scalar, multi-select, date, time, date-time, user, and space picker fields.",
+    "input": {
+      "fixture": "fixtures/actions/dialog-submit/complex-form.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/dialog-submit.complex-form.json"
+    }
+  },
+  {
+    "id": "actions.widget-update.autocomplete-users",
+    "description": "Parse a widget update/autocomplete action into the shared normalized action shape.",
+    "input": {
+      "fixture": "fixtures/actions/widget-update/autocomplete-users.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/widget-update.autocomplete-users.json"
+    }
+  },
+  {
+    "id": "actions.slash-command.deploy",
+    "description": "Parse slash command metadata and argument text into a normalized action.",
+    "input": {
+      "fixture": "fixtures/actions/slash-command/deploy.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/slash-command.deploy.json"
+    }
+  },
+  {
+    "id": "actions.app-command.search-docs",
+    "description": "Parse app command metadata and common parameters into a normalized action.",
+    "input": {
+      "fixture": "fixtures/actions/app-command/search-docs.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/app-command.search-docs.json"
+    }
+  },
+  {
+    "id": "actions.card-click.invalid-and-unknown-fields",
+    "description": "Preserve unknown fields and return stable validation errors for malformed action/form payloads.",
+    "input": {
+      "fixture": "fixtures/actions/card-click/invalid-and-unknown-fields.json",
+      "source": "fixture"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/actions/card-click.invalid-and-unknown-fields.json"
+    }
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "title": "Review send settings",
+  "submitLabel": "Submit",
+  "submitAction": {
+    "function": "submit_review",
+    "parameters": {
+      "draftId": "draft-17"
+    }
+  },
+  "fields": [
+    {
+      "name": "summary",
+      "label": "Summary",
+      "type": "text",
+      "value": "Draft team update",
+      "multiline": true
+    },
+    {
+      "name": "risk",
+      "label": "Risk",
+      "type": "selection",
+      "items": [
+        {
+          "text": "Low",
+          "value": "low",
+          "selected": true
+        },
+        {
+          "text": "High",
+          "value": "high"
+        }
+      ]
+    },
+    {
+      "name": "send_copy",
+      "label": "Send me a copy",
+      "type": "switch",
+      "selected": true
+    }
+  ]
+}

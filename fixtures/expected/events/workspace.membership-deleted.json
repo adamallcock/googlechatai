@@ -1,0 +1,119 @@
+{
+  "eventId": "workspace_events:workspace-event-4",
+  "receivedAt": "2026-06-29T18:33:00Z",
+  "source": "workspace_events",
+  "kind": "membership.deleted",
+  "rawKind": "google.workspace.chat.membership.v1.deleted",
+  "actor": {
+    "name": "users/999",
+    "displayName": null,
+    "email": null,
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "access_limited",
+      "reason": "display_name_or_email_unavailable"
+    }
+  },
+  "actorState": {
+    "status": "access_limited",
+    "reason": "display_name_or_email_unavailable"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": null,
+  "action": null,
+  "dialog": null,
+  "membership": {
+    "ref": {
+      "name": "spaces/AAA/members/users/999"
+    },
+    "state": "NOT_A_MEMBER",
+    "member": {
+      "name": "users/999",
+      "displayName": null,
+      "email": null,
+      "type": "HUMAN",
+      "isApp": false,
+      "access": {
+        "status": "access_limited",
+        "reason": "display_name_or_email_unavailable"
+      }
+    },
+    "createdAt": "2026-06-01T12:00:00Z",
+    "deletedAt": "2026-06-29T18:33:00Z"
+  },
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": true,
+    "isSpaceEvent": false,
+    "isUserAction": false,
+    "systemNotes": [
+      "Membership changed in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": "workspace-event-4",
+    "workspaceEventType": "google.workspace.chat.membership.v1.deleted",
+    "workspaceEventSource": "//chat.googleapis.com/spaces/AAA",
+    "workspaceEventSubject": "spaces/AAA/members/users/999"
+  },
+  "idempotencyKey": "workspace_events:workspace-event-4",
+  "raw": {
+    "specversion": "1.0",
+    "id": "workspace-event-4",
+    "source": "//chat.googleapis.com/spaces/AAA",
+    "type": "google.workspace.chat.membership.v1.deleted",
+    "subject": "spaces/AAA/members/users/999",
+    "time": "2026-06-29T18:33:00Z",
+    "datacontenttype": "application/json",
+    "data": {
+      "membership": {
+        "name": "spaces/AAA/members/users/999",
+        "state": "NOT_A_MEMBER",
+        "member": {
+          "name": "users/999",
+          "type": "HUMAN"
+        },
+        "createTime": "2026-06-01T12:00:00Z",
+        "deleteTime": "2026-06-29T18:33:00Z"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      }
+    }
+  }
+}

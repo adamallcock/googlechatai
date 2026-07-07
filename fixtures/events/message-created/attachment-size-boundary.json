@@ -1,0 +1,44 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:26:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/attachment-boundary-1",
+    "text": "Tiny log attached.",
+    "formattedText": "Tiny log attached.",
+    "createTime": "2026-06-29T18:26:00Z",
+    "sender": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "attachment": [
+      {
+        "name": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1",
+        "contentName": "tiny.log",
+        "contentType": "text/plain",
+        "source": "UPLOADED_CONTENT",
+        "sizeBytes": 2500,
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/attachment-boundary-1/attachments/log-1/media"
+        }
+      }
+    ]
+  }
+}

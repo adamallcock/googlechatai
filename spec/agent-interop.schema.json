@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/agent-interop.schema.json",
+  "title": "Google Chat AI Agent Interop",
+  "anyOf": [
+    { "$ref": "#/$defs/agentResponse" },
+    { "$ref": "#/$defs/agentResponseMessagePlan" }
+  ],
+  "$defs": {
+    "agentResponse": {
+      "type": "object",
+      "required": [
+        "kind",
+        "schemaVersion",
+        "provider",
+        "sdk",
+        "responseId",
+        "finalText",
+        "sources",
+        "toolCalls",
+        "toolResults",
+        "thinkingSummaries",
+        "usage",
+        "cost",
+        "warnings",
+        "systemNotes",
+        "rawShape"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "const": "agent_response" },
+        "schemaVersion": { "type": "string" },
+        "provider": { "type": ["string", "null"] },
+        "sdk": { "type": ["string", "null"] },
+        "responseId": { "type": ["string", "null"] },
+        "finalText": { "type": ["string", "null"] },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source" }
+        },
+        "toolCalls": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/toolCall" }
+        },
+        "toolResults": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/toolResult" }
+        },
+        "thinkingSummaries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/thinkingSummary" }
+        },
+        "usage": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/usage" }
+          ]
+        },
+        "cost": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/cost" }
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rawShape": { "$ref": "#/$defs/rawShape" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "url",
+        "sourceType",
+        "provider",
+        "referenceText",
+        "startIndex",
+        "endIndex"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] },
+        "url": { "type": ["string", "null"] },
+        "sourceType": { "type": ["string", "null"] },
+        "provider": { "type": ["string", "null"] },
+        "referenceText": { "type": ["string", "null"] },
+        "startIndex": { "type": ["integer", "null"], "minimum": 0 },
+        "endIndex": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "toolCall": {
+      "type": "object",
+      "required": ["id", "name", "status", "inputSummary", "stepIndex", "provider"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "inputSummary": { "type": ["string", "null"] },
+        "stepIndex": { "type": ["integer", "null"], "minimum": 0 },
+        "provider": { "type": ["string", "null"] }
+      }
+    },
+    "toolResult": {
+      "type": "object",
+      "required": ["id", "name", "status", "outputSummary", "stepIndex", "provider"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "outputSummary": { "type": ["string", "null"] },
+        "stepIndex": { "type": ["integer", "null"], "minimum": 0 },
+        "provider": { "type": ["string", "null"] }
+      }
+    },
+    "thinkingSummary": {
+      "type": "object",
+      "required": ["text", "provider", "stepIndex"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "provider": { "type": ["string", "null"] },
+        "stepIndex": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "required": [
+        "inputTokens",
+        "outputTokens",
+        "totalTokens",
+        "cachedInputTokens",
+        "reasoningTokens",
+        "provider"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "inputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "outputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "totalTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "cachedInputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "reasoningTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "provider": { "type": ["string", "null"] }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "required": ["amountUsd", "currency", "source", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "amountUsd": { "type": ["number", "null"], "minimum": 0 },
+        "currency": { "type": ["string", "null"] },
+        "source": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "rawShape": {
+      "type": "object",
+      "required": ["topLevelKeys", "contentTypes", "stepTypes", "itemTypes"],
+      "additionalProperties": false,
+      "properties": {
+        "topLevelKeys": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "contentTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "stepTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "itemTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "agentResponseMessagePlan": {
+      "type": "object",
+      "required": [
+        "kind",
+        "schemaVersion",
+        "responseId",
+        "text",
+        "summary",
+        "cards",
+        "messageSequence",
+        "systemNotes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "const": "agent_response_message_plan" },
+        "schemaVersion": { "type": "string" },
+        "responseId": { "type": ["string", "null"] },
+        "text": { "type": "string" },
+        "summary": {
+          "type": "object",
+          "required": [
+            "provider",
+            "sdk",
+            "sourceCount",
+            "toolCallCount",
+            "toolResultCount",
+            "thinkingSummaryCount",
+            "hasCost"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "provider": { "type": ["string", "null"] },
+            "sdk": { "type": ["string", "null"] },
+            "sourceCount": { "type": "integer", "minimum": 0 },
+            "toolCallCount": { "type": "integer", "minimum": 0 },
+            "toolResultCount": { "type": "integer", "minimum": 0 },
+            "thinkingSummaryCount": { "type": "integer", "minimum": 0 },
+            "hasCost": { "type": "boolean" }
+          }
+        },
+        "cards": {
+          "type": "object",
+          "required": ["sources", "thinking", "toolStatus"],
+          "additionalProperties": true,
+          "properties": {
+            "sources": { "type": ["object", "null"] },
+            "thinking": { "type": ["object", "null"] },
+            "toolStatus": { "type": ["object", "null"] }
+          }
+        },
+        "messageSequence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["purpose", "payload"],
+            "additionalProperties": false,
+            "properties": {
+              "purpose": { "type": "string" },
+              "payload": { "type": "object" }
+            }
+          }
+        },
+        "systemNotes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+

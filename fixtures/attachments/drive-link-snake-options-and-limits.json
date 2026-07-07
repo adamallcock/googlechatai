@@ -1,0 +1,23 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/snakeDoc1/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/snakeDoc2/edit"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://docs.google.com/document/d/snakeDoc3/edit"
+    }
+  ],
+  "options": {
+    "target_directory": "/tmp/chat-ai-sdk/snake-links",
+    "export_mime_type": "application/pdf",
+    "enable_live_drive": true,
+    "env": {},
+    "max_drive_links": 2
+  }
+}

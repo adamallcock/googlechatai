@@ -1,0 +1,101 @@
+[
+  {
+    "id": "cards.build.card-message.custom",
+    "description": "Build a primitive Cards V2 message with raw widgets.",
+    "operation": "cards.buildCardMessage",
+    "input": {
+      "fixture": "fixtures/cards/builders/custom.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/custom.message.json"
+    }
+  },
+  {
+    "id": "cards.build.card-message.sections",
+    "description": "Build a multi-section Cards V2 message with fields and actions.",
+    "operation": "cards.buildCardMessage",
+    "input": {
+      "fixture": "fixtures/cards/builders/sections.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/sections.message.json"
+    }
+  },
+  {
+    "id": "cards.build.approval",
+    "description": "Build the reusable approval card helper output.",
+    "operation": "cards.buildApprovalCard",
+    "input": {
+      "fixture": "fixtures/cards/builders/approval.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/approval.message.json"
+    }
+  },
+  {
+    "id": "cards.build.progress",
+    "description": "Build the reusable progress card helper output.",
+    "operation": "cards.buildProgressCard",
+    "input": {
+      "fixture": "fixtures/cards/builders/progress.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/progress.message.json"
+    }
+  },
+  {
+    "id": "cards.build.error",
+    "description": "Build the reusable error card helper output.",
+    "operation": "cards.buildErrorCard",
+    "input": {
+      "fixture": "fixtures/cards/builders/error.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/error.message.json"
+    }
+  },
+  {
+    "id": "cards.build.dialog",
+    "description": "Build a Workspace add-on dialog response from dialog options.",
+    "operation": "cards.buildDialog",
+    "input": {
+      "fixture": "fixtures/cards/builders/dialog.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/dialog.response.json"
+    }
+  },
+  {
+    "id": "cards.build.action-responses",
+    "description": "Build deterministic Chat add-on action response envelopes.",
+    "operation": "cards.buildActionResponses",
+    "input": {
+      "fixture": "fixtures/cards/builders/action-responses.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/action-responses.json"
+    }
+  },
+  {
+    "id": "cards.build.navigation",
+    "description": "Build push/update navigation steps and a navigation response.",
+    "operation": "cards.buildNavigationResponse",
+    "input": {
+      "fixture": "fixtures/cards/builders/navigation.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/navigation.response.json"
+    }
+  },
+  {
+    "id": "cards.action-state.round-trip",
+    "description": "Encode, decode, attach, read, and route hidden card action state.",
+    "operation": "cards.actionState",
+    "input": {
+      "fixture": "fixtures/cards/builders/stateful-action.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/cards/builders/stateful-action.json"
+    }
+  }
+]

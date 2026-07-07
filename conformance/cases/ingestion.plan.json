@@ -1,0 +1,40 @@
+[
+  {
+    "id": "ingestion.polling.plan",
+    "description": "Plan a read-only polling fallback using spaces.messages.list filters and checkpoint page token.",
+    "operation": "ingestion.plan",
+    "input": {
+      "mode": "polling",
+      "authMode": "user",
+      "space": "spaces/AAA",
+      "startTime": "2026-07-04T00:00:00Z",
+      "endTime": "2026-07-04T01:00:00Z",
+      "pageSize": 250,
+      "showDeleted": true,
+      "checkpoint": {
+        "pageToken": "cursor-1"
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/ingestion/polling-plan.json"
+    }
+  },
+  {
+    "id": "ingestion.polling.page",
+    "description": "Process a spaces.messages.list page into polling snapshot events with cursor and duplicate metadata.",
+    "operation": "ingestion.processPollingPage",
+    "input": {
+      "space": "spaces/AAA",
+      "receivedAt": "2026-07-04T00:10:00.000Z",
+      "responseFixture": "fixtures/api-responses/messages/polling-ingestion-page.json",
+      "checkpoint": {
+        "seenKeys": [
+          "polling:spaces/AAA/messages/old:2026-07-04T00:04:00Z"
+        ]
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/ingestion/polling-page.json"
+    }
+  }
+]

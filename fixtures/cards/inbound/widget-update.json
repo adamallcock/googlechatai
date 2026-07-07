@@ -1,0 +1,25 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T19:10:00Z",
+  "user": {
+    "name": "users/789",
+    "displayName": "Katherine Johnson",
+    "type": "HUMAN"
+  },
+  "common": {
+    "eventType": "WIDGET_UPDATE",
+    "invokedFunction": "assignee_autocomplete",
+    "parameters": {
+      "field": "assignee"
+    },
+    "formInputs": {
+      "assignee": {
+        "stringInputs": {
+          "value": [
+            "ada"
+          ]
+        }
+      }
+    }
+  }
+}

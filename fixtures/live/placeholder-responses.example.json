@@ -1,0 +1,9 @@
+{
+  "texts": [
+    "Thinking...",
+    "Checking the thread...",
+    "Reviewing context..."
+  ],
+  "mode": "roundRobin",
+  "cursor": 0
+}

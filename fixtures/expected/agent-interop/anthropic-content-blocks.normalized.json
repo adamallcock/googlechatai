@@ -1,0 +1,71 @@
+{
+  "kind": "agent_response",
+  "schemaVersion": "2026-07-06",
+  "provider": "anthropic",
+  "sdk": "anthropic-sdk",
+  "responseId": "msg_01SDKCompatAnthropic",
+  "finalText": "The launch plan is ready once legal signs off.",
+  "sources": [
+    {
+      "id": null,
+      "title": "Launch plan",
+      "url": "https://docs.google.com/document/d/doc123/edit",
+      "sourceType": "url",
+      "provider": "anthropic",
+      "referenceText": null,
+      "startIndex": 4,
+      "endIndex": 15
+    }
+  ],
+  "toolCalls": [
+    {
+      "id": "toolu_01",
+      "name": "drive_search",
+      "status": "requested",
+      "inputSummary": "{\"limit\":5,\"query\":\"release plan\"}",
+      "stepIndex": null,
+      "provider": "anthropic"
+    }
+  ],
+  "toolResults": [],
+  "thinkingSummaries": [
+    {
+      "text": "I should check the release plan and summarize only the public conclusion.",
+      "provider": "anthropic",
+      "stepIndex": null
+    }
+  ],
+  "usage": {
+    "inputTokens": 1200,
+    "outputTokens": 220,
+    "totalTokens": 1420,
+    "cachedInputTokens": 500,
+    "reasoningTokens": null,
+    "provider": "anthropic"
+  },
+  "cost": null,
+  "warnings": [],
+  "systemNotes": [
+    "Agent response normalized from Anthropic SDK content blocks.",
+    "Thinking summaries are provider-provided summaries only; hidden chain-of-thought is not inferred."
+  ],
+  "rawShape": {
+    "topLevelKeys": [
+      "_request_id",
+      "content",
+      "id",
+      "model",
+      "role",
+      "stop_reason",
+      "usage"
+    ],
+    "contentTypes": [
+      "thinking",
+      "tool_use",
+      "text"
+    ],
+    "stepTypes": [],
+    "itemTypes": []
+  }
+}
+

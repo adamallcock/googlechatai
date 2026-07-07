@@ -1,0 +1,39 @@
+{
+  "type": "CARD_CLICKED",
+  "dialogEventType": "SUBMIT_DIALOG",
+  "eventTime": "2026-06-29T19:05:00Z",
+  "user": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "type": "HUMAN"
+  },
+  "common": {
+    "invokedFunction": "submit_review",
+    "parameters": {
+      "draftId": "draft-17"
+    },
+    "formInputs": {
+      "summary": {
+        "stringInputs": {
+          "value": [
+            "Ship it"
+          ]
+        }
+      },
+      "risk": {
+        "stringInputs": {
+          "value": [
+            "low"
+          ]
+        }
+      },
+      "send_copy": {
+        "stringInputs": {
+          "value": [
+            "true"
+          ]
+        }
+      }
+    }
+  }
+}

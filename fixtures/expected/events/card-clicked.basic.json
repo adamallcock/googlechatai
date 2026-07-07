@@ -1,0 +1,228 @@
+{
+  "eventId": "fixture:CARD_CLICKED:spaces/AAA/messages/card-1:2026-06-29T18:10:00Z",
+  "receivedAt": "2026-06-29T18:10:00Z",
+  "source": "fixture",
+  "kind": "card.clicked",
+  "rawKind": "CARD_CLICKED",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": null,
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/card-1"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": {
+      "displayName": "Runtime Bot",
+      "email": null,
+      "resourceName": "users/app",
+      "type": "BOT",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:09:30Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/card-1 from Runtime Bot (BOT, users/app) created at 2026-06-29T18:09:30Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/card-1"
+      },
+      "sender": {
+        "displayName": "Runtime Bot",
+        "email": null,
+        "resourceName": "users/app",
+        "type": "BOT",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:09:30Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/card-1 from Runtime Bot (BOT, users/app) created at 2026-06-29T18:09:30Z.",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/card-1 from Runtime Bot (BOT, users/app) created at 2026-06-29T18:09:30Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/card-1 from Runtime Bot (BOT, users/app) created at 2026-06-29T18:09:30Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+  },
+  "action": {
+    "actionId": "fixture:card_click:approve_deploy:spaces/AAA/messages/card-1:2026-06-29T18:10:00Z",
+    "actionType": "card_click",
+    "methodName": "approve_deploy",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:10:00Z",
+    "parameters": {
+      "environment": "staging"
+    },
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": {
+        "actionMethodName": "approve_deploy",
+        "parameters": [
+          {
+            "key": "environment",
+            "value": "staging"
+          }
+        ]
+      },
+      "common": null,
+      "slashCommand": null,
+      "appCommandMetadata": null,
+      "dialogEventType": null
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) clicked card action \"approve_deploy\" at 2026-06-29T18:10:00Z.",
+      "System Note: Action parameters: environment=staging."
+    ]
+  },
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": true,
+    "canOpenDialog": true,
+    "canUpdateCard": true
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": true,
+    "isCardAction": true,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "Ada Lovelace clicked card action approve_deploy in Engineering."
+    ]
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:CARD_CLICKED:spaces/AAA/messages/card-1:2026-06-29T18:10:00Z",
+  "raw": {
+    "type": "CARD_CLICKED",
+    "eventTime": "2026-06-29T18:10:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/card-1",
+      "text": "",
+      "createTime": "2026-06-29T18:09:30Z",
+      "sender": {
+        "name": "users/app",
+        "displayName": "Runtime Bot",
+        "type": "BOT"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      }
+    },
+    "action": {
+      "actionMethodName": "approve_deploy",
+      "parameters": [
+        {
+          "key": "environment",
+          "value": "staging"
+        }
+      ]
+    }
+  }
+}

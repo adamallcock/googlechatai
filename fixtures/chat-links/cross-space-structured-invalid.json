@@ -1,0 +1,13 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/u/0/app/chat/AAA",
+      "title": "Conflicting structured metadata",
+      "chatSpaceLinkData": {
+        "message": "spaces/AAA/messages/msg-1",
+        "thread": "spaces/BBB/threads/thread-1"
+      }
+    }
+  ]
+}

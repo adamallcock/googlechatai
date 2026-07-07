@@ -1,0 +1,866 @@
+[
+  {
+    "id": "stream.scheduler.cadence",
+    "description": "Patch cadence with char and interval gates.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 10,
+        "minIntervalMs": 100,
+        "maxPatches": 5
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "hello ",
+          "atMs": 0
+        },
+        {
+          "type": "chunk",
+          "text": "world of chat",
+          "atMs": 50
+        },
+        {
+          "type": "chunk",
+          "text": " streaming",
+          "atMs": 200
+        },
+        {
+          "type": "finish",
+          "atMs": 300
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 1,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "hello world of chat",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 2,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "hello world of chat streaming",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 3,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "hello world of chat streaming",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 10,
+          "minIntervalMs": 100,
+          "maxPatches": 5,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "hello world of chat streaming",
+        "pendingChars": 0,
+        "lastPatchAtMs": 200,
+        "patchesUsed": 2,
+        "segmentIndex": 0,
+        "totalChunks": 3,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": []
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.patch-budget",
+    "description": "Reserve the last patch slot for the final text.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 1,
+        "minIntervalMs": 0,
+        "maxPatches": 3
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "chunk-0 ",
+          "atMs": 0
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-1 ",
+          "atMs": 10
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-2 ",
+          "atMs": 20
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-3 ",
+          "atMs": 30
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-4 ",
+          "atMs": 40
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-5 ",
+          "atMs": 50
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-6 ",
+          "atMs": 60
+        },
+        {
+          "type": "chunk",
+          "text": "chunk-7 ",
+          "atMs": 70
+        },
+        {
+          "type": "finish",
+          "atMs": 100
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "chunk-0 ",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "chunk-0 chunk-1 ",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 8,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "chunk-0 chunk-1 chunk-2 chunk-3 chunk-4 chunk-5 chunk-6 chunk-7 ",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 1,
+          "minIntervalMs": 0,
+          "maxPatches": 3,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "chunk-0 chunk-1 chunk-2 chunk-3 chunk-4 chunk-5 chunk-6 chunk-7 ",
+        "pendingChars": 48,
+        "lastPatchAtMs": 10,
+        "patchesUsed": 2,
+        "segmentIndex": 0,
+        "totalChunks": 8,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": [
+          "patch_budget_reserved_for_final_text"
+        ]
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.truncate-overflow",
+    "description": "Truncate at the message size limit with a note.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 20,
+        "minIntervalMs": 0,
+        "maxMessageChars": 120,
+        "overflow": "truncate"
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "atMs": 0
+        },
+        {
+          "type": "chunk",
+          "text": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+          "atMs": 10
+        },
+        {
+          "type": "chunk",
+          "text": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+          "atMs": 20
+        },
+        {
+          "type": "finish",
+          "atMs": 30
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 3,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n[Output truncated: Google Chat message size limit reached.]",
+          "updateMask": "text",
+          "final": true,
+          "truncated": true
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 20,
+          "minIntervalMs": 0,
+          "maxPatches": 20,
+          "maxMessageChars": 120,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+        "pendingChars": 140,
+        "lastPatchAtMs": 0,
+        "patchesUsed": 1,
+        "segmentIndex": 0,
+        "totalChunks": 3,
+        "truncated": true,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": [
+          "truncated_at_message_size_limit"
+        ]
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.split-overflow",
+    "description": "Split into continuation messages at whitespace boundaries.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 15,
+        "minIntervalMs": 0,
+        "maxMessageChars": 100,
+        "overflow": "split"
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word",
+          "atMs": 0
+        },
+        {
+          "type": "chunk",
+          "text": " tail-tttttttttttttttttttttttttttttttttttttttt",
+          "atMs": 10
+        },
+        {
+          "type": "finish",
+          "atMs": 20
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "word word word word word word word word word word word word word word word word word word word word",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        },
+        {
+          "eventIndex": 0,
+          "action": "start_continuation",
+          "segmentIndex": 1,
+          "text": "(continued)\n…",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 1,
+          "text": "(continued)\nword word word word word word word word word word",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "finalize",
+          "segmentIndex": 1,
+          "text": "(continued)\nword word word word word word word word word word",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "start_continuation",
+          "segmentIndex": 2,
+          "text": "(continued)\n…",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "patch",
+          "segmentIndex": 2,
+          "text": "(continued)\ntail-tttttttttttttttttttttttttttttttttttttttt",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 2,
+          "action": "finalize",
+          "segmentIndex": 2,
+          "text": "(continued)\ntail-tttttttttttttttttttttttttttttttttttttttt",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 15,
+          "minIntervalMs": 0,
+          "maxPatches": 20,
+          "maxMessageChars": 100,
+          "overflow": "split",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "tail-tttttttttttttttttttttttttttttttttttttttt",
+        "pendingChars": 0,
+        "lastPatchAtMs": 10,
+        "patchesUsed": 1,
+        "segmentIndex": 2,
+        "totalChunks": 2,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": [
+          "split_into_continuation_messages"
+        ]
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.cancel",
+    "description": "Cancel finalizes with the cancel note and ignores later chunks.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 5,
+        "minIntervalMs": 50,
+        "prefix": ">> ",
+        "suffix": " <<",
+        "typingIndicator": " ▌"
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "partial answer",
+          "atMs": 0
+        },
+        {
+          "type": "chunk",
+          "text": " more",
+          "atMs": 100
+        },
+        {
+          "type": "cancel",
+          "atMs": 150
+        },
+        {
+          "type": "chunk",
+          "text": "late",
+          "atMs": 200
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": ">> partial answer << ▌",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": ">> partial answer more << ▌",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 2,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": ">> partial answer more\n\n[Stopped at user request.] <<",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false,
+          "cancelled": true
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 5,
+          "minIntervalMs": 50,
+          "maxPatches": 20,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": ">> ",
+          "suffix": " <<",
+          "typingIndicator": " ▌",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "partial answer more",
+        "pendingChars": 0,
+        "lastPatchAtMs": 100,
+        "patchesUsed": 2,
+        "segmentIndex": 0,
+        "totalChunks": 2,
+        "truncated": false,
+        "finished": true,
+        "cancelled": true,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": [
+          "chunk_received_after_finish"
+        ]
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.error",
+    "description": "Stream errors finalize with the error note.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 5,
+        "minIntervalMs": 0
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "some progress",
+          "atMs": 0
+        },
+        {
+          "type": "error",
+          "atMs": 50
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "some progress",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 1,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "some progress\n\n[Response interrupted by an error.]",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false,
+          "errored": true
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 5,
+          "minIntervalMs": 0,
+          "maxPatches": 20,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "some progress",
+        "pendingChars": 0,
+        "lastPatchAtMs": 0,
+        "patchesUsed": 1,
+        "segmentIndex": 0,
+        "totalChunks": 1,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": true,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": []
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.degrade-after-failures",
+    "description": "Consecutive patch failures degrade to final-only mode.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 1,
+        "minIntervalMs": 0,
+        "maxConsecutivePatchFailures": 2
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "one ",
+          "atMs": 0
+        },
+        {
+          "type": "patch_result",
+          "ok": false,
+          "atMs": 5
+        },
+        {
+          "type": "chunk",
+          "text": "two ",
+          "atMs": 10
+        },
+        {
+          "type": "patch_result",
+          "ok": false,
+          "atMs": 15
+        },
+        {
+          "type": "chunk",
+          "text": "three ",
+          "atMs": 20
+        },
+        {
+          "type": "finish",
+          "atMs": 30
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "one ",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 2,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "one two ",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 5,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "one two three ",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 1,
+          "minIntervalMs": 0,
+          "maxPatches": 20,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 2
+        },
+        "content": "one two three ",
+        "pendingChars": 6,
+        "lastPatchAtMs": 10,
+        "patchesUsed": 2,
+        "segmentIndex": 0,
+        "totalChunks": 3,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 2,
+        "degradedToFinalOnly": true,
+        "warnings": [
+          "degraded_to_final_only_after_patch_failures"
+        ]
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.flush-and-final-override",
+    "description": "Flush forces small patches; finish accepts a finalText override.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {
+        "minPatchChars": 1000,
+        "minIntervalMs": 0
+      },
+      "events": [
+        {
+          "type": "chunk",
+          "text": "tiny",
+          "atMs": 0
+        },
+        {
+          "type": "flush",
+          "atMs": 5
+        },
+        {
+          "type": "chunk",
+          "text": " more",
+          "atMs": 10
+        },
+        {
+          "type": "finish",
+          "finalText": "the final answer",
+          "atMs": 20
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 1,
+          "action": "patch",
+          "segmentIndex": 0,
+          "text": "tiny",
+          "updateMask": "text",
+          "final": false
+        },
+        {
+          "eventIndex": 3,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "the final answer",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 1000,
+          "minIntervalMs": 0,
+          "maxPatches": 20,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "the final answer",
+        "pendingChars": 16,
+        "lastPatchAtMs": 5,
+        "patchesUsed": 1,
+        "segmentIndex": 0,
+        "totalChunks": 2,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": []
+      }
+    }
+  },
+  {
+    "id": "stream.scheduler.empty-finish",
+    "description": "An empty stream finalizes with the configured empty text.",
+    "operation": "stream.schedulerReplay",
+    "input": {
+      "config": {},
+      "events": [
+        {
+          "type": "finish",
+          "atMs": 0
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.stream_scheduler_replay",
+      "actions": [
+        {
+          "eventIndex": 0,
+          "action": "finalize",
+          "segmentIndex": 0,
+          "text": "No response was generated.",
+          "updateMask": "text",
+          "final": true,
+          "truncated": false
+        }
+      ],
+      "state": {
+        "kind": "chat.stream_scheduler_state",
+        "config": {
+          "minPatchChars": 120,
+          "minIntervalMs": 1000,
+          "maxPatches": 20,
+          "maxMessageChars": 4000,
+          "overflow": "truncate",
+          "prefix": "",
+          "suffix": "",
+          "typingIndicator": "",
+          "truncationNote": "\n\n[Output truncated: Google Chat message size limit reached.]",
+          "continuationPrefix": "(continued)\n",
+          "cancelNote": "\n\n[Stopped at user request.]",
+          "errorNote": "\n\n[Response interrupted by an error.]",
+          "emptyFinalText": "No response was generated.",
+          "maxConsecutivePatchFailures": 3
+        },
+        "content": "",
+        "pendingChars": 0,
+        "lastPatchAtMs": null,
+        "patchesUsed": 0,
+        "segmentIndex": 0,
+        "totalChunks": 0,
+        "truncated": false,
+        "finished": true,
+        "cancelled": false,
+        "errored": false,
+        "consecutivePatchFailures": 0,
+        "degradedToFinalOnly": false,
+        "warnings": []
+      }
+    }
+  }
+]

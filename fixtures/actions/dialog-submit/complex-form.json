@@ -1,0 +1,79 @@
+{
+  "type": "CARD_CLICKED",
+  "dialogEventType": "SUBMIT_DIALOG",
+  "eventTime": "2026-06-29T18:20:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/DIALOG",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    }
+  },
+  "action": {
+    "actionMethodName": "submit_profile",
+    "parameters": [
+      {
+        "key": "step",
+        "value": "2"
+      }
+    ]
+  },
+  "common": {
+    "invokedFunction": "submit_profile",
+    "parameters": {
+      "flowId": "profile-update"
+    },
+    "formInputs": {
+      "title": {
+        "stringInputs": {
+          "value": ["Launch Plan"]
+        }
+      },
+      "labels": {
+        "stringInputs": {
+          "value": ["urgent", "customer"]
+        }
+      },
+      "dueDate": {
+        "dateInput": {
+          "msSinceEpoch": "1782777600000"
+        }
+      },
+      "reminderTime": {
+        "timeInput": {
+          "hours": 9,
+          "minutes": 30
+        }
+      },
+      "startAt": {
+        "dateTimeInput": {
+          "msSinceEpoch": "1782829800000"
+        }
+      },
+      "assignee": {
+        "stringInputs": {
+          "value": ["users/456"]
+        }
+      },
+      "notifySpaces": {
+        "stringInputs": {
+          "value": ["spaces/AAA", "spaces/BBB"]
+        }
+      }
+    }
+  }
+}

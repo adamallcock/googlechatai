@@ -1,0 +1,193 @@
+{
+  "actionId": "fixture:dialog_submit:submit_profile:spaces/AAA/messages/DIALOG:2026-06-29T18:20:00Z",
+  "actionType": "dialog_submit",
+  "methodName": "submit_profile",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "eventTime": "2026-06-29T18:20:00Z",
+  "parameters": {
+    "step": "2",
+    "flowId": "profile-update"
+  },
+  "formInputs": {
+    "title": {
+      "kind": "string",
+      "value": "Launch Plan",
+      "values": ["Launch Plan"],
+      "raw": {
+        "stringInputs": {
+          "value": ["Launch Plan"]
+        }
+      }
+    },
+    "labels": {
+      "kind": "multi_select",
+      "value": ["urgent", "customer"],
+      "values": ["urgent", "customer"],
+      "raw": {
+        "stringInputs": {
+          "value": ["urgent", "customer"]
+        }
+      }
+    },
+    "dueDate": {
+      "kind": "date",
+      "value": "2026-06-30",
+      "msSinceEpoch": "1782777600000",
+      "raw": {
+        "dateInput": {
+          "msSinceEpoch": "1782777600000"
+        }
+      }
+    },
+    "reminderTime": {
+      "kind": "time",
+      "value": "09:30",
+      "raw": {
+        "timeInput": {
+          "hours": 9,
+          "minutes": 30
+        }
+      }
+    },
+    "startAt": {
+      "kind": "date_time",
+      "value": "2026-06-30T14:30:00.000Z",
+      "msSinceEpoch": "1782829800000",
+      "raw": {
+        "dateTimeInput": {
+          "msSinceEpoch": "1782829800000"
+        }
+      }
+    },
+    "assignee": {
+      "kind": "user_picker",
+      "value": [
+        {
+          "name": "users/456",
+          "displayName": null,
+          "type": null
+        }
+      ],
+      "values": ["users/456"],
+      "raw": {
+        "stringInputs": {
+          "value": ["users/456"]
+        }
+      }
+    },
+    "notifySpaces": {
+      "kind": "space_picker",
+      "value": [
+        {
+          "name": "spaces/AAA",
+          "displayName": null,
+          "type": null
+        },
+        {
+          "name": "spaces/BBB",
+          "displayName": null,
+          "type": null
+        }
+      ],
+      "values": ["spaces/AAA", "spaces/BBB"],
+      "raw": {
+        "stringInputs": {
+          "value": ["spaces/AAA", "spaces/BBB"]
+        }
+      }
+    }
+  },
+  "selectedUsers": [
+    {
+      "name": "users/456",
+      "displayName": null,
+      "type": null
+    }
+  ],
+  "selectedSpaces": [
+    {
+      "name": "spaces/AAA",
+      "displayName": null,
+      "type": null
+    },
+    {
+      "name": "spaces/BBB",
+      "displayName": null,
+      "type": null
+    }
+  ],
+  "validationErrors": [],
+  "systemNotes": [
+    "System Note: Ada Lovelace (users/123) submitted dialog action \"submit_profile\" at 2026-06-29T18:20:00Z.",
+    "System Note: Action parameters: flowId=profile-update, step=2.",
+    "System Note: Form field assignee selected users/456.",
+    "System Note: Form field dueDate has date 2026-06-30.",
+    "System Note: Form field labels has values urgent, customer.",
+    "System Note: Form field notifySpaces selected spaces/AAA, spaces/BBB.",
+    "System Note: Form field reminderTime has time 09:30.",
+    "System Note: Form field startAt has date-time 2026-06-30T14:30:00.000Z.",
+    "System Note: Form field title has value \"Launch Plan\"."
+  ],
+  "raw": {
+    "action": {
+      "actionMethodName": "submit_profile",
+      "parameters": [
+        {
+          "key": "step",
+          "value": "2"
+        }
+      ]
+    },
+    "common": {
+      "invokedFunction": "submit_profile",
+      "parameters": {
+        "flowId": "profile-update"
+      },
+      "formInputs": {
+        "title": {
+          "stringInputs": {
+            "value": ["Launch Plan"]
+          }
+        },
+        "labels": {
+          "stringInputs": {
+            "value": ["urgent", "customer"]
+          }
+        },
+        "dueDate": {
+          "dateInput": {
+            "msSinceEpoch": "1782777600000"
+          }
+        },
+        "reminderTime": {
+          "timeInput": {
+            "hours": 9,
+            "minutes": 30
+          }
+        },
+        "startAt": {
+          "dateTimeInput": {
+            "msSinceEpoch": "1782829800000"
+          }
+        },
+        "assignee": {
+          "stringInputs": {
+            "value": ["users/456"]
+          }
+        },
+        "notifySpaces": {
+          "stringInputs": {
+            "value": ["spaces/AAA", "spaces/BBB"]
+          }
+        }
+      }
+    },
+    "slashCommand": null,
+    "appCommandMetadata": null,
+    "dialogEventType": "SUBMIT_DIALOG"
+  }
+}

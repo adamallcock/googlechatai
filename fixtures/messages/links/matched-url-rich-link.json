@@ -1,0 +1,37 @@
+{
+  "name": "spaces/AAA/messages/LINK",
+  "text": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "formattedText": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "argumentText": "Review https://example.com/design and https://drive.google.com/file/d/abc",
+  "createTime": "2026-06-29T18:03:00Z",
+  "lastUpdateTime": "2026-06-29T18:04:00Z",
+  "sender": {
+    "name": "users/222",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "matchedUrl": {
+    "url": "https://example.com/design"
+  },
+  "annotations": [
+    {
+      "type": "RICH_LINK",
+      "startIndex": 38,
+      "length": 35,
+      "richLinkMetadata": {
+        "richLinkType": "DRIVE_FILE",
+        "uri": "https://drive.google.com/file/d/abc",
+        "mimeType": "application/vnd.google-apps.document",
+        "driveLinkData": {
+          "title": "Launch Plan"
+        }
+      }
+    }
+  ]
+}

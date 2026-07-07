@@ -1,0 +1,131 @@
+{
+  "pushStep": {
+    "type": "push",
+    "card": {
+      "title": "Navigation Details",
+      "submitLabel": "Done",
+      "submitAction": {
+        "function": "navigation_done",
+        "parameters": {
+          "runId": "fixture-run"
+        }
+      },
+      "fields": [
+        {
+          "name": "decision",
+          "label": "Decision",
+          "type": "selection",
+          "items": [
+            {
+              "text": "Approve",
+              "value": "approve",
+              "selected": true
+            },
+            {
+              "text": "Send back",
+              "value": "send_back"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "updateStep": {
+    "type": "update",
+    "card": {
+      "header": {
+        "title": "Navigation Updated",
+        "subtitle": "Step 2"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "decoratedText": {
+                "topLabel": "STATUS",
+                "text": "Review moved to the next card."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "navigationResponse": {
+    "action": {
+      "navigations": [
+        {
+          "pushCard": {
+            "header": {
+              "title": "Navigation Details"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "selectionInput": {
+                      "name": "decision",
+                      "label": "Decision",
+                      "type": "DROPDOWN",
+                      "items": [
+                        {
+                          "text": "Approve",
+                          "value": "approve",
+                          "selected": true
+                        },
+                        {
+                          "text": "Send back",
+                          "value": "send_back"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "buttonList": {
+                      "buttons": [
+                        {
+                          "text": "Done",
+                          "onClick": {
+                            "action": {
+                              "function": "navigation_done",
+                              "parameters": [
+                                {
+                                  "key": "runId",
+                                  "value": "fixture-run"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "updateCard": {
+            "header": {
+              "title": "Navigation Updated",
+              "subtitle": "Step 2"
+            },
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "decoratedText": {
+                      "topLabel": "STATUS",
+                      "text": "Review moved to the next card."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

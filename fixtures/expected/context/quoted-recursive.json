@@ -1,0 +1,308 @@
+{
+  "contextId": "context.quoted-recursive",
+  "schemaVersion": "0.1",
+  "kind": "ai_context",
+  "source": {
+    "type": "fixture",
+    "fixtureId": "context.quoted-recursive"
+  },
+  "createdAt": "2026-06-29T18:30:00Z",
+  "timeZone": "America/New_York",
+  "limits": {
+    "maxMessages": 10,
+    "maxBytes": 200000,
+    "dateRange": null
+  },
+  "pagination": {
+    "pageToken": null,
+    "nextPageToken": null,
+    "hasMore": false
+  },
+  "systemNotes": [
+    "System Note: Current message includes nested quoted context preserved as child context nodes."
+  ],
+  "nodes": [
+    {
+      "nodeId": "msg.current",
+      "nodeType": "message",
+      "role": "user",
+      "text": "Can you compare this to Grace's earlier estimate?",
+      "identity": {
+        "status": "resolved",
+        "name": "users/123",
+        "userResource": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "actorType": "human",
+        "isBot": false,
+        "isApp": false,
+        "isHuman": true,
+        "type": "HUMAN"
+      },
+      "timestamps": {
+        "createdAt": "2026-06-29T18:30:00Z",
+        "updatedAt": null,
+        "timeZone": "America/New_York"
+      },
+      "relationships": [
+        {
+          "type": "current_message",
+          "targetNodeId": null,
+          "note": "Message that triggered context loading."
+        }
+      ],
+      "metadata": {
+        "message": "spaces/AAA/messages/current",
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/thread-quote"
+      },
+      "availability": {
+        "state": "available",
+        "reason": null,
+        "note": null
+      },
+      "truncation": {
+        "isTruncated": false,
+        "reason": null,
+        "includedBytes": null,
+        "originalBytes": null,
+        "omittedNodeCount": 0
+      },
+      "systemNotes": [
+        "System Note: Ada Lovelace quoted earlier thread context with this message."
+      ],
+      "children": [
+        {
+          "nodeId": "msg.grace-estimate",
+          "nodeType": "message",
+          "role": "user",
+          "text": "Initial estimate is 4 weeks.",
+          "identity": {
+            "status": "resolved",
+            "name": "users/456",
+            "userResource": "users/456",
+            "displayName": "Grace Hopper",
+            "email": "grace@example.com",
+            "actorType": "human",
+            "isBot": false,
+            "isApp": false,
+            "isHuman": true,
+            "type": "HUMAN"
+          },
+          "timestamps": {
+            "createdAt": "2026-06-28T21:00:00Z",
+            "updatedAt": null,
+            "timeZone": "America/New_York"
+          },
+          "relationships": [
+            {
+              "type": "quoted_by",
+              "targetNodeId": "msg.current",
+              "note": "Grace Hopper's message is quoted by the current message."
+            }
+          ],
+          "metadata": {
+            "message": "spaces/AAA/messages/grace-estimate",
+            "space": "spaces/AAA",
+            "thread": "spaces/AAA/threads/thread-quote"
+          },
+          "availability": {
+            "state": "available",
+            "reason": null,
+            "note": null
+          },
+          "truncation": {
+            "isTruncated": false,
+            "reason": null,
+            "includedBytes": null,
+            "originalBytes": null,
+            "omittedNodeCount": 0
+          },
+          "systemNotes": [
+            "System Note: Quoted message sent by Grace Hopper on 2026-06-28T21:00:00Z."
+          ],
+          "children": [
+            {
+              "nodeId": "att.grace-estimate-sheet",
+              "nodeType": "attachment",
+              "role": "system",
+              "text": null,
+              "identity": null,
+              "timestamps": {
+                "createdAt": "2026-06-28T21:00:00Z",
+                "updatedAt": null,
+                "timeZone": "America/New_York"
+              },
+              "relationships": [
+                {
+                  "type": "attached_to",
+                  "targetNodeId": "msg.grace-estimate",
+                  "note": "Spreadsheet was attached to Grace Hopper's quoted message."
+                }
+              ],
+              "metadata": {
+                "attachment": {
+                  "name": "spaces/AAA/messages/grace-estimate/attachments/sheet-1",
+                  "contentName": "estimate.xlsx",
+                  "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                  "sizeBytes": 48000,
+                  "source": "UPLOADED_CONTENT"
+                }
+              },
+              "availability": {
+                "state": "available",
+                "reason": null,
+                "note": null
+              },
+              "truncation": {
+                "isTruncated": false,
+                "reason": null,
+                "includedBytes": null,
+                "originalBytes": null,
+                "omittedNodeCount": 0
+              },
+              "systemNotes": [
+                "System Note: Grace Hopper attached estimate.xlsx (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, 48 KB) with this message."
+              ],
+              "children": [
+                {
+                  "nodeId": "derived.grace-estimate-sheet-preview",
+                  "nodeType": "derived_content",
+                  "role": "system",
+                  "text": "Workbook preview: Timeline tab includes a 4-week estimate.",
+                  "identity": null,
+                  "timestamps": {
+                    "createdAt": "2026-06-28T21:00:00Z",
+                    "updatedAt": null,
+                    "timeZone": "America/New_York"
+                  },
+                  "relationships": [
+                    {
+                      "type": "derived_from",
+                      "targetNodeId": "att.grace-estimate-sheet",
+                      "note": "Preview text extracted from the spreadsheet attachment."
+                    }
+                  ],
+                  "metadata": {
+                    "contentType": "text/plain",
+                    "extraction": "fixture"
+                  },
+                  "availability": {
+                    "state": "available",
+                    "reason": null,
+                    "note": null
+                  },
+                  "truncation": {
+                    "isTruncated": false,
+                    "reason": null,
+                    "includedBytes": 56,
+                    "originalBytes": 56,
+                    "omittedNodeCount": 0
+                  },
+                  "systemNotes": [],
+                  "children": []
+                }
+              ]
+            },
+            {
+              "nodeId": "msg.ada-qa-buffer",
+              "nodeType": "message",
+              "role": "user",
+              "text": "Can you include QA buffer?",
+              "identity": {
+                "status": "resolved",
+                "name": "users/123",
+                "userResource": "users/123",
+                "displayName": "Ada Lovelace",
+                "email": "ada@example.com",
+                "actorType": "human",
+                "isBot": false,
+                "isApp": false,
+                "isHuman": true,
+                "type": "HUMAN"
+              },
+              "timestamps": {
+                "createdAt": "2026-06-28T20:55:00Z",
+                "updatedAt": null,
+                "timeZone": "America/New_York"
+              },
+              "relationships": [
+                {
+                  "type": "quoted_by",
+                  "targetNodeId": "msg.grace-estimate",
+                  "note": "Ada Lovelace's earlier message is quoted by Grace Hopper's estimate."
+                }
+              ],
+              "metadata": {
+                "message": "spaces/AAA/messages/ada-qa-buffer",
+                "space": "spaces/AAA",
+                "thread": "spaces/AAA/threads/thread-quote"
+              },
+              "availability": {
+                "state": "available",
+                "reason": null,
+                "note": null
+              },
+              "truncation": {
+                "isTruncated": false,
+                "reason": null,
+                "includedBytes": null,
+                "originalBytes": null,
+                "omittedNodeCount": 0
+              },
+              "systemNotes": [
+                "System Note: Nested quoted message sent by Ada Lovelace on 2026-06-28T20:55:00Z."
+              ],
+              "children": [
+                {
+                  "nodeId": "att.ada-qa-image",
+                  "nodeType": "attachment",
+                  "role": "system",
+                  "text": null,
+                  "identity": null,
+                  "timestamps": {
+                    "createdAt": "2026-06-28T20:55:00Z",
+                    "updatedAt": null,
+                    "timeZone": "America/New_York"
+                  },
+                  "relationships": [
+                    {
+                      "type": "attached_to",
+                      "targetNodeId": "msg.ada-qa-buffer",
+                      "note": "Image was attached to the nested quoted message."
+                    }
+                  ],
+                  "metadata": {
+                    "attachment": {
+                      "name": "spaces/AAA/messages/ada-qa-buffer/attachments/image-1",
+                      "contentName": "qa-buffer.png",
+                      "contentType": "image/png",
+                      "sizeBytes": 1300000,
+                      "source": "UPLOADED_CONTENT"
+                    }
+                  },
+                  "availability": {
+                    "state": "available",
+                    "reason": null,
+                    "note": null
+                  },
+                  "truncation": {
+                    "isTruncated": false,
+                    "reason": null,
+                    "includedBytes": null,
+                    "originalBytes": null,
+                    "omittedNodeCount": 0
+                  },
+                  "systemNotes": [
+                    "System Note: Ada Lovelace attached qa-buffer.png (image/png, 1.3 MB) with this message."
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "message": {
+    "messageId": "1001",
+    "publishTime": "2026-06-29T18:20:01Z",
+    "attributes": {
+      "googclient_deliveryattempt": "1"
+    },
+    "data": "eyJ0eXBlIjoiTUVTU0FHRSIsImV2ZW50VGltZSI6IjIwMjYtMDYtMjlUMTg6MjA6MDBaIiwic3BhY2UiOnsibmFtZSI6InNwYWNlcy9ETTEiLCJ0eXBlIjoiRE0ifSwidXNlciI6eyJuYW1lIjoidXNlcnMvNDU2IiwiZGlzcGxheU5hbWUiOiJHcmFjZSBIb3BwZXIiLCJlbWFpbCI6ImdyYWNlQGV4YW1wbGUuY29tIiwidHlwZSI6IkhVTUFOIn0sIm1lc3NhZ2UiOnsibmFtZSI6InNwYWNlcy9ETTEvbWVzc2FnZXMvbXNnLTEiLCJ0ZXh0IjoiaGVsbG8gZnJvbSBwdWJzdWIiLCJjcmVhdGVUaW1lIjoiMjAyNi0wNi0yOVQxODoyMDowMFoiLCJzZW5kZXIiOnsibmFtZSI6InVzZXJzLzQ1NiIsImRpc3BsYXlOYW1lIjoiR3JhY2UgSG9wcGVyIiwiZW1haWwiOiJncmFjZUBleGFtcGxlLmNvbSIsInR5cGUiOiJIVU1BTiJ9LCJzcGFjZSI6eyJuYW1lIjoic3BhY2VzL0RNMSIsInR5cGUiOiJETSJ9fX0="
+  },
+  "subscription": "projects/chat-ai-sdk/subscriptions/events"
+}

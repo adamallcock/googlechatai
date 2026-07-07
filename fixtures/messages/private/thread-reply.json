@@ -1,0 +1,27 @@
+{
+  "name": "spaces/AAA/messages/PRI",
+  "text": "Need private help",
+  "formattedText": "Need private help",
+  "argumentText": "Need private help",
+  "createTime": "2026-06-29T18:09:00Z",
+  "sender": {
+    "name": "users/222",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN"
+  },
+  "space": {
+    "name": "spaces/DM1",
+    "type": "DM"
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "threadReply": true,
+  "privateMessageViewer": {
+    "name": "users/111",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN"
+  }
+}

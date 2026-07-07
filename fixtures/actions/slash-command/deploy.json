@@ -1,0 +1,34 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:40:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/SLASH",
+    "text": "/deploy staging --force",
+    "argumentText": "staging --force",
+    "createTime": "2026-06-29T18:40:00Z",
+    "sender": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "slashCommand": {
+      "commandId": "101",
+      "commandName": "deploy"
+    }
+  }
+}

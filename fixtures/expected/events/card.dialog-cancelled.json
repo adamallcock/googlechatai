@@ -1,0 +1,210 @@
+{
+  "eventId": "fixture:CARD_CLICKED:spaces/AAA/messages/DIALOG_CANCEL:2026-06-29T18:19:00Z",
+  "receivedAt": "2026-06-29T18:19:00Z",
+  "source": "fixture",
+  "kind": "dialog.cancelled",
+  "rawKind": "CARD_CLICKED",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/DIALOG_CANCEL"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Google Chat AI SDK Dev",
+      "email": null,
+      "resourceName": "users/app",
+      "type": "BOT",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/DIALOG_CANCEL from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/DIALOG_CANCEL"
+      },
+      "sender": {
+        "displayName": "Google Chat AI SDK Dev",
+        "email": null,
+        "resourceName": "users/app",
+        "type": "BOT",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:00:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/DIALOG_CANCEL from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/DIALOG_CANCEL from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/DIALOG_CANCEL from Google Chat AI SDK Dev (BOT, users/app) created at 2026-06-29T18:00:00Z."
+  },
+  "action": {
+    "actionId": "fixture:dialog_cancel:cancel_incident_dialog:spaces/AAA/messages/DIALOG_CANCEL:2026-06-29T18:19:00Z",
+    "actionType": "dialog_cancel",
+    "methodName": "cancel_incident_dialog",
+    "actor": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T18:19:00Z",
+    "parameters": {},
+    "formInputs": {},
+    "selectedUsers": [],
+    "selectedSpaces": [],
+    "validationErrors": [],
+    "raw": {
+      "action": {
+        "actionMethodName": "cancel_incident_dialog"
+      },
+      "common": {
+        "invokedFunction": "cancel_incident_dialog"
+      },
+      "slashCommand": null,
+      "appCommandMetadata": null,
+      "dialogEventType": "CANCEL_DIALOG"
+    },
+    "systemNotes": [
+      "System Note: Ada Lovelace (users/123) cancelled dialog action \"cancel_incident_dialog\" at 2026-06-29T18:19:00Z."
+    ]
+  },
+  "dialog": {
+    "eventType": "CANCEL_DIALOG"
+  },
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": true
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": true,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": []
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:CARD_CLICKED:spaces/AAA/messages/DIALOG_CANCEL:2026-06-29T18:19:00Z",
+  "raw": {
+    "type": "CARD_CLICKED",
+    "eventTime": "2026-06-29T18:19:00Z",
+    "dialogEventType": "CANCEL_DIALOG",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/DIALOG_CANCEL",
+      "createTime": "2026-06-29T18:00:00Z",
+      "sender": {
+        "name": "users/app",
+        "displayName": "Google Chat AI SDK Dev",
+        "type": "BOT"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      }
+    },
+    "action": {
+      "actionMethodName": "cancel_incident_dialog"
+    },
+    "common": {
+      "invokedFunction": "cancel_incident_dialog"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local worktrees
+.worktrees/
+worktrees/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+coverage/
+.coverage
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+.secrets/
+secrets/
+.tokens/
+tokens/
+*.pem
+*.key
+credentials.json
+client_secret*.json
+service-account*.json
+*service-account*.json
+oauth-token*.json
+access-token*.json
+refresh-token*.json
+token-cache*.json
+private-key*.json
+
+# Local live-test output
+artifacts/live/
+live-artifacts/
+reports/live/
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Generated discovery snapshots can be large. Commit curated snapshots only.
+discovery/snapshots/*.json
+!discovery/snapshots/.gitkeep
+
+# Private tenant-specific live ledgers stay local-only.
+docs/private/

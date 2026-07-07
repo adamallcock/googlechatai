@@ -1,0 +1,70 @@
+{
+  "fallbackText": "Progress: Prepare weekly summary. 33% complete. Completed: Read source data. In progress: Draft summary. Pending: Send update.",
+  "text": "Progress: Prepare weekly summary. 33% complete. Completed: Read source data. In progress: Draft summary. Pending: Send update.",
+  "cardsV2": [
+    {
+      "cardId": "progress.weekly-summary",
+      "card": {
+        "header": {
+          "title": "Prepare weekly summary",
+          "subtitle": "AI workflow progress"
+        },
+        "sections": [
+          {
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "Generating a concise update for the leadership thread."
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "PROGRESS",
+                  "text": "33% complete"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "COMPLETE",
+                  "text": "Read source data"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "ACTIVE",
+                  "text": "Draft summary"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "PENDING",
+                  "text": "Send update"
+                }
+              },
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Cancel",
+                      "onClick": {
+                        "action": {
+                          "function": "cancel_workflow",
+                          "parameters": [
+                            {
+                              "key": "workflowId",
+                              "value": "weekly-summary"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

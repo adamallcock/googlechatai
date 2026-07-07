@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/ingestion.schema.json",
+  "title": "Google Chat AI Ingestion",
+  "oneOf": [
+    { "$ref": "#/$defs/ingestionPlan" },
+    { "$ref": "#/$defs/ingestionBatch" }
+  ],
+  "$defs": {
+    "ingestionPlan": {
+      "type": "object",
+      "required": [
+        "kind",
+        "mode",
+        "status",
+        "capability",
+        "polling",
+        "requests",
+        "checkpoint",
+        "idempotency",
+        "safety",
+        "warnings"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.ingestion_plan" },
+        "mode": { "const": "polling" },
+        "status": { "type": "string", "enum": ["planned", "blocked"] },
+        "capability": { "$ref": "#/$defs/capability" },
+        "polling": { "$ref": "#/$defs/pollingConfig" },
+        "requests": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/googleApiRequest" }
+        },
+        "checkpoint": { "$ref": "#/$defs/checkpoint" },
+        "idempotency": {
+          "type": "object",
+          "required": ["duplicateStrategy", "keyFields"],
+          "additionalProperties": true,
+          "properties": {
+            "duplicateStrategy": { "const": "skip_seen_polling_snapshots" },
+            "keyFields": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "safety": { "$ref": "#/$defs/safety" },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ingestionBatch": {
+      "type": "object",
+      "required": [
+        "kind",
+        "mode",
+        "source",
+        "space",
+        "receivedAt",
+        "events",
+        "checkpoint",
+        "pagination",
+        "idempotency"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.ingestion_batch" },
+        "mode": { "const": "polling" },
+        "source": { "const": "spaces.messages.list" },
+        "space": { "type": "string" },
+        "receivedAt": { "type": "string" },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ingestionEvent" }
+        },
+        "checkpoint": { "$ref": "#/$defs/checkpoint" },
+        "pagination": {
+          "type": "object",
+          "required": ["nextPageToken", "hasMore", "resultCount"],
+          "additionalProperties": true,
+          "properties": {
+            "nextPageToken": { "type": ["string", "null"] },
+            "hasMore": { "type": "boolean" },
+            "resultCount": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "idempotency": {
+          "type": "object",
+          "required": ["duplicateStrategy", "skippedCount"],
+          "additionalProperties": true,
+          "properties": {
+            "duplicateStrategy": { "const": "skip_seen_polling_snapshots" },
+            "skippedCount": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "nextRequest": { "$ref": "#/$defs/ingestionPlan" }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "required": [
+        "authMode",
+        "requiredScopes",
+        "requiresAdminApproval",
+        "requiresMembership",
+        "readOnly",
+        "writeCapable",
+        "notes"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "authMode": { "type": "string", "enum": ["user", "app"] },
+        "requiredScopes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "requiresAdminApproval": { "type": "boolean" },
+        "requiresMembership": { "type": "boolean" },
+        "readOnly": { "const": true },
+        "writeCapable": { "const": false },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "pollingConfig": {
+      "type": "object",
+      "required": [
+        "space",
+        "thread",
+        "pageSize",
+        "filter",
+        "orderBy",
+        "showDeleted",
+        "backoff"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "space": { "type": "string" },
+        "thread": { "type": ["string", "null"] },
+        "pageSize": { "type": "integer", "minimum": 1 },
+        "filter": { "type": ["string", "null"] },
+        "orderBy": { "type": "string" },
+        "showDeleted": { "type": "boolean" },
+        "backoff": {
+          "type": "object",
+          "required": ["initialMs", "maxMs", "multiplier", "jitter"],
+          "additionalProperties": true,
+          "properties": {
+            "initialMs": { "type": "integer", "minimum": 0 },
+            "maxMs": { "type": "integer", "minimum": 0 },
+            "multiplier": { "type": "number", "minimum": 1 },
+            "jitter": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "googleApiRequest": {
+      "type": "object",
+      "required": ["resource", "method", "path", "query", "body"],
+      "additionalProperties": true,
+      "properties": {
+        "resource": { "type": "string" },
+        "method": { "type": "string", "enum": ["GET"] },
+        "path": { "type": "string" },
+        "query": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "body": { "type": "null" }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "required": ["type", "scope", "cursor", "pageToken", "highWatermarkTime"],
+      "additionalProperties": true,
+      "properties": {
+        "type": { "const": "polling" },
+        "scope": { "type": "string" },
+        "cursor": { "type": ["string", "null"] },
+        "pageToken": { "type": ["string", "null"] },
+        "nextPageToken": { "type": ["string", "null"] },
+        "highWatermarkTime": { "type": ["string", "null"] },
+        "seenKeys": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "required": ["liveAllowed", "writesMessages", "notes"],
+      "additionalProperties": true,
+      "properties": {
+        "liveAllowed": { "const": false },
+        "writesMessages": { "const": false },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ingestionEvent": {
+      "type": "object",
+      "required": ["kind", "source", "sequence", "normalized", "snapshot"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.ingestion_event" },
+        "source": { "const": "polling" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "normalized": { "type": "object" },
+        "snapshot": {
+          "type": "object",
+          "required": [
+            "kind",
+            "messageName",
+            "effectiveTime",
+            "duplicateKey",
+            "skippedAsDuplicate"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": ["created_snapshot", "updated_snapshot", "deleted_snapshot"]
+            },
+            "messageName": { "type": "string" },
+            "effectiveTime": { "type": "string" },
+            "duplicateKey": { "type": "string" },
+            "skippedAsDuplicate": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

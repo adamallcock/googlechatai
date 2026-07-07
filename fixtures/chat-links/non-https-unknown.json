@@ -1,0 +1,12 @@
+{
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "http://chat.google.com/room/AAA"
+    },
+    {
+      "kind": "plain_url",
+      "url": "http://mail.google.com/mail/u/0/#chat/space/BBB"
+    }
+  ]
+}

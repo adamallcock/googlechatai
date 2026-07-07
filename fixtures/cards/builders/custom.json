@@ -1,0 +1,16 @@
+{
+  "cardId": "custom.status",
+  "title": "Custom status",
+  "subtitle": "Raw escape",
+  "fallbackText": "Custom status: Rendered through raw widget.",
+  "widgets": [
+    {
+      "textParagraph": {
+        "text": "Rendered through raw widget."
+      }
+    },
+    {
+      "divider": {}
+    }
+  ]
+}

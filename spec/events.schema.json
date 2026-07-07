@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/events.schema.json",
+  "title": "Normalized Google Chat Event Envelope",
+  "type": "object",
+  "required": [
+    "eventId",
+    "receivedAt",
+    "source",
+    "kind",
+    "rawKind",
+    "actor",
+    "actorState",
+    "space",
+    "thread",
+    "message",
+    "action",
+    "dialog",
+    "membership",
+    "reaction",
+    "locale",
+    "timeZone",
+    "authContext",
+    "capabilities",
+    "relationship",
+    "transport",
+    "idempotencyKey",
+    "raw"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "eventId": { "type": "string" },
+    "receivedAt": { "type": "string" },
+    "source": {
+      "type": "string",
+      "enum": ["chat_http", "workspace_events", "pubsub", "fixture"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "message.created",
+        "message.updated",
+        "message.deleted",
+        "message.mentioned_app",
+        "message.direct",
+        "message.thread_reply",
+        "message.slash_command",
+        "message.app_command",
+        "message.link_preview_requested",
+        "message.unknown_command",
+        "space.added",
+        "space.removed",
+        "space.updated",
+        "space.deleted",
+        "membership.created",
+        "membership.updated",
+        "membership.deleted",
+        "reaction.created",
+        "reaction.deleted",
+        "card.clicked",
+        "dialog.opened",
+        "dialog.submitted",
+        "dialog.cancelled",
+        "widget.updated",
+        "event.batch",
+        "event.unknown"
+      ]
+    },
+    "rawKind": { "type": ["string", "null"] },
+    "actor": { "$ref": "#/$defs/userRefNullable" },
+    "actorState": { "$ref": "#/$defs/identityState" },
+    "space": { "$ref": "#/$defs/spaceRefNullable" },
+    "thread": { "$ref": "#/$defs/threadRefNullable" },
+    "message": { "$ref": "#/$defs/messageNullable" },
+    "action": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "actions.schema.json" }
+      ]
+    },
+    "dialog": { "type": ["object", "null"], "additionalProperties": true },
+    "membership": { "$ref": "#/$defs/membershipNullable" },
+    "reaction": { "$ref": "#/$defs/reactionNullable" },
+    "locale": { "type": ["string", "null"] },
+    "timeZone": { "type": ["string", "null"] },
+    "authContext": {
+      "type": "object",
+      "required": ["authType", "scopes", "responseMode"],
+      "additionalProperties": true,
+      "properties": {
+        "authType": { "type": ["string", "null"] },
+        "scopes": { "type": "array", "items": { "type": "string" } },
+        "responseMode": {
+          "type": "string",
+          "enum": ["sync", "async", "none", "unknown"]
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": [
+        "canRespondSynchronously",
+        "canRespondAsynchronously",
+        "canReplyInThread",
+        "canOpenDialog",
+        "canUpdateCard"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "canRespondSynchronously": { "type": "boolean" },
+        "canRespondAsynchronously": { "type": "boolean" },
+        "canReplyInThread": { "type": "boolean" },
+        "canOpenDialog": { "type": "boolean" },
+        "canUpdateCard": { "type": "boolean" }
+      }
+    },
+    "relationship": { "$ref": "#/$defs/relationship" },
+    "transport": { "$ref": "#/$defs/transport" },
+    "idempotencyKey": { "type": "string" },
+    "raw": true
+  },
+  "$defs": {
+    "identityState": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["available", "access_limited", "missing"]
+        },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "userRef": {
+      "type": "object",
+      "required": ["name", "displayName", "email", "type", "isApp", "access"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "displayName": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] },
+        "isApp": { "type": "boolean" },
+        "access": { "$ref": "#/$defs/identityState" }
+      }
+    },
+    "userRefNullable": {
+      "oneOf": [{ "$ref": "#/$defs/userRef" }, { "type": "null" }]
+    },
+    "spaceRef": {
+      "type": "object",
+      "required": ["name", "displayName", "type", "spaceType"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "displayName": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] },
+        "spaceType": { "type": ["string", "null"] }
+      }
+    },
+    "spaceRefNullable": {
+      "oneOf": [{ "$ref": "#/$defs/spaceRef" }, { "type": "null" }]
+    },
+    "threadRef": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "threadKey": { "type": ["string", "null"] }
+      }
+    },
+    "threadRefNullable": {
+      "oneOf": [{ "$ref": "#/$defs/threadRef" }, { "type": "null" }]
+    },
+    "message": {
+      "type": "object",
+      "required": [
+        "ref",
+        "space",
+        "thread",
+        "sender",
+        "senderState",
+        "createdAt",
+        "updatedAt",
+        "deletedAt",
+        "isDeleted",
+        "isThreadReply",
+        "isPrivate",
+        "privateViewer",
+        "text",
+        "formattedText",
+        "argumentText",
+        "plainTextForModel",
+        "attachments",
+        "mentions",
+        "slashCommand",
+        "appCommand",
+        "quotedMessage",
+        "deletion",
+        "cards",
+        "reactions"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "ref": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" }
+          }
+        },
+        "space": { "$ref": "#/$defs/spaceRefNullable" },
+        "thread": { "$ref": "#/$defs/threadRefNullable" },
+        "sender": { "$ref": "#/$defs/userRefNullable" },
+        "senderState": { "$ref": "#/$defs/identityState" },
+        "createdAt": { "type": ["string", "null"] },
+        "updatedAt": { "type": ["string", "null"] },
+        "deletedAt": { "type": ["string", "null"] },
+        "isDeleted": { "type": "boolean" },
+        "isThreadReply": { "type": "boolean" },
+        "isPrivate": { "type": "boolean" },
+        "privateViewer": { "$ref": "#/$defs/userRefNullable" },
+        "text": { "type": "string" },
+        "formattedText": { "type": ["string", "null"] },
+        "argumentText": { "type": ["string", "null"] },
+        "plainTextForModel": { "type": "string" },
+        "attachments": { "type": "array" },
+        "mentions": { "type": "array" },
+        "slashCommand": { "type": ["object", "null"], "additionalProperties": true },
+        "appCommand": { "type": ["object", "null"], "additionalProperties": true },
+        "quotedMessage": { "type": ["object", "null"], "additionalProperties": true },
+        "deletion": { "type": ["object", "null"], "additionalProperties": true },
+        "cards": { "type": "array" },
+        "reactions": { "type": "array" }
+      }
+    },
+    "messageNullable": {
+      "oneOf": [{ "$ref": "messages.schema.json" }, { "type": "null" }]
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "actionId",
+        "actionType",
+        "methodName",
+        "parameters",
+        "formInputs",
+        "selectedUsers",
+        "selectedSpaces",
+        "validationErrors"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "actionId": { "type": "string" },
+        "actionType": {
+          "type": "string",
+          "enum": [
+            "slash_command",
+            "app_command",
+            "card_click",
+            "dialog_submit",
+            "dialog_cancel",
+            "widget_update",
+            "link_preview"
+          ]
+        },
+        "methodName": { "type": ["string", "null"] },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "formInputs": { "type": "object", "additionalProperties": true },
+        "selectedUsers": { "type": "array" },
+        "selectedSpaces": { "type": "array" },
+        "validationErrors": { "type": "array" }
+      }
+    },
+    "actionNullable": {
+      "oneOf": [{ "$ref": "#/$defs/action" }, { "type": "null" }]
+    },
+    "membership": {
+      "type": "object",
+      "required": ["ref", "state", "member", "createdAt", "deletedAt"],
+      "additionalProperties": true,
+      "properties": {
+        "ref": {
+          "type": "object",
+          "required": ["name"],
+          "properties": { "name": { "type": "string" } }
+        },
+        "state": { "type": ["string", "null"] },
+        "member": { "$ref": "#/$defs/userRefNullable" },
+        "createdAt": { "type": ["string", "null"] },
+        "deletedAt": { "type": ["string", "null"] }
+      }
+    },
+    "membershipNullable": {
+      "oneOf": [{ "$ref": "#/$defs/membership" }, { "type": "null" }]
+    },
+    "reaction": {
+      "type": "object",
+      "required": ["ref", "user", "emoji", "messageRef", "createdAt", "deletedAt"],
+      "additionalProperties": true,
+      "properties": {
+        "ref": {
+          "type": "object",
+          "required": ["name"],
+          "properties": { "name": { "type": "string" } }
+        },
+        "user": { "$ref": "#/$defs/userRefNullable" },
+        "emoji": { "type": "object", "additionalProperties": true },
+        "messageRef": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["name"],
+              "properties": { "name": { "type": "string" } }
+            },
+            { "type": "null" }
+          ]
+        },
+        "createdAt": { "type": ["string", "null"] },
+        "deletedAt": { "type": ["string", "null"] }
+      }
+    },
+    "reactionNullable": {
+      "oneOf": [{ "$ref": "#/$defs/reaction" }, { "type": "null" }]
+    },
+    "relationship": {
+      "type": "object",
+      "required": [
+        "isQuote",
+        "isDirectReply",
+        "isThreadReply",
+        "isCardAction",
+        "isReaction",
+        "isEdit",
+        "isDeletion",
+        "isMembershipEvent",
+        "isSpaceEvent",
+        "isUserAction",
+        "systemNotes"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "isQuote": { "type": "boolean" },
+        "isDirectReply": { "type": "boolean" },
+        "isThreadReply": { "type": "boolean" },
+        "isCardAction": { "type": "boolean" },
+        "isReaction": { "type": "boolean" },
+        "isEdit": { "type": "boolean" },
+        "isDeletion": { "type": "boolean" },
+        "isMembershipEvent": { "type": "boolean" },
+        "isSpaceEvent": { "type": "boolean" },
+        "isUserAction": { "type": "boolean" },
+        "systemNotes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "transport": {
+      "type": "object",
+      "required": [
+        "kind",
+        "pubsubMessageId",
+        "pubsubPublishTime",
+        "pubsubSubscription",
+        "pubsubDeliveryAttempt",
+        "workspaceEventId",
+        "workspaceEventType",
+        "workspaceEventSource",
+        "workspaceEventSubject"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "type": "string", "enum": ["direct", "pubsub", "workspace_events"] },
+        "pubsubMessageId": { "type": ["string", "null"] },
+        "pubsubPublishTime": { "type": ["string", "null"] },
+        "pubsubSubscription": { "type": ["string", "null"] },
+        "pubsubDeliveryAttempt": { "type": ["string", "null"] },
+        "workspaceEventId": { "type": ["string", "null"] },
+        "workspaceEventType": { "type": ["string", "null"] },
+        "workspaceEventSource": { "type": ["string", "null"] },
+        "workspaceEventSubject": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

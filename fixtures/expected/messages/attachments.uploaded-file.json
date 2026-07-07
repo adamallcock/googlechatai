@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/ATT"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:05:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "See attached report",
+  "formattedText": "See attached report",
+  "argumentText": "See attached report",
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 19,
+      "text": "See attached report"
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [
+    {
+      "name": "spaces/AAA/messages/ATT/attachments/report",
+      "contentName": "launch-report.pdf",
+      "contentType": "application/pdf",
+      "source": "UPLOADED_CONTENT",
+      "mediaResourceName": "spaces/AAA/messages/ATT/attachments/report/media",
+      "thumbnailUri": "https://example.invalid/report-thumb.png"
+    }
+  ],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/ATT from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:05:00Z."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/ATT"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/111",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:05:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "See attached report",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/ATT from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:05:00Z."
+    ],
+    "children": [
+      {
+        "kind": "attachment",
+        "relationship": "attachment",
+        "name": "spaces/AAA/messages/ATT/attachments/report",
+        "contentName": "launch-report.pdf",
+        "contentType": "application/pdf",
+        "source": "UPLOADED_CONTENT",
+        "mediaResourceName": "spaces/AAA/messages/ATT/attachments/report/media",
+        "accessState": "metadata_only",
+        "systemNotes": [
+          "System Note: The user attached launch-report.pdf (application/pdf) with this message."
+        ],
+        "children": [],
+        "plainTextForModel": "System Note: The user attached launch-report.pdf (application/pdf) with this message."
+      }
+    ],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/ATT from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:05:00Z.\nSee attached report\nSystem Note: The user attached launch-report.pdf (application/pdf) with this message."
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/ATT from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:05:00Z.\nSee attached report\nSystem Note: The user attached launch-report.pdf (application/pdf) with this message."
+}

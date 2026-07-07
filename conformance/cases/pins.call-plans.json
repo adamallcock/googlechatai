@@ -1,0 +1,349 @@
+[
+  {
+    "id": "pins.plan.pin-message",
+    "description": "Plan pinning a message in a space by full message resource name.",
+    "operation": "pins.pin",
+    "input": {
+      "space": "spaces/AAA",
+      "message": "spaces/AAA/messages/BBB",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.pin",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {},
+          "body": {
+            "messagePin": {
+              "message": "spaces/AAA/messages/BBB"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "pin": {
+        "action": "pin",
+        "space": "spaces/AAA",
+        "message": "spaces/AAA/messages/BBB"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "pins.plan.unpin-by-name",
+    "description": "Plan unpinning a message pin directly by its resource name.",
+    "operation": "pins.unpin",
+    "input": {
+      "messagePin": "spaces/AAA/messagePins/CCC",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.unpin",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.delete",
+          "method": "DELETE",
+          "path": "/v1/spaces/AAA/messagePins/CCC",
+          "query": {},
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "pin": {
+        "action": "unpin",
+        "strategy": "direct",
+        "name": "spaces/AAA/messagePins/CCC"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "pins.plan.unpin-by-message",
+    "description": "Plan unpinning a message by space and message when the message pin name is not known, requiring a list-then-delete strategy.",
+    "operation": "pins.unpin",
+    "input": {
+      "space": "spaces/AAA",
+      "message": "spaces/AAA/messages/BBB",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.unpin",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {
+            "pageSize": 100
+          },
+          "body": null
+        },
+        {
+          "resource": "spaces.messagePins.delete",
+          "method": "DELETE",
+          "path": "/v1/{resolvedMessagePin}",
+          "query": {},
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "pin": {
+        "action": "unpin",
+        "strategy": "list-then-delete",
+        "space": "spaces/AAA",
+        "message": "spaces/AAA/messages/BBB",
+        "resolvedMessagePinPlaceholder": "/v1/{resolvedMessagePin}"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
+        "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+      ]
+    }
+  },
+  {
+    "id": "pins.plan.list",
+    "description": "Plan listing message pins in a space with the default page size.",
+    "operation": "pins.list",
+    "input": {
+      "space": "spaces/AAA",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.list",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {
+            "pageSize": 100
+          },
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "pin": {
+        "action": "list",
+        "space": "spaces/AAA",
+        "pageSize": 100,
+        "pageToken": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "pins.plan.list-paged",
+    "description": "Plan listing message pins with an explicit page size and page token.",
+    "operation": "pins.list",
+    "input": {
+      "space": "spaces/AAA",
+      "pageSize": 25,
+      "pageToken": "next-page",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.list",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {
+            "pageSize": 25,
+            "pageToken": "next-page"
+          },
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "pin": {
+        "action": "list",
+        "space": "spaces/AAA",
+        "pageSize": 25,
+        "pageToken": "next-page"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  },
+  {
+    "id": "pins.plan.ensure-pinned",
+    "description": "Plan ensuring a message is pinned using a list-then-pin strategy that skips already-pinned messages.",
+    "operation": "pins.ensurePinned",
+    "input": {
+      "space": "spaces/AAA",
+      "message": "spaces/AAA/messages/BBB",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "pins.ensurePinned",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messagePins.list",
+          "method": "GET",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {
+            "pageSize": 100
+          },
+          "body": null
+        },
+        {
+          "resource": "spaces.messagePins.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messagePins",
+          "query": {},
+          "body": {
+            "messagePin": {
+              "message": "spaces/AAA/messages/BBB"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "ensure": {
+        "strategy": "list-then-pin",
+        "alreadyPinnedAction": "skip"
+      },
+      "pin": {
+        "action": "ensurePinned",
+        "space": "spaces/AAA",
+        "message": "spaces/AAA/messages/BBB",
+        "pageSize": 100,
+        "pageToken": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+      ]
+    }
+  }
+]

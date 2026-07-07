@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/PRI"
+  },
+  "space": {
+    "name": "spaces/DM1",
+    "displayName": null,
+    "type": "DM"
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "sender": {
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "resourceName": "users/222",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:09:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": true,
+    "threadReply": true,
+    "directMessage": true
+  },
+  "privateMessageViewer": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "text": "Need private help",
+  "formattedText": "Need private help",
+  "argumentText": "Need private help",
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 17,
+      "text": "Need private help"
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/PRI from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:09:00Z.",
+    "System Note: This message is a thread reply in spaces/AAA/threads/thread-1.",
+    "System Note: This message is private to Ada Lovelace <ada@example.com> (HUMAN, users/111).",
+    "System Note: This message was sent in a direct message space."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/PRI"
+    },
+    "sender": {
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "resourceName": "users/222",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:09:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "Need private help",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/PRI from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:09:00Z.",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1.",
+      "System Note: This message is private to Ada Lovelace <ada@example.com> (HUMAN, users/111).",
+      "System Note: This message was sent in a direct message space."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/PRI from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:09:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nSystem Note: This message is private to Ada Lovelace <ada@example.com> (HUMAN, users/111).\nSystem Note: This message was sent in a direct message space.\nNeed private help"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/PRI from Grace Hopper <grace@example.com> (HUMAN, users/222) created at 2026-06-29T18:09:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\nSystem Note: This message is private to Ada Lovelace <ada@example.com> (HUMAN, users/111).\nSystem Note: This message was sent in a direct message space.\nNeed private help"
+}

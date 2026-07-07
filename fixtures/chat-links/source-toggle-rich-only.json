@@ -1,0 +1,26 @@
+{
+  "annotations": [
+    {
+      "kind": "matchedUrl",
+      "url": "https://chat.google.com/room/MATCHED"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/PLAIN"
+    },
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/RICH",
+      "title": "Rich only"
+    }
+  ],
+  "matchedUrl": {
+    "url": "https://chat.google.com/room/TOPMATCHED"
+  },
+  "text": "Plain text https://chat.google.com/room/TEXT",
+  "options": {
+    "includeMatchedUrls": false,
+    "includePlainTextUrls": false,
+    "allowSpaceLevelContext": true
+  }
+}

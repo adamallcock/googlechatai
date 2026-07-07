@@ -1,0 +1,67 @@
+{
+  "name": "spaces/AAA/messages/card-1",
+  "cardsV2": [
+    {
+      "cardId": "approval.release-42",
+      "card": {
+        "header": {
+          "title": "Approve release 42?",
+          "subtitle": "Release approval"
+        },
+        "sections": [
+          {
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "Deploy version 42 to production."
+                }
+              },
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Approve",
+                      "onClick": {
+                        "action": {
+                          "function": "approval_decision",
+                          "parameters": [
+                            {
+                              "key": "decision",
+                              "value": "approve"
+                            },
+                            {
+                              "key": "requestId",
+                              "value": "release-42"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text": "Reject",
+                      "onClick": {
+                        "action": {
+                          "function": "approval_decision",
+                          "parameters": [
+                            {
+                              "key": "decision",
+                              "value": "reject"
+                            },
+                            {
+                              "key": "requestId",
+                              "value": "release-42"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

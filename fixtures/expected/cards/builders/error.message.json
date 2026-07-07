@@ -1,0 +1,52 @@
+{
+  "fallbackText": "Error: Export failed. Sheets API returned PERMISSION_DENIED. Details: Missing chat.bot scope. Action: Retry.",
+  "text": "Error: Export failed. Sheets API returned PERMISSION_DENIED. Details: Missing chat.bot scope. Action: Retry.",
+  "cardsV2": [
+    {
+      "cardId": "error.export",
+      "card": {
+        "header": {
+          "title": "Export failed",
+          "subtitle": "Error"
+        },
+        "sections": [
+          {
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "Sheets API returned PERMISSION_DENIED."
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "DETAILS",
+                  "text": "Missing chat.bot scope."
+                }
+              },
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Retry",
+                      "onClick": {
+                        "action": {
+                          "function": "retry_export",
+                          "parameters": [
+                            {
+                              "key": "jobId",
+                              "value": "export-7"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

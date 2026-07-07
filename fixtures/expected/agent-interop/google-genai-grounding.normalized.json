@@ -1,0 +1,79 @@
+{
+  "kind": "agent_response",
+  "schemaVersion": "2026-07-06",
+  "provider": "google",
+  "sdk": "google-genai",
+  "responseId": null,
+  "finalText": "Spain won Euro 2024, defeating England 2-1 in the final.",
+  "sources": [
+    {
+      "id": null,
+      "title": "uefa.com",
+      "url": "https://www.uefa.com/euro2024/news/spain-wins-euro-2024",
+      "sourceType": "url",
+      "provider": "google",
+      "referenceText": null,
+      "startIndex": 0,
+      "endIndex": 5
+    }
+  ],
+  "toolCalls": [
+    {
+      "id": null,
+      "name": "google_search",
+      "status": "requested",
+      "inputSummary": "{\"queries\":[\"UEFA Euro 2024 winner\"]}",
+      "stepIndex": 1,
+      "provider": "google"
+    }
+  ],
+  "toolResults": [
+    {
+      "id": "search_001",
+      "name": "google_search",
+      "status": "completed",
+      "outputSummary": "Search suggestions available.",
+      "stepIndex": 2,
+      "provider": "google"
+    }
+  ],
+  "thinkingSummaries": [
+    {
+      "text": "Need search final result.",
+      "provider": "google",
+      "stepIndex": 0
+    }
+  ],
+  "usage": {
+    "inputTokens": 120,
+    "outputTokens": 50,
+    "totalTokens": 170,
+    "cachedInputTokens": null,
+    "reasoningTokens": null,
+    "provider": "google"
+  },
+  "cost": null,
+  "warnings": [],
+  "systemNotes": [
+    "Agent response normalized from Google GenAI Interactions response.",
+    "Thinking summaries are provider-provided summaries only; hidden chain-of-thought is not inferred."
+  ],
+  "rawShape": {
+    "topLevelKeys": [
+      "output_text",
+      "steps",
+      "usage_metadata"
+    ],
+    "contentTypes": [
+      "text"
+    ],
+    "stepTypes": [
+      "thought",
+      "google_search_call",
+      "google_search_result",
+      "model_output"
+    ],
+    "itemTypes": []
+  }
+}
+

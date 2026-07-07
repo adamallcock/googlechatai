@@ -1,0 +1,10 @@
+{
+  "name": "spaces/AAA/messages/source",
+  "matchedUrl": {
+    "url": "https://chat.google.com/room/AAA"
+  },
+  "text": "Discuss https://chat.google.com/room/AAA. Then see https://chat.google.com/room/BBB, bad https://[::1 and finally https://chat.google.com/room/CCC!",
+  "options": {
+    "allowSpaceLevelContext": false
+  }
+}

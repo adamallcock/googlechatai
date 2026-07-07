@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/cards.schema.json",
+  "title": "Google Chat AI Cards",
+  "oneOf": [
+    { "$ref": "#/$defs/normalizedCard" },
+    { "$ref": "#/$defs/cardMessage" },
+    { "$ref": "#/$defs/dialogResponse" },
+    { "$ref": "#/$defs/cardSummary" },
+    { "$ref": "#/$defs/cardActionContext" },
+    { "$ref": "#/$defs/cardLintResult" },
+    { "$ref": "#/$defs/cardTranslationResult" }
+  ],
+  "$defs": {
+    "normalizedCard": {
+      "type": "object",
+      "required": ["cardId", "version", "title", "sections", "actions", "raw"],
+      "additionalProperties": true,
+      "properties": {
+        "cardId": { "type": "string" },
+        "version": {
+          "type": "string",
+          "enum": ["cards_v1", "cards_v2", "unknown"]
+        },
+        "title": { "type": ["string", "null"] },
+        "summary": { "type": ["string", "null"] },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "actions.schema.json" }
+        },
+        "fallbackText": { "type": ["string", "null"] },
+        "raw": true
+      }
+    },
+    "cardMessage": {
+      "type": "object",
+      "required": ["fallbackText", "text", "cardsV2"],
+      "additionalProperties": true,
+      "properties": {
+        "fallbackText": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "cardsV2": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/cardV2" }
+        }
+      }
+    },
+    "cardV2": {
+      "type": "object",
+      "required": ["cardId", "card"],
+      "additionalProperties": true,
+      "properties": {
+        "cardId": { "type": "string", "minLength": 1 },
+        "card": {
+          "type": "object",
+          "required": ["header", "sections"],
+          "additionalProperties": true,
+          "properties": {
+            "header": {
+              "type": "object",
+              "required": ["title"],
+              "additionalProperties": true,
+              "properties": {
+                "title": { "type": "string", "minLength": 1 },
+                "subtitle": { "type": "string" }
+              }
+            },
+            "sections": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["widgets"],
+                "additionalProperties": true,
+                "properties": {
+                  "widgets": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dialogResponse": {
+      "type": "object",
+      "required": ["fallbackText", "actionResponse"],
+      "additionalProperties": true,
+      "properties": {
+        "fallbackText": { "type": "string", "minLength": 1 },
+        "actionResponse": {
+          "type": "object",
+          "required": ["type", "dialogAction"],
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "DIALOG" },
+            "dialogAction": {
+              "type": "object",
+              "required": ["dialog"],
+              "additionalProperties": true
+            }
+          }
+        }
+      }
+    },
+    "cardSummary": {
+      "type": "object",
+      "required": ["cards", "plainText"],
+      "additionalProperties": true,
+      "properties": {
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["cardId", "title", "subtitle", "sections"],
+            "additionalProperties": true,
+            "properties": {
+              "cardId": { "type": ["string", "null"] },
+              "title": { "type": ["string", "null"] },
+              "subtitle": { "type": ["string", "null"] },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["widgetCount", "text", "fields", "buttons"],
+                  "additionalProperties": true,
+                  "properties": {
+                    "header": { "type": "string" },
+                    "widgetCount": { "type": "integer", "minimum": 0 },
+                    "text": { "type": "array", "items": { "type": "string" } },
+                    "fields": { "type": "array", "items": { "type": "object" } },
+                    "buttons": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["text", "parameters"],
+                        "additionalProperties": true,
+                        "properties": {
+                          "text": { "type": ["string", "null"] },
+                          "function": { "type": "string" },
+                          "openLink": { "type": "string" },
+                          "parameters": {
+                            "type": "object",
+                            "additionalProperties": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "plainText": { "type": "string" }
+      }
+    },
+    "cardActionContext": {
+      "type": "object",
+      "required": ["summary", "note"],
+      "additionalProperties": true,
+      "properties": {
+        "summary": { "$ref": "#/$defs/cardActionSummary" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "cardLintResult": {
+      "type": "object",
+      "required": ["kind", "surface", "ok", "summary", "stats", "findings", "translated"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.card_lint_result" },
+        "surface": { "type": "string", "minLength": 1 },
+        "ok": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 },
+        "stats": { "$ref": "#/$defs/cardLintStats" },
+        "findings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/cardLintFinding" }
+        },
+        "translated": { "type": ["object", "null"], "additionalProperties": true }
+      }
+    },
+    "cardTranslationResult": {
+      "type": "object",
+      "required": ["kind", "from", "to", "mode", "ok", "findings", "payload"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "const": "chat.card_translation_result" },
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "mode": { "type": "string", "minLength": 1 },
+        "ok": { "type": "boolean" },
+        "findings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/cardLintFinding" }
+        },
+        "payload": { "type": ["object", "null"], "additionalProperties": true }
+      }
+    },
+    "cardLintStats": {
+      "type": "object",
+      "required": ["cards", "sections", "widgets", "buttons", "images", "bytes"],
+      "additionalProperties": false,
+      "properties": {
+        "cards": { "type": "integer", "minimum": 0 },
+        "sections": { "type": "integer", "minimum": 0 },
+        "widgets": { "type": "integer", "minimum": 0 },
+        "buttons": { "type": "integer", "minimum": 0 },
+        "images": { "type": "integer", "minimum": 0 },
+        "bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cardLintFinding": {
+      "type": "object",
+      "required": ["severity", "code", "path", "message", "remediation"],
+      "additionalProperties": false,
+      "properties": {
+        "severity": { "type": "string", "enum": ["error", "warning"] },
+        "code": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "remediation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "cardActionSummary": {
+      "type": "object",
+      "required": [
+        "actionType",
+        "methodName",
+        "parameters",
+        "formInputs",
+        "actor",
+        "eventTime"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "actionType": {
+          "type": "string",
+          "enum": ["card_click", "dialog_submit", "widget_update"]
+        },
+        "methodName": { "type": ["string", "null"] },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "formInputs": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/formInputSummary" }
+        },
+        "actor": {
+          "type": ["object", "null"],
+          "additionalProperties": true,
+          "properties": {
+            "name": { "type": "string" },
+            "displayName": { "type": ["string", "null"] },
+            "type": { "type": ["string", "null"] }
+          }
+        },
+        "eventTime": { "type": ["string", "null"] }
+      }
+    },
+    "formInputSummary": {
+      "type": "object",
+      "required": ["kind", "values", "value"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "type": "string" },
+        "values": { "type": "array", "items": { "type": "string" } },
+        "value": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

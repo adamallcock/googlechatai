@@ -1,0 +1,31 @@
+{
+  "name": "spaces/ROOT/messages/root",
+  "sender": {
+    "name": "users/root",
+    "displayName": "Root Sender"
+  },
+  "children": [
+    {
+      "name": "spaces/AAA/messages/child-one",
+      "relationship": "quoted-reply",
+      "createTime": "2026-07-05T17:00:00Z",
+      "sender": {
+        "name": "users/one",
+        "displayName": "Child One",
+        "email": "one@example.com"
+      },
+      "text": "First https://chat.google.com/room/AAA"
+    },
+    {
+      "name": "spaces/AAA/messages/child-two",
+      "relationship": "thread-reply",
+      "createTime": "2026-07-05T17:01:00Z",
+      "text": "Duplicate https://chat.google.com/room/AAA and thread https://chat.google.com/room/AAA/thread-1"
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": true,
+    "maxThreadMessages": 6,
+    "maxSpaceMessages": 3
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "spaces/AAA/messages/root",
+  "text": "Root https://chat.google.com/room/AAA",
+  "message": {
+    "name": "spaces/AAA/messages/nested",
+    "text": "Nested https://chat.google.com/room/BBB"
+  },
+  "options": {
+    "maxTraversalDepth": 1,
+    "allowSpaceLevelContext": false
+  }
+}

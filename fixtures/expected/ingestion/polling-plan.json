@@ -1,0 +1,73 @@
+{
+  "kind": "chat.ingestion_plan",
+  "mode": "polling",
+  "status": "planned",
+  "capability": {
+    "authMode": "user",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.messages.readonly"
+    ],
+    "requiresAdminApproval": false,
+    "requiresMembership": true,
+    "readOnly": true,
+    "writeCapable": false,
+    "notes": [
+      "User-auth polling reads messages visible to the installing user."
+    ]
+  },
+  "polling": {
+    "space": "spaces/AAA",
+    "thread": null,
+    "pageSize": 250,
+    "filter": "createTime > \"2026-07-04T00:00:00Z\" AND createTime < \"2026-07-04T01:00:00Z\"",
+    "orderBy": "createTime ASC",
+    "showDeleted": true,
+    "backoff": {
+      "initialMs": 1000,
+      "maxMs": 60000,
+      "multiplier": 2,
+      "jitter": true
+    }
+  },
+  "requests": [
+    {
+      "resource": "spaces.messages.list",
+      "method": "GET",
+      "path": "/v1/spaces/AAA/messages",
+      "query": {
+        "pageSize": 250,
+        "pageToken": "cursor-1",
+        "filter": "createTime > \"2026-07-04T00:00:00Z\" AND createTime < \"2026-07-04T01:00:00Z\"",
+        "orderBy": "createTime ASC",
+        "showDeleted": true
+      },
+      "body": null
+    }
+  ],
+  "checkpoint": {
+    "type": "polling",
+    "scope": "spaces/AAA#messages",
+    "cursor": null,
+    "pageToken": "cursor-1",
+    "highWatermarkTime": null
+  },
+  "idempotency": {
+    "duplicateStrategy": "skip_seen_polling_snapshots",
+    "keyFields": [
+      "message.name",
+      "lastUpdateTime",
+      "deleteTime",
+      "createTime"
+    ]
+  },
+  "safety": {
+    "liveAllowed": false,
+    "writesMessages": false,
+    "notes": [
+      "Polling is read-only and should target spaces the principal can already read."
+    ]
+  },
+  "warnings": [
+    "Polling emits snapshots, not authoritative real-time create/update/delete events."
+  ]
+}

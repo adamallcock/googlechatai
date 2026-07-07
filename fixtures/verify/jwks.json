@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "alg": "RS256",
+      "use": "sig",
+      "kid": "googlechatai-test-key-1",
+      "n": "76ILkdPKUd5hxIqCaAXgSEA35E8-CL8l5kyTVHK1fkMr9PWflhfwa2vWc0X3z7RZ-7GTvN-0q5SLB_VEBNymUmvPWdryVxAk7lozNhI2J5vAxSb02Vdj-4nY6ncHp6LXUtqiA_eWEckVQJl6fmxLzbr5i2fBC0T5UdkpbuNSCf6Vwysu1IkCda5nmKe2D89Vfreleuy7-PFtSwBZnDlT6r3xnXHoKcaeM1EgFwzSXbcBou3mwLPG0GHs6niqeg1vATQXEziiunQzvdVma2DYnGRm3avY5OYeM9_fwCMrVhDIw0j3R1eB73JwTQOOLyTZDewUNMUgqo3snRIeyPz8lw",
+      "e": "AQAB"
+    }
+  ]
+}

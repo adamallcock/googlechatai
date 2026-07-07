@@ -1,0 +1,31 @@
+{
+  "specversion": "1.0",
+  "id": "workspace-event-1",
+  "source": "//chat.googleapis.com/spaces/AAA",
+  "type": "google.workspace.chat.message.v1.updated",
+  "subject": "spaces/AAA/messages/EDITED",
+  "time": "2026-06-29T18:30:00Z",
+  "datacontenttype": "application/json",
+  "data": {
+    "message": {
+      "name": "spaces/AAA/messages/EDITED",
+      "text": "edited copy",
+      "argumentText": "edited copy",
+      "createTime": "2026-06-29T18:00:00Z",
+      "lastUpdateTime": "2026-06-29T18:30:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      }
+    }
+  }
+}

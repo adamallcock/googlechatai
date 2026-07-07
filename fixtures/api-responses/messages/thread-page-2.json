@@ -1,0 +1,34 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/reply-2",
+      "text": "Final answer posted.",
+      "createTime": "2026-06-29T18:06:00Z",
+      "lastUpdateTime": "2026-06-29T18:06:20Z",
+      "sender": {
+        "name": "users/bot",
+        "displayName": "Build Bot",
+        "email": "chat-app@apps.googleusercontent.com",
+        "type": "BOT"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      },
+      "replyTo": "spaces/AAA/messages/root",
+      "emojiReactionSummaries": [
+        {
+          "emoji": {
+            "unicode": "👍"
+          },
+          "reactionCount": 2
+        }
+      ]
+    }
+  ],
+  "nextPageToken": "thread-cursor-3"
+}

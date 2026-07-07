@@ -1,0 +1,25 @@
+{
+  "summary": {
+    "actionType": "widget_update",
+    "methodName": "assignee_autocomplete",
+    "parameters": {
+      "field": "assignee"
+    },
+    "formInputs": {
+      "assignee": {
+        "kind": "string",
+        "values": [
+          "ada"
+        ],
+        "value": "ada"
+      }
+    },
+    "actor": {
+      "name": "users/789",
+      "displayName": "Katherine Johnson",
+      "type": "HUMAN"
+    },
+    "eventTime": "2026-06-29T19:10:00Z"
+  },
+  "note": "System Note: Katherine Johnson (users/789) updated widget via assignee_autocomplete at 2026-06-29T19:10:00Z. Parameters: field=assignee. Form values: assignee=ada."
+}

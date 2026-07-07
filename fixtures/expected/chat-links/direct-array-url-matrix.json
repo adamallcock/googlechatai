@@ -1,0 +1,460 @@
+{
+  "kind": "chat.chat_link_retrieval_plan",
+  "status": "partial",
+  "dryRun": true,
+  "summary": "Planned 11 Google Chat link candidate reads in dry-run mode.",
+  "counts": {
+    "candidates": 11,
+    "parsed": 2,
+    "unknown": 9,
+    "plannedRequests": 2,
+    "cacheHits": 0,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "truncation": {
+    "status": "complete",
+    "maxChatLinks": 200,
+    "maxPlainTextUrls": 200,
+    "maxTraversalDepth": 256,
+    "maxTraversalNodes": 5000,
+    "maxLinkScanItems": 5000,
+    "maxPlainTextScanChars": 65536,
+    "maxUrlLength": 2048,
+    "maxOccurrencesPerCandidate": 50,
+    "candidatesVisited": 11,
+    "plainTextUrlsScanned": 0,
+    "plainTextCharsScanned": 0,
+    "traversalNodesVisited": 1,
+    "linkScanItemsVisited": 12,
+    "cappedCandidates": 0,
+    "cappedPlainTextUrls": 0,
+    "cappedPlainTextScanChars": 0,
+    "cappedOversizedUrls": 0,
+    "cappedOccurrences": 0,
+    "cappedTraversalNodes": 0,
+    "cappedLinkScanItems": 0
+  },
+  "candidates": [
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-1",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/space/AAA?ignored=1",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "high",
+      "scope": "space",
+      "space": "spaces/AAA",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/AAA",
+      "urlShape": "gmail_hash_space",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/AAA",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-2",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/dm/AAA",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-3",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/space/AAA%2FBBB",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-4",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/#chat/space/AAA/thread-1",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-5",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/AAA%2FBBB",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-6",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/u/2/app/chat/BBB",
+      "title": null,
+      "parseStatus": "parsed",
+      "confidence": "medium",
+      "scope": "space",
+      "space": "spaces/BBB",
+      "thread": null,
+      "message": null,
+      "resourceName": "spaces/BBB",
+      "urlShape": "chat_app_space",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": "spaces/BBB",
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-7",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/0/extra/#chat/space/AAA",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-8",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/chat/u/0/extra/#chat/space/AAA",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-9",
+      "source": "plain_url",
+      "originalUrl": "https://mail.google.com/mail/u/notnum/#chat/space/AAA",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-10",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/u/notnum/app/chat/BBB",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    },
+    {
+      "kind": "chat_link",
+      "candidateId": "chat-link-11",
+      "source": "plain_url",
+      "originalUrl": "https://chat.google.com/room/AAA/thread%22x",
+      "title": null,
+      "parseStatus": "unknown",
+      "confidence": "unknown",
+      "scope": "unknown",
+      "space": null,
+      "thread": null,
+      "message": null,
+      "resourceName": null,
+      "urlShape": "unknown_chat_url",
+      "context": {
+        "messageName": null,
+        "relationship": "input",
+        "path": [
+          "input"
+        ]
+      },
+      "warnings": [
+        "Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+      ],
+      "cache": {
+        "status": "unavailable",
+        "strategy": "resource_last_update_time",
+        "key": null,
+        "resourceName": null,
+        "lastUpdateTime": null,
+        "revalidateWith": null
+      }
+    }
+  ],
+  "requests": [
+    {
+      "candidateId": "chat-link-1",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/AAA",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-1"
+      ]
+    },
+    {
+      "candidateId": "chat-link-6",
+      "resource": "spaces.get",
+      "method": "GET",
+      "path": "/v1/spaces/BBB",
+      "query": {},
+      "body": null,
+      "purpose": "read_space_breadcrumb",
+      "candidateIds": [
+        "chat-link-6"
+      ]
+    }
+  ],
+  "capability": {
+    "ok": true,
+    "authMode": "user",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/chat.spaces.readonly"
+    ],
+    "requiresAdminApproval": false,
+    "reasons": []
+  },
+  "safety": {
+    "liveAllowed": false,
+    "notes": [
+      "Dry run only; no Google Chat API call was executed."
+    ]
+  },
+  "systemNotes": [
+    "System Note: Planned 11 linked Google Chat context reads in dry-run mode; no Google Chat API call was executed.",
+    "System Note: Chat link cache keys use resource name plus lastUpdateTime when available so edited messages invalidate cached context."
+  ],
+  "warnings": [
+    "chat-link-2: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-3: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-4: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-5: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-7: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-8: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-9: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-10: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned.",
+    "chat-link-11: Chat URL shape is not recognized; retained for corpus collection but no API request will be planned."
+  ]
+}

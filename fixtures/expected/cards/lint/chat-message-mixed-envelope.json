@@ -1,0 +1,45 @@
+{
+  "kind": "chat.card_lint_result",
+  "surface": "chat-message",
+  "ok": false,
+  "summary": "4 errors, 0 warnings",
+  "stats": {
+    "cards": 0,
+    "sections": 0,
+    "widgets": 1,
+    "buttons": 1,
+    "images": 0,
+    "bytes": 295
+  },
+  "findings": [
+    {
+      "severity": "error",
+      "code": "wrong_cards_field",
+      "path": "$.cards_v2",
+      "message": "Use cardsV2 for Google Chat REST messages.",
+      "remediation": "Rename cards_v2 to cardsV2 for this profile."
+    },
+    {
+      "severity": "error",
+      "code": "addon_envelope_on_chat_message",
+      "path": "$.hostAppDataAction",
+      "message": "Workspace add-on action envelopes cannot be used as raw Chat message bodies.",
+      "remediation": "Pass only the message object to spaces.messages.create, or lint this payload with the workspace-addon-action-response profile."
+    },
+    {
+      "severity": "error",
+      "code": "accessory_attachment_conflict",
+      "path": "$.accessoryWidgets",
+      "message": "Accessory widgets are not supported on messages that contain attachments.",
+      "remediation": "Send the attachment and accessory controls as separate messages."
+    },
+    {
+      "severity": "error",
+      "code": "button_missing_onclick",
+      "path": "$.accessoryWidgets[0].buttonList.buttons[0]",
+      "message": "Button must define onClick.action.function or onClick.openLink.url.",
+      "remediation": "Add an action function or openLink URL to the button."
+    }
+  ],
+  "translated": null
+}

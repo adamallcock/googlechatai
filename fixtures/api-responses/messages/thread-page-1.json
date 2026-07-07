@@ -1,0 +1,103 @@
+{
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/root",
+      "text": "Deploy window starts now.",
+      "createTime": "2026-06-29T18:00:00Z",
+      "sender": {
+        "name": "users/ada",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      }
+    },
+    {
+      "name": "spaces/AAA/messages/reply-1",
+      "text": "I checked the rollout card.",
+      "createTime": "2026-06-29T18:03:00Z",
+      "sender": {
+        "name": "users/grace",
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "displayName": "Engineering",
+        "type": "ROOM"
+      },
+      "thread": {
+        "name": "spaces/AAA/threads/thread-1"
+      },
+      "replyTo": "spaces/AAA/messages/root",
+      "quotedMessages": [
+        {
+          "name": "spaces/AAA/messages/root",
+          "text": "Deploy window starts now.",
+          "createTime": "2026-06-29T18:00:00Z",
+          "sender": {
+            "name": "users/ada",
+            "displayName": "Ada Lovelace",
+            "email": "ada@example.com",
+            "type": "HUMAN"
+          },
+          "thread": {
+            "name": "spaces/AAA/threads/thread-1"
+          },
+          "quotedMessages": [
+            {
+              "name": "spaces/AAA/messages/reply-1",
+              "text": "cycle back to reply",
+              "createTime": "2026-06-29T18:03:00Z",
+              "sender": {
+                "name": "users/grace",
+                "displayName": "Grace Hopper",
+                "email": "grace@example.com",
+                "type": "HUMAN"
+              }
+            }
+          ]
+        }
+      ],
+      "attachment": [
+        {
+          "name": "spaces/AAA/messages/reply-1/attachments/diagram",
+          "contentName": "diagram.png",
+          "contentType": "image/png",
+          "sizeBytes": 2048,
+          "source": "UPLOADED_CONTENT",
+          "attachmentDataRef": {
+            "resourceName": "spaces/AAA/messages/reply-1/attachments/diagram/media"
+          }
+        }
+      ],
+      "cardsV2": [
+        {
+          "cardId": "rollout-summary"
+        }
+      ],
+      "actionAnnotations": [
+        {
+          "type": "CARD_CLICK",
+          "methodName": "approve_deploy",
+          "actionTime": "2026-06-29T18:04:30Z",
+          "actor": {
+            "name": "users/grace",
+            "displayName": "Grace Hopper",
+            "email": "grace@example.com",
+            "type": "HUMAN"
+          }
+        }
+      ]
+    }
+  ],
+  "nextPageToken": "thread-cursor-2"
+}

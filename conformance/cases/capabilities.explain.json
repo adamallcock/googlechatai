@@ -1,0 +1,78 @@
+[
+  {
+    "id": "capabilities.messages.reply.app",
+    "operation": "capabilities.explainChatCapability",
+    "input": {
+      "intent": "messages.reply",
+      "options": {
+        "principal": "app"
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/capabilities/messages.reply.app.json"
+    }
+  },
+  {
+    "id": "capabilities.reactions.add.app-unsupported",
+    "operation": "capabilities.planChatPermission",
+    "input": {
+      "intent": "reactions.add",
+      "options": {
+        "principal": "app"
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/capabilities/reactions.add.app-unsupported.json"
+    }
+  },
+  {
+    "id": "capabilities.errors.insufficient-scopes",
+    "operation": "capabilities.explainGoogleChatError",
+    "input": {
+      "error": {
+        "httpStatus": 403,
+        "body": {
+          "error": {
+            "status": "PERMISSION_DENIED",
+            "message": "Request had insufficient authentication scopes."
+          }
+        }
+      },
+      "context": {
+        "intent": "messages.read_context",
+        "principal": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.readonly"
+        ]
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/capabilities/errors.insufficient-scopes.json"
+    }
+  },
+  {
+    "id": "capabilities.errors.rate-limit",
+    "operation": "capabilities.explainGoogleChatError",
+    "input": {
+      "error": {
+        "httpStatus": 429,
+        "headers": {
+          "retry-after": "3"
+        },
+        "body": {
+          "error": {
+            "status": "RESOURCE_EXHAUSTED",
+            "message": "Quota exceeded."
+          }
+        }
+      },
+      "context": {
+        "intent": "messages.send",
+        "principal": "app"
+      }
+    },
+    "expect": {
+      "fixture": "fixtures/expected/capabilities/errors.rate-limit.json"
+    }
+  }
+]

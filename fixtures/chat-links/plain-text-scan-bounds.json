@@ -1,0 +1,8 @@
+{
+  "text": "https://chat.google.com/room/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA https://chat.google.com/room/OK trailing text beyond scan budget",
+  "options": {
+    "allowSpaceLevelContext": false,
+    "maxPlainTextScanChars": 145,
+    "maxUrlLength": 50
+  }
+}

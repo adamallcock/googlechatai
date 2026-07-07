@@ -1,0 +1,176 @@
+[
+  {
+    "name": "spaces/AAA/messages/root/attachments/pdf-1",
+    "contentName": "../Q2 Final?.pdf",
+    "safeFilename": "Q2_Final_.pdf",
+    "contentType": "application/pdf",
+    "mediaKind": "pdf",
+    "source": "UPLOADED_CONTENT",
+    "contentSizeBytes": 124000,
+    "mediaResourceName": "spaces/AAA/messages/root/attachments/pdf-1/media",
+    "attachmentDataRef": {
+      "resourceName": "spaces/AAA/messages/root/attachments/pdf-1/media",
+      "attachmentUploadToken": null
+    },
+    "driveDataRef": null,
+    "thumbnailUri": "https://chat.googleusercontent.com/thumb/pdf-1",
+    "downloadUri": null,
+    "context": {
+      "messageName": "spaces/AAA/messages/root",
+      "relationship": "current_message",
+      "path": ["current_message:spaces/AAA/messages/root"]
+    },
+    "policy": {
+      "status": "allowed",
+      "reasons": [],
+      "maxDownloadBytes": 26214400,
+      "maxUploadBytes": 209715200
+    },
+    "processing": {
+      "extraction": {
+        "status": "skipped",
+        "parser": null,
+        "text": null,
+        "reason": "No parser has run."
+      },
+      "transcription": {
+        "status": "skipped",
+        "provider": null,
+        "text": null,
+        "reason": "Attachment is not audio."
+      }
+    }
+  },
+  {
+    "name": "spaces/AAA/messages/root/attachments/block-1",
+    "contentName": "../../malware.exe",
+    "safeFilename": "malware.exe",
+    "contentType": "application/x-msdownload",
+    "mediaKind": "unknown",
+    "source": "UPLOADED_CONTENT",
+    "contentSizeBytes": 1024,
+    "mediaResourceName": "spaces/AAA/messages/root/attachments/block-1/media",
+    "attachmentDataRef": {
+      "resourceName": "spaces/AAA/messages/root/attachments/block-1/media",
+      "attachmentUploadToken": null
+    },
+    "driveDataRef": null,
+    "thumbnailUri": null,
+    "downloadUri": null,
+    "context": {
+      "messageName": "spaces/AAA/messages/root",
+      "relationship": "current_message",
+      "path": ["current_message:spaces/AAA/messages/root"]
+    },
+    "policy": {
+      "status": "blocked",
+      "reasons": ["content_type_blocked", "extension_blocked"],
+      "maxDownloadBytes": 26214400,
+      "maxUploadBytes": 209715200
+    },
+    "processing": {
+      "extraction": {
+        "status": "blocked",
+        "parser": null,
+        "text": null,
+        "reason": "Attachment is blocked by policy."
+      },
+      "transcription": {
+        "status": "skipped",
+        "provider": null,
+        "text": null,
+        "reason": "Attachment is blocked by policy."
+      }
+    }
+  },
+  {
+    "name": "spaces/AAA/messages/quoted/attachments/audio-1",
+    "contentName": "voice note?.ogg",
+    "safeFilename": "voice_note_.ogg",
+    "contentType": "audio/ogg",
+    "mediaKind": "audio",
+    "source": "UPLOADED_CONTENT",
+    "contentSizeBytes": 2048,
+    "mediaResourceName": "spaces/AAA/messages/quoted/attachments/audio-1/media",
+    "attachmentDataRef": {
+      "resourceName": "spaces/AAA/messages/quoted/attachments/audio-1/media",
+      "attachmentUploadToken": null
+    },
+    "driveDataRef": null,
+    "thumbnailUri": null,
+    "downloadUri": null,
+    "context": {
+      "messageName": "spaces/AAA/messages/quoted",
+      "relationship": "quoted_message",
+      "path": [
+        "current_message:spaces/AAA/messages/root",
+        "quoted_message:spaces/AAA/messages/quoted"
+      ]
+    },
+    "policy": {
+      "status": "allowed",
+      "reasons": [],
+      "maxDownloadBytes": 26214400,
+      "maxUploadBytes": 209715200
+    },
+    "processing": {
+      "extraction": {
+        "status": "skipped",
+        "parser": null,
+        "text": null,
+        "reason": "No parser has run."
+      },
+      "transcription": {
+        "status": "disabled",
+        "provider": null,
+        "text": null,
+        "reason": "Audio transcription is disabled by default."
+      }
+    }
+  },
+  {
+    "name": "spaces/AAA/messages/history/attachments/image-1",
+    "contentName": "design/sketch.png",
+    "safeFilename": "sketch.png",
+    "contentType": "image/png",
+    "mediaKind": "image",
+    "source": "DRIVE_FILE",
+    "contentSizeBytes": null,
+    "mediaResourceName": null,
+    "attachmentDataRef": null,
+    "driveDataRef": {
+      "driveFileId": "drive-file-123",
+      "resourceKey": "rk"
+    },
+    "thumbnailUri": "https://chat.googleusercontent.com/thumb/image-1",
+    "downloadUri": null,
+    "context": {
+      "messageName": "spaces/AAA/messages/history",
+      "relationship": "thread_history",
+      "path": [
+        "current_message:spaces/AAA/messages/root",
+        "thread_history:spaces/AAA/messages/history"
+      ]
+    },
+    "policy": {
+      "status": "allowed",
+      "reasons": [],
+      "maxDownloadBytes": 26214400,
+      "maxUploadBytes": 209715200
+    },
+    "processing": {
+      "extraction": {
+        "status": "skipped",
+        "parser": null,
+        "text": null,
+        "reason": "No parser has run."
+      },
+      "transcription": {
+        "status": "skipped",
+        "provider": null,
+        "text": null,
+        "reason": "Attachment is not audio."
+      }
+    }
+  }
+]

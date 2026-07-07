@@ -1,0 +1,61 @@
+{
+  "updateMessage": {
+    "fallbackText": "Action updated.",
+    "text": "Action updated.",
+    "cardsV2": [
+      {
+        "cardId": "action-update",
+        "card": {
+          "header": {
+            "title": "Action Update"
+          },
+          "sections": [
+            {
+              "widgets": [
+                {
+                  "decoratedText": {
+                    "text": "Button action received."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "dialog": {
+    "title": "Action Details",
+    "submitLabel": "Send",
+    "submitAction": {
+      "function": "submit_action_details",
+      "parameters": {
+        "runId": "fixture-run"
+      }
+    },
+    "fields": [
+      {
+        "name": "note",
+        "label": "Note",
+        "type": "text",
+        "value": "Looks good"
+      }
+    ]
+  },
+  "rawDialogCard": {
+    "header": {
+      "title": "Raw Dialog"
+    },
+    "sections": [
+      {
+        "widgets": [
+          {
+            "textParagraph": {
+              "text": "Raw card body"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

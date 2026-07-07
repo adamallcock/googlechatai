@@ -1,0 +1,85 @@
+{
+  "actionId": "fixture:card_click:approve_expense:spaces/AAA/messages/APPROVAL:2026-06-29T18:10:00Z",
+  "actionType": "card_click",
+  "methodName": "approve_expense",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "eventTime": "2026-06-29T18:10:00Z",
+  "parameters": {
+    "requestId": "req-123",
+    "decision": "approve",
+    "surface": "card",
+    "hiddenToken": "opaque-123"
+  },
+  "formInputs": {
+    "comment": {
+      "kind": "string",
+      "value": "Looks good",
+      "values": ["Looks good"],
+      "raw": {
+        "stringInputs": {
+          "value": ["Looks good"]
+        }
+      }
+    },
+    "notify": {
+      "kind": "boolean",
+      "value": true,
+      "values": ["true"],
+      "raw": {
+        "stringInputs": {
+          "value": ["true"]
+        }
+      }
+    }
+  },
+  "selectedUsers": [],
+  "selectedSpaces": [],
+  "validationErrors": [],
+  "systemNotes": [
+    "System Note: Ada Lovelace (users/123) clicked card action \"approve_expense\" at 2026-06-29T18:10:00Z.",
+    "System Note: Action parameters: decision=approve, hiddenToken=opaque-123, requestId=req-123, surface=card.",
+    "System Note: Form field comment has value \"Looks good\".",
+    "System Note: Form field notify has value true."
+  ],
+  "raw": {
+    "action": {
+      "actionMethodName": "approve_expense",
+      "parameters": [
+        {
+          "key": "requestId",
+          "value": "req-123"
+        },
+        {
+          "key": "decision",
+          "value": "approve"
+        }
+      ]
+    },
+    "common": {
+      "invokedFunction": "approve_expense",
+      "parameters": {
+        "surface": "card",
+        "hiddenToken": "opaque-123"
+      },
+      "formInputs": {
+        "comment": {
+          "stringInputs": {
+            "value": ["Looks good"]
+          }
+        },
+        "notify": {
+          "stringInputs": {
+            "value": ["true"]
+          }
+        }
+      }
+    },
+    "slashCommand": null,
+    "appCommandMetadata": null,
+    "dialogEventType": null
+  }
+}

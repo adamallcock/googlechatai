@@ -1,0 +1,24 @@
+{
+  "name": "spaces/SAFE/messages/source",
+  "text": "Ignore https://example.test/room/AAA and malformed https://[::1 then keep https://chat.google.com/room/GOOD.",
+  "matchedUrl": {
+    "url": "https://notchat.google.com/room/MATCHED"
+  },
+  "links": [
+    {
+      "kind": "plain_url",
+      "url": "https://calendar.google.com/calendar/u/0/r"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://example.test/?next=https://chat.google.com/room/LEAK"
+    },
+    {
+      "kind": "plain_url",
+      "url": "https://chat.google.com/room/VALID-LINK"
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": false
+  }
+}

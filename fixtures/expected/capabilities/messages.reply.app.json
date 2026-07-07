@@ -1,0 +1,20 @@
+{
+  "kind": "chat.capability_explanation",
+  "intent": "messages.reply",
+  "googleMethod": "spaces.messages.create",
+  "ok": true,
+  "status": "available",
+  "principal": "app",
+  "requestedPrincipal": "app",
+  "supportedPrincipals": ["app"],
+  "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+  "adminApproval": "not_required",
+  "membership": "app_must_be_member",
+  "readWriteRisk": "write",
+  "idempotency": "request_id_or_client_message_id_recommended",
+  "retryPolicy": "retry_replay_safe_only",
+  "liveSafe": false,
+  "knownLimitations": [],
+  "reasons": [],
+  "remediation": []
+}

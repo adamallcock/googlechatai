@@ -1,0 +1,332 @@
+[
+  {
+    "id": "chatLinks.plan.structured-url-cache",
+    "description": "Plan dry-run Chat link retrieval from structured chatSpaceLinkData plus URL fallback shapes with cache metadata hints.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/structured-url-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/structured-url-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.direct-array-url-matrix",
+    "description": "Plan dry-run Chat link retrieval from a direct top-level link array, including Gmail hash-query and unknown Chat URL shapes.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/direct-array-url-matrix.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/direct-array-url-matrix.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.disabled",
+    "description": "Feature-flag disabled Chat link planning returns no candidates or requests.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/disabled-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/disabled-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.app-auth",
+    "description": "App-auth Chat link planning derives app message-read and bot breadcrumb scopes.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/app-auth-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/app-auth-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.invalid-auth",
+    "description": "Invalid auth modes block Chat link plans and produce no requests.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/invalid-auth-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/invalid-auth-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.truncation-dedupe",
+    "description": "Wide-tree caps and repeated resource dedupe expose truncation metadata and occurrence breadcrumbs.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/truncation-dedupe-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/truncation-dedupe-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.raw-rich-link-annotation",
+    "description": "Raw Google Chat RICH_LINK annotations preserve chatSpaceLinkData and plan canonical message reads.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/raw-rich-link-annotation.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/raw-rich-link-annotation.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.structured-precedence",
+    "description": "Structured chatSpaceLinkData wins over an otherwise unknown browser URL shape.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/structured-precedence.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/structured-precedence.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.source-toggle-rich-only",
+    "description": "Source toggles suppress matched and plain URLs while keeping rich Chat links.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/source-toggle-rich-only.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/source-toggle-rich-only.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.text-matched-dedupe",
+    "description": "Matched URL metadata deduplicates against plain text extraction while terminal punctuation is trimmed.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/text-matched-dedupe.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/text-matched-dedupe.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.cross-space-structured-invalid",
+    "description": "Structured Chat link metadata with inconsistent spaces is retained as invalid and plans no reads.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/cross-space-structured-invalid.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/cross-space-structured-invalid.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.nested-context-breadcrumbs",
+    "description": "Nested message traversal preserves relationship paths, sender breadcrumbs, and occurrence ordering across runtimes.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/nested-context-breadcrumbs.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/nested-context-breadcrumbs.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.space-context-disabled",
+    "description": "Space links plan only a space breadcrumb when space-level message context is not enabled.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/space-context-disabled.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/space-context-disabled.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.cache-revalidation-thread-space",
+    "description": "Cache hits for thread and space reads use bounded metadata revalidation selectors.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/cache-revalidation-thread-space.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/cache-revalidation-thread-space.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.scan-item-cap",
+    "description": "Link scan item caps stop scanning later structured links and report truncation consistently.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/scan-item-cap.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/scan-item-cap.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.plain-text-cap",
+    "description": "Plain-text URL caps preserve the first bounded URLs and expose partial traversal metadata.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/plain-text-cap.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/plain-text-cap.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.traversal-depth-cap",
+    "description": "Traversal depth caps keep root links while omitting deeper child messages with truncation notes.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/traversal-depth-cap.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/traversal-depth-cap.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.strict-url-and-malformed",
+    "description": "Strict Chat URL parsing ignores non-Chat false positives and malformed URLs while preserving later valid Chat links.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/strict-url-and-malformed-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/strict-url-and-malformed-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.snake-case-cache-aliases",
+    "description": "Snake_case option and cache aliases produce the same app-auth plan and cache-hit metadata as camelCase options.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/snake-case-cache-aliases-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/snake-case-cache-aliases-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.unknown-chat-url-no-reads",
+    "description": "Unknown DM, group, repeated-space, and threaded hash Chat URLs are retained for corpus collection without planned reads.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/unknown-chat-url-no-reads-plan.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/unknown-chat-url-no-reads-plan.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.malformed-structured-retained",
+    "description": "Malformed or empty chatSpaceLinkData is retained as invalid instead of falling back to parseable URLs or disappearing.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/malformed-structured-retained.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/malformed-structured-retained.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.matched-url-scan-cap",
+    "description": "The link scan item budget also caps top-level matchedUrl extraction.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/matched-url-scan-cap.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/matched-url-scan-cap.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.structured-resource-safety",
+    "description": "Unsafe structured resource-name segments are rejected before request path or filter planning.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/structured-resource-safety.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/structured-resource-safety.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.structured-url-resource-dedupe",
+    "description": "The same canonical resource is deduped across structured metadata and URL parser shapes.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/structured-url-resource-dedupe.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/structured-url-resource-dedupe.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.space-cache-without-context",
+    "description": "Space cache hits are not counted as revalidated when only a space breadcrumb request is planned.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/space-cache-without-context.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/space-cache-without-context.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.normalized-message-context-node",
+    "description": "Normalized message AST roots are not rescanned through their duplicate contextNode text.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/normalized-message-context-node.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/normalized-message-context-node.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.non-https-unknown",
+    "description": "Non-HTTPS Google Chat and Gmail Chat links are retained as unknown and never converted into API reads.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/non-https-unknown.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/non-https-unknown.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.rich-links-disabled",
+    "description": "The rich-link source toggle suppresses both rich-link URLs and structured chatSpaceLinkData while keeping matched and plain URLs.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/rich-links-disabled.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/rich-links-disabled.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.plain-text-scan-bounds",
+    "description": "Plain-text scanning is byte bounded and oversized URL candidates are skipped with truncation metadata.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/plain-text-scan-bounds.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/plain-text-scan-bounds.json"
+    }
+  },
+  {
+    "id": "chatLinks.plan.occurrence-cap",
+    "description": "Repeated resource breadcrumbs are capped per candidate while retaining a deterministic first-occurrence order.",
+    "operation": "chatLinks.plan",
+    "input": {
+      "fixture": "fixtures/chat-links/occurrence-cap.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/chat-links/occurrence-cap.json"
+    }
+  }
+]

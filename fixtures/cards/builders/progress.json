@@ -1,0 +1,27 @@
+{
+  "cardId": "progress.weekly-summary",
+  "title": "Prepare weekly summary",
+  "subtitle": "AI workflow progress",
+  "detail": "Generating a concise update for the leadership thread.",
+  "percent": 33,
+  "steps": [
+    {
+      "label": "Read source data",
+      "status": "complete"
+    },
+    {
+      "label": "Draft summary",
+      "status": "active"
+    },
+    {
+      "label": "Send update",
+      "status": "pending"
+    }
+  ],
+  "cancelAction": {
+    "function": "cancel_workflow",
+    "parameters": {
+      "workflowId": "weekly-summary"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "actionId": "fixture:slash_command:deploy:spaces/AAA/messages/SLASH:2026-06-29T18:40:00Z",
+  "actionType": "slash_command",
+  "methodName": "deploy",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "eventTime": "2026-06-29T18:40:00Z",
+  "parameters": {
+    "commandId": "101",
+    "commandName": "deploy",
+    "argumentText": "staging --force"
+  },
+  "formInputs": {},
+  "selectedUsers": [],
+  "selectedSpaces": [],
+  "validationErrors": [],
+  "systemNotes": [
+    "System Note: Ada Lovelace (users/123) ran slash command \"deploy\" at 2026-06-29T18:40:00Z.",
+    "System Note: Action parameters: argumentText=staging --force, commandId=101, commandName=deploy."
+  ],
+  "raw": {
+    "action": null,
+    "common": null,
+    "slashCommand": {
+      "commandId": "101",
+      "commandName": "deploy"
+    },
+    "appCommandMetadata": null,
+    "dialogEventType": null
+  }
+}

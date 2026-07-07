@@ -1,0 +1,16 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/u/0/app/chat/AAA/AAA/thread-1?cls=7",
+      "title": "Thread from structured metadata",
+      "chatSpaceLinkData": {
+        "space": "spaces/AAA",
+        "thread": "spaces/AAA/threads/thread-1"
+      }
+    }
+  ],
+  "options": {
+    "maxThreadMessages": 8
+  }
+}

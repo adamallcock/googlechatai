@@ -1,0 +1,1301 @@
+[
+  {
+    "id": "messages.send-to-space.dry-run",
+    "description": "Plan a dry-run app-auth message send to a named space.",
+    "operation": "messages.sendToSpace",
+    "input": {
+      "space": "spaces/AAA",
+      "text": "Deployment complete.",
+      "authMode": "app",
+      "requestId": "req-w9-space",
+      "clientMessageId": "client-w9-space"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.sendToSpace",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-w9-space",
+            "messageId": "client-w9-space"
+          },
+          "body": {
+            "text": "Deployment complete."
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-w9-space",
+        "clientMessageId": "client-w9-space"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.send-to-user-email.no-live-dm",
+    "description": "Plan a user-email direct message send without allowing a live DM operation.",
+    "operation": "messages.sendToUser",
+    "input": {
+      "email": "ada@example.com",
+      "text": "Your report is ready.",
+      "authMode": "app",
+      "requestId": "req-w9-dm-send",
+      "clientMessageId": "client-w9-dm-send"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.sendToUser",
+      "dryRun": true,
+      "capability": {
+        "ok": false,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": [
+          "Direct-message live sends are disabled by W9 safety policy; this plan is dry-run only."
+        ]
+      },
+      "requests": [
+        {
+          "resource": "spaces.findDirectMessage",
+          "method": "GET",
+          "path": "/v1/spaces:findDirectMessage",
+          "query": {
+            "name": "users/ada@example.com"
+          },
+          "body": null
+        },
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/{resolvedDirectMessageSpace}/messages",
+          "query": {
+            "requestId": "req-w9-dm-send",
+            "messageId": "client-w9-dm-send"
+          },
+          "body": {
+            "text": "Your report is ready."
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-w9-dm-send",
+        "clientMessageId": "client-w9-dm-send"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": true,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed.",
+          "Direct messages are planned only; W9 never executes DM operations."
+        ]
+      },
+      "warnings": [
+        "Direct message targets must be explicitly approved in a live smoke harness."
+      ]
+    }
+  },
+  {
+    "id": "messages.find-or-setup-dm.no-live-dm",
+    "description": "Plan find/setup DM operations without executing direct-message calls.",
+    "operation": "messages.findOrSetupDm",
+    "input": {
+      "email": "ada@example.com",
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.findOrSetupDm",
+      "dryRun": true,
+      "capability": {
+        "ok": false,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": [
+          "Direct-message setup is disabled by W9 safety policy; this plan is dry-run only."
+        ]
+      },
+      "requests": [
+        {
+          "resource": "spaces.findDirectMessage",
+          "method": "GET",
+          "path": "/v1/spaces:findDirectMessage",
+          "query": {
+            "name": "users/ada@example.com"
+          },
+          "body": null
+        },
+        {
+          "resource": "spaces.setup",
+          "method": "POST",
+          "path": "/v1/spaces:setup",
+          "query": {},
+          "body": {
+            "spaceType": "DIRECT_MESSAGE",
+            "memberships": [
+              {
+                "member": {
+                  "name": "users/ada@example.com",
+                  "type": "HUMAN"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": true,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed.",
+          "Direct messages are planned only; W9 never executes DM operations."
+        ]
+      },
+      "warnings": [
+        "Direct message setup must not run against real users from W9."
+      ]
+    }
+  },
+  {
+    "id": "messages.reply-in-current-thread.dry-run",
+    "description": "Plan a threaded reply from current event/thread context.",
+    "operation": "messages.replyInThread",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/thread-1",
+      "text": "Acknowledged.",
+      "authMode": "app",
+      "requestId": "req-w9-reply",
+      "clientMessageId": "client-w9-reply"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replyInThread",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-w9-reply",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "messageId": "client-w9-reply"
+          },
+          "body": {
+            "text": "Acknowledged.",
+            "thread": {
+              "name": "spaces/AAA/threads/thread-1"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-w9-reply",
+        "clientMessageId": "client-w9-reply"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.start-thread.dry-run",
+    "description": "Plan a new thread with a stable client thread key.",
+    "operation": "messages.startThread",
+    "input": {
+      "space": "spaces/AAA",
+      "threadKey": "deploy-2026-06-29",
+      "text": "Starting deployment thread.",
+      "authMode": "app",
+      "requestId": "req-w9-start",
+      "clientMessageId": "client-w9-start"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.startThread",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-w9-start",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+            "messageId": "client-w9-start"
+          },
+          "body": {
+            "text": "Starting deployment thread.",
+            "thread": {
+              "threadKey": "deploy-2026-06-29"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-w9-start",
+        "clientMessageId": "client-w9-start"
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.edit.update-mask",
+    "description": "Plan editing a message and generate the update mask from changed fields.",
+    "operation": "messages.edit",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "text": "Edited text.",
+      "cardsV2": [
+        {
+          "cardId": "summary"
+        }
+      ],
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.edit",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/BBB",
+          "query": {
+            "updateMask": "text,cardsV2"
+          },
+          "body": {
+            "text": "Edited text.",
+            "cardsV2": [
+              {
+                "cardId": "summary"
+              }
+            ]
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.delete-app-created.dry-run",
+    "description": "Plan deleting an app-created message only.",
+    "operation": "messages.deleteAppMessage",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "appCreated": true,
+      "authMode": "app"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.deleteAppMessage",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.delete",
+          "method": "DELETE",
+          "path": "/v1/spaces/AAA/messages/BBB",
+          "query": {},
+          "body": null
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.stream.create-plus-patch",
+    "description": "Plan model streaming as one create followed by throttled patch calls.",
+    "operation": "messages.stream",
+    "input": {
+      "space": "spaces/AAA",
+      "message": "spaces/AAA/messages/client-stream-1",
+      "initialText": "Thinking...",
+      "patchTexts": [
+        "First token batch",
+        "Second token batch",
+        "Final answer"
+      ],
+      "authMode": "app",
+      "requestId": "req-w9-stream",
+      "clientMessageId": "client-stream-1",
+      "throttleMs": 750
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.stream",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-w9-stream",
+            "messageId": "client-stream-1"
+          },
+          "body": {
+            "text": "Thinking..."
+          }
+        },
+        {
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/client-stream-1",
+          "query": {
+            "updateMask": "text"
+          },
+          "body": {
+            "text": "First token batch"
+          },
+          "throttle": {
+            "minDelayMs": 750,
+            "final": false
+          }
+        },
+        {
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/client-stream-1",
+          "query": {
+            "updateMask": "text"
+          },
+          "body": {
+            "text": "Second token batch"
+          },
+          "throttle": {
+            "minDelayMs": 750,
+            "final": false
+          }
+        },
+        {
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/client-stream-1",
+          "query": {
+            "updateMask": "text"
+          },
+          "body": {
+            "text": "Final answer"
+          },
+          "throttle": {
+            "minDelayMs": 0,
+            "final": true
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-w9-stream",
+        "clientMessageId": "client-stream-1"
+      },
+      "streaming": {
+        "strategy": "create-then-patch",
+        "throttleMs": 750,
+        "patchCount": 3
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.placeholder.create.threaded",
+    "description": "Plan an immediate placeholder response in the current thread and return an edit handle seed.",
+    "operation": "messages.placeholder.create",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/T1",
+      "placeholderText": "Thinking...",
+      "authMode": "app",
+      "requestId": "req-placeholder",
+      "clientMessageId": "client-placeholder",
+      "correlationId": "event-123"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.placeholder.create",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-placeholder",
+            "messageId": "client-placeholder",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "body": {
+            "text": "Thinking...",
+            "thread": {
+              "name": "spaces/AAA/threads/T1"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-placeholder",
+        "clientMessageId": "client-placeholder"
+      },
+      "placeholder": {
+        "strategy": "create-then-edit",
+        "state": "pending",
+        "systemNotes": [
+          "System Note: A placeholder response will be posted immediately and later edited with the final answer."
+        ],
+        "textSelection": {
+          "kind": "chat.placeholder_text_selection",
+          "text": "Thinking...",
+          "mode": "first",
+          "index": 0,
+          "count": 1,
+          "source": "placeholderText",
+          "nextCursor": null,
+          "randomSeed": null,
+          "warnings": []
+        },
+        "handle": {
+          "kind": "chat.placeholder_response_handle",
+          "space": "spaces/AAA",
+          "messageName": null,
+          "threadName": "spaces/AAA/threads/T1",
+          "threadKey": null,
+          "requestId": "req-placeholder",
+          "clientMessageId": "client-placeholder",
+          "correlationId": "event-123",
+          "authMode": "app",
+          "createdAt": null,
+          "editable": false,
+          "allowedUpdateMasks": [
+            "text",
+            "cardsV2",
+            "accessoryWidgets"
+          ]
+        }
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.placeholder.create.configured-round-robin",
+    "description": "Plan an immediate placeholder response from an admin-configured JSON text pool.",
+    "operation": "messages.placeholder.create",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/T1",
+      "placeholderConfigJson": "{\"texts\":[\"One\",\"Two\",\"Three\"],\"mode\":\"roundRobin\",\"cursor\":4}",
+      "authMode": "app",
+      "requestId": "req-placeholder-config",
+      "clientMessageId": "client-placeholder-config",
+      "correlationId": "event-123"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.placeholder.create",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-placeholder-config",
+            "messageId": "client-placeholder-config",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "body": {
+            "text": "Two",
+            "thread": {
+              "name": "spaces/AAA/threads/T1"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-placeholder-config",
+        "clientMessageId": "client-placeholder-config"
+      },
+      "placeholder": {
+        "strategy": "create-then-edit",
+        "state": "pending",
+        "systemNotes": [
+          "System Note: A placeholder response will be posted immediately and later edited with the final answer."
+        ],
+        "textSelection": {
+          "kind": "chat.placeholder_text_selection",
+          "text": "Two",
+          "mode": "roundRobin",
+          "index": 1,
+          "count": 3,
+          "source": "placeholderConfigJson",
+          "nextCursor": 5,
+          "randomSeed": null,
+          "warnings": []
+        },
+        "handle": {
+          "kind": "chat.placeholder_response_handle",
+          "space": "spaces/AAA",
+          "messageName": null,
+          "threadName": "spaces/AAA/threads/T1",
+          "threadKey": null,
+          "requestId": "req-placeholder-config",
+          "clientMessageId": "client-placeholder-config",
+          "correlationId": "event-123",
+          "authMode": "app",
+          "createdAt": null,
+          "editable": false,
+          "allowedUpdateMasks": [
+            "text",
+            "cardsV2",
+            "accessoryWidgets"
+          ]
+        }
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.placeholder.complete.text-and-card",
+    "description": "Plan final response delivery by patching the placeholder message instead of creating a second reply.",
+    "operation": "messages.placeholder.complete",
+    "input": {
+      "handle": {
+        "kind": "chat.placeholder_response_handle",
+        "space": "spaces/AAA",
+        "messageName": "spaces/AAA/messages/placeholder",
+        "threadName": "spaces/AAA/threads/T1",
+        "threadKey": null,
+        "requestId": "req-placeholder",
+        "clientMessageId": "client-placeholder",
+        "correlationId": "event-123",
+        "authMode": "app",
+        "createdAt": "2026-07-04T00:00:00Z",
+        "editable": true,
+        "allowedUpdateMasks": [
+          "text",
+          "cardsV2",
+          "accessoryWidgets"
+        ]
+      },
+      "text": "Final answer",
+      "cardsV2": [
+        {
+          "cardId": "sources"
+        }
+      ]
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.placeholder.complete",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.patch",
+          "method": "PATCH",
+          "path": "/v1/spaces/AAA/messages/placeholder",
+          "query": {
+            "updateMask": "text,cardsV2"
+          },
+          "body": {
+            "text": "Final answer",
+            "cardsV2": [
+              {
+                "cardId": "sources"
+              }
+            ]
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-placeholder",
+        "clientMessageId": "client-placeholder"
+      },
+      "placeholder": {
+        "strategy": "edit-placeholder",
+        "state": "complete",
+        "updateMask": "text,cardsV2",
+        "handle": {
+          "kind": "chat.placeholder_response_handle",
+          "space": "spaces/AAA",
+          "messageName": "spaces/AAA/messages/placeholder",
+          "threadName": "spaces/AAA/threads/T1",
+          "threadKey": null,
+          "requestId": "req-placeholder",
+          "clientMessageId": "client-placeholder",
+          "correlationId": "event-123",
+          "authMode": "app",
+          "createdAt": "2026-07-04T00:00:00Z",
+          "editable": true,
+          "allowedUpdateMasks": [
+            "text",
+            "cardsV2",
+            "accessoryWidgets"
+          ]
+        },
+        "fallback": {
+          "onPatchFailure": "throw",
+          "request": null
+        },
+        "systemNotes": [
+          "System Note: The final response should edit the placeholder message instead of creating a second Chat message."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.async.placeholder-queue",
+    "description": "Plan production async response handoff with placeholder creation, hydrated reply handle, and queue-safe task envelope.",
+    "operation": "messages.async.plan",
+    "input": {
+      "space": "spaces/AAA",
+      "thread": "spaces/AAA/threads/T1",
+      "eventId": "event-123",
+      "correlationId": "event-123",
+      "authMode": "app",
+      "expectedWorkMs": 45000,
+      "receivedAt": "2026-07-04T00:00:00.000Z",
+      "now": "2026-07-04T00:00:03.000Z",
+      "respondWithPlaceholder": true,
+      "placeholderText": "Thinking...",
+      "requestId": "req-async-placeholder",
+      "clientMessageId": "client-async-placeholder",
+      "createdMessage": {
+        "name": "spaces/AAA/messages/placeholder",
+        "createTime": "2026-07-04T00:00:03.500Z",
+        "thread": {
+          "name": "spaces/AAA/threads/T1"
+        }
+      },
+      "queue": {
+        "adapter": "cloudTasks",
+        "target": "projects/p/locations/us-central1/queues/chat-ai"
+      },
+      "payloadRef": "gs://chat-ai-sdk/tasks/event-123.json"
+    },
+    "expect": {
+      "kind": "chat.async_response_plan",
+      "status": "defer",
+      "strategy": "placeholder_then_queue",
+      "deadline": {
+        "syncDeadlineMs": 30000,
+        "safetyMarginMs": 5000,
+        "elapsedMs": 3000,
+        "remainingMs": 27000,
+        "workBudgetMs": 22000,
+        "expectedWorkMs": 45000,
+        "shouldDefer": true,
+        "reason": "expected_work_exceeds_sync_budget"
+      },
+      "idempotency": {
+        "idempotencyKey": "chat-event:event-123",
+        "duplicateStrategy": "guard_before_placeholder",
+        "replaySafe": true
+      },
+      "placeholderPlan": {
+        "kind": "chat.call_plan",
+        "operation": "messages.placeholder.create",
+        "dryRun": true,
+        "capability": {
+          "ok": true,
+          "authMode": "app",
+          "requiredScopes": [
+            "https://www.googleapis.com/auth/chat.bot"
+          ],
+          "reasons": []
+        },
+        "requests": [
+          {
+            "resource": "spaces.messages.create",
+            "method": "POST",
+            "path": "/v1/spaces/AAA/messages",
+            "query": {
+              "requestId": "req-async-placeholder",
+              "messageId": "client-async-placeholder",
+              "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            },
+            "body": {
+              "text": "Thinking...",
+              "thread": {
+                "name": "spaces/AAA/threads/T1"
+              }
+            }
+          }
+        ],
+        "idempotency": {
+          "requestId": "req-async-placeholder",
+          "clientMessageId": "client-async-placeholder"
+        },
+        "placeholder": {
+          "strategy": "create-then-edit",
+          "state": "pending",
+          "systemNotes": [
+            "System Note: A placeholder response will be posted immediately and later edited with the final answer."
+          ],
+          "textSelection": {
+            "kind": "chat.placeholder_text_selection",
+            "text": "Thinking...",
+            "mode": "first",
+            "index": 0,
+            "count": 1,
+            "source": "placeholderText",
+            "nextCursor": null,
+            "randomSeed": null,
+            "warnings": []
+          },
+          "handle": {
+            "kind": "chat.placeholder_response_handle",
+            "space": "spaces/AAA",
+            "messageName": null,
+            "threadName": "spaces/AAA/threads/T1",
+            "threadKey": null,
+            "requestId": "req-async-placeholder",
+            "clientMessageId": "client-async-placeholder",
+            "correlationId": "event-123",
+            "authMode": "app",
+            "createdAt": null,
+            "editable": false,
+            "allowedUpdateMasks": [
+              "text",
+              "cardsV2",
+              "accessoryWidgets"
+            ]
+          }
+        },
+        "safety": {
+          "liveAllowed": false,
+          "directMessage": false,
+          "notes": [
+            "Dry run only; no Google Chat API call was executed."
+          ]
+        },
+        "warnings": []
+      },
+      "replyHandle": {
+        "kind": "chat.placeholder_response_handle",
+        "space": "spaces/AAA",
+        "messageName": "spaces/AAA/messages/placeholder",
+        "threadName": "spaces/AAA/threads/T1",
+        "threadKey": null,
+        "requestId": "req-async-placeholder",
+        "clientMessageId": "client-async-placeholder",
+        "correlationId": "event-123",
+        "authMode": "app",
+        "createdAt": "2026-07-04T00:00:03.500Z",
+        "editable": true,
+        "allowedUpdateMasks": [
+          "text",
+          "cardsV2",
+          "accessoryWidgets"
+        ]
+      },
+      "queue": {
+        "adapter": "cloudTasks",
+        "target": "projects/p/locations/us-central1/queues/chat-ai",
+        "status": "planned",
+        "task": {
+          "kind": "chat.async_response_task",
+          "taskId": "task-event-123",
+          "eventId": "event-123",
+          "correlationId": "event-123",
+          "idempotencyKey": "chat-event:event-123",
+          "authMode": "app",
+          "space": "spaces/AAA",
+          "payloadRef": "gs://chat-ai-sdk/tasks/event-123.json",
+          "replyHandle": {
+            "kind": "chat.placeholder_response_handle",
+            "space": "spaces/AAA",
+            "messageName": "spaces/AAA/messages/placeholder",
+            "threadName": "spaces/AAA/threads/T1",
+            "threadKey": null,
+            "requestId": "req-async-placeholder",
+            "clientMessageId": "client-async-placeholder",
+            "correlationId": "event-123",
+            "authMode": "app",
+            "createdAt": "2026-07-04T00:00:03.500Z",
+            "editable": true,
+            "allowedUpdateMasks": [
+              "text",
+              "cardsV2",
+              "accessoryWidgets"
+            ]
+          },
+          "requiresReplyHandleHydration": false,
+          "createdAt": "2026-07-04T00:00:03.000Z",
+          "deadlineMs": 30000,
+          "finalDelivery": {
+            "strategy": "edit_placeholder",
+            "successOperation": "messages.placeholder.complete",
+            "errorOperation": "messages.placeholder.complete",
+            "onPatchFailure": "createNewMessage"
+          }
+        },
+        "productionAdapters": [
+          {
+            "adapter": "cloudTasks",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "bullmq",
+            "language": "node",
+            "status": "planned"
+          },
+          {
+            "adapter": "pubsub",
+            "language": "node-python",
+            "status": "planned"
+          },
+          {
+            "adapter": "celery",
+            "language": "python",
+            "status": "planned"
+          }
+        ]
+      },
+      "completion": {
+        "successOperation": "messages.placeholder.complete",
+        "errorOperation": "messages.placeholder.complete",
+        "finalDeliveryStrategy": "edit_placeholder",
+        "errorText": "Sorry, something went wrong while preparing the response."
+      },
+      "systemNotes": [
+        "System Note: This interaction should respond with a placeholder immediately and enqueue final AI work.",
+        "System Note: The queued worker should edit spaces/AAA/messages/placeholder instead of creating a second final-answer message."
+      ]
+    }
+  },
+  {
+    "id": "messages.reply-to-event.room-top-level-thread-key",
+    "description": "Plan a reply to a top-level room event using the default mimic policy and stable threadKey fallback.",
+    "operation": "messages.replyToEvent",
+    "input": {
+      "event": {
+        "kind": "message.mentioned_app",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "ref": {
+            "name": "spaces/AAA/messages/ROOT"
+          },
+          "state": {
+            "threadReply": false,
+            "directMessage": false
+          }
+        }
+      },
+      "text": "Answer in a thread.",
+      "requestId": "req-reply-top-level",
+      "clientMessageId": "client-reply-top-level"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replyToEvent",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-reply-top-level",
+            "messageId": "client-reply-top-level",
+            "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          },
+          "body": {
+            "text": "Answer in a thread.",
+            "thread": {
+              "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root"
+            }
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-reply-top-level",
+        "clientMessageId": "client-reply-top-level"
+      },
+      "replyTarget": {
+        "kind": "chat.reply_target",
+        "status": "ready",
+        "source": "event",
+        "policy": {
+          "strategy": "mimic",
+          "dm": "topLevel",
+          "roomTopLevel": "thread",
+          "roomThreadReply": "thread",
+          "missingThread": "threadKey",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+        },
+        "conversation": "space",
+        "route": "thread",
+        "space": "spaces/AAA",
+        "threadName": null,
+        "threadKey": "chat-ai-sdk-reply-spaces-aaa-messages-root",
+        "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",
+        "reason": "room_top_level_thread_key",
+        "warnings": [
+          "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+        ],
+        "systemNotes": [
+          "System Note: Reply routing selected a thread reply target."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "Event did not include a thread name; using a stable threadKey derived from the triggering message."
+      ]
+    }
+  },
+  {
+    "id": "messages.reply-to-event.force-top-level",
+    "description": "Plan a reply to a thread event while overriding the policy to a top-level message.",
+    "operation": "messages.replyToEvent",
+    "input": {
+      "event": {
+        "kind": "message.thread_reply",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "thread": {
+            "name": "spaces/AAA/threads/T1"
+          },
+          "state": {
+            "threadReply": true,
+            "directMessage": false
+          }
+        }
+      },
+      "text": "Answer at top level.",
+      "requestId": "req-reply-top",
+      "clientMessageId": "client-reply-top",
+      "replyRouting": {
+        "strategy": "topLevel"
+      }
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replyToEvent",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-reply-top",
+            "messageId": "client-reply-top"
+          },
+          "body": {
+            "text": "Answer at top level."
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-reply-top",
+        "clientMessageId": "client-reply-top"
+      },
+      "replyTarget": {
+        "kind": "chat.reply_target",
+        "status": "ready",
+        "source": "event",
+        "policy": {
+          "strategy": "topLevel",
+          "dm": "topLevel",
+          "roomTopLevel": "thread",
+          "roomThreadReply": "thread",
+          "missingThread": "threadKey",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+        },
+        "conversation": "space",
+        "route": "topLevel",
+        "space": "spaces/AAA",
+        "threadName": null,
+        "threadKey": null,
+        "messageReplyOption": null,
+        "reason": "forced_top_level",
+        "warnings": [],
+        "systemNotes": [
+          "System Note: Reply routing selected a top-level message target."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.reply-to-event.room-top-level-thread-name-override",
+    "description": "Treat a root room message with a thread name as a top-level invocation when threadReply is false.",
+    "operation": "messages.replyToEvent",
+    "input": {
+      "event": {
+        "kind": "message.mentioned_app",
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM"
+        },
+        "message": {
+          "thread": {
+            "name": "spaces/AAA/threads/ROOT"
+          },
+          "state": {
+            "threadReply": false,
+            "directMessage": false
+          }
+        }
+      },
+      "text": "Answer at top level from root thread.",
+      "requestId": "req-reply-root-top",
+      "clientMessageId": "client-reply-root-top",
+      "replyRouting": {
+        "roomTopLevel": "topLevel",
+        "roomThreadReply": "thread"
+      }
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replyToEvent",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.create",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages",
+          "query": {
+            "requestId": "req-reply-root-top",
+            "messageId": "client-reply-root-top"
+          },
+          "body": {
+            "text": "Answer at top level from root thread."
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": "req-reply-root-top",
+        "clientMessageId": "client-reply-root-top"
+      },
+      "replyTarget": {
+        "kind": "chat.reply_target",
+        "status": "ready",
+        "source": "event",
+        "policy": {
+          "strategy": "mimic",
+          "dm": "topLevel",
+          "roomTopLevel": "topLevel",
+          "roomThreadReply": "thread",
+          "missingThread": "threadKey",
+          "messageReplyOption": "REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+        },
+        "conversation": "space",
+        "route": "topLevel",
+        "space": "spaces/AAA",
+        "threadName": null,
+        "threadKey": null,
+        "messageReplyOption": null,
+        "reason": "room_top_level_top_level",
+        "warnings": [],
+        "systemNotes": [
+          "System Note: Reply routing selected a top-level message target."
+        ]
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
+    }
+  }
+]

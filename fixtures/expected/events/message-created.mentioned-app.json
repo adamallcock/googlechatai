@@ -1,0 +1,222 @@
+{
+  "eventId": "fixture:MESSAGE:spaces/AAA/messages/MENTIONED_APP:2026-06-29T18:09:00Z",
+  "receivedAt": "2026-06-29T18:09:00Z",
+  "source": "fixture",
+  "kind": "message.mentioned_app",
+  "rawKind": "MESSAGE",
+  "actor": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "type": "HUMAN",
+    "isApp": false,
+    "access": {
+      "status": "available",
+      "reason": null
+    }
+  },
+  "actorState": {
+    "status": "available",
+    "reason": null
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": null,
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/MENTIONED_APP"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": null,
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/123",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:09:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "state": {
+      "deleted": false,
+      "private": false,
+      "threadReply": false,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "<users/app> help me summarize",
+    "formattedText": null,
+    "argumentText": "help me summarize",
+    "segments": [
+      {
+        "kind": "userMention",
+        "startIndex": 0,
+        "length": 11,
+        "text": "@Google Chat AI SDK Dev",
+        "sourceText": "<users/app>",
+        "annotationIndex": 0
+      },
+      {
+        "kind": "text",
+        "startIndex": 11,
+        "length": 18,
+        "text": " help me summarize"
+      }
+    ],
+    "annotations": [
+      {
+        "kind": "userMention",
+        "startIndex": 0,
+        "length": 11,
+        "text": "<users/app>",
+        "renderText": "@Google Chat AI SDK Dev",
+        "user": {
+          "displayName": "Google Chat AI SDK Dev",
+          "email": null,
+          "resourceName": "users/app",
+          "type": "BOT",
+          "accessState": "available",
+          "ambiguityState": "unambiguous"
+        },
+        "mentionType": "MENTION"
+      }
+    ],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/MENTIONED_APP from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:09:00Z."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/MENTIONED_APP"
+      },
+      "sender": {
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "resourceName": "users/123",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "createdAt": "2026-06-29T18:09:00Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "accessState": "available",
+      "text": "@Google Chat AI SDK Dev help me summarize",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/MENTIONED_APP from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:09:00Z."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/MENTIONED_APP from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:09:00Z.\n@Google Chat AI SDK Dev help me summarize"
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/MENTIONED_APP from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:09:00Z.\n@Google Chat AI SDK Dev help me summarize"
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "sync"
+  },
+  "capabilities": {
+    "canRespondSynchronously": true,
+    "canRespondAsynchronously": true,
+    "canReplyInThread": false,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": false,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": false,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": []
+  },
+  "transport": {
+    "kind": "direct",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": null,
+    "workspaceEventType": null,
+    "workspaceEventSource": null,
+    "workspaceEventSubject": null
+  },
+  "idempotencyKey": "fixture:MESSAGE:spaces/AAA/messages/MENTIONED_APP:2026-06-29T18:09:00Z",
+  "raw": {
+    "type": "MESSAGE",
+    "eventTime": "2026-06-29T18:09:00Z",
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "user": {
+      "name": "users/123",
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "type": "HUMAN"
+    },
+    "message": {
+      "name": "spaces/AAA/messages/MENTIONED_APP",
+      "text": "<users/app> help me summarize",
+      "argumentText": "help me summarize",
+      "createTime": "2026-06-29T18:09:00Z",
+      "sender": {
+        "name": "users/123",
+        "displayName": "Ada Lovelace",
+        "email": "ada@example.com",
+        "type": "HUMAN"
+      },
+      "space": {
+        "name": "spaces/AAA",
+        "type": "ROOM",
+        "displayName": "Engineering"
+      },
+      "annotations": [
+        {
+          "type": "USER_MENTION",
+          "startIndex": 0,
+          "length": 11,
+          "userMention": {
+            "user": {
+              "name": "users/app",
+              "displayName": "Google Chat AI SDK Dev",
+              "type": "BOT"
+            },
+            "type": "MENTION"
+          }
+        }
+      ]
+    }
+  }
+}

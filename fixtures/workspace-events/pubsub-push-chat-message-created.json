@@ -1,0 +1,19 @@
+{
+  "message": {
+    "attributes": {
+      "ce-id": "workspace-events-chat-message-created-1",
+      "ce-source": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+      "ce-specversion": "1.0",
+      "ce-type": "google.workspace.chat.message.v1.created",
+      "ce-time": "2026-06-29T19:00:01Z",
+      "ce-subject": "//chat.googleapis.com/spaces/AAA/messages/CCC",
+      "content-type": "application/json",
+      "synthetic": "true"
+    },
+    "data": "eyJtZXNzYWdlIjp7Im5hbWUiOiJzcGFjZXMvQUFBL21lc3NhZ2VzL0NDQyIsInNlbmRlciI6eyJuYW1lIjoidXNlcnMvNDU2IiwiZGlzcGxheU5hbWUiOiJHcmFjZSBIb3BwZXIiLCJ0eXBlIjoiSFVNQU4ifSwiY3JlYXRlVGltZSI6IjIwMjYtMDYtMjlUMTk6MDA6MDBaIiwidGV4dCI6IlNoaXAgVzExIiwidGhyZWFkIjp7Im5hbWUiOiJzcGFjZXMvQUFBL3RocmVhZHMvdGhyZWFkLTIifSwic3BhY2UiOnsibmFtZSI6InNwYWNlcy9BQUEiLCJkaXNwbGF5TmFtZSI6IkVuZ2luZWVyaW5nIiwidHlwZSI6IlJPT00ifSwiYXJndW1lbnRUZXh0IjoiU2hpcCBXMTEifX0=",
+    "messageId": "pubsub-message-1",
+    "orderingKey": "//workspaceevents.googleapis.com/subscriptions/chat-spaces-dev",
+    "publishTime": "2026-06-29T19:00:02Z"
+  },
+  "subscription": "projects/chat-ai-sdk/subscriptions/chat-ai-sdk-workspace-events-dev-push"
+}

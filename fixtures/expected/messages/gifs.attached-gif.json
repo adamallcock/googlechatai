@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/GIF"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:10:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "Here is the launch gif",
+  "formattedText": "Here is the launch gif",
+  "argumentText": "Here is the launch gif",
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 22,
+      "text": "Here is the launch gif"
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [
+    {
+      "uri": "https://tenor.googleapis.com/v2/featured?gif=launch"
+    }
+  ],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/GIF from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:10:00Z."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/GIF"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/111",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:10:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "Here is the launch gif",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/GIF from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:10:00Z."
+    ],
+    "children": [
+      {
+        "kind": "gif",
+        "relationship": "attachment",
+        "uri": "https://tenor.googleapis.com/v2/featured?gif=launch",
+        "accessState": "metadata_only",
+        "systemNotes": [
+          "System Note: The user attached a GIF: https://tenor.googleapis.com/v2/featured?gif=launch."
+        ],
+        "children": [],
+        "plainTextForModel": "System Note: The user attached a GIF: https://tenor.googleapis.com/v2/featured?gif=launch."
+      }
+    ],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/GIF from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:10:00Z.\nHere is the launch gif\nSystem Note: The user attached a GIF: https://tenor.googleapis.com/v2/featured?gif=launch."
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/GIF from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:10:00Z.\nHere is the launch gif\nSystem Note: The user attached a GIF: https://tenor.googleapis.com/v2/featured?gif=launch."
+}

@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": 403,
+    "status": "PERMISSION_DENIED",
+    "message": "The app cannot read messages before it was added."
+  }
+}

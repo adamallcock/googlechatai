@@ -1,0 +1,44 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-06-29T18:25:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/456",
+    "displayName": "Grace Hopper",
+    "email": "grace@example.com",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/attachment-1",
+    "text": "Please review the recording and brief.",
+    "formattedText": "Please review the recording and brief.",
+    "createTime": "2026-06-29T18:25:00Z",
+    "sender": {
+      "name": "users/456",
+      "displayName": "Grace Hopper",
+      "email": "grace@example.com",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "attachment": [
+      {
+        "name": "spaces/AAA/messages/attachment-1/attachments/audio-1",
+        "contentName": "standup.m4a",
+        "contentType": "audio/mp4",
+        "source": "UPLOADED_CONTENT",
+        "sizeBytes": 2100000,
+        "attachmentDataRef": {
+          "resourceName": "spaces/AAA/messages/attachment-1/attachments/audio-1/media"
+        }
+      }
+    ]
+  }
+}

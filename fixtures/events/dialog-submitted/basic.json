@@ -1,0 +1,35 @@
+{
+  "type": "DIALOG_SUBMITTED",
+  "dialogEventType": "SUBMIT_DIALOG",
+  "eventTime": "2026-06-29T18:11:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "action": {
+    "actionMethodName": "submit_runtime_settings",
+    "parameters": [
+      {
+        "key": "mode",
+        "value": "fixture"
+      }
+    ]
+  },
+  "common": {
+    "formInputs": {
+      "summary_length": {
+        "stringInputs": {
+          "value": [
+            "short"
+          ]
+        }
+      }
+    }
+  }
+}

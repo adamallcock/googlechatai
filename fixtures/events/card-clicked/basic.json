@@ -1,0 +1,41 @@
+{
+  "type": "CARD_CLICKED",
+  "eventTime": "2026-06-29T18:10:00Z",
+  "space": {
+    "name": "spaces/AAA",
+    "type": "ROOM",
+    "displayName": "Engineering"
+  },
+  "user": {
+    "name": "users/123",
+    "displayName": "Ada Lovelace",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/AAA/messages/card-1",
+    "text": "",
+    "createTime": "2026-06-29T18:09:30Z",
+    "sender": {
+      "name": "users/app",
+      "displayName": "Runtime Bot",
+      "type": "BOT"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "type": "ROOM",
+      "displayName": "Engineering"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    }
+  },
+  "action": {
+    "actionMethodName": "approve_deploy",
+    "parameters": [
+      {
+        "key": "environment",
+        "value": "staging"
+      }
+    ]
+  }
+}

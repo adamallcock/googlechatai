@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/googlechatai/messages.schema.json",
+  "title": "Normalized Google Chat Message AST",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "ref",
+    "sender",
+    "createdAt",
+    "state",
+    "text",
+    "segments",
+    "annotations",
+    "links",
+    "attachments",
+    "attachedGifs",
+    "cards",
+    "reactions",
+    "systemNotes",
+    "contextNode",
+    "plainTextForModel"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": { "const": "message-ast.v1" },
+    "ref": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" }
+      }
+    },
+    "space": { "$ref": "#/$defs/spaceRef" },
+    "thread": { "$ref": "#/$defs/threadRef" },
+    "sender": { "$ref": "identity.schema.json#/$defs/identityOrNull" },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] },
+    "deletedAt": { "type": ["string", "null"] },
+    "state": {
+      "type": "object",
+      "required": ["deleted", "private", "threadReply", "directMessage"],
+      "additionalProperties": false,
+      "properties": {
+        "deleted": { "type": "boolean" },
+        "private": { "type": "boolean" },
+        "threadReply": { "type": "boolean" },
+        "directMessage": { "type": "boolean" }
+      }
+    },
+    "privateMessageViewer": { "$ref": "identity.schema.json#/$defs/identityOrNull" },
+    "text": { "type": "string" },
+    "formattedText": { "type": ["string", "null"] },
+    "argumentText": { "type": ["string", "null"] },
+    "segments": { "type": "array", "items": { "$ref": "#/$defs/segment" } },
+    "annotations": { "type": "array", "items": { "$ref": "#/$defs/annotation" } },
+    "links": { "type": "array", "items": { "$ref": "#/$defs/link" } },
+    "slashCommand": { "type": ["object", "null"] },
+    "customEmojis": { "type": "array" },
+    "attachments": { "type": "array", "items": { "$ref": "#/$defs/attachment" } },
+    "attachedGifs": { "type": "array", "items": { "$ref": "#/$defs/gif" } },
+    "cards": { "type": "array", "items": { "$ref": "#/$defs/card" } },
+    "reactions": { "type": "array", "items": { "$ref": "#/$defs/reaction" } },
+    "systemNotes": { "type": "array", "items": { "type": "string" } },
+    "contextNode": { "$ref": "context.schema.json#/$defs/contextNode" },
+    "plainTextForModel": { "type": "string" }
+  },
+  "$defs": {
+    "spaceRef": {
+      "type": ["object", "null"],
+      "required": ["name", "displayName", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "displayName": { "type": ["string", "null"] },
+        "type": { "type": ["string", "null"] }
+      }
+    },
+    "threadRef": {
+      "type": ["object", "null"],
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" }
+      }
+    },
+    "segment": {
+      "type": "object",
+      "required": ["kind", "startIndex", "length", "text"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "type": "string" },
+        "startIndex": { "type": "number" },
+        "length": { "type": "number" },
+        "text": { "type": "string" },
+        "sourceText": { "type": "string" },
+        "annotationIndex": { "type": "number" }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "required": ["kind", "startIndex", "length", "text", "renderText"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["userMention", "slashCommand", "customEmoji", "richLink", "unknown"]
+        },
+        "startIndex": { "type": ["number", "null"] },
+        "length": { "type": ["number", "null"] },
+        "text": { "type": "string" },
+        "renderText": { "type": "string" }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["kind", "url", "startIndex", "length", "text"],
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "type": "string", "enum": ["matchedUrl", "richLink"] },
+        "url": { "type": ["string", "null"] },
+        "startIndex": { "type": ["number", "null"] },
+        "length": { "type": ["number", "null"] },
+        "text": { "type": ["string", "null"] }
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "required": ["name", "contentName", "contentType", "source", "mediaResourceName"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "contentName": { "type": ["string", "null"] },
+        "contentType": { "type": ["string", "null"] },
+        "source": { "type": ["string", "null"] },
+        "mediaResourceName": { "type": ["string", "null"] }
+      }
+    },
+    "gif": {
+      "type": "object",
+      "required": ["uri"],
+      "additionalProperties": false,
+      "properties": {
+        "uri": { "type": "string" }
+      }
+    },
+    "card": {
+      "type": "object",
+      "required": ["cardId", "title"],
+      "additionalProperties": true,
+      "properties": {
+        "cardId": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] }
+      }
+    },
+    "reaction": {
+      "type": "object",
+      "required": ["emoji", "reactionCount"],
+      "additionalProperties": false,
+      "properties": {
+        "emoji": { "type": "object" },
+        "reactionCount": { "type": "number" }
+      }
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "eventId": "workspace_events:workspace-event-2",
+  "receivedAt": "2026-06-29T18:31:00Z",
+  "source": "workspace_events",
+  "kind": "message.deleted",
+  "rawKind": "google.workspace.chat.message.v1.deleted",
+  "actor": null,
+  "actorState": {
+    "status": "missing",
+    "reason": "workspace_event_missing_actor"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM",
+    "spaceType": null
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/thread-1"
+  },
+  "message": {
+    "schemaVersion": "message-ast.v1",
+    "ref": {
+      "name": "spaces/AAA/messages/DELETED"
+    },
+    "space": {
+      "name": "spaces/AAA",
+      "displayName": "Engineering",
+      "type": "ROOM"
+    },
+    "thread": {
+      "name": "spaces/AAA/threads/thread-1"
+    },
+    "sender": null,
+    "createdAt": null,
+    "updatedAt": null,
+    "deletedAt": "2026-06-29T18:31:00Z",
+    "state": {
+      "deleted": true,
+      "private": false,
+      "threadReply": true,
+      "directMessage": false
+    },
+    "privateMessageViewer": null,
+    "text": "",
+    "formattedText": null,
+    "argumentText": null,
+    "segments": [],
+    "annotations": [],
+    "links": [],
+    "slashCommand": null,
+    "customEmojis": [],
+    "attachments": [],
+    "attachedGifs": [],
+    "cards": [],
+    "reactions": [],
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/DELETED from Unknown sender (unknown access) created at unknown time.",
+      "System Note: Message was deleted at 2026-06-29T18:31:00Z (USER_DELETED).",
+      "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    ],
+    "contextNode": {
+      "kind": "message",
+      "relationship": "root",
+      "ref": {
+        "name": "spaces/AAA/messages/DELETED"
+      },
+      "sender": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "deletedAt": "2026-06-29T18:31:00Z",
+      "accessState": "deleted",
+      "text": "",
+      "systemNotes": [
+        "System Note: Message spaces/AAA/messages/DELETED from Unknown sender (unknown access) created at unknown time.",
+        "System Note: Message was deleted at 2026-06-29T18:31:00Z (USER_DELETED).",
+        "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+      ],
+      "children": [],
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/DELETED from Unknown sender (unknown access) created at unknown time.\nSystem Note: Message was deleted at 2026-06-29T18:31:00Z (USER_DELETED).\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+    },
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/DELETED from Unknown sender (unknown access) created at unknown time.\nSystem Note: Message was deleted at 2026-06-29T18:31:00Z (USER_DELETED).\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1."
+  },
+  "action": null,
+  "dialog": null,
+  "membership": null,
+  "reaction": null,
+  "locale": null,
+  "timeZone": null,
+  "authContext": {
+    "authType": null,
+    "scopes": [],
+    "responseMode": "none"
+  },
+  "capabilities": {
+    "canRespondSynchronously": false,
+    "canRespondAsynchronously": false,
+    "canReplyInThread": true,
+    "canOpenDialog": false,
+    "canUpdateCard": false
+  },
+  "relationship": {
+    "isQuote": false,
+    "isDirectReply": false,
+    "isThreadReply": true,
+    "isCardAction": false,
+    "isReaction": false,
+    "isEdit": false,
+    "isDeletion": true,
+    "isMembershipEvent": false,
+    "isSpaceEvent": false,
+    "isUserAction": true,
+    "systemNotes": [
+      "A message in Engineering was deleted."
+    ]
+  },
+  "transport": {
+    "kind": "workspace_events",
+    "pubsubMessageId": null,
+    "pubsubPublishTime": null,
+    "pubsubSubscription": null,
+    "pubsubDeliveryAttempt": null,
+    "workspaceEventId": "workspace-event-2",
+    "workspaceEventType": "google.workspace.chat.message.v1.deleted",
+    "workspaceEventSource": "//chat.googleapis.com/spaces/AAA",
+    "workspaceEventSubject": "spaces/AAA/messages/DELETED"
+  },
+  "idempotencyKey": "workspace_events:workspace-event-2",
+  "raw": {
+    "specversion": "1.0",
+    "id": "workspace-event-2",
+    "source": "//chat.googleapis.com/spaces/AAA",
+    "type": "google.workspace.chat.message.v1.deleted",
+    "subject": "spaces/AAA/messages/DELETED",
+    "time": "2026-06-29T18:31:00Z",
+    "datacontenttype": "application/json",
+    "data": {
+      "message": {
+        "name": "spaces/AAA/messages/DELETED",
+        "deleteTime": "2026-06-29T18:31:00Z",
+        "deletionMetadata": {
+          "deletionType": "USER_DELETED"
+        },
+        "space": {
+          "name": "spaces/AAA",
+          "type": "ROOM",
+          "displayName": "Engineering"
+        },
+        "thread": {
+          "name": "spaces/AAA/threads/thread-1"
+        }
+      }
+    }
+  }
+}

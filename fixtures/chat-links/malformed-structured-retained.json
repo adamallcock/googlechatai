@@ -1,0 +1,21 @@
+{
+  "links": [
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/FALLBACK",
+      "title": "Malformed structured space",
+      "chatSpaceLinkData": {
+        "space": "spaces/B AD"
+      }
+    },
+    {
+      "kind": "richLink",
+      "url": "https://chat.google.com/room/EMPTY",
+      "title": "Empty structured metadata",
+      "chatSpaceLinkData": {}
+    }
+  ],
+  "options": {
+    "allowSpaceLevelContext": true
+  }
+}

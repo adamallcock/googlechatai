@@ -1,0 +1,23 @@
+{
+  "space": "spaces/EXAMPLE_SMOKE_SPACE",
+  "displayName": "Google Chat AI SDK Smoke Example",
+  "spaceType": "SPACE",
+  "customer": "customers/my_customer",
+  "purpose": "Template for a dedicated Google Chat live-smoke test space. Copy to chat-smoke-space.local.json and replace the placeholders with the real smoke space metadata.",
+  "safety": {
+    "dedicatedSmokeSpace": true,
+    "noDirectMessages": true,
+    "noRealUsersInvited": true
+  },
+  "allowedOperations": [
+    "spaces.list",
+    "spaces.get",
+    "spaces.create",
+    "spaces.delete",
+    "media.download",
+    "spaces.messages.list",
+    "spaces.messages.create",
+    "spaces.messages.patch",
+    "spaces.messages.delete"
+  ]
+}

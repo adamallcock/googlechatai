@@ -1,0 +1,171 @@
+{
+  "cards": [
+    {
+      "cardId": "rich.inventory",
+      "title": "Rich Widget Inventory",
+      "subtitle": "Cards V2",
+      "sections": [
+        {
+          "header": "Visuals",
+          "widgetCount": 5,
+          "text": [],
+          "fields": [],
+          "buttons": [],
+          "images": [
+            {
+              "altText": "Google Chat SDK avatar",
+              "imageUrl": "https://developers.google.com/workspace/chat/images/quickstart-app-avatar.png",
+              "openLink": "https://developers.google.com/workspace/chat"
+            }
+          ],
+          "dividers": 1,
+          "grids": [
+            {
+              "title": "Artifacts",
+              "columnCount": 2,
+              "items": [
+                {
+                  "id": "pdf",
+                  "title": "PDF",
+                  "subtitle": "Parsed",
+                  "imageAltText": "PDF icon"
+                },
+                {
+                  "id": "audio",
+                  "title": "Voice note",
+                  "subtitle": "Transcribed"
+                }
+              ],
+              "function": "open_artifact",
+              "parameters": {
+                "source": "grid"
+              }
+            }
+          ],
+          "columns": [
+            {
+              "columnCount": 2,
+              "columns": [
+                {
+                  "widgetCount": 1,
+                  "text": [],
+                  "fields": [
+                    {
+                      "label": "Owner",
+                      "text": "Ada Lovelace"
+                    }
+                  ],
+                  "buttons": []
+                },
+                {
+                  "widgetCount": 1,
+                  "text": [
+                    "Ready for review"
+                  ],
+                  "fields": [],
+                  "buttons": []
+                }
+              ]
+            }
+          ],
+          "carousels": [
+            {
+              "cardCount": 2,
+              "cards": [
+                {
+                  "widgets": {
+                    "widgetCount": 1,
+                    "text": [
+                      "First carousel panel"
+                    ],
+                    "fields": [],
+                    "buttons": []
+                  },
+                  "footer": {
+                    "widgetCount": 1,
+                    "text": [],
+                    "fields": [],
+                    "buttons": [
+                      {
+                        "text": "Open first",
+                        "openLink": "https://developers.google.com/workspace/chat",
+                        "parameters": {}
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widgets": {
+                    "widgetCount": 2,
+                    "text": [
+                      "Second carousel panel"
+                    ],
+                    "fields": [],
+                    "buttons": [],
+                    "images": [
+                      {
+                        "altText": "Carousel image",
+                        "imageUrl": "https://example.com/carousel.png"
+                      }
+                    ]
+                  },
+                  "footer": {
+                    "widgetCount": 1,
+                    "text": [],
+                    "fields": [],
+                    "buttons": [
+                      {
+                        "text": "Select second",
+                        "function": "select_carousel",
+                        "parameters": {
+                          "panel": "second"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "header": "Inputs",
+          "widgetCount": 3,
+          "text": [],
+          "fields": [
+            {
+              "name": "priority",
+              "label": "Priority",
+              "type": "DROPDOWN",
+              "selected": [
+                "High"
+              ]
+            }
+          ],
+          "buttons": [],
+          "dateTimePickers": [
+            {
+              "name": "due",
+              "label": "Due date",
+              "type": "DATE_ONLY",
+              "valueMsEpoch": "1783209600000"
+            }
+          ],
+          "chips": [
+            {
+              "text": "urgent"
+            },
+            {
+              "text": "research",
+              "function": "filter_tag",
+              "parameters": {
+                "tag": "research"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plainText": "Card rich.inventory: Rich Widget Inventory (Cards V2). Section Visuals. Images: Google Chat SDK avatar -> https://developers.google.com/workspace/chat. Dividers: 1. Grid Artifacts: PDF (Parsed); Voice note (Transcribed). Columns: column 1: Fields: Owner=Ada Lovelace.; column 2: Text: Ready for review. Carousel: card 1: Text: First carousel panel Footer: Buttons: Open first -> https://developers.google.com/workspace/chat; card 2: Text: Second carousel panel Images: Carousel image Footer: Buttons: Select second -> select_carousel(panel=second). Section Inputs. Fields: Priority=High. Date/time pickers: Due date DATE_ONLY=1783209600000. Chips: urgent; research -> filter_tag(tag=research)."
+}

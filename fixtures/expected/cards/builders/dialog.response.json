@@ -1,0 +1,74 @@
+{
+  "fallbackText": "Dialog requested: Review send settings. Fields: Summary, Risk, Send me a copy.",
+  "actionResponse": {
+    "type": "DIALOG",
+    "dialogAction": {
+      "dialog": {
+        "body": {
+          "sections": [
+            {
+              "widgets": [
+                {
+                  "textInput": {
+                    "name": "summary",
+                    "label": "Summary",
+                    "type": "MULTIPLE_LINE",
+                    "value": "Draft team update"
+                  }
+                },
+                {
+                  "selectionInput": {
+                    "name": "risk",
+                    "label": "Risk",
+                    "type": "DROPDOWN",
+                    "items": [
+                      {
+                        "text": "Low",
+                        "value": "low",
+                        "selected": true
+                      },
+                      {
+                        "text": "High",
+                        "value": "high"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "decoratedText": {
+                    "text": "Send me a copy",
+                    "switchControl": {
+                      "name": "send_copy",
+                      "selected": true,
+                      "controlType": "SWITCH"
+                    }
+                  }
+                },
+                {
+                  "buttonList": {
+                    "buttons": [
+                      {
+                        "text": "Submit",
+                        "onClick": {
+                          "action": {
+                            "function": "submit_review",
+                            "parameters": [
+                              {
+                                "key": "draftId",
+                                "value": "draft-17"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.30.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "googlechatai"
+version = "0.0.1"
+description = "Python package for the Google Chat AI SDK."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+  { name = "Adam Allcock" }
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/adamallcock/googlechatai"
+Repository = "https://github.com/adamallcock/googlechatai"
+Issues = "https://github.com/adamallcock/googlechatai/issues"
+
+[project.optional-dependencies]
+fastapi = [
+  "fastapi>=0.138.2,<0.139.0",
+  "uvicorn[standard]>=0.49.0,<0.50.0"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/googlechatai"]

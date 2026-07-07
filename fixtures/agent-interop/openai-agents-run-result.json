@@ -1,0 +1,57 @@
+{
+  "finalOutput": "The deploy is green.",
+  "lastAgent": {
+    "name": "Release agent"
+  },
+  "newItems": [
+    {
+      "type": "tool_call_item",
+      "rawItem": {
+        "call_id": "call_abc",
+        "name": "run_tests",
+        "arguments": "{\"suite\":\"smoke\"}"
+      }
+    },
+    {
+      "type": "tool_call_output_item",
+      "rawItem": {
+        "call_id": "call_abc",
+        "output": "12 tests passed"
+      }
+    },
+    {
+      "type": "reasoning_item",
+      "rawItem": {
+        "summary": [
+          {
+            "text": "Checked tests and deployment status."
+          }
+        ]
+      }
+    },
+    {
+      "type": "message_output_item",
+      "rawItem": {
+        "content": [
+          {
+            "type": "output_text",
+            "text": "The deploy is green."
+          }
+        ]
+      }
+    }
+  ],
+  "rawResponses": [
+    {
+      "usage": {
+        "input_tokens": 700,
+        "output_tokens": 130,
+        "total_tokens": 830,
+        "output_tokens_details": {
+          "reasoning_tokens": 30
+        }
+      }
+    }
+  ]
+}
+

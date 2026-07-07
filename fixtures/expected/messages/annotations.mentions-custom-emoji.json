@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/ANN"
+  },
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering",
+    "type": "ROOM"
+  },
+  "thread": null,
+  "sender": {
+    "displayName": "Ada Lovelace",
+    "email": "ada@example.com",
+    "resourceName": "users/111",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-06-29T18:01:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "Hi <users/222>, ship it :party_blob:",
+  "formattedText": "Hi <users/222>, ship it :party_blob:",
+  "argumentText": "Hi <users/222>, ship it :party_blob:",
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 3,
+      "text": "Hi "
+    },
+    {
+      "kind": "userMention",
+      "startIndex": 3,
+      "length": 11,
+      "text": "@Grace Hopper",
+      "sourceText": "<users/222>",
+      "annotationIndex": 0
+    },
+    {
+      "kind": "text",
+      "startIndex": 14,
+      "length": 10,
+      "text": ", ship it "
+    },
+    {
+      "kind": "customEmoji",
+      "startIndex": 24,
+      "length": 12,
+      "text": ":party_blob:",
+      "sourceText": ":party_blob:",
+      "annotationIndex": 1
+    }
+  ],
+  "annotations": [
+    {
+      "kind": "userMention",
+      "startIndex": 3,
+      "length": 11,
+      "text": "<users/222>",
+      "renderText": "@Grace Hopper",
+      "user": {
+        "displayName": "Grace Hopper",
+        "email": "grace@example.com",
+        "resourceName": "users/222",
+        "type": "HUMAN",
+        "accessState": "available",
+        "ambiguityState": "unambiguous"
+      },
+      "mentionType": "MENTION"
+    },
+    {
+      "kind": "customEmoji",
+      "startIndex": 24,
+      "length": 12,
+      "text": ":party_blob:",
+      "renderText": ":party_blob:",
+      "emoji": {
+        "name": "customEmojis/party_blob",
+        "emojiName": ":party_blob:",
+        "temporaryImageUri": "https://example.invalid/party_blob.png"
+      }
+    }
+  ],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [
+    {
+      "startIndex": 24,
+      "length": 12,
+      "text": ":party_blob:",
+      "renderText": ":party_blob:",
+      "emoji": {
+        "name": "customEmojis/party_blob",
+        "emojiName": ":party_blob:",
+        "temporaryImageUri": "https://example.invalid/party_blob.png"
+      }
+    }
+  ],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [
+    {
+      "emoji": {
+        "type": "unicode",
+        "label": "👍",
+        "unicode": "👍",
+        "customEmoji": null
+      },
+      "reactionCount": 2
+    }
+  ],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/ANN from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:01:00Z.",
+    "System Note: Custom emoji :party_blob: (customEmojis/party_blob) appears in this message.",
+    "System Note: 2 reactions with 👍."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/ANN"
+    },
+    "sender": {
+      "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
+      "resourceName": "users/111",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-06-29T18:01:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "Hi @Grace Hopper, ship it :party_blob:",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/ANN from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:01:00Z.",
+      "System Note: Custom emoji :party_blob: (customEmojis/party_blob) appears in this message.",
+      "System Note: 2 reactions with 👍."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/ANN from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:01:00Z.\nSystem Note: Custom emoji :party_blob: (customEmojis/party_blob) appears in this message.\nSystem Note: 2 reactions with 👍.\nHi @Grace Hopper, ship it :party_blob:"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/ANN from Ada Lovelace <ada@example.com> (HUMAN, users/111) created at 2026-06-29T18:01:00Z.\nSystem Note: Custom emoji :party_blob: (customEmojis/party_blob) appears in this message.\nSystem Note: 2 reactions with 👍.\nHi @Grace Hopper, ship it :party_blob:"
+}

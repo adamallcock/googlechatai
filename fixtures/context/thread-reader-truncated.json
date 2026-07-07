@@ -1,0 +1,36 @@
+{
+  "space": {
+    "name": "spaces/AAA",
+    "displayName": "Engineering"
+  },
+  "thread": {
+    "name": "spaces/AAA/threads/deploy"
+  },
+  "readOptions": {
+    "startTime": "2026-06-29T18:00:00Z",
+    "endTime": "2026-06-29T20:00:00Z",
+    "limit": 2,
+    "order": "oldest_first",
+    "pageToken": "page-2"
+  },
+  "messages": [
+    {
+      "name": "spaces/AAA/messages/1",
+      "senderDisplayName": "Ada Lovelace",
+      "createdAt": "2026-06-29T18:30:00Z",
+      "text": "Starting deploy thread."
+    },
+    {
+      "name": "spaces/AAA/messages/2",
+      "senderDisplayName": "Grace Hopper",
+      "createdAt": "2026-06-29T18:45:00Z",
+      "text": "Waiting on checks."
+    }
+  ],
+  "resultState": {
+    "partial": true,
+    "truncated": true,
+    "nextPageToken": "page-3",
+    "inaccessibleHistory": false
+  }
+}
