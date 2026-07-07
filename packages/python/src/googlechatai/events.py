@@ -5,7 +5,7 @@ from __future__ import annotations
 import base64
 import json
 from collections.abc import Mapping
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from .actions import normalize_action
@@ -591,7 +591,7 @@ def normalize_event(
         or _as_string(event.get("eventTime"))
         or _as_string(event.get("time"))
         or _as_string(transport.get("pubsubPublishTime"))
-        or datetime.fromtimestamp(0, UTC).isoformat().replace("+00:00", "Z")
+        or datetime.fromtimestamp(0, timezone.utc).isoformat().replace("+00:00", "Z")
     )
     resource_name = _resource_name_for(message, reaction, membership, space, action)
     event_id = _event_id_for(

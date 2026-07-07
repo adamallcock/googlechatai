@@ -1472,11 +1472,11 @@ This table maps the live discovery surface checked on 2026-06-29 to package modu
 | `spaces.messages.update` | `messages` | Full update compatibility, prefer patch where possible |
 | `spaces.spaceEvents.get` | `events` | Retrieve space event |
 | `spaces.spaceEvents.list` | `events` | Passive monitoring, checkpoints |
-| `users.availability.getAvailability` | `users` | Availability-aware workflows |
+| `users.availability.get` | `users` | Availability-aware workflows (renamed from `getAvailability` in discovery revision `20260705`) |
 | `users.availability.markAsActive` | `users` | User availability operations |
 | `users.availability.markAsAway` | `users` | User availability operations |
 | `users.availability.markAsDoNotDisturb` | `users` | User availability operations |
-| `users.availability.updateAvailability` | `users` | User availability operations |
+| `users.availability.patch` | `users` | User availability operations (renamed from `updateAvailability` in discovery revision `20260705`) |
 | `users.sections.create` | `navigation` | Create user Chat sections |
 | `users.sections.delete` | `navigation` | Delete user Chat sections |
 | `users.sections.items.list` | `navigation` | List spaces in user sections |

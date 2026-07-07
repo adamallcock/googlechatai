@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const repoRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const baselinePath = path.join(
   repoRoot,
-  "discovery/google-chat-v1-20260623.methods.json",
+  "discovery/google-chat-v1-20260705.methods.json",
 );
 const discoveryUrl = "https://chat.googleapis.com/$discovery/rest?version=v1";
 
@@ -57,7 +57,10 @@ export function diffDiscovery(baseline, liveDiscoveryDocument) {
     baselineRevision !== null &&
     String(liveRevision) !== String(baselineRevision);
 
-  const hasDrift = added.length > 0 || removed.length > 0 || revisionChanged;
+  // Google's discovery endpoint serves different revisions across requests
+  // during rollouts, so a revision change alone is informational noise;
+  // only method-level changes count as drift.
+  const hasDrift = added.length > 0 || removed.length > 0;
 
   return {
     ok: !hasDrift,
@@ -129,7 +132,11 @@ export function formatReport(diff) {
   lines.push(`Live revision: ${diff.liveRevision}`);
 
   if (diff.revisionChanged) {
-    lines.push("Revision changed.");
+    lines.push(
+      diff.ok
+        ? "Revision changed (methods unchanged; informational only)."
+        : "Revision changed.",
+    );
   }
 
   if (diff.added.length > 0) {

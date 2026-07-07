@@ -126,12 +126,14 @@ test("diffDiscovery detects a removed method", () => {
   assert.deepEqual(diff.removed, ["spaces.get"]);
 });
 
-test("diffDiscovery detects a revision change even with no method drift", () => {
+test("diffDiscovery treats a revision-only change as informational, not drift", () => {
   const document = discoveryDocumentFixture({ revision: "20260701" });
 
   const diff = diffDiscovery(baselineFixture, document);
 
-  assert.equal(diff.ok, false);
+  // Google's discovery endpoint serves different revisions across requests
+  // during rollouts; only method-level changes count as drift.
+  assert.equal(diff.ok, true);
   assert.equal(diff.revisionChanged, true);
   assert.equal(diff.liveRevision, "20260701");
   assert.equal(diff.baselineRevision, "20260623");

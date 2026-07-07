@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 
@@ -362,7 +362,7 @@ def _parse_date_input(
         }
 
     assert ms_since_epoch is not None
-    value = datetime.fromtimestamp(float(ms_since_epoch) / 1000, UTC).date().isoformat()
+    value = datetime.fromtimestamp(float(ms_since_epoch) / 1000, timezone.utc).date().isoformat()
     return {
         "kind": "date",
         "value": value,
@@ -399,7 +399,7 @@ def _parse_date_time_input(
 
     assert ms_since_epoch is not None
     value = (
-        datetime.fromtimestamp(float(ms_since_epoch) / 1000, UTC)
+        datetime.fromtimestamp(float(ms_since_epoch) / 1000, timezone.utc)
         .isoformat(timespec="milliseconds")
         .replace("+00:00", "Z")
     )

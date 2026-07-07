@@ -4,7 +4,7 @@ import path from "node:path";
 const root = new URL("../../", import.meta.url);
 const baselinePath = path.join(
   root.pathname,
-  "discovery/google-chat-v1-20260623.methods.json",
+  "discovery/google-chat-v1-20260705.methods.json",
 );
 
 function walkMethods(resource, prefix = "", out = []) {
