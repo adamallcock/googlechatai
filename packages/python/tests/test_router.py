@@ -824,6 +824,8 @@ class AsyncRouterDeadlineTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_deadline_offloads_blocking_sync_handlers_from_the_event_loop(self) -> None:
         raw = read_json("fixtures/events/message-created/basic.json")
+        handler_started = threading.Event()
+        release_handler = threading.Event()
         handler_finished = asyncio.Event()
         chat = GoogleChatAI(deadline={"budget_ms": 20})
         loop = asyncio.get_running_loop()
@@ -831,60 +833,83 @@ class AsyncRouterDeadlineTests(unittest.IsolatedAsyncioTestCase):
         @chat.on_message
         def handle_message(ctx):
             _ = ctx
-            time.sleep(0.08)
+            handler_started.set()
+            release_handler.wait(timeout=0.5)
             loop.call_soon_threadsafe(handler_finished.set)
             return "late result"
 
-        started = loop.time()
-        observed_delay: list[float] = []
+        probe_ran = asyncio.Event()
 
         async def probe() -> None:
-            await asyncio.sleep(0.005)
-            observed_delay.append(loop.time() - started)
+            while not handler_started.is_set():
+                await asyncio.sleep(0)
+            probe_ran.set()
 
         probe_task = asyncio.create_task(probe())
-        response = await chat.dispatch_async(raw, source="fixture")
+        try:
+            response = await chat.dispatch_async(raw, source="fixture")
 
-        self.assertEqual(response, {"text": "Still working on it..."})
-        await probe_task
-        self.assertLess(observed_delay[0], 0.03)
-        await asyncio.wait_for(handler_finished.wait(), timeout=0.5)
+            self.assertEqual(response, {"text": "Still working on it..."})
+            await asyncio.wait_for(probe_task, timeout=0.5)
+            self.assertTrue(probe_ran.is_set())
+        finally:
+            release_handler.set()
+            if not probe_task.done():
+                probe_task.cancel()
+            await asyncio.gather(probe_task, return_exceptions=True)
+            if handler_started.is_set():
+                await asyncio.wait_for(handler_finished.wait(), timeout=0.5)
 
     async def test_sync_dedupe_store_is_offloaded_and_deadline_accounted(self) -> None:
         raw = read_json("fixtures/events/message-created/basic.json")
+        loop = asyncio.get_running_loop()
+        store_started = threading.Event()
+        release_store = threading.Event()
+        store_finished = asyncio.Event()
 
         class SlowStore:
             def __init__(self) -> None:
                 self.delegate = InMemoryIdempotencyStore()
 
             def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
-                time.sleep(0.08)
-                return self.delegate.claim(
-                    key,
-                    ttl_ms=ttl_ms,
-                    now_ms=now_ms,
-                    metadata=metadata,
-                )
+                store_started.set()
+                release_store.wait(timeout=0.5)
+                try:
+                    return self.delegate.claim(
+                        key,
+                        ttl_ms=ttl_ms,
+                        now_ms=now_ms,
+                        metadata=metadata,
+                    )
+                finally:
+                    loop.call_soon_threadsafe(store_finished.set)
 
         chat = GoogleChatAI(
             dedupe={"store": SlowStore(), "offload_sync": True},
             deadline={"budget_ms": 20},
         )
         chat.on_message(lambda ctx: "handled")
-        loop = asyncio.get_running_loop()
-        started = loop.time()
-        observed_delay: list[float] = []
+        probe_ran = asyncio.Event()
 
         async def probe() -> None:
-            await asyncio.sleep(0.005)
-            observed_delay.append(loop.time() - started)
+            while not store_started.is_set():
+                await asyncio.sleep(0)
+            probe_ran.set()
 
         probe_task = asyncio.create_task(probe())
-        response = await chat.dispatch_async(raw, source="fixture")
+        try:
+            response = await chat.dispatch_async(raw, source="fixture")
 
-        self.assertEqual(response, {"text": "Still working on it..."})
-        await probe_task
-        self.assertLess(observed_delay[0], 0.03)
+            self.assertEqual(response, {"text": "Still working on it..."})
+            await asyncio.wait_for(probe_task, timeout=0.5)
+            self.assertTrue(probe_ran.is_set())
+        finally:
+            release_store.set()
+            if not probe_task.done():
+                probe_task.cancel()
+            await asyncio.gather(probe_task, return_exceptions=True)
+            if store_started.is_set():
+                await asyncio.wait_for(store_finished.wait(), timeout=0.5)
 
     async def test_async_dispatch_preserves_thread_affine_store_by_default(self) -> None:
         raw = read_json("fixtures/events/message-created/basic.json")
