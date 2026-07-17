@@ -79,7 +79,7 @@
     "workspace-events:pull-smoke": "pnpm build && node tools/workspace-events/pull-smoke.mjs"
   },
   "devDependencies": {
-    "@types/node": "26.0.1",
+    "@types/node": "26.1.1",
     "pyright": "1.1.411",
     "typescript": "6.0.3",
     "vitest": "4.1.9"
