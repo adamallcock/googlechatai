@@ -28,7 +28,7 @@ function goodInput() {
       "on:\n  workflow_dispatch:",
       "build-artifacts:",
       "needs: build-artifacts",
-      "npm publish --access public",
+      "npm publish ./node-package/googlechatai.tgz --access public",
       "pypa/gh-action-pypi-publish@release/v1",
       "registry-artifact-state.mjs npm",
       "registry-artifact-state.mjs pypi",
@@ -78,6 +78,18 @@ test("publication policy rejects automatic publication triggers and non-beta Pyt
   assert.equal(result.ok, false);
   assert.equal(result.checks.find((entry) => entry.id === "manual-only-publish-trigger")?.ok, false);
   assert.equal(result.checks.find((entry) => entry.id === "python-public-beta-classifier")?.ok, false);
+});
+
+test("publication policy requires an explicit local npm tarball path", () => {
+  const input = goodInput();
+  input.workflow = input.workflow.replace(
+    "npm publish ./node-package/googlechatai.tgz",
+    "npm publish node-package/googlechatai.tgz",
+  );
+  const result = evaluatePublicationPolicy(input);
+
+  assert.equal(result.ok, false);
+  assert.equal(result.checks.find((entry) => entry.id === "trusted-publish-workflow")?.ok, false);
 });
 
 test("live readiness verifies both public registries without credentials", async () => {

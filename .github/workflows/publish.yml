@@ -123,7 +123,7 @@ jobs:
           else
             NPM_TAG="latest"
           fi
-          npm publish node-package/*.tgz --access public --tag "${NPM_TAG}"
+          npm publish ./node-package/*.tgz --access public --tag "${NPM_TAG}"
       - name: Check immutable PyPI artifact state
         id: pypi-state
         run: node tools/release/registry-artifact-state.mjs pypi python-dist

@@ -103,7 +103,7 @@ export function evaluatePublicationPolicy(input) {
         workflow.includes("build-artifacts:") &&
         workflow.includes("needs: build-artifacts") &&
         workflow.includes("id-token: write") &&
-        /npm publish(?:\s+[^\n]+)?\s+--access public/.test(workflow) &&
+        /npm publish\s+\.\/node-package\/[^\s\n]*\.tgz\s+--access public/.test(workflow) &&
         workflow.includes("pypa/gh-action-pypi-publish@release/v1") &&
         workflow.includes("registry-artifact-state.mjs npm") &&
         workflow.includes("registry-artifact-state.mjs pypi") &&
