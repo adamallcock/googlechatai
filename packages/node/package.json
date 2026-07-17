@@ -51,6 +51,6 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "4.1.9"
+    "@vitest/coverage-v8": "4.1.10"
   }
 }
