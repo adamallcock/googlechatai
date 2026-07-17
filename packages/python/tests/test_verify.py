@@ -1,6 +1,12 @@
 import json
 import pathlib
+import asyncio
+import sys
+import time
+import threading
+import types
 import unittest
+from unittest.mock import patch
 
 from googlechatai.verify import (
     GOOGLE_CHAT_JWKS_URL,
@@ -287,3 +293,387 @@ class AsgiVerifierTest(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(body.get("text"), "ok")
+
+
+class AsyncAsgiVerifierTest(unittest.IsolatedAsyncioTestCase):
+    async def test_synchronous_verifier_is_offloaded_without_blocking_the_event_loop(self) -> None:
+        from googlechatai.adapters.asgi import ASGIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        class SlowVerifier:
+            def verify(self, token):
+                _ = token
+                time.sleep(0.1)
+                return {"ok": False, "status": "missing_token"}
+
+        adapter = ASGIAdapter(GoogleChatAI(), verifier=SlowVerifier())
+        sent: list[dict] = []
+
+        async def receive():
+            return {"type": "http.request", "body": b"{}", "more_body": False}
+
+        async def send(message):
+            sent.append(message)
+
+        loop = asyncio.get_running_loop()
+        started = loop.time()
+        observed_delay: list[float] = []
+
+        async def probe():
+            await asyncio.sleep(0.005)
+            observed_delay.append(loop.time() - started)
+
+        probe_task = asyncio.create_task(probe())
+        await adapter(
+            {
+                "type": "http",
+                "path": "/chat/events",
+                "method": "POST",
+                "headers": [],
+            },
+            receive,
+            send,
+        )
+        await probe_task
+
+        self.assertEqual(sent[0]["status"], 401)
+        self.assertLess(observed_delay[0], 0.03)
+
+    async def test_stalled_verifier_returns_safe_timeout_response(self) -> None:
+        from googlechatai.adapters.asgi import ASGIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        class SlowVerifier:
+            def verify(self, token):
+                _ = token
+                time.sleep(0.1)
+                return {"ok": True}
+
+        adapter = ASGIAdapter(
+            GoogleChatAI(),
+            verifier=SlowVerifier(),
+            verification_timeout_ms=5,
+        )
+        sent: list[dict] = []
+
+        async def receive():
+            return {"type": "http.request", "body": b"{}", "more_body": False}
+
+        async def send(message):
+            sent.append(message)
+
+        started = time.perf_counter()
+        await adapter(
+            {
+                "type": "http",
+                "path": "/chat/events",
+                "method": "POST",
+                "headers": [],
+            },
+            receive,
+            send,
+        )
+
+        self.assertLess(time.perf_counter() - started, 0.06)
+        self.assertEqual(sent[0]["status"], 500)
+        self.assertEqual(json.loads(sent[1]["body"])["error"], "verification_unavailable")
+
+    async def test_async_verifier_is_bounded_by_the_same_timeout(self) -> None:
+        from googlechatai.adapters.asgi import ASGIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        class SlowAsyncVerifier:
+            async def verify(self, token):
+                _ = token
+                await asyncio.sleep(0.1)
+                return {"ok": True}
+
+        adapter = ASGIAdapter(
+            GoogleChatAI(),
+            verifier=SlowAsyncVerifier(),
+            verification_timeout_ms=5,
+        )
+        sent: list[dict] = []
+
+        async def receive():
+            return {"type": "http.request", "body": b"{}", "more_body": False}
+
+        async def send(message):
+            sent.append(message)
+
+        started = time.perf_counter()
+        await adapter(
+            {
+                "type": "http",
+                "path": "/chat/events",
+                "method": "POST",
+                "headers": [],
+            },
+            receive,
+            send,
+        )
+
+        self.assertLess(time.perf_counter() - started, 0.06)
+        self.assertEqual(sent[0]["status"], 500)
+
+    async def test_asgi_adapter_bounds_streamed_body_and_rejects_invalid_utf8(self) -> None:
+        from googlechatai.adapters.asgi import ASGIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        oversized = ASGIAdapter(GoogleChatAI(), max_body_bytes=4)
+        sent: list[dict] = []
+        messages = iter(
+            [
+                {"type": "http.request", "body": b"123", "more_body": True},
+                {"type": "http.request", "body": b"456", "more_body": False},
+            ]
+        )
+
+        async def receive_oversized():
+            return next(messages)
+
+        async def send_oversized(message):
+            sent.append(message)
+
+        await oversized(
+            {
+                "type": "http",
+                "path": "/chat/events",
+                "method": "POST",
+                "headers": [],
+            },
+            receive_oversized,
+            send_oversized,
+        )
+        self.assertEqual(sent[0]["status"], 413)
+
+        invalid_utf8 = ASGIAdapter(GoogleChatAI())
+        sent.clear()
+
+        async def receive_invalid_utf8():
+            return {"type": "http.request", "body": b"\xff", "more_body": False}
+
+        await invalid_utf8(
+            {
+                "type": "http",
+                "path": "/chat/events",
+                "method": "POST",
+                "headers": [],
+            },
+            receive_invalid_utf8,
+            send_oversized,
+        )
+        self.assertEqual(sent[0]["status"], 400)
+
+    async def test_asgi_adapter_maps_delivery_and_verifier_capacity_to_503(self) -> None:
+        import googlechatai.adapters.asgi as asgi_module
+        import googlechatai.router.runtime as runtime_module
+
+        from googlechatai.adapters.asgi import ASGIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        payload = json.dumps(
+            {
+                "type": "MESSAGE",
+                "eventTime": "2026-07-10T12:00:00Z",
+                "message": {
+                    "name": "spaces/AAA/messages/BBB",
+                    "text": "hello",
+                    "sender": {"name": "users/123", "type": "HUMAN"},
+                    "space": {"name": "spaces/AAA"},
+                },
+                "space": {"name": "spaces/AAA"},
+            }
+        ).encode("utf-8")
+
+        async def receive():
+            return {"type": "http.request", "body": payload, "more_body": False}
+
+        async def invoke(adapter):
+            sent: list[dict] = []
+
+            async def send(message):
+                sent.append(message)
+
+            await adapter(
+                {
+                    "type": "http",
+                    "path": "/chat/events",
+                    "method": "POST",
+                    "headers": [],
+                },
+                receive,
+                send,
+            )
+            return sent
+
+        delivery_chat = GoogleChatAI(deadline={"budget_ms": 20})
+        delivery_chat.on_message(lambda ctx: "handled")
+        with patch.object(
+            runtime_module,
+            "_blocking_work_slots",
+            threading.BoundedSemaphore(0),
+        ):
+            sent = await invoke(ASGIAdapter(delivery_chat))
+        self.assertEqual(sent[0]["status"], 503)
+        self.assertEqual(json.loads(sent[1]["body"])["error"], "delivery_capacity_exhausted")
+
+        class Verifier:
+            def verify(self, token):
+                _ = token
+                return {"ok": True}
+
+        with patch.object(
+            asgi_module,
+            "_verifier_work_slots",
+            threading.BoundedSemaphore(0),
+        ):
+            sent = await invoke(ASGIAdapter(GoogleChatAI(), verifier=Verifier()))
+        self.assertEqual(sent[0]["status"], 503)
+        self.assertEqual(
+            json.loads(sent[1]["body"])["error"],
+            "verification_capacity_exhausted",
+        )
+
+
+class AsyncFastAPIAdapterVerifierTest(unittest.IsolatedAsyncioTestCase):
+    def _mount_handler(self, adapter):
+        from googlechatai.adapters.fastapi import FastAPIAdapter
+
+        class FakeRequestAnnotation:
+            pass
+
+        class FakeJSONResponse:
+            def __init__(self, content, status_code=200):
+                self.content = content
+                self.status_code = status_code
+
+        class FakeApp:
+            def __init__(self):
+                self.handler = None
+
+            def post(self, path):
+                self.path = path
+
+                def register(handler):
+                    self.handler = handler
+                    return handler
+
+                return register
+
+        fastapi_module = types.ModuleType("fastapi")
+        fastapi_module.Request = FakeRequestAnnotation
+        responses_module = types.ModuleType("fastapi.responses")
+        responses_module.JSONResponse = FakeJSONResponse
+        previous_fastapi = sys.modules.get("fastapi")
+        previous_responses = sys.modules.get("fastapi.responses")
+        app = FakeApp()
+        try:
+            sys.modules["fastapi"] = fastapi_module
+            sys.modules["fastapi.responses"] = responses_module
+            FastAPIAdapter(adapter.chat, verifier=adapter.verifier,
+                           verification_timeout_ms=adapter.verification_timeout_ms,
+                           max_body_bytes=adapter.max_body_bytes).mount(app)
+            return app.handler
+        finally:
+            if previous_fastapi is None:
+                sys.modules.pop("fastapi", None)
+            else:
+                sys.modules["fastapi"] = previous_fastapi
+            if previous_responses is None:
+                sys.modules.pop("fastapi.responses", None)
+            else:
+                sys.modules["fastapi.responses"] = previous_responses
+
+    class _Request:
+        def __init__(self, chunks, headers=None):
+            self._chunks = chunks
+            self.headers = headers or {}
+
+        async def stream(self):
+            for chunk in self._chunks:
+                yield chunk
+
+    async def test_fastapi_adapter_handles_sync_async_throwing_and_timed_out_verifiers(self) -> None:
+        from googlechatai.adapters.fastapi import FastAPIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        class SyncVerifier:
+            def verify(self, token):
+                _ = token
+                return {"ok": False, "status": "missing_token"}
+
+        class AsyncVerifier:
+            async def verify(self, token):
+                _ = token
+                return {"ok": False, "status": "async_rejected"}
+
+        class ThrowingVerifier:
+            def verify(self, token):
+                _ = token
+                raise RuntimeError("unavailable")
+
+        class SlowAsyncVerifier:
+            async def verify(self, token):
+                _ = token
+                await asyncio.sleep(0.1)
+                return {"ok": True}
+
+        for verifier, expected_status in (
+            (SyncVerifier(), 401),
+            (AsyncVerifier(), 401),
+            (ThrowingVerifier(), 500),
+            (SlowAsyncVerifier(), 500),
+        ):
+            with self.subTest(verifier=type(verifier).__name__):
+                handler = self._mount_handler(
+                    FastAPIAdapter(
+                        GoogleChatAI(),
+                        verifier=verifier,
+                        verification_timeout_ms=5,
+                    )
+                )
+                response = await handler(self._Request([b"{}"] ))
+                self.assertEqual(response.status_code, expected_status)
+
+    async def test_fastapi_adapter_streams_a_bounded_body(self) -> None:
+        from googlechatai.adapters.fastapi import FastAPIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        handler = self._mount_handler(FastAPIAdapter(GoogleChatAI(), max_body_bytes=4))
+        response = await handler(self._Request([b"123", b"456"]))
+
+        self.assertEqual(response.status_code, 413)
+
+    async def test_fastapi_adapter_maps_delivery_capacity_to_503(self) -> None:
+        import googlechatai.router.runtime as runtime_module
+
+        from googlechatai.adapters.fastapi import FastAPIAdapter
+        from googlechatai.router import GoogleChatAI
+
+        chat = GoogleChatAI(deadline={"budget_ms": 20})
+        chat.on_message(lambda ctx: "handled")
+        handler = self._mount_handler(FastAPIAdapter(chat))
+        payload = json.dumps(
+            {
+                "type": "MESSAGE",
+                "eventTime": "2026-07-10T12:00:00Z",
+                "message": {
+                    "name": "spaces/AAA/messages/BBB",
+                    "text": "hello",
+                    "sender": {"name": "users/123", "type": "HUMAN"},
+                    "space": {"name": "spaces/AAA"},
+                },
+                "space": {"name": "spaces/AAA"},
+            }
+        ).encode("utf-8")
+
+        with patch.object(
+            runtime_module,
+            "_blocking_work_slots",
+            threading.BoundedSemaphore(0),
+        ):
+            response = await handler(self._Request([payload]))
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.content["error"], "delivery_capacity_exhausted")

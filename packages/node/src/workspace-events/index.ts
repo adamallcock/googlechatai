@@ -1,8 +1,8 @@
 import { Buffer } from "node:buffer";
 import fs from "node:fs/promises";
-import path from "node:path";
 
 import { normalizeEvent } from "../events.js";
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 import type {
   ChatEventEnvelope,
   ChatEventSource,
@@ -51,14 +51,14 @@ export class FileWorkspaceEventsCheckpointStore
   }
 
   async save(scope: string, checkpoint: WorkspaceEventsCheckpoint): Promise<void> {
-    const checkpoints = await this.readAll();
-    checkpoints[scope] = checkpoint;
-    await fs.mkdir(path.dirname(this.filePath), { recursive: true });
-    await fs.writeFile(
-      this.filePath,
-      `${JSON.stringify(checkpoints, null, 2)}\n`,
-      "utf8",
-    );
+    await withFileStateLock(this.filePath, async () => {
+      const checkpoints = await this.readAll();
+      checkpoints[scope] = checkpoint;
+      await writeFileAtomically(
+        this.filePath,
+        `${JSON.stringify(checkpoints, null, 2)}\n`,
+      );
+    });
   }
 
   private async readAll(): Promise<Record<string, WorkspaceEventsCheckpoint>> {

@@ -5,6 +5,7 @@ import logging
 import pathlib
 import sys
 import time
+import threading
 import types
 import unittest
 from typing import Any
@@ -630,6 +631,63 @@ class RouterTests(unittest.TestCase):
         self.assertEqual(second, {"status": "duplicate_event_ignored"})
         self.assertEqual(handler_calls, ["handled"])
 
+    def test_dedupe_accepts_a_structural_store_not_owned_by_the_sdk(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+
+        class ApplicationStore:
+            def __init__(self) -> None:
+                self.delegate = InMemoryIdempotencyStore()
+
+            def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
+                return self.delegate.claim(
+                    key,
+                    ttl_ms=ttl_ms,
+                    now_ms=now_ms,
+                    metadata=metadata,
+                )
+
+        chat = GoogleChatAI(dedupe={"store": ApplicationStore()})
+        calls: list[str] = []
+
+        @chat.on_message
+        def handle_message(ctx):
+            calls.append("handled")
+            return "handled once"
+
+        self.assertEqual(chat.dispatch(copy.deepcopy(raw), source="fixture"), {"text": "handled once"})
+        self.assertEqual(
+            chat.dispatch(copy.deepcopy(raw), source="fixture"),
+            {"status": "duplicate_event_ignored"},
+        )
+        self.assertEqual(calls, ["handled"])
+
+    def test_sync_dispatch_preserves_thread_affine_structural_store_execution(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+
+        class ThreadAffineStore:
+            def __init__(self) -> None:
+                self.owner_thread = threading.get_ident()
+                self.delegate = InMemoryIdempotencyStore()
+
+            def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
+                if threading.get_ident() != self.owner_thread:
+                    raise RuntimeError("thread-affinity broken")
+                return self.delegate.claim(
+                    key,
+                    ttl_ms=ttl_ms,
+                    now_ms=now_ms,
+                    metadata=metadata,
+                )
+
+        chat = GoogleChatAI(dedupe={"store": ThreadAffineStore()})
+        chat.on_message(lambda ctx: "handled")
+
+        self.assertEqual(chat.dispatch(copy.deepcopy(raw), source="fixture"), {"text": "handled"})
+        self.assertEqual(
+            chat.dispatch(copy.deepcopy(raw), source="fixture"),
+            {"status": "duplicate_event_ignored"},
+        )
+
     def test_deadline_exceeded_returns_fallback_and_logs_late_completion(self) -> None:
         raw = read_json("fixtures/events/message-created/basic.json")
         logger = logging.getLogger("googlechatai.tests.router_deadline")
@@ -708,6 +766,180 @@ class RouterTests(unittest.TestCase):
         response = chat.dispatch(raw, source="fixture")
 
         self.assertEqual(response, {"text": "fast result"})
+
+    def test_sync_deadline_dispatch_reuses_one_supervisor_thread(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+        before = [
+            thread
+            for thread in threading.enumerate()
+            if thread.name == "googlechatai-deadline-supervisor"
+        ]
+
+        for _ in range(3):
+            chat = GoogleChatAI(deadline={"budget_ms": 10})
+
+            @chat.on_message
+            async def handle_message(ctx):
+                _ = ctx
+                await asyncio.sleep(0.03)
+                return "late result"
+
+            self.assertEqual(
+                chat.dispatch(raw, source="fixture"),
+                {"text": "Still working on it..."},
+            )
+
+        after = [
+            thread
+            for thread in threading.enumerate()
+            if thread.name == "googlechatai-deadline-supervisor"
+        ]
+        self.assertLessEqual(len(after), max(1, len(before)))
+
+
+class AsyncRouterDeadlineTests(unittest.IsolatedAsyncioTestCase):
+    async def test_deadline_yields_to_unrelated_event_loop_work(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+        probe_ran = asyncio.Event()
+        handler_finished = asyncio.Event()
+        chat = GoogleChatAI(deadline={"budget_ms": 30})
+
+        @chat.on_message
+        async def handle_message(ctx):
+            await asyncio.sleep(0.08)
+            handler_finished.set()
+            return "slow result"
+
+        async def probe() -> None:
+            await asyncio.sleep(0.005)
+            probe_ran.set()
+
+        probe_task = asyncio.create_task(probe())
+        response = await chat.dispatch_async(raw, source="fixture")
+
+        self.assertEqual(response, {"text": "Still working on it..."})
+        self.assertTrue(probe_ran.is_set())
+        await probe_task
+        await asyncio.wait_for(handler_finished.wait(), timeout=0.5)
+
+    async def test_deadline_offloads_blocking_sync_handlers_from_the_event_loop(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+        handler_started = threading.Event()
+        release_handler = threading.Event()
+        handler_finished = asyncio.Event()
+        chat = GoogleChatAI(deadline={"budget_ms": 20})
+        loop = asyncio.get_running_loop()
+
+        @chat.on_message
+        def handle_message(ctx):
+            _ = ctx
+            handler_started.set()
+            release_handler.wait(timeout=0.5)
+            loop.call_soon_threadsafe(handler_finished.set)
+            return "late result"
+
+        probe_ran = asyncio.Event()
+
+        async def probe() -> None:
+            while not handler_started.is_set():
+                await asyncio.sleep(0)
+            probe_ran.set()
+
+        probe_task = asyncio.create_task(probe())
+        try:
+            response = await chat.dispatch_async(raw, source="fixture")
+
+            self.assertEqual(response, {"text": "Still working on it..."})
+            await asyncio.wait_for(probe_task, timeout=0.5)
+            self.assertTrue(probe_ran.is_set())
+        finally:
+            release_handler.set()
+            if not probe_task.done():
+                probe_task.cancel()
+            await asyncio.gather(probe_task, return_exceptions=True)
+            if handler_started.is_set():
+                await asyncio.wait_for(handler_finished.wait(), timeout=0.5)
+
+    async def test_sync_dedupe_store_is_offloaded_and_deadline_accounted(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+        loop = asyncio.get_running_loop()
+        store_started = threading.Event()
+        release_store = threading.Event()
+        store_finished = asyncio.Event()
+
+        class SlowStore:
+            def __init__(self) -> None:
+                self.delegate = InMemoryIdempotencyStore()
+
+            def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
+                store_started.set()
+                release_store.wait(timeout=0.5)
+                try:
+                    return self.delegate.claim(
+                        key,
+                        ttl_ms=ttl_ms,
+                        now_ms=now_ms,
+                        metadata=metadata,
+                    )
+                finally:
+                    loop.call_soon_threadsafe(store_finished.set)
+
+        chat = GoogleChatAI(
+            dedupe={"store": SlowStore(), "offload_sync": True},
+            deadline={"budget_ms": 20},
+        )
+        chat.on_message(lambda ctx: "handled")
+        probe_ran = asyncio.Event()
+
+        async def probe() -> None:
+            while not store_started.is_set():
+                await asyncio.sleep(0)
+            probe_ran.set()
+
+        probe_task = asyncio.create_task(probe())
+        try:
+            response = await chat.dispatch_async(raw, source="fixture")
+
+            self.assertEqual(response, {"text": "Still working on it..."})
+            await asyncio.wait_for(probe_task, timeout=0.5)
+            self.assertTrue(probe_ran.is_set())
+        finally:
+            release_store.set()
+            if not probe_task.done():
+                probe_task.cancel()
+            await asyncio.gather(probe_task, return_exceptions=True)
+            if store_started.is_set():
+                await asyncio.wait_for(store_finished.wait(), timeout=0.5)
+
+    async def test_async_dispatch_preserves_thread_affine_store_by_default(self) -> None:
+        raw = read_json("fixtures/events/message-created/basic.json")
+
+        class ThreadAffineStore:
+            def __init__(self) -> None:
+                self.owner_thread = threading.get_ident()
+                self.delegate = InMemoryIdempotencyStore()
+
+            def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
+                if threading.get_ident() != self.owner_thread:
+                    raise RuntimeError("thread-affinity broken")
+                return self.delegate.claim(
+                    key,
+                    ttl_ms=ttl_ms,
+                    now_ms=now_ms,
+                    metadata=metadata,
+                )
+
+        chat = GoogleChatAI(dedupe={"store": ThreadAffineStore()})
+        chat.on_message(lambda ctx: "handled")
+
+        self.assertEqual(
+            await chat.dispatch_async(copy.deepcopy(raw), source="fixture"),
+            {"text": "handled"},
+        )
+        self.assertEqual(
+            await chat.dispatch_async(copy.deepcopy(raw), source="fixture"),
+            {"status": "duplicate_event_ignored"},
+        )
 
 
 if __name__ == "__main__":

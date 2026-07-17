@@ -2,7 +2,7 @@
   "contextItems": [
     {
       "kind": "system_note",
-      "text": "System Note: Thread spaces/AAA/threads/deploy in Engineering was read from 2026-06-29T18:00:00Z to 2026-06-29T20:00:00Z with limit 2, order oldest_first, page token page-2."
+      "text": "System Note: Thread spaces/AAA/threads/deploy in Engineering was read from 2026-06-29T18:00:00Z to 2026-06-29T20:00:00Z with limit 2, order oldest_first."
     },
     {
       "kind": "message_text",
@@ -14,7 +14,7 @@
     },
     {
       "kind": "system_note",
-      "text": "System Note: Thread history is partial and truncated. More messages are available with page token page-3."
+      "text": "System Note: Thread history is partial and truncated. More messages are available but are not included in this context."
     }
   ]
 }

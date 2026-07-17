@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import path from "node:path";
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 
 export type RetryAction = "retry" | "refresh_auth" | "fail";
 
@@ -482,10 +482,12 @@ export class FileIdempotencyStore implements IdempotencyStore {
   }
 
   async claim(input: IdempotencyClaimInput): Promise<IdempotencyClaim> {
-    const entries = await this.#readEntries();
-    const claim = claimInMap(entries, input, this.#options);
-    await this.#writeEntries(entries);
-    return claim;
+    return withFileStateLock(this.#filePath, async () => {
+      const entries = await this.#readEntries();
+      const claim = claimInMap(entries, input, this.#options);
+      await this.#writeEntries(entries);
+      return claim;
+    });
   }
 
   async #readEntries(): Promise<Map<string, StoredIdempotencyEntry>> {
@@ -522,13 +524,10 @@ export class FileIdempotencyStore implements IdempotencyStore {
         ]),
       ),
     };
-    await fs.mkdir(path.dirname(this.#filePath), { recursive: true, mode: 0o700 });
-    const tempPath = `${this.#filePath}.${process.pid}.${Date.now()}.tmp`;
-    await fs.writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, {
-      encoding: "utf8",
-      mode: 0o600,
-    });
-    await fs.rename(tempPath, this.#filePath);
+    await writeFileAtomically(
+      this.#filePath,
+      `${JSON.stringify(payload, null, 2)}\n`,
+    );
   }
 }
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "googlechatai"
-version = "0.0.2"
+version = "0.1.0-beta.1"
 description = "Python package for the Google Chat AI SDK."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ authors = [
   { name = "Adam Allcock" }
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",

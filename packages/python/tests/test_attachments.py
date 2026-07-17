@@ -1151,6 +1151,48 @@ class AttachmentTests(unittest.TestCase):
             render_attachment_context_parts(transcribed)[0]["text"],
         )
 
+    def test_blocks_unsafe_parser_input_and_bounds_extracted_attachment_text(self) -> None:
+        attachment = normalize_attachment(
+            {
+                "name": "spaces/AAA/messages/root/attachments/note",
+                "contentName": "note.txt",
+                "contentType": "text/plain",
+            }
+        )
+        self.assertIsNotNone(attachment)
+        parser = lambda attachment, data: {
+            "status": "complete",
+            "parser": "fixture-text",
+            "text": "abcdefgh",
+        }
+
+        scanner_blocked = parse_attachment_content(
+            attachment,
+            "safe",
+            scanner=lambda attachment, data: {"status": "blocked", "reason": "scanner policy"},
+            parsers={"text": parser},
+        )
+        self.assertEqual(scanner_blocked["processing"]["extraction"]["status"], "blocked")
+        self.assertEqual(scanner_blocked["processing"]["extraction"]["reason"], "scanner policy")
+
+        input_blocked = parse_attachment_content(
+            attachment,
+            "too long",
+            max_parse_bytes=3,
+            parsers={"text": parser},
+        )
+        self.assertEqual(input_blocked["processing"]["extraction"]["status"], "blocked")
+
+        bounded = parse_attachment_content(
+            attachment,
+            "safe",
+            max_extracted_chars=4,
+            parsers={"text": parser},
+        )
+        self.assertEqual(bounded["processing"]["extraction"]["status"], "partial")
+        self.assertEqual(bounded["processing"]["extraction"]["text"], "abcd")
+        self.assertIn("truncated at 4", bounded["processing"]["extraction"]["reason"])
+
     def test_openai_and_gemini_providers_are_optional_and_auth_explicit(self) -> None:
         with self.assertRaisesRegex(
             ValueError, "OpenAI transcription requires an explicit apiKey or client."

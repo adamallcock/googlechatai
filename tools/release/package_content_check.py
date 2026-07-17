@@ -121,7 +121,13 @@ def check_node_package() -> list[str]:
     if package_json.get("license") != "Apache-2.0":
         failures.append("packages/node/package.json license must stay Apache-2.0")
 
-    for relative_path in ["dist/index.js", "dist/index.d.ts"]:
+    for relative_path in [
+        "dist/index.js",
+        "dist/index.d.ts",
+        "cli/index.mjs",
+        "templates/node/package.json.tmpl",
+        "templates/python/requirements.txt.tmpl",
+    ]:
         if not (NODE_PACKAGE_DIR / relative_path).is_file():
             failures.append(f"Node package artifact is missing: packages/node/{relative_path}")
 
@@ -135,7 +141,14 @@ def check_node_package() -> list[str]:
             failures.append(f"npm pack dry-run did not return JSON: {exc}")
         else:
             files = {item["path"] for item in pack_json[0].get("files", [])}
-            required = {"dist/index.js", "dist/index.d.ts", "package.json"}
+            required = {
+                "dist/index.js",
+                "dist/index.d.ts",
+                "cli/index.mjs",
+                "templates/node/package.json.tmpl",
+                "templates/python/requirements.txt.tmpl",
+                "package.json",
+            }
             missing = sorted(required - files)
             if missing:
                 failures.append(f"Node package dry-run is missing files: {', '.join(missing)}")
@@ -152,7 +165,9 @@ def check_node_package() -> list[str]:
     if failures:
         fail("Package content check failed:\n- " + "\n- ".join(failures))
 
-    notes.append("Node npm pack dry-run content is scoped to built dist files.")
+    notes.append(
+        "Node npm pack dry-run content is scoped to built dist files, the public CLI, and scaffold templates."
+    )
     return notes
 
 

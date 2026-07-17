@@ -15,12 +15,12 @@ import inspect
 import json
 import math
 import os
-import tempfile
 import time
 from pathlib import Path
 from typing import Any, AsyncIterable, Callable, Iterable, Mapping
 
 from ..transport import create_retrying_chat_client
+from .._file_state import atomic_write_text, file_state_lock
 
 STATE_KIND = "chat.stream_scheduler_state"
 REPLAY_KIND = "chat.stream_scheduler_replay"
@@ -510,27 +510,14 @@ class FileStreamCancellationRegistry:
         }
 
     def _write(self, cancelled: dict[str, str]) -> None:
-        self._path.parent.mkdir(parents=True, exist_ok=True)
         payload = json.dumps({"version": 1, "cancelled": cancelled}, indent=2) + "\n"
-        fd, temp_path = tempfile.mkstemp(
-            prefix=f"{self._path.name}.tmp-", dir=str(self._path.parent)
-        )
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                handle.write(payload)
-            os.replace(temp_path, self._path)
-        finally:
-            if os.path.exists(temp_path):
-                os.unlink(temp_path)
-        try:
-            os.chmod(self._path, 0o600)
-        except OSError:
-            pass
+        atomic_write_text(self._path, payload)
 
     def cancel(self, stream_id: str, reason: str = "cancelled") -> None:
-        cancelled = self._read()
-        cancelled[stream_id] = reason
-        self._write(cancelled)
+        with file_state_lock(self._path):
+            cancelled = self._read()
+            cancelled[stream_id] = reason
+            self._write(cancelled)
 
     def is_cancelled(self, stream_id: str) -> bool:
         return stream_id in self._read()
@@ -539,10 +526,11 @@ class FileStreamCancellationRegistry:
         return self._read().get(stream_id)
 
     def clear(self, stream_id: str) -> None:
-        cancelled = self._read()
-        if stream_id in cancelled:
-            del cancelled[stream_id]
-            self._write(cancelled)
+        with file_state_lock(self._path):
+            cancelled = self._read()
+            if stream_id in cancelled:
+                del cancelled[stream_id]
+                self._write(cancelled)
 
 
 def create_chat_request_applier(

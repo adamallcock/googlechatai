@@ -18,6 +18,7 @@ The SDK exposes shared transport primitives in both Node and Python:
 - `guardDuplicateEventDelivery` / `guard_duplicate_event_delivery`
 - `InMemoryIdempotencyStore`
 - `FileIdempotencyStore`
+- `FirestoreIdempotencyStore`
 
 Feature functions should ask a central client to perform a Chat operation. They
 should not directly refresh OAuth tokens, sleep on `429`, retry `503`, or decide
@@ -211,69 +212,12 @@ The external adapter must make the first claim and the duplicate decision in one
 atomic operation. A read-then-write implementation is not sufficient for
 multi-instance Cloud Run.
 
-The Cloud Run example includes a dependency-free Firestore REST idempotency mode:
-
-```bash
-GOOGLE_CHAT_IDEMPOTENCY_STORE=firestore
-GOOGLE_CHAT_IDEMPOTENCY_FIRESTORE_DATABASE=(default)
-GOOGLE_CHAT_IDEMPOTENCY_FIRESTORE_COLLECTION=googleChatEventIdempotency
-```
-
-Deploy it only after the Firestore API is enabled, the database exists, and the
-runtime service account has `roles/datastore.user`. Verify with
-`live:chat-log-smoke -- --expect-idempotency-mode=firestore` after posting a
-duplicate direct event or after an approved real Chat duplicate test.
-
-Monitor retention and growth with the read-only Firestore monitor:
-
-```bash
-RUN_LIVE_IDEMPOTENCY_MONITOR=1 corepack pnpm cloud:idempotency-monitor
-```
-
-The monitor checks the collection group count, TTL field state, sampled
-`expiresAt`/`seenCount` health, and writes redacted evidence without document
-names, event keys, or stored event metadata.
-
-To make the same health state alertable, emit a redacted Cloud Logging summary:
-
-```bash
-RUN_LIVE_IDEMPOTENCY_MONITOR=1 \
-corepack pnpm cloud:idempotency-monitor -- --write-cloud-log
-```
-
-The emitted log uses `google_chat_idempotency_monitor` as the structured event
-name and sets severity to `INFO`, `WARNING`, or `ERROR` based on monitor
-findings. It still excludes raw document names, event keys, message text, and
-stored metadata. A temporary disabled log-based alert policy can be smoked with:
-
-```bash
-RUN_LIVE_IDEMPOTENCY_ALERT_SMOKE=1 \
-corepack pnpm cloud:idempotency-alert-smoke
-```
-
-That smoke creates and deletes a Cloud Monitoring `LogMatch` policy against the
-monitor warning/failure log. Production alerting still needs an approved
-scheduler for the monitor command plus approved notification channels.
-
-For production-like execution without a downloaded JSON key, deploy the monitor
-as a Cloud Run Job:
-
-```bash
-RUN_LIVE_IDEMPOTENCY_MONITOR_JOB=1 \
-corepack pnpm cloud:idempotency-monitor-job -- --execute-now
-```
-
-The job setup uses metadata-server auth inside Cloud Run, grants the runtime
-service account Firestore data access, Firestore schema/TTL metadata access,
-and Cloud Logging write access, deploys a small Dockerfile image that contains
-only the monitor script, and can execute the job once for proof. Add
-`--create-scheduler` only when a persistent schedule is approved; production
-notification channels should be attached to the log-based alert policy rather
-than baked into local feature code.
-
-Current production-alert posture: keep alerts in Cloud Monitoring/Cloud Logging.
-The SDK should emit structured status, not directly DM, email, or message users
-from local feature helpers.
+The package now includes `FirestoreIdempotencyStore` in Node and Python. It
+uses conditional document creation and update-time compare-and-set through an
+injected authenticated Firestore REST transport. The application supplies its
+own OAuth, service-account, or emulator transport; the SDK does not read or
+store credentials. See [Production Hardening Boundaries](2026-07-10-production-hardening.md)
+for the native option names and Cloud Run integration boundary.
 
 ## Directory Identity Enrichment
 

@@ -15,6 +15,8 @@ function env(overrides = {}) {
     GOOGLE_CLOUD_PROJECT: "example-chat-project",
     GOOGLE_APPLICATION_CREDENTIALS: "/tmp/unused-service-account.json",
     GOOGLE_CHAT_IDEMPOTENCY_MONITOR_RUN_ID: "idempotency-monitor-test",
+    GOOGLE_CHAT_IDEMPOTENCY_MONITOR_EXPECTED_EVENTS_PER_MINUTE: "10",
+    GOOGLE_CHAT_IDEMPOTENCY_MONITOR_RETENTION_MINUTES: "10",
     ...overrides,
   };
 }
@@ -125,6 +127,41 @@ test("loadIdempotencyMonitorConfig refuses live run without explicit guard", () 
   );
 });
 
+test("live monitor requires explicit thresholds or a rate-and-retention capacity budget", () => {
+  assert.throws(
+    () =>
+      loadIdempotencyMonitorConfig({
+        argv: ["node", "idempotency-monitor.mjs"],
+        env: env({
+          GOOGLE_CHAT_IDEMPOTENCY_MONITOR_EXPECTED_EVENTS_PER_MINUTE: undefined,
+          GOOGLE_CHAT_IDEMPOTENCY_MONITOR_RETENTION_MINUTES: undefined,
+        }),
+      }),
+    /Live monitoring requires/,
+  );
+  const config = loadIdempotencyMonitorConfig({
+    argv: [
+      "node",
+      "idempotency-monitor.mjs",
+      "--expected-events-per-minute=12",
+      "--retention-minutes=10",
+    ],
+    env: env({
+      GOOGLE_CHAT_IDEMPOTENCY_MONITOR_EXPECTED_EVENTS_PER_MINUTE: undefined,
+      GOOGLE_CHAT_IDEMPOTENCY_MONITOR_RETENTION_MINUTES: undefined,
+    }),
+  });
+  assert.deepEqual(config.capacityBudget, {
+    configured: true,
+    source: "rate_and_retention",
+    expectedEventsPerMinute: 12,
+    retentionMinutes: 10,
+    baselineDocuments: 120,
+  });
+  assert.equal(config.warnDocs, 180);
+  assert.equal(config.failDocs, 240);
+});
+
 test("buildIdempotencyMonitorPlan is read-only and redacted", () => {
   const config = loadIdempotencyMonitorConfig({
     argv: ["node", "idempotency-monitor.mjs", "--dry-run"],
@@ -133,7 +170,7 @@ test("buildIdempotencyMonitorPlan is read-only and redacted", () => {
   const plan = buildIdempotencyMonitorPlan(config);
 
   assert.equal(plan.mode, "dry-run");
-  assert.equal(plan.calls.length, 3);
+  assert.equal(plan.calls.length, 4);
   assert.equal(plan.calls.every((call) => call.writes === false), true);
   assert.equal(plan.privacy.rawDocumentNamesSaved, false);
   assert.equal(plan.privacy.rawEventKeysSaved, false);
@@ -186,7 +223,12 @@ test("runIdempotencyMonitor fails before network when service account key is mis
         writeEvidence: false,
         fetchImpl: fakeFetch().fetchImpl,
       }),
-    /missing-monitor-key\.json/,
+    (error) => {
+      assert.match(error.message, /access-token/);
+      assert.equal(error.evidence.failure.stage, "access-token");
+      assert.equal(error.evidence.privacy.rawErrorMessagesSaved, false);
+      return true;
+    },
   );
 });
 
@@ -197,12 +239,13 @@ test("buildIdempotencyMonitorPlan shows Cloud Logging write when enabled", () =>
   });
   const plan = buildIdempotencyMonitorPlan(config);
 
-  assert.equal(plan.calls.length, 4);
+  assert.equal(plan.calls.length, 5);
   assert.deepEqual(
     plan.calls.map((call) => [call.operation, call.writes]),
     [
       ["firestore.fields.get.ttl", false],
       ["firestore.documents.runAggregationQuery.count", false],
+      ["firestore.documents.runAggregationQuery.expiredCount", false],
       ["firestore.documents.runQuery.sample", false],
       ["logging.entries.write.monitor-result", true],
     ],
@@ -227,6 +270,7 @@ test("runIdempotencyMonitor summarizes Firestore collection health without raw k
 
   assert.equal(result.ok, true);
   assert.equal(result.evidence.counts.documents, 2);
+  assert.equal(result.evidence.counts.expiredDocuments, 0);
   assert.equal(result.evidence.ttl.state, "ACTIVE");
   assert.equal(result.evidence.sample.seenCount.max, 2);
   assert.equal(result.evidence.sample.seenCount.duplicateDocuments, 1);
@@ -237,6 +281,87 @@ test("runIdempotencyMonitor summarizes Firestore collection health without raw k
   assert.equal(
     fake.requests.some((request) => request.method !== "GET" && request.method !== "POST"),
     false,
+  );
+});
+
+test("runIdempotencyMonitor counts expired documents with a bounded filtered aggregation", async () => {
+  const config = loadIdempotencyMonitorConfig({
+    argv: [
+      "node",
+      "idempotency-monitor.mjs",
+      "--expired-warn-docs=2",
+      "--expired-fail-docs=3",
+    ],
+    env: env(),
+  });
+  const fake = fakeFetch({ count: 2, expiredCount: 2 });
+  const result = await runIdempotencyMonitor(config, {
+    writeEvidence: false,
+    fetchImpl: fake.fetchImpl,
+    getAccessToken: async () => "test-token",
+  });
+  const expiredAggregation = fake.requests.find(
+    (request) => request.body?.structuredAggregationQuery?.structuredQuery?.where,
+  );
+
+  assert.equal(result.evidence.counts.expiredDocuments, 2);
+  assert.ok(expiredAggregation);
+  assert.equal(
+    expiredAggregation.body.structuredAggregationQuery.structuredQuery.where.fieldFilter.field.fieldPath,
+    "expiresAt",
+  );
+});
+
+test("runIdempotencyMonitor targets an exact nested collection path and custom TTL field", async () => {
+  const config = loadIdempotencyMonitorConfig({
+    argv: [
+      "node",
+      "idempotency-monitor.mjs",
+      "--collection=apps/tenant/claims",
+      "--ttl-field=expiry",
+      "--allow-ttl-unknown",
+    ],
+    env: env(),
+  });
+  const fake = fakeFetch({
+    ttlBody: {
+      name: "projects/example-chat-project/databases/(default)/collectionGroups/claims/fields/expiry",
+      ttlConfig: { state: "ACTIVE" },
+    },
+  });
+  await runIdempotencyMonitor(config, {
+    writeEvidence: false,
+    fetchImpl: fake.fetchImpl,
+    getAccessToken: async () => "test-token",
+  });
+  const aggregation = fake.requests.find(
+    (request) =>
+      request.method === "POST" &&
+      request.url.endsWith(":runAggregationQuery") &&
+      request.body?.structuredAggregationQuery?.structuredQuery?.where === undefined,
+  );
+  const sample = fake.requests.find((request) => request.url.endsWith(":runQuery"));
+
+  assert.match(aggregation.url, /documents\/apps\/tenant:runAggregationQuery$/);
+  assert.equal(
+    aggregation.body.structuredAggregationQuery.structuredQuery.from[0].collectionId,
+    "claims",
+  );
+  assert.equal(
+    Object.hasOwn(aggregation.body.structuredAggregationQuery.structuredQuery.from[0], "allDescendants"),
+    false,
+  );
+  assert.equal(sample.body.structuredQuery.select.fields[2].fieldPath, "expiry");
+});
+
+test("runIdempotencyMonitor bounds diagnostic sample size", () => {
+  assert.throws(
+    () =>
+      loadIdempotencyMonitorConfig({
+        argv: ["node", "idempotency-monitor.mjs", "--sample-limit=101"],
+        env: env(),
+      }),
+    /--sample-limit must be at most 100/,
   );
 });
 
@@ -368,6 +493,43 @@ test("runIdempotencyMonitor writes error Cloud Logging summary before failing", 
   );
   assert.equal(loggingRequest.body.entries[0].severity, "ERROR");
   assert.equal(loggingRequest.body.entries[0].jsonPayload.failureCount, 1);
+});
+
+test("runIdempotencyMonitor emits a redacted failure summary when Firestore fails before evidence", async () => {
+  const config = loadIdempotencyMonitorConfig({
+    argv: ["node", "idempotency-monitor.mjs", "--write-cloud-log"],
+    env: env(),
+  });
+  const fake = fakeFetch();
+  await assert.rejects(
+    () =>
+      runIdempotencyMonitor(config, {
+        writeEvidence: false,
+        getAccessToken: async () => "test-token",
+        fetchImpl: async (url, init) => {
+          if (String(url).endsWith(":runAggregationQuery")) {
+            return jsonResponse(
+              { error: { status: "PERMISSION_DENIED", message: "private document details" } },
+              { status: 403 },
+            );
+          }
+          return fake.fetchImpl(url, init);
+        },
+      }),
+    (error) => {
+      assert.match(error.message, /document-count/);
+      assert.equal(error.evidence.cloudLog.written, true);
+      assert.equal(error.evidence.failure.status, 403);
+      assert.equal(error.evidence.privacy.rawErrorMessagesSaved, false);
+      return true;
+    },
+  );
+  const loggingRequest = fake.requests.find((request) =>
+    request.url.includes("logging.googleapis.com"),
+  );
+  assert.ok(loggingRequest);
+  assert.equal(loggingRequest.body.entries[0].jsonPayload.failureCount, 1);
+  assert.equal(JSON.stringify(loggingRequest.body).includes("private document details"), false);
 });
 
 test("runIdempotencyMonitor can allow TTL metadata to be unavailable", async () => {

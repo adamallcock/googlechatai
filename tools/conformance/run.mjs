@@ -110,6 +110,10 @@ function caseKind(conformanceCase) {
     return "stream";
   }
 
+  if (conformanceCase.id.startsWith("idempotency.")) {
+    return "idempotency";
+  }
+
   throw new Error(`Unsupported conformance case id: ${conformanceCase.id}`);
 }
 
@@ -300,9 +304,54 @@ function nodeContextOperationResult(conformanceCase) {
   switch (conformanceCase.operation) {
     case "context.render":
       return nodeSdk.renderAiContext(input);
+    case "context.modelSafe":
+      return nodeSdk.projectModelContext(input, conformanceCase.options ?? {});
     default:
       throw new Error(`Unsupported context operation: ${conformanceCase.operation}`);
   }
+}
+
+async function nodeIdempotencyOperationResult(conformanceCase) {
+  if (conformanceCase.operation !== "idempotency.structuralStore") {
+    throw new Error(`Unsupported idempotency operation: ${conformanceCase.operation}`);
+  }
+
+  class ApplicationStore {
+    constructor() {
+      this.delegate = new nodeSdk.InMemoryIdempotencyStore();
+      this.calls = 0;
+    }
+
+    async claim(input) {
+      this.calls += 1;
+      return this.delegate.claim(input);
+    }
+  }
+
+  const store = new ApplicationStore();
+  const first = await nodeSdk.guardDuplicateEventDelivery(conformanceCase.input.event, {
+    store,
+    ttlMs: conformanceCase.input.ttlMs,
+    nowMs: conformanceCase.input.nowMs,
+  });
+  const second = await nodeSdk.guardDuplicateEventDelivery(conformanceCase.input.event, {
+    store,
+    ttlMs: conformanceCase.input.ttlMs,
+    nowMs: conformanceCase.input.nowMs + 1,
+  });
+  return {
+    first: {
+      claimed: first.claim.claimed,
+      duplicate: first.duplicate,
+      seenCount: first.claim.seenCount,
+    },
+    second: {
+      claimed: second.claim.claimed,
+      duplicate: second.duplicate,
+      seenCount: second.claim.seenCount,
+    },
+    calls: store.calls,
+  };
 }
 
 function nodeAttachmentOperationResult(conformanceCase) {
@@ -570,6 +619,10 @@ function resultWithNode(conformanceCase, raw, source) {
 
   if (kind === "context") {
     return nodeContextOperationResult(conformanceCase);
+  }
+
+  if (kind === "idempotency") {
+    return nodeIdempotencyOperationResult(conformanceCase);
   }
 
   if (kind === "attachments") {
@@ -917,13 +970,27 @@ function pythonContextOperationResult(conformanceCase) {
   const code = `
 import json
 import sys
-from googlechatai import render_ai_context
+from googlechatai import project_model_context, render_ai_context
 
 operation = sys.argv[1]
-input_data = json.load(sys.stdin)["input"]
+payload = json.load(sys.stdin)
+input_data = payload["input"]
+option_aliases = {
+    "redactEmails": "redact_emails",
+    "maxTextChars": "max_text_chars",
+    "maxTotalTextChars": "max_total_text_chars",
+    "maxFragments": "max_fragments",
+    "maxQuoteDepth": "max_quote_depth",
+}
+options_data = {
+    option_aliases.get(key, key): value
+    for key, value in (payload.get("options") or {}).items()
+}
 
 if operation == "context.render":
     result = render_ai_context(input_data)
+elif operation == "context.modelSafe":
+    result = project_model_context(input_data, **options_data)
 else:
     raise ValueError(f"Unsupported context operation: {operation}")
 
@@ -932,7 +999,10 @@ print(json.dumps(result, sort_keys=True, separators=(",", ":")))
   const output = execFileSync("python3", ["-c", code, conformanceCase.operation], {
     cwd: root,
     encoding: "utf8",
-    input: JSON.stringify({ input: loadInputSpec(conformanceCase.input) }),
+    input: JSON.stringify({
+      input: loadInputSpec(conformanceCase.input),
+      options: conformanceCase.options ?? {},
+    }),
     env: {
       ...process.env,
       PYTHONPATH: path.join(root, "packages/python/src"),
@@ -940,6 +1010,59 @@ print(json.dumps(result, sort_keys=True, separators=(",", ":")))
   });
 
   return JSON.parse(output);
+}
+
+function pythonIdempotencyOperationResult(conformanceCase) {
+  const code = `
+import json
+import sys
+from googlechatai import InMemoryIdempotencyStore, guard_duplicate_event_delivery
+
+payload = json.load(sys.stdin)
+
+class ApplicationStore:
+    def __init__(self):
+        self.delegate = InMemoryIdempotencyStore()
+        self.calls = 0
+
+    def claim(self, key, *, ttl_ms=None, now_ms=None, metadata=None):
+        self.calls += 1
+        return self.delegate.claim(
+            key,
+            ttl_ms=ttl_ms,
+            now_ms=now_ms,
+            metadata=metadata,
+        )
+
+store = ApplicationStore()
+first = guard_duplicate_event_delivery(
+    payload["event"],
+    store=store,
+    ttl_ms=payload["ttlMs"],
+    now_ms=payload["nowMs"],
+)
+second = guard_duplicate_event_delivery(
+    payload["event"],
+    store=store,
+    ttl_ms=payload["ttlMs"],
+    now_ms=payload["nowMs"] + 1,
+)
+result = {
+    "first": {
+        "claimed": first["claim"].claimed,
+        "duplicate": first["duplicate"],
+        "seenCount": first["claim"].seen_count,
+    },
+    "second": {
+        "claimed": second["claim"].claimed,
+        "duplicate": second["duplicate"],
+        "seenCount": second["claim"].seen_count,
+    },
+    "calls": store.calls,
+}
+print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+`;
+  return runPythonOperation(code, conformanceCase, conformanceCase.input);
 }
 
 function pythonAttachmentOperationResult(conformanceCase) {
@@ -1123,6 +1246,10 @@ print(json.dumps(normalize_message(raw), sort_keys=True, separators=(",", ":")))
 
   if (caseKind(conformanceCase) === "context") {
     return pythonContextOperationResult(conformanceCase);
+  }
+
+  if (caseKind(conformanceCase) === "idempotency") {
+    return pythonIdempotencyOperationResult(conformanceCase);
   }
 
   if (caseKind(conformanceCase) === "attachments") {
@@ -1542,6 +1669,7 @@ for (const conformanceCase of cases) {
     kind === "reactions" ||
     kind === "capabilities" ||
     kind === "context" ||
+    kind === "idempotency" ||
     kind === "cards" ||
     kind === "attachments" ||
     kind === "chatLinks" ||

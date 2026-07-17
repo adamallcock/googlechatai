@@ -1,0 +1,17 @@
+{
+  "name": "__PROJECT_NAME__",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "card": "googlechatai card lint fixtures/card.json",
+    "dev": "node src/server.mjs",
+    "doctor": "googlechatai doctor",
+    "fixture": "googlechatai replay fixtures/mention.json --language node --handler src/app.mjs --expect-text \"You said\"",
+    "inspect": "googlechatai inspect fixtures/mention.json",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "googlechatai": "__GOOGLECHATAI_VERSION__"
+  }
+}

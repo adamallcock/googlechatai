@@ -12,11 +12,11 @@ from __future__ import annotations
 
 import base64
 import json
-import os
-import time
 from pathlib import Path
 from typing import Any, Callable, Protocol
 from urllib.parse import quote, urlencode
+
+from .._file_state import atomic_write_text, file_state_lock
 
 
 DEFAULT_CLOUD_TASKS_BASE_URL = "https://cloudtasks.googleapis.com"
@@ -65,34 +65,37 @@ class FileAsyncResponseQueue:
 
     def enqueue(self, task: dict[str, Any]) -> dict[str, Any]:
         task_id = _required_task_id(task)
-        tasks = self._read_tasks()
-        tasks.append(dict(task))
-        self._write_tasks(tasks)
-        return {
-            "kind": "chat.async_queue_enqueue_result",
-            "status": "enqueued",
-            "depth": len(tasks),
-            "taskId": task_id,
-        }
+        with file_state_lock(self.file_path):
+            tasks = self._read_tasks()
+            tasks.append(dict(task))
+            self._write_tasks(tasks)
+            return {
+                "kind": "chat.async_queue_enqueue_result",
+                "status": "enqueued",
+                "depth": len(tasks),
+                "taskId": task_id,
+            }
 
     def dequeue(self) -> dict[str, Any] | None:
-        tasks = self._read_tasks()
-        if not tasks:
-            return None
-        next_task = tasks.pop(0)
-        self._write_tasks(tasks)
-        return next_task
+        with file_state_lock(self.file_path):
+            tasks = self._read_tasks()
+            if not tasks:
+                return None
+            next_task = tasks.pop(0)
+            self._write_tasks(tasks)
+            return next_task
 
     def list(self) -> list[dict[str, Any]]:
         return self._read_tasks()
 
     def drain(self, limit: int | None = None) -> list[dict[str, Any]]:
-        tasks = self._read_tasks()
-        count = len(tasks) if limit is None else max(0, int(limit))
-        drained = tasks[:count]
-        del tasks[:count]
-        self._write_tasks(tasks)
-        return drained
+        with file_state_lock(self.file_path):
+            tasks = self._read_tasks()
+            count = len(tasks) if limit is None else max(0, int(limit))
+            drained = tasks[:count]
+            del tasks[:count]
+            self._write_tasks(tasks)
+            return drained
 
     def _read_tasks(self) -> list[dict[str, Any]]:
         if not self.file_path.exists():
@@ -101,16 +104,8 @@ class FileAsyncResponseQueue:
         return list(parsed.get("tasks", []))
 
     def _write_tasks(self, tasks: list[dict[str, Any]]) -> None:
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {"version": 1, "tasks": tasks}
-        temp_path = self.file_path.with_name(f"{self.file_path.name}.{os.getpid()}.{time.time_ns()}.tmp")
-        temp_path.write_text(f"{json.dumps(payload, indent=2)}\n", "utf8")
-        os.replace(temp_path, self.file_path)
-        try:
-            os.chmod(self.file_path, 0o600)
-        except OSError:
-            # Some platforms reject POSIX chmod bits; best-effort only.
-            pass
+        atomic_write_text(self.file_path, f"{json.dumps(payload, indent=2)}\n")
 
 
 class CloudTasksQueueAdapter:

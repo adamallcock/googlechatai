@@ -16,12 +16,15 @@ test("release:check enforces parity validation before release hygiene", () => {
     scripts["release:check"],
     "pnpm validate && pnpm release:hygiene",
   );
-  assert.match(scripts.validate, /pnpm parity:exports/);
-  assert.match(scripts.validate, /pnpm python:static/);
-  assert.match(scripts.validate, /pnpm conformance/);
-  assert.match(scripts.validate, /pnpm test/);
+  assert.equal(
+    scripts.validate,
+    "pnpm conformance && pnpm parity:exports && pnpm python:static && pnpm python:typecheck && pnpm test && pnpm test:coverage && pnpm build",
+  );
   assert.match(scripts["release:hygiene"], /pnpm format:check/);
   assert.match(scripts["release:hygiene"], /pnpm docs:check/);
   assert.match(scripts["release:hygiene"], /pnpm hygiene:secrets/);
+  assert.match(scripts["release:hygiene"], /pnpm cloud:source-upload-check -- --allow-missing-gcloud/);
   assert.match(scripts["release:hygiene"], /pnpm package:check/);
+  assert.match(scripts["release:hygiene"], /pnpm publish:check/);
+  assert.match(scripts["publish:live-check"], /--require-local-version-published/);
 });

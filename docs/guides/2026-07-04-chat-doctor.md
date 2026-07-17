@@ -7,8 +7,11 @@ status: implemented
 
 # Chat Doctor
 
-`chat:doctor` is the public diagnostic entrypoint for Google Chat app setup,
-endpoint, auth, interaction, and log-correlation checks.
+`chat:doctor` is the repository-maintainer diagnostic entrypoint for private
+tenant setup, deployed endpoints, auth, interaction, and log-correlation
+checks. Package users should start with the generic, dependency-free
+`npx googlechatai@next doctor` workflow documented in
+[Public CLI And First App](2026-07-16-public-cli-and-first-app.md).
 
 Start with a side-effect-free plan:
 

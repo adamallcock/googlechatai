@@ -78,7 +78,7 @@
         "truncated": true,
         "inaccessible": false,
         "systemNotes": [
-          "System Note: More thread history is available after cursor thread-cursor-3.",
+          "System Note: More thread history is available but is not included in this context.",
           "System Note: Thread history was truncated at the requested limit of 3 messages."
         ],
         "messages": [

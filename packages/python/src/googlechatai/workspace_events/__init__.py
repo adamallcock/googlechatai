@@ -8,6 +8,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+from googlechatai._file_state import atomic_write_text, file_state_lock
 from googlechatai.events import normalize_event
 
 
@@ -37,13 +38,13 @@ class FileWorkspaceEventsCheckpointStore:
         return self._read_all().get(scope)
 
     def save(self, scope: str, checkpoint: dict[str, Any]) -> None:
-        checkpoints = self._read_all()
-        checkpoints[scope] = checkpoint
-        self._file_path.parent.mkdir(parents=True, exist_ok=True)
-        self._file_path.write_text(
-            json.dumps(checkpoints, indent=2) + "\n",
-            encoding="utf-8",
-        )
+        with file_state_lock(self._file_path):
+            checkpoints = self._read_all()
+            checkpoints[scope] = checkpoint
+            atomic_write_text(
+                self._file_path,
+                json.dumps(checkpoints, indent=2) + "\n",
+            )
 
     def _read_all(self) -> dict[str, dict[str, Any]]:
         if not self._file_path.exists():

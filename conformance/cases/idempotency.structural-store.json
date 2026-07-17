@@ -1,0 +1,22 @@
+[
+  {
+    "id": "idempotency.structural-store-claim-contract",
+    "operation": "idempotency.structuralStore",
+    "description": "Both SDKs accept an application-owned structural idempotency store and preserve duplicate claim semantics.",
+    "input": {
+      "event": {
+        "eventId": "events/conformance-1",
+        "idempotencyKey": "events/conformance-1",
+        "kind": "message.created",
+        "source": {"kind": "fixture"}
+      },
+      "ttlMs": 60000,
+      "nowMs": 1000
+    },
+    "expect": {
+      "first": {"claimed": true, "duplicate": false, "seenCount": 1},
+      "second": {"claimed": false, "duplicate": true, "seenCount": 2},
+      "calls": 2
+    }
+  }
+]

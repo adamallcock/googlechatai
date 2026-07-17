@@ -1,0 +1,13 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --pull
+      - -f
+      - examples/cloud-run-node-sdk/Dockerfile
+      - -t
+      - $_IMAGE
+      - .
+
+images:
+  - $_IMAGE

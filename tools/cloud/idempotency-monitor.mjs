@@ -9,6 +9,7 @@ const defaultEvidenceDir = path.join(repoRoot, "fixtures/live/evidence");
 const datastoreScope = "https://www.googleapis.com/auth/datastore";
 const loggingWriteScope = "https://www.googleapis.com/auth/logging.write";
 const defaultCloudLogName = "googlechatai-sdk-idempotency-monitor";
+const maxSampleLimit = 100;
 const metadataTokenUrl =
   "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token";
 const authModes = new Set(["service-account-key", "metadata"]);
@@ -26,6 +27,8 @@ function parseArgs(argv) {
     sampleLimit: null,
     expiredWarnDocs: null,
     expiredFailDocs: null,
+    expectedEventsPerMinute: null,
+    retentionMinutes: null,
     evidencePath: null,
     runId: null,
     allowTtlUnknown: false,
@@ -101,6 +104,16 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg.startsWith("--expired-fail-docs=")) {
       args.expiredFailDocs = Number(arg.slice("--expired-fail-docs=".length));
+    } else if (arg === "--expected-events-per-minute") {
+      args.expectedEventsPerMinute = Number(readRequiredValue(index, arg));
+      index += 1;
+    } else if (arg.startsWith("--expected-events-per-minute=")) {
+      args.expectedEventsPerMinute = Number(arg.slice("--expected-events-per-minute=".length));
+    } else if (arg === "--retention-minutes") {
+      args.retentionMinutes = Number(readRequiredValue(index, arg));
+      index += 1;
+    } else if (arg.startsWith("--retention-minutes=")) {
+      args.retentionMinutes = Number(arg.slice("--retention-minutes=".length));
     } else if (arg === "--evidence") {
       args.evidencePath = readRequiredValue(index, arg);
       index += 1;
@@ -135,10 +148,13 @@ function parseArgs(argv) {
   return args;
 }
 
-function positiveInteger(value, fallback, name) {
+function positiveInteger(value, fallback, name, { max = null } = {}) {
   const selected = value ?? fallback;
   if (!Number.isInteger(selected) || selected <= 0) {
     throw new Error(`${name} must be a positive integer.`);
+  }
+  if (max !== null && selected > max) {
+    throw new Error(`${name} must be at most ${max}.`);
   }
   return selected;
 }
@@ -161,6 +177,23 @@ function resolvePath(input, cwd = process.cwd()) {
 function makeRunId() {
   const stamp = new Date().toISOString().replace(/[^0-9TZ]/g, "");
   return `idempotency-monitor-${stamp}-${crypto.randomBytes(3).toString("hex")}`;
+}
+
+function collectionTarget(value) {
+  if (typeof value !== "string" || value.trim() === "") {
+    throw new Error("--collection must be a non-empty Firestore collection path.");
+  }
+  const segments = value.split("/");
+  if (segments.length % 2 === 0 || segments.some((segment) => segment.trim() === "")) {
+    throw new Error(
+      "--collection must be an odd-segment Firestore collection path, such as claims or apps/app-id/claims.",
+    );
+  }
+  return {
+    path: segments.join("/"),
+    id: segments.at(-1),
+    parentPath: segments.slice(0, -1).join("/"),
+  };
 }
 
 export function loadIdempotencyMonitorConfig({
@@ -188,20 +221,29 @@ export function loadIdempotencyMonitorConfig({
       `--auth must be one of ${Array.from(authModes).join(", ")}.`,
     );
   }
-  const warnDocs = positiveInteger(
-    args.warnDocs ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_WARN_DOCS),
-    100,
-    "--warn-docs",
-  );
-  const failDocs = positiveInteger(
-    args.failDocs ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_FAIL_DOCS),
-    Math.max(warnDocs * 10, warnDocs + 1),
-    "--fail-docs",
-  );
-  const countUpTo = positiveInteger(
-    args.countUpTo ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_COUNT_UP_TO),
-    failDocs + 1,
-    "--count-up-to",
+  const expectedEventsPerMinute =
+    args.expectedEventsPerMinute ??
+    numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_EXPECTED_EVENTS_PER_MINUTE);
+  const retentionMinutes =
+    args.retentionMinutes ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_RETENTION_MINUTES);
+  if (expectedEventsPerMinute !== null) {
+    positiveInteger(expectedEventsPerMinute, 1, "--expected-events-per-minute");
+  }
+  if (retentionMinutes !== null) {
+    positiveInteger(retentionMinutes, 1, "--retention-minutes");
+  }
+  const thresholds = capacityThresholds({
+    warnDocs: args.warnDocs ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_WARN_DOCS),
+    failDocs: args.failDocs ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_FAIL_DOCS),
+    countUpTo: args.countUpTo ?? numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_COUNT_UP_TO),
+    expectedEventsPerMinute,
+    retentionMinutes,
+    dryRun: args.dryRun,
+  });
+  const collection = collectionTarget(
+    args.collection ??
+      env.GOOGLE_CHAT_IDEMPOTENCY_FIRESTORE_COLLECTION ??
+      "googleChatEventIdempotency",
   );
 
   return {
@@ -211,10 +253,9 @@ export function loadIdempotencyMonitorConfig({
       args.database ??
       env.GOOGLE_CHAT_IDEMPOTENCY_FIRESTORE_DATABASE ??
       "(default)",
-    collection:
-      args.collection ??
-      env.GOOGLE_CHAT_IDEMPOTENCY_FIRESTORE_COLLECTION ??
-      "googleChatEventIdempotency",
+    collection: collection.path,
+    collectionId: collection.id,
+    collectionParentPath: collection.parentPath,
     ttlField:
       args.ttlField ?? env.GOOGLE_CHAT_IDEMPOTENCY_TTL_FIELD ?? "expiresAt",
     authMode,
@@ -234,14 +275,16 @@ export function loadIdempotencyMonitorConfig({
       args.evidencePath ?? env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_EVIDENCE,
       cwd,
     ),
-    countUpTo,
-    warnDocs,
-    failDocs,
+    countUpTo: thresholds.countUpTo,
+    warnDocs: thresholds.warnDocs,
+    failDocs: thresholds.failDocs,
+    capacityBudget: thresholds.capacityBudget,
     sampleLimit: positiveInteger(
       args.sampleLimit ??
         numberEnv(env.GOOGLE_CHAT_IDEMPOTENCY_MONITOR_SAMPLE_LIMIT),
       25,
       "--sample-limit",
+      { max: maxSampleLimit },
     ),
     expiredWarnDocs: nonNegativeInteger(
       args.expiredWarnDocs ??
@@ -274,12 +317,66 @@ function numberEnv(value) {
   return Number(value);
 }
 
+function capacityThresholds({
+  warnDocs,
+  failDocs,
+  countUpTo,
+  expectedEventsPerMinute,
+  retentionMinutes,
+  dryRun,
+}) {
+  const hasExplicitWarn = warnDocs !== null;
+  const hasExplicitFail = failDocs !== null;
+  if (hasExplicitWarn !== hasExplicitFail) {
+    throw new Error("--warn-docs and --fail-docs must be supplied together.");
+  }
+  const hasCapacityBudget =
+    expectedEventsPerMinute !== null && retentionMinutes !== null;
+  if (!dryRun && !hasExplicitWarn && !hasCapacityBudget) {
+    throw new Error(
+      "Live monitoring requires --warn-docs/--fail-docs or --expected-events-per-minute with --retention-minutes.",
+    );
+  }
+  const baselineDocuments = hasCapacityBudget
+    ? expectedEventsPerMinute * retentionMinutes
+    : null;
+  const derivedWarn = baselineDocuments === null
+    ? 100
+    : Math.max(1, Math.ceil(baselineDocuments * 1.5));
+  const effectiveWarn = positiveInteger(warnDocs, derivedWarn, "--warn-docs");
+  const derivedFail = baselineDocuments === null
+    ? Math.max(effectiveWarn * 10, effectiveWarn + 1)
+    : Math.max(effectiveWarn + 1, Math.ceil(baselineDocuments * 2));
+  const effectiveFail = positiveInteger(failDocs, derivedFail, "--fail-docs");
+  return {
+    warnDocs: effectiveWarn,
+    failDocs: effectiveFail,
+    countUpTo: positiveInteger(countUpTo, effectiveFail + 1, "--count-up-to"),
+    capacityBudget: {
+      configured: hasExplicitWarn || hasCapacityBudget,
+      source: hasExplicitWarn
+        ? "explicit_thresholds"
+        : hasCapacityBudget
+          ? "rate_and_retention"
+          : "dry_run_default",
+      expectedEventsPerMinute,
+      retentionMinutes,
+      baselineDocuments,
+    },
+  };
+}
+
 function documentsParent(config) {
-  return `projects/${config.project}/databases/${config.database}/documents`;
+  return [
+    `projects/${config.project}/databases/${config.database}/documents`,
+    config.collectionParentPath || null,
+  ]
+    .filter(Boolean)
+    .join("/");
 }
 
 function collectionGroupFieldName(config) {
-  return `projects/${config.project}/databases/${config.database}/collectionGroups/${config.collection}/fields/${config.ttlField}`;
+  return `projects/${config.project}/databases/${config.database}/collectionGroups/${config.collectionId}/fields/${config.ttlField}`;
 }
 
 function authModeLabel(config) {
@@ -300,6 +397,14 @@ export function buildIdempotencyMonitorPlan(config) {
     },
     {
       operation: "firestore.documents.runAggregationQuery.count",
+      method: "POST",
+      path: `/v1/${documentsParent(config)}:runAggregationQuery`,
+      writes: false,
+      authMode: authModeLabel(config),
+      requiredScopes: [datastoreScope],
+    },
+    {
+      operation: "firestore.documents.runAggregationQuery.expiredCount",
       method: "POST",
       path: `/v1/${documentsParent(config)}:runAggregationQuery`,
       writes: false,
@@ -347,6 +452,7 @@ export function buildIdempotencyMonitorPlan(config) {
       expiredFailDocs: config.expiredFailDocs,
       sampleLimit: config.sampleLimit,
     },
+    capacityBudget: config.capacityBudget,
     calls,
     cloudLog: {
       enabled: Boolean(config.writeCloudLog),
@@ -502,10 +608,38 @@ function aggregationPayload(config) {
       structuredQuery: {
         from: [
           {
-            collectionId: config.collection,
-            allDescendants: true,
+            collectionId: config.collectionId,
           },
         ],
+      },
+      aggregations: [
+        {
+          alias: "doc_count",
+          count: {
+            upTo: String(config.countUpTo),
+          },
+        },
+      ],
+    },
+  };
+}
+
+function expiredAggregationPayload(config, now = new Date()) {
+  return {
+    structuredAggregationQuery: {
+      structuredQuery: {
+        from: [
+          {
+            collectionId: config.collectionId,
+          },
+        ],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: config.ttlField },
+            op: "LESS_THAN",
+            value: { timestampValue: now.toISOString() },
+          },
+        },
       },
       aggregations: [
         {
@@ -526,14 +660,13 @@ function samplePayload(config) {
         fields: [
           { fieldPath: "firstSeenAt" },
           { fieldPath: "lastSeenAt" },
-          { fieldPath: "expiresAt" },
+          { fieldPath: config.ttlField },
           { fieldPath: "seenCount" },
         ],
       },
       from: [
         {
-          collectionId: config.collection,
-          allDescendants: true,
+          collectionId: config.collectionId,
         },
       ],
       limit: config.sampleLimit,
@@ -565,21 +698,22 @@ function firestoreInteger(fields, name) {
   return Number.isFinite(number) ? number : null;
 }
 
-function summarizeSample(rows, now = new Date()) {
+function summarizeSample(rows, now = new Date(), ttlField = "expiresAt") {
   const docs = (Array.isArray(rows) ? rows : [rows])
     .map((row) => row.document?.fields)
     .filter(Boolean);
   const firstSeen = [];
   const lastSeen = [];
   const expires = [];
-  const seenCounts = [];
+  let maxSeenCount = null;
+  let duplicateDocuments = 0;
   let expiredDocs = 0;
-  let missingExpiresAt = 0;
+  let missingTtlField = 0;
 
   for (const fields of docs) {
     const firstSeenAt = firestoreTimestamp(fields, "firstSeenAt");
     const lastSeenAt = firestoreTimestamp(fields, "lastSeenAt");
-    const expiresAt = firestoreTimestamp(fields, "expiresAt");
+    const expiresAt = firestoreTimestamp(fields, ttlField);
     const seenCount = firestoreInteger(fields, "seenCount");
 
     if (firstSeenAt) {
@@ -594,10 +728,13 @@ function summarizeSample(rows, now = new Date()) {
         expiredDocs += 1;
       }
     } else {
-      missingExpiresAt += 1;
+      missingTtlField += 1;
     }
     if (seenCount !== null) {
-      seenCounts.push(seenCount);
+      maxSeenCount = maxSeenCount === null ? seenCount : Math.max(maxSeenCount, seenCount);
+      if (seenCount > 1) {
+        duplicateDocuments += 1;
+      }
     }
   }
 
@@ -607,11 +744,11 @@ function summarizeSample(rows, now = new Date()) {
     lastSeenAt: minMaxIso(lastSeen),
     expiresAt: minMaxIso(expires),
     seenCount: {
-      max: seenCounts.length > 0 ? Math.max(...seenCounts) : null,
-      duplicateDocuments: seenCounts.filter((count) => count > 1).length,
+      max: maxSeenCount,
+      duplicateDocuments,
     },
     expiredInSample: expiredDocs,
-    missingExpiresAt,
+    missingTtlField,
   };
 }
 
@@ -663,8 +800,8 @@ function collectFindings({ config, count, expiredCount, ttl, sample }) {
       `expired-count-${expiredCount}-gte-warn-${config.expiredWarnDocs}`,
     );
   }
-  if (sample.missingExpiresAt > 0) {
-    warnings.push(`sample-missing-expiresAt-${sample.missingExpiresAt}`);
+  if (sample.missingTtlField > 0) {
+    warnings.push(`sample-missing-${config.ttlField}-${sample.missingTtlField}`);
   }
 
   return { warnings, failures };
@@ -760,66 +897,20 @@ async function writeEvidenceFile(config, evidence) {
   return evidencePath;
 }
 
-export async function runIdempotencyMonitor(
-  config,
-  { writeEvidence = true, fetchImpl = fetch, getAccessToken } = {},
-) {
-  if (config.help) {
-    return { ok: true, evidence: { help: true } };
-  }
+function redactedFailureDetails(error, stage) {
+  return {
+    stage,
+    operation: typeof error?.operation === "string" ? error.operation : null,
+    status: Number.isInteger(error?.status) ? error.status : null,
+    name: typeof error?.name === "string" ? error.name : "Error",
+  };
+}
 
-  if (config.dryRun) {
-    return { ok: true, evidence: buildIdempotencyMonitorPlan(config) };
-  }
-
-  const startedAt = new Date().toISOString();
-  const now = new Date();
-  const token = getAccessToken
-    ? await getAccessToken(config, { scopes: authScopesForConfig(config) })
-    : await fetchAccessToken(config, { fetchImpl });
-  const baseUrl = "https://firestore.googleapis.com/v1";
-  const documentsUrl = `${baseUrl}/${documentsParent(config)}`;
-  let ttl = { available: false, state: null, fieldNameMatches: false };
-
-  try {
-    const field = await firestoreJson(
-      `${baseUrl}/${collectionGroupFieldName(config)}`,
-      { operation: "firestore.fields.get.ttl", method: "GET", token, fetchImpl },
-    );
-    ttl = ttlStateFromField(config, field);
-  } catch (error) {
-    ttl = {
-      available: false,
-      state: null,
-      fieldNameMatches: false,
-      error: {
-        status: error.status ?? null,
-        name: error.name ?? "Error",
-      },
-    };
-  }
-
-  const countResponse = await firestoreJson(`${documentsUrl}:runAggregationQuery`, {
-    operation: "firestore.documents.runAggregationQuery.count",
-    method: "POST",
-    token,
-    fetchImpl,
-    body: aggregationPayload(config),
-  });
-  const sampleResponse = await firestoreJson(`${documentsUrl}:runQuery`, {
-    operation: "firestore.documents.runQuery.sample",
-    method: "POST",
-    token,
-    fetchImpl,
-    body: samplePayload(config),
-  });
-  const count = aggregationCount(countResponse);
-  const sample = summarizeSample(sampleResponse, now);
-  const expiredCount = sample.expiredInSample;
-  const findings = collectFindings({ config, count, expiredCount, ttl, sample });
-  const severity = severityForFindings(findings);
-  const evidence = {
-    ok: findings.failures.length === 0,
+function failedMonitorEvidence(config, { startedAt, stage, error }) {
+  const failure = redactedFailureDetails(error, stage);
+  const failureCode = `monitor-operation-failed:${stage}`;
+  return {
+    ok: false,
     mode: "firestore-idempotency-monitor",
     runId: config.runId,
     project: config.project,
@@ -836,54 +927,200 @@ export async function runIdempotencyMonitor(
       expiredFailDocs: config.expiredFailDocs,
       sampleLimit: config.sampleLimit,
     },
-    ttl,
+    capacityBudget: config.capacityBudget,
+    ttl: { available: false, state: null, fieldNameMatches: false },
     counts: {
-      documents: count,
-      countMayBeCapped: count >= config.countUpTo,
-      expiredDocumentsInSample: expiredCount,
+      documents: null,
+      countMayBeCapped: false,
+      expiredDocuments: null,
+      expiredDocumentsInSample: null,
     },
-    sample,
-    warnings: findings.warnings,
-    failures: findings.failures,
+    sample: {
+      sampled: 0,
+      firstSeenAt: { min: null, max: null },
+      lastSeenAt: { min: null, max: null },
+      expiresAt: { min: null, max: null },
+      seenCount: { max: null, duplicateDocuments: 0 },
+      expiredInSample: 0,
+      missingTtlField: 0,
+    },
+    warnings: [],
+    failures: [failureCode],
+    failure,
     cloudLog: {
       enabled: Boolean(config.writeCloudLog),
       written: false,
       logName: config.cloudLogName,
-      severity,
-      operation: config.writeCloudLog
-        ? "logging.entries.write.monitor-result"
-        : null,
+      severity: "ERROR",
+      operation: config.writeCloudLog ? "logging.entries.write.monitor-result" : null,
     },
     privacy: {
       rawDocumentNamesSaved: false,
       rawEventKeysSaved: false,
       metadataJsonSaved: false,
+      rawErrorMessagesSaved: false,
     },
   };
+}
+
+export async function runIdempotencyMonitor(
+  config,
+  { writeEvidence = true, fetchImpl = fetch, getAccessToken } = {},
+) {
+  if (config.help) {
+    return { ok: true, evidence: { help: true } };
+  }
+
+  if (config.dryRun) {
+    return { ok: true, evidence: buildIdempotencyMonitorPlan(config) };
+  }
+
+  const startedAt = new Date().toISOString();
+  const now = new Date();
+  let token = null;
+  let stage = "access-token";
+  let evidence;
+  try {
+    token = getAccessToken
+      ? await getAccessToken(config, { scopes: authScopesForConfig(config) })
+      : await fetchAccessToken(config, { fetchImpl });
+    const baseUrl = "https://firestore.googleapis.com/v1";
+    const documentsUrl = `${baseUrl}/${documentsParent(config)}`;
+    let ttl = { available: false, state: null, fieldNameMatches: false };
+
+    stage = "ttl-metadata";
+    try {
+      const field = await firestoreJson(
+        `${baseUrl}/${collectionGroupFieldName(config)}`,
+        { operation: "firestore.fields.get.ttl", method: "GET", token, fetchImpl },
+      );
+      ttl = ttlStateFromField(config, field);
+    } catch (error) {
+      ttl = {
+        available: false,
+        state: null,
+        fieldNameMatches: false,
+        error: {
+          status: error.status ?? null,
+          name: error.name ?? "Error",
+        },
+      };
+    }
+
+    stage = "document-count";
+    const countResponse = await firestoreJson(`${documentsUrl}:runAggregationQuery`, {
+      operation: "firestore.documents.runAggregationQuery.count",
+      method: "POST",
+      token,
+      fetchImpl,
+      body: aggregationPayload(config),
+    });
+    stage = "expired-document-count";
+    const expiredCountResponse = await firestoreJson(`${documentsUrl}:runAggregationQuery`, {
+      operation: "firestore.documents.runAggregationQuery.expiredCount",
+      method: "POST",
+      token,
+      fetchImpl,
+      body: expiredAggregationPayload(config, now),
+    });
+    stage = "diagnostic-sample";
+    const sampleResponse = await firestoreJson(`${documentsUrl}:runQuery`, {
+      operation: "firestore.documents.runQuery.sample",
+      method: "POST",
+      token,
+      fetchImpl,
+      body: samplePayload(config),
+    });
+    const count = aggregationCount(countResponse);
+    const expiredCount = aggregationCount(expiredCountResponse);
+    const sample = summarizeSample(sampleResponse, now, config.ttlField);
+    const findings = collectFindings({ config, count, expiredCount, ttl, sample });
+    const severity = severityForFindings(findings);
+    evidence = {
+      ok: findings.failures.length === 0,
+      mode: "firestore-idempotency-monitor",
+      runId: config.runId,
+      project: config.project,
+      database: config.database,
+      collection: config.collection,
+      ttlField: config.ttlField,
+      startedAt,
+      finishedAt: new Date().toISOString(),
+      thresholds: {
+        warnDocs: config.warnDocs,
+        failDocs: config.failDocs,
+        countUpTo: config.countUpTo,
+        expiredWarnDocs: config.expiredWarnDocs,
+        expiredFailDocs: config.expiredFailDocs,
+        sampleLimit: config.sampleLimit,
+      },
+      capacityBudget: config.capacityBudget,
+      ttl,
+      counts: {
+        documents: count,
+        countMayBeCapped: count >= config.countUpTo,
+        expiredDocuments: expiredCount,
+        expiredDocumentsInSample: sample.expiredInSample,
+      },
+      sample,
+      warnings: findings.warnings,
+      failures: findings.failures,
+      cloudLog: {
+        enabled: Boolean(config.writeCloudLog),
+        written: false,
+        logName: config.cloudLogName,
+        severity,
+        operation: config.writeCloudLog
+          ? "logging.entries.write.monitor-result"
+          : null,
+      },
+      privacy: {
+        rawDocumentNamesSaved: false,
+        rawEventKeysSaved: false,
+        metadataJsonSaved: false,
+      },
+    };
+  } catch (error) {
+    evidence = failedMonitorEvidence(config, { startedAt, stage, error });
+    if (token && config.writeCloudLog) {
+      try {
+        evidence.cloudLog = await writeCloudLogEntry(config, evidence, {
+          token,
+          fetchImpl,
+          severity: "ERROR",
+        });
+      } catch (logError) {
+        evidence.cloudLog = {
+          ...evidence.cloudLog,
+          error: redactedFailureDetails(logError, "failure-log-write"),
+        };
+      }
+    }
+    if (writeEvidence) {
+      evidence.evidencePath = await writeEvidenceFile(config, evidence);
+    }
+    const wrapped = new Error(`Idempotency monitor failed during ${stage}.`);
+    wrapped.evidence = evidence;
+    throw wrapped;
+  }
 
   if (config.writeCloudLog) {
     try {
       evidence.cloudLog = await writeCloudLogEntry(config, evidence, {
         token,
         fetchImpl,
-        severity,
+        severity: evidence.cloudLog.severity,
       });
     } catch (error) {
       evidence.cloudLog = {
         ...evidence.cloudLog,
         written: false,
-        error: {
-          status: error.status ?? null,
-          name: error.name ?? "Error",
-          message: error.message ?? String(error),
-        },
+        error: redactedFailureDetails(error, "result-log-write"),
       };
       if (writeEvidence) {
         evidence.evidencePath = await writeEvidenceFile(config, evidence);
       }
-      const wrapped = new Error(
-        `Idempotency monitor Cloud Logging write failed: ${error.message}`,
-      );
+      const wrapped = new Error("Idempotency monitor Cloud Logging write failed.");
       wrapped.evidence = evidence;
       throw wrapped;
     }
@@ -893,9 +1130,9 @@ export async function runIdempotencyMonitor(
     evidence.evidencePath = await writeEvidenceFile(config, evidence);
   }
 
-  if (findings.failures.length > 0) {
+  if (evidence.failures.length > 0) {
     const error = new Error(
-      `Idempotency monitor failed: ${findings.failures.join(", ")}`,
+      `Idempotency monitor failed: ${evidence.failures.join(", ")}`,
     );
     error.evidence = evidence;
     throw error;

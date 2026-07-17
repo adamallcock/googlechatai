@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 
 import type { AccessTokenLease, GetAccessTokenInput } from "../transport/index.js";
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 
 type JsonObject = Record<string, unknown>;
 
@@ -118,25 +118,29 @@ export class FileAsyncResponseQueue implements AsyncResponseQueue {
 
   async enqueue(task: JsonObject): Promise<AsyncQueueEnqueueResult> {
     const taskId = requiredTaskId(task);
-    const tasks = await this.#readTasks();
-    tasks.push(task);
-    await this.#writeTasks(tasks);
-    return {
-      kind: "chat.async_queue_enqueue_result",
-      status: "enqueued",
-      depth: tasks.length,
-      taskId,
-    };
+    return withFileStateLock(this.#filePath, async () => {
+      const tasks = await this.#readTasks();
+      tasks.push(task);
+      await this.#writeTasks(tasks);
+      return {
+        kind: "chat.async_queue_enqueue_result",
+        status: "enqueued",
+        depth: tasks.length,
+        taskId,
+      };
+    });
   }
 
   async dequeue(): Promise<JsonObject | null> {
-    const tasks = await this.#readTasks();
-    const next = tasks.shift();
-    if (next === undefined) {
-      return null;
-    }
-    await this.#writeTasks(tasks);
-    return next;
+    return withFileStateLock(this.#filePath, async () => {
+      const tasks = await this.#readTasks();
+      const next = tasks.shift();
+      if (next === undefined) {
+        return null;
+      }
+      await this.#writeTasks(tasks);
+      return next;
+    });
   }
 
   async list(): Promise<JsonObject[]> {
@@ -144,11 +148,13 @@ export class FileAsyncResponseQueue implements AsyncResponseQueue {
   }
 
   async drain(limit?: number): Promise<JsonObject[]> {
-    const tasks = await this.#readTasks();
-    const count = limit === undefined ? tasks.length : Math.max(0, Math.floor(limit));
-    const drained = tasks.splice(0, count);
-    await this.#writeTasks(tasks);
-    return drained;
+    return withFileStateLock(this.#filePath, async () => {
+      const tasks = await this.#readTasks();
+      const count = limit === undefined ? tasks.length : Math.max(0, Math.floor(limit));
+      const drained = tasks.splice(0, count);
+      await this.#writeTasks(tasks);
+      return drained;
+    });
   }
 
   async #readTasks(): Promise<JsonObject[]> {
@@ -172,18 +178,10 @@ export class FileAsyncResponseQueue implements AsyncResponseQueue {
 
   async #writeTasks(tasks: JsonObject[]): Promise<void> {
     const payload: SerializedAsyncQueueFile = { version: 1, tasks };
-    await fs.mkdir(path.dirname(this.#filePath), { recursive: true, mode: 0o700 });
-    const tempPath = `${this.#filePath}.${process.pid}.${Date.now()}.tmp`;
-    await fs.writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, {
-      encoding: "utf8",
-      mode: 0o600,
-    });
-    await fs.rename(tempPath, this.#filePath);
-    try {
-      await fs.chmod(this.#filePath, 0o600);
-    } catch {
-      // Some platforms (e.g. Windows) reject POSIX chmod bits; ignore.
-    }
+    await writeFileAtomically(
+      this.#filePath,
+      `${JSON.stringify(payload, null, 2)}\n`,
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import unittest
 import json
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from googlechatai import (
@@ -140,6 +141,24 @@ class TransportRetryPolicyTests(unittest.TestCase):
         self.assertTrue(after_expiry.claimed)
         self.assertFalse(after_expiry.duplicate)
         self.assertEqual(after_expiry.seen_count, 1)
+
+    def test_in_memory_idempotency_claim_is_atomic_across_threads(self) -> None:
+        store = InMemoryIdempotencyStore()
+
+        with ThreadPoolExecutor(max_workers=16) as executor:
+            claims = list(
+                executor.map(
+                    lambda index: store.claim(
+                        "same-event",
+                        ttl_ms=60_000,
+                        now_ms=1_000 + index,
+                    ),
+                    range(16),
+                )
+            )
+
+        self.assertEqual(sum(claim.claimed for claim in claims), 1)
+        self.assertEqual(sum(claim.duplicate for claim in claims), 15)
 
     def test_file_idempotency_store_persists_across_instances(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

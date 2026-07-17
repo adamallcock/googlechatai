@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -32,12 +33,159 @@ export function walkMethods(resource, prefix = "", out = []) {
   return out;
 }
 
+/** Walk the resource tree while retaining each discovery method definition. */
+export function walkMethodEntries(resource, prefix = "", out = {}) {
+  for (const [name, method] of Object.entries(resource?.methods ?? {})) {
+    out[`${prefix}${name}`] = method;
+  }
+
+  for (const [name, child] of Object.entries(resource?.resources ?? {})) {
+    walkMethodEntries(child, `${prefix}${name}.`, out);
+  }
+
+  return out;
+}
+
+function record(value) {
+  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+
+function stringOrNull(value) {
+  return typeof value === "string" ? value : null;
+}
+
+function canonicalParameter(parameter) {
+  const raw = record(parameter);
+  return {
+    location: stringOrNull(raw.location),
+    required: raw.required === true,
+    type: stringOrNull(raw.type),
+    format: stringOrNull(raw.format),
+    repeated: raw.repeated === true,
+    pattern: stringOrNull(raw.pattern),
+    enum: Array.isArray(raw.enum)
+      ? raw.enum.filter((value) => typeof value === "string").sort()
+      : [],
+    default: raw.default ?? null,
+  };
+}
+
+const DISCOVERY_PROSE_KEYS = new Set([
+  "annotations",
+  "description",
+  "documentationLink",
+  "enumDescriptions",
+  "id",
+  "title",
+]);
+
+/**
+ * Canonicalize a reachable discovery schema rather than merely hashing a
+ * `$ref` name. Google can change a field's enum, requiredness, or nested type
+ * without changing the method's top-level request/response reference.
+ */
+export function canonicalReachableSchema(value, schemas = {}, resolving = new Set()) {
+  if (Array.isArray(value)) {
+    return value.map((item) => canonicalReachableSchema(item, schemas, resolving));
+  }
+  if (!value || typeof value !== "object") {
+    return value ?? null;
+  }
+
+  const raw = record(value);
+  const ref = stringOrNull(raw.$ref);
+  const own = Object.fromEntries(
+    Object.entries(raw)
+      .filter(([key]) => !DISCOVERY_PROSE_KEYS.has(key))
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, item]) => [
+        key,
+        key === "$ref"
+          ? item
+          : canonicalReachableSchema(item, schemas, resolving),
+      ]),
+  );
+
+  if (!ref) {
+    return own;
+  }
+  if (resolving.has(ref)) {
+    return { ...own, resolved: { $ref: ref, cycle: true } };
+  }
+  const target = record(schemas[ref]);
+  if (Object.keys(target).length === 0) {
+    return { ...own, resolved: null };
+  }
+  const nextResolving = new Set(resolving);
+  nextResolving.add(ref);
+  return {
+    ...own,
+    resolved: canonicalReachableSchema(target, schemas, nextResolving),
+  };
+}
+
+/**
+ * Stable subset of a discovery method's request contract. Descriptions and
+ * generated prose are intentionally excluded so doc-only changes do not make
+ * the release gate noisy, while HTTP/path/parameter/request/response changes
+ * do.
+ */
+export function canonicalMethodSignature(method, schemas = {}) {
+  const raw = record(method);
+  const parameters = record(raw.parameters);
+  return {
+    id: stringOrNull(raw.id),
+    httpMethod: stringOrNull(raw.httpMethod),
+    path: stringOrNull(raw.path),
+    flatPath: stringOrNull(raw.flatPath),
+    parameterOrder: Array.isArray(raw.parameterOrder)
+      ? raw.parameterOrder.filter((value) => typeof value === "string")
+      : [],
+    parameters: Object.fromEntries(
+      Object.entries(parameters)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([name, parameter]) => [name, canonicalParameter(parameter)]),
+    ),
+    requestRef: stringOrNull(record(raw.request).$ref),
+    responseRef: stringOrNull(record(raw.response).$ref),
+    requestContract: canonicalReachableSchema(record(raw.request), schemas),
+    responseContract: canonicalReachableSchema(record(raw.response), schemas),
+    scopes: Array.isArray(raw.scopes)
+      ? raw.scopes.filter((value) => typeof value === "string").sort()
+      : [],
+    mediaUpload: {
+      accept: Array.isArray(record(raw.mediaUpload).accept)
+        ? record(raw.mediaUpload).accept.filter((value) => typeof value === "string").sort()
+        : [],
+      maxSize: stringOrNull(record(raw.mediaUpload).maxSize),
+      simplePath: stringOrNull(record(record(raw.mediaUpload).protocols).simple?.path),
+      resumablePath: stringOrNull(record(record(raw.mediaUpload).protocols).resumable?.path),
+    },
+  };
+}
+
+export function methodSignatureHash(method, schemas = {}) {
+  return crypto
+    .createHash("sha256")
+    .update(JSON.stringify(canonicalMethodSignature(method, schemas)))
+    .digest("hex");
+}
+
+export function extractMethodSignatures(discoveryDocument) {
+  const schemas = record(discoveryDocument?.schemas);
+  return Object.fromEntries(
+    Object.entries(walkMethodEntries(discoveryDocument))
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([name, method]) => [name, methodSignatureHash(method, schemas)]),
+  );
+}
+
 /**
  * Extract the sorted method-id list from a raw discovery document, the same
  * shape stored under `methods` in the curated snapshot.
  */
 export function extractSortedMethods(discoveryDocument) {
-  return walkMethods(discoveryDocument).sort();
+  return Object.keys(extractMethodSignatures(discoveryDocument));
 }
 
 /**
@@ -47,6 +195,8 @@ export function extractSortedMethods(discoveryDocument) {
 export function diffDiscovery(baseline, liveDiscoveryDocument) {
   const expected = [...(baseline.methods ?? [])].sort();
   const current = extractSortedMethods(liveDiscoveryDocument);
+  const currentSignatures = extractMethodSignatures(liveDiscoveryDocument);
+  const baselineSignatures = record(baseline.methodSignatures);
 
   const added = current.filter((method) => !expected.includes(method));
   const removed = expected.filter((method) => !current.includes(method));
@@ -60,7 +210,26 @@ export function diffDiscovery(baseline, liveDiscoveryDocument) {
   // Google's discovery endpoint serves different revisions across requests
   // during rollouts, so a revision change alone is informational noise;
   // only method-level changes count as drift.
-  const hasDrift = added.length > 0 || removed.length > 0;
+  const changed = expected
+    .filter((method) => current.includes(method) && baselineSignatures[method] !== undefined)
+    .filter((method) => baselineSignatures[method] !== currentSignatures[method])
+    .map((method) => ({
+      method,
+      baselineSignature: baselineSignatures[method],
+      liveSignature: currentSignatures[method],
+    }));
+  const missingBaselineSignatures = expected.filter(
+    (method) => typeof baselineSignatures[method] !== "string",
+  );
+  const unexpectedBaselineSignatures = Object.keys(baselineSignatures)
+    .filter((method) => !expected.includes(method))
+    .sort();
+  const hasDrift =
+    added.length > 0 ||
+    removed.length > 0 ||
+    changed.length > 0 ||
+    missingBaselineSignatures.length > 0 ||
+    unexpectedBaselineSignatures.length > 0;
 
   return {
     ok: !hasDrift,
@@ -69,6 +238,9 @@ export function diffDiscovery(baseline, liveDiscoveryDocument) {
     revisionChanged,
     added,
     removed,
+    changed,
+    missingBaselineSignatures,
+    unexpectedBaselineSignatures,
     baselineMethodCount: expected.length,
     liveMethodCount: current.length,
   };
@@ -153,6 +325,31 @@ export function formatReport(diff) {
     }
   }
 
+  if (diff.changed.length > 0) {
+    lines.push(`Changed method signatures (${diff.changed.length}):`);
+    for (const change of diff.changed) {
+      lines.push(`  ~ ${change.method}`);
+    }
+  }
+
+  if (diff.missingBaselineSignatures.length > 0) {
+    lines.push(
+      `Baseline methods missing signatures (${diff.missingBaselineSignatures.length}):`,
+    );
+    for (const method of diff.missingBaselineSignatures) {
+      lines.push(`  ! ${method}`);
+    }
+  }
+
+  if (diff.unexpectedBaselineSignatures.length > 0) {
+    lines.push(
+      `Baseline signatures without a declared method (${diff.unexpectedBaselineSignatures.length}):`,
+    );
+    for (const method of diff.unexpectedBaselineSignatures) {
+      lines.push(`  ! ${method}`);
+    }
+  }
+
   return lines.join("\n");
 }
 
@@ -173,7 +370,7 @@ function usage() {
     "Usage: node tools/discovery/check-live-drift.mjs [--json]",
     "",
     "Fetches the live Google Chat v1 discovery document and diffs its method",
-    "list and revision against the curated snapshot in discovery/.",
+    "list and request-contract signatures against the curated snapshot in discovery/.",
     "",
     "Options:",
     "  --json   Print a machine-readable diff instead of the human report.",
@@ -181,7 +378,7 @@ function usage() {
     "",
     "Exit codes:",
     "  0  no drift",
-    "  1  drift detected (added/removed methods or revision change)",
+    "  1  drift detected (added/removed methods or changed method signatures)",
     "  2  could not reach or parse the live discovery document",
   ].join("\n");
 }

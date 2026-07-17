@@ -1,0 +1,17 @@
+{
+  "space": "spaces/REPLACE_WITH_DEDICATED_SMOKE_SPACE",
+  "displayName": "Google Chat AI SDK Smoke - REPLACE_ME",
+  "spaceType": "SPACE",
+  "appUser": "users/REPLACE_WITH_APP_USER",
+  "allowedOperations": [
+    "spaces.get",
+    "spaces.messages.create",
+    "spaces.messages.list",
+    "spaces.messages.delete"
+  ],
+  "safety": {
+    "dedicatedSmokeSpace": true,
+    "noDirectMessages": true,
+    "noRealUsersInvited": true
+  }
+}

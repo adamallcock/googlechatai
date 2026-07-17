@@ -27,8 +27,38 @@ Highlights:
   adapters. Optional FastAPI/ASGI adapters install with
   `pip install "googlechatai[fastapi]"`.
 
-Status: early development (0.0.x). APIs may change between minor versions
-while the SDK stabilizes.
+Status: `0.1.0-beta.1` public-beta release candidate (published Python
+metadata normalizes this to `0.1.0b1`). APIs may change before the stable
+`0.1.0` release.
+
+## Create a first app
+
+The matching Node distribution carries the dependency-free CLI and generates
+Python projects:
+
+```bash
+npx googlechatai@next init my-python-chat-app --language python --install
+cd my-python-chat-app
+.venv/bin/python -m unittest
+npx googlechatai@next replay fixtures/mention.json \
+  --language python \
+  --python .venv/bin/python \
+  --handler app.py \
+  --expect-text "You said"
+npx googlechatai@next doctor
+```
+
+The generated app includes a minimal mention handler, verified and
+body-bounded callback server, sanitized fixture, test, environment template,
+and guarded smoke metadata example. Offline tests need no Google credentials.
+
+The CLI also provides event inspection, dry-run Chat request planning, card
+linting, and configuration diagnosis. It is offline or read-only by default;
+the only write-capable path is an explicitly guarded `smoke --live` run in a
+dedicated test space.
+
+Google Cloud project creation, Chat app registration, deployment, OAuth/admin
+approval, and installation remain operator steps.
 
 googlechatai is an independent project and is not affiliated with or
 endorsed by Google LLC. Google Chat is a trademark of Google LLC.

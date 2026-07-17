@@ -186,6 +186,29 @@ describe("transport retry policy", () => {
     }
   });
 
+  it("serializes concurrent file claims without losing duplicate observations", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "chat-idempotency-"));
+    const filePath = path.join(dir, "claims.json");
+    try {
+      const claims = await Promise.all(
+        Array.from({ length: 12 }, (_, index) =>
+          new FileIdempotencyStore({ filePath }).claim({
+            key: "same-event",
+            ttlMs: 60_000,
+            nowMs: 1_000 + index,
+          }),
+        ),
+      );
+      expect(claims.filter((claim) => claim.claimed)).toHaveLength(1);
+      expect(claims.filter((claim) => claim.duplicate)).toHaveLength(11);
+
+      const saved = JSON.parse(await fs.readFile(filePath, "utf8"));
+      expect(saved.entries["same-event"]).toMatchObject({ seenCount: 12 });
+    } finally {
+      await fs.rm(dir, { recursive: true, force: true });
+    }
+  });
+
   it("refreshes user auth and replays after a 401 without caller-side retry code", async () => {
     const tokenCalls: boolean[] = [];
     const authorizations: string[] = [];

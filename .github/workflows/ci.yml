@@ -14,6 +14,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  source-upload-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Verify Cloud Build source upload exclusions
+        run: node tools/cloud/source-upload-check.mjs
+
   validate:
     runs-on: ubuntu-latest
     strategy:

@@ -109,4 +109,37 @@ describe("workspace events", () => {
       parsed[0]!.event.pubSub!.checkpoint,
     );
   });
+
+  it("serializes concurrent checkpoint saves for independent scopes", async () => {
+    const checkpointPath = path.join(
+      fs.mkdtempSync(path.join(os.tmpdir(), "googlechatai-w11-")),
+      "checkpoints.json",
+    );
+    const store = new FileWorkspaceEventsCheckpointStore(checkpointPath);
+    const checkpoint = {
+      type: "pubsub" as const,
+      cursor: "cursor",
+      ackId: "ack",
+      messageId: null,
+      subscription: "subscriptions/test",
+      publishTime: null,
+      deliveryAttempt: null,
+      orderingKey: null,
+    };
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) =>
+        store.save(`scope-${index}`, { ...checkpoint, ackId: `ack-${index}` }),
+      ),
+    );
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) =>
+        expect(store.load(`scope-${index}`)).resolves.toEqual({
+          ...checkpoint,
+          ackId: `ack-${index}`,
+        }),
+      ),
+    );
+  });
 });

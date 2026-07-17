@@ -26,6 +26,7 @@ import {
   planReadSpaceContext,
   planReadThreadContext,
   planReplyInThread,
+  projectModelContext,
   planSendToSpace,
   planSendToUser,
   planStartThread,
@@ -862,6 +863,31 @@ describe("thread and space context readers", () => {
       );
     });
   }
+
+  it("bounds deeply nested quoted context without recursive traversal", () => {
+    let message: Record<string, unknown> = {
+      plainTextForModel: "leaf",
+      attachments: [],
+      quotedMessages: [],
+    };
+    for (let index = 0; index < 1_100; index += 1) {
+      message = {
+        plainTextForModel: `quote-${index}`,
+        attachments: [],
+        quotedMessages: [message],
+      };
+    }
+
+    const projected = projectModelContext(
+      { kind: "chat.context", messages: [message] },
+      { maxQuoteDepth: 8 },
+    );
+    const projection = projected.projection as Record<string, unknown>;
+    const fragments = projected.fragments as unknown[];
+
+    expect(projection.quoteDepthLimited).toBe(true);
+    expect(fragments).toHaveLength(10); // policy plus root and eight quotes
+  });
 
   it("trims model context by estimated token budget while preserving requested order", () => {
     const input = {

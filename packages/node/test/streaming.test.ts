@@ -372,4 +372,20 @@ describe("stream cancellation registries", () => {
     await writer.clear("s1");
     expect(await reader.isCancelled("s1")).toBe(false);
   });
+
+  it("serializes concurrent cancellation writes for a local file", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "chat-stream-cancel-"));
+    const filePath = path.join(dir, "cancels.json");
+    const registry = new FileStreamCancellationRegistry({ filePath });
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) => registry.cancel(`s${index}`, "stop")),
+    );
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) =>
+        expect(registry.isCancelled(`s${index}`)).resolves.toBe(true),
+      ),
+    );
+  });
 });

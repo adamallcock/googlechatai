@@ -69,6 +69,20 @@ describe("FileAsyncResponseQueue", () => {
     expect(await secondQueue.list()).toEqual([task("task-1"), task("task-2")]);
   });
 
+  it("serializes concurrent enqueues for one local queue file", async () => {
+    const dir = await makeTempDir();
+    const filePath = path.join(dir, "queue.json");
+    const queue = new FileAsyncResponseQueue({ filePath });
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) => queue.enqueue(task(`task-${index}`))),
+    );
+
+    expect((await queue.list()).map((entry) => entry.taskId).sort()).toEqual(
+      Array.from({ length: 12 }, (_, index) => `task-${index}`).sort(),
+    );
+  });
+
   it("dequeues FIFO and supports drain with and without a limit", async () => {
     const dir = await makeTempDir();
     const filePath = path.join(dir, "queue.json");

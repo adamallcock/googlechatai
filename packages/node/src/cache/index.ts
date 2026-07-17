@@ -2,6 +2,8 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
+
 type JsonValue =
   | null
   | boolean
@@ -343,41 +345,39 @@ export class FileArtifactCache implements ArtifactCache {
 
   async put(input: ArtifactCachePutInput): Promise<ArtifactCacheHit> {
     const key = sanitizeKey(input.key);
-    const bytes = bytesFrom(input.bytes);
-    const nowMs = nowOrDefault(input.nowMs);
-    const ttlMs = ttlOrDefault(input.ttlMs);
-    const blob = `${hashBytes(bytes)}.bin`;
-    await fs.mkdir(path.join(this.#directory, "blobs"), {
-      recursive: true,
-      mode: 0o700,
+    return withFileStateLock(this.#metadataPath(key), async () => {
+      const bytes = bytesFrom(input.bytes);
+      const nowMs = nowOrDefault(input.nowMs);
+      const ttlMs = ttlOrDefault(input.ttlMs);
+      const blob = `${hashBytes(bytes)}.bin`;
+      await writeFileAtomically(path.join(this.#directory, "blobs", blob), bytes);
+      await this.#writeMetadata(key, {
+        version: 1,
+        kind: "artifact",
+        key,
+        metadata: input.metadata ?? {},
+        blob,
+        createdAt: iso(nowMs),
+        expiresAt: iso(nowMs + ttlMs),
+      });
+      return (await this.get(key, { nowMs })) as ArtifactCacheHit;
     });
-    await fs.writeFile(path.join(this.#directory, "blobs", blob), bytes, {
-      mode: 0o600,
-    });
-    await this.#writeMetadata(key, {
-      version: 1,
-      kind: "artifact",
-      key,
-      metadata: input.metadata ?? {},
-      blob,
-      createdAt: iso(nowMs),
-      expiresAt: iso(nowMs + ttlMs),
-    });
-    return (await this.get(key, { nowMs })) as ArtifactCacheHit;
   }
 
   async putNegative(entry: NegativeCacheEntry): Promise<NegativeCacheEntry> {
     const key = sanitizeKey(entry.key);
-    await this.#writeMetadata(key, {
-      version: 1,
-      kind: "negative",
-      key,
-      reason: entry.reason,
-      sourceId: entry.sourceId,
-      createdAt: entry.createdAt,
-      expiresAt: entry.expiresAt,
+    return withFileStateLock(this.#metadataPath(key), async () => {
+      await this.#writeMetadata(key, {
+        version: 1,
+        kind: "negative",
+        key,
+        reason: entry.reason,
+        sourceId: entry.sourceId,
+        createdAt: entry.createdAt,
+        expiresAt: entry.expiresAt,
+      });
+      return entry;
     });
-    return entry;
   }
 
   async #readMetadata(key: string): Promise<SerializedMetadata | null> {
@@ -399,12 +399,9 @@ export class FileArtifactCache implements ArtifactCache {
   }
 
   async #writeMetadata(key: string, metadata: SerializedMetadata): Promise<void> {
-    const metadataDir = path.join(this.#directory, "metadata");
-    await fs.mkdir(metadataDir, { recursive: true, mode: 0o700 });
-    await fs.writeFile(
+    await writeFileAtomically(
       this.#metadataPath(key),
       `${JSON.stringify(metadata, null, 2)}\n`,
-      { encoding: "utf8", mode: 0o600 },
     );
   }
 

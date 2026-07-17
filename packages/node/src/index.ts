@@ -93,6 +93,7 @@ export {
   buildConversationContextWithIdentity,
   planReadSpaceContext,
   planReadThreadContext,
+  projectModelContext,
   renderAiContext,
 } from "./threads/index.js";
 export {
@@ -121,6 +122,10 @@ export {
   parseRetryAfterMs,
   requestJsonWithRetry,
 } from "./transport/index.js";
+export {
+  FirestoreIdempotencyStore,
+  FirestoreIdempotencyStoreError,
+} from "./firestore/index.js";
 export {
   CHAT_REACTIONS_READONLY_SCOPE,
   CHAT_REACTIONS_SCOPE,
@@ -184,6 +189,10 @@ export type {
   ChatLinkSource,
 } from "./chat-links/index.js";
 export type {
+  ModelContextFragment,
+  ModelContextProjectionOptions,
+} from "./threads/index.js";
+export type {
   ArtifactCache,
   ArtifactCacheGetResult,
   ArtifactCacheHit,
@@ -201,6 +210,9 @@ export type {
   AttachmentParserInput,
   AttachmentParserResult,
   AttachmentParsers,
+  AttachmentSafetyScanInput,
+  AttachmentSafetyScanResult,
+  AttachmentSafetyScanner,
   AttachmentPipelineCacheEntry,
   AttachmentPipelineInput,
   AttachmentPipelineOptions,
@@ -317,6 +329,12 @@ export type {
   RetryPolicyOptions,
 } from "./transport/index.js";
 export type {
+  FirestoreIdempotencyStoreOptions,
+  FirestoreTransport,
+  FirestoreTransportRequest,
+  FirestoreTransportResponse,
+} from "./firestore/index.js";
+export type {
   ChatAIContextHelpers,
   ChatContextLoaderInput,
   ChatContextLoaders,
@@ -334,6 +352,7 @@ export type {
   HandlePayloadOptions,
 } from "./router/index.js";
 export type {
+  ExpressAdapterOptions,
   ExpressLikeHandler,
   ExpressLikeNext,
   ExpressLikeRequest,

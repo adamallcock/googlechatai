@@ -1,0 +1,47 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2026-01-01T12:00:00Z",
+  "space": {
+    "name": "spaces/EXAMPLE",
+    "type": "ROOM",
+    "displayName": "Example Space"
+  },
+  "user": {
+    "name": "users/example-user",
+    "displayName": "Example User",
+    "email": "example@example.invalid",
+    "type": "HUMAN"
+  },
+  "message": {
+    "name": "spaces/EXAMPLE/messages/example-mention",
+    "text": "<users/app> summarize this",
+    "argumentText": "summarize this",
+    "createTime": "2026-01-01T12:00:00Z",
+    "sender": {
+      "name": "users/example-user",
+      "displayName": "Example User",
+      "email": "example@example.invalid",
+      "type": "HUMAN"
+    },
+    "space": {
+      "name": "spaces/EXAMPLE",
+      "type": "ROOM",
+      "displayName": "Example Space"
+    },
+    "annotations": [
+      {
+        "type": "USER_MENTION",
+        "startIndex": 0,
+        "length": 11,
+        "userMention": {
+          "user": {
+            "name": "users/app",
+            "displayName": "Example App",
+            "type": "BOT"
+          },
+          "type": "MENTION"
+        }
+      }
+    ]
+  }
+}

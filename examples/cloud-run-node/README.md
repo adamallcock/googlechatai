@@ -1,6 +1,6 @@
 # Cloud Run Node Example
 
-Scaffolded example (W0-owned). A dependency-free `node:http` dev webhook with
+Scaffolded smoke example (W0-owned). A dependency-free `node:http` dev webhook with
 `/healthz`, `/avatar.png`, and `/chat/events` (also under `/api`), used as the
 guarded live-smoke target described in
 `docs/runbooks/2026-06-29-live-chat-smoke-harness.md`.
@@ -16,6 +16,13 @@ PORT=8080 node server.mjs
 `GET http://127.0.0.1:8080/healthz` returns `{ "ok": true, ... }`. POST a
 Google Chat event payload to `/chat/events` to see the logged summary and
 response. `Dockerfile` builds a `node:22-slim` image for Cloud Run deploys.
+
+## Production reference
+
+For a package-routed, verified, bounded-body Cloud Run integration, use
+[`../cloud-run-node-sdk/README.md`](../cloud-run-node-sdk/README.md). This
+directory remains a smoke scaffold and should not be treated as the canonical
+production integration.
 
 ## Import path note
 

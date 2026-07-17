@@ -2,12 +2,18 @@
 title: Release Hygiene
 date: 2026-06-29
 type: runbook
-status: draft
+status: implemented
 ---
 
 # Release Hygiene
 
-This repo is not ready for package publication until package names, registry ownership, and license terms are intentionally selected. The gates below keep CI useful while parallel workstreams continue.
+The root workspace is private, but the Node.js and Python `googlechatai`
+packages are public Apache-2.0 public-beta artifacts. Their current immutable
+published version is `0.0.2` on npm and PyPI; `0.1.0-beta.1` is the checked-in
+release candidate. Publication remains intentionally manual: registry
+ownership, Trusted Publisher configuration, 2FA, and release-environment
+approval are account-level controls documented in
+[`docs/runbooks/2026-07-10-publication-handoff.md`](../../docs/runbooks/2026-07-10-publication-handoff.md).
 
 ## CI Gates
 
@@ -31,7 +37,9 @@ script name; it runs `pnpm conformance` when the root script is available.
 - `pnpm conformance`
 - `pnpm parity:exports`
 - `pnpm python:static`
+- `pnpm python:typecheck`
 - `pnpm test`
+- `pnpm test:coverage`
 - `pnpm build`
 
 `pnpm release:hygiene` runs:
@@ -41,11 +49,16 @@ script name; it runs `pnpm conformance` when the root script is available.
 - `pnpm build`
 - `pnpm hygiene:generated`
 - `pnpm hygiene:secrets`
+- `pnpm cloud:source-upload-check -- --allow-missing-gcloud`
 - `pnpm package:check`
+- `pnpm publish:check`
 - `pnpm dependency:freshness`
 
 The validation build runs before package checks so Node package artifact checks
 can inspect fresh `dist` files instead of relying on previous local state.
+The CI source-upload job installs the Cloud CLI and runs the same checker
+against `gcloud meta list-files-for-upload`, so private tenant ledgers and live
+fixture evidence cannot silently enter a Cloud Build source upload.
 
 ## Secret And Generated File Guards
 
@@ -86,6 +99,8 @@ For Docker base images:
 
 ```bash
 docker buildx imagetools inspect node:22-slim
+# If the local Docker install lacks buildx, the release checker falls back to:
+docker manifest inspect node:22-slim
 ```
 
 For optional transcription provider packages, evaluate both Node and Python packages before adding adapters:
@@ -108,6 +123,12 @@ python3 -m pip index versions Pillow
 python3 -m pip index versions mutagen
 ```
 
+For the Python public-contract type checker:
+
+```bash
+npm view pyright version dist-tags time.modified license repository --json
+```
+
 As of 2026-06-29, these root dependency versions were already verified current and are pinned in the repo:
 
 - `pnpm@11.9.0`
@@ -115,6 +136,7 @@ As of 2026-06-29, these root dependency versions were already verified current a
 - `vitest@4.1.9`
 - `@vitest/coverage-v8@4.1.9` (verified 2026-07-06; pinned to the vitest peer version)
 - `@types/node@26.0.1`
+- `pyright@1.1.411`
 - `hatchling>=1.30.1`
 - PyPI build frontend `build==1.5.0`
 
@@ -126,7 +148,7 @@ Node package checks require:
 
 - `pnpm build` has emitted `packages/node/dist/index.js` and `packages/node/dist/index.d.ts`
 - `npm pack --dry-run --json packages/node` includes only expected package content
-- the package remains `private: true` until naming, ownership, and license are decided
+- `packages/node/package.json` declares `publishConfig.access: public`
 
 Python package checks require:
 
@@ -135,15 +157,19 @@ Python package checks require:
 - `src/googlechatai/__init__.py` and `src/googlechatai/py.typed` are included in the package tree
 - `python -m build` can create a wheel and sdist in a temporary output directory using `build==1.5.0`
 
-Python artifact building is checked before merge. Python artifact publication remains blocked until package naming and license decisions are complete. Do not publish to PyPI from CI.
+Python artifact building is checked before merge. Python publication happens
+only through the manual OIDC workflow and protected `release` environment; do
+not publish from a developer workstation or CI job that lacks that environment.
 
-## Package Naming And License Checklist
+## Public-Beta Publication Checklist
 
 Before any npm or PyPI publication:
 
-- Confirm the npm scope and package name are available, owned by the project, and not implying official Google ownership unless that is intentional.
-- Confirm the PyPI name is available, owned by the project, and aligned with the npm naming story.
-- Select a repository license and add the license file plus package metadata.
-- Confirm README, examples, and package descriptions reflect the selected names.
-- Decide provenance, signing, two-factor authentication, and trusted publishing requirements for npm and PyPI.
+- Confirm `googlechatai` registry ownership and public package metadata on npm
+  and PyPI with `pnpm publish:live-check`.
+- Keep the Apache-2.0 license, `LICENSE`, `NOTICE`, README, examples, and
+  package descriptions aligned with the public package name.
+- Configure provenance/trusted publishing, two-factor authentication, and the
+  protected GitHub `release` environment as specified in the publication
+  handoff runbook.
 - Confirm generated files and local credentials are still ignored before staging.
