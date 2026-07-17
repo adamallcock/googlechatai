@@ -34,9 +34,15 @@ The repository currently implements a broad local and dry-run foundation:
 - Node and Python runtime routers and local fixture POST examples.
 - Dry-run send/reply/thread/stream planners and mocked context readers.
 - Shared Node and Python transport helpers for retry, user-auth refresh, replay
-  safety, and local idempotency.
+  safety, structural idempotency contracts, local stores, and injected
+  Firestore compare-and-set reference stores.
+- A package-routed Cloud Run reference that uses verified Fetch routing and a
+  bounded request body, alongside the older smoke-only scaffold.
+- Model-safe context projection with trust/provenance labels, pagination-token
+  exclusion, default email redaction, and attachment scanner/resource seams.
 - Guarded live-safe Cloud, Pub/Sub, Workspace Events, and Chat smoke tooling.
-- A discovery metadata check for the curated Google Chat v1 method snapshot.
+- A discovery metadata check for the curated Google Chat v1 method snapshot and
+  stable request-contract fingerprints.
 - Live evidence from the private live test tenant's smoke workspace, including
   app/user auth, message lifecycle, Cards V2, threads, media downloads, Drive
   export, reactions, context reads, and cleanup.
@@ -49,7 +55,7 @@ Layer 1: raw and typed Google Chat client.
   retry/idempotency helpers scaffolded.
 - Purpose: expose typed request/response objects, pagination, retries,
   scope-aware errors, discovery version reporting, and passthrough access.
-- Current repo evidence: `discovery/google-chat-v1-20260623.methods.json` and
+- Current repo evidence: `discovery/google-chat-v1-20260705.methods.json` and
   `tools/discovery/check-methods.mjs`.
 - Auth and retry boundary: see
   [Auth Principal And Resilient Transport](../architecture/2026-06-30-auth-principal-resilience.md).
@@ -90,11 +96,12 @@ handler, or orchestration behavior should add or update fixture coverage.
 
 ## Current Scaffolded Areas
 
-- `conformance/`: a full Node/Python runner exists; deferred contract cases are
-  still reported for non-executable context contracts.
-- `examples/cloud-run-node/`: W0-owned Cloud Run webhook scaffold exists with
-  `/api/healthz`, `/api/avatar.png`, and `/api/chat/events`; private live
-  evidence currently verifies this deployed shape.
+- `conformance/`: a full Node/Python runner executes active context-render and
+  model-safe context cases alongside the other shared contracts.
+- `examples/cloud-run-node/`: smoke-only Cloud Run webhook scaffold with
+  `/api/healthz`, `/api/avatar.png`, and `/api/chat/events`.
+- `examples/cloud-run-node-sdk/`: canonical package-routed Cloud Run reference
+  with a verified `/chat/events` boundary and local-fixture escape hatch.
 - `tools/cloud/` and `tools/chat/`: live smoke scripts exist and should only be
   run inside the safety boundary.
 - `docs/runbooks/`: cloud setup notes exist, with manual gates documented.
@@ -118,10 +125,10 @@ handler, or orchestration behavior should add or update fixture coverage.
 
 ## Blocked Or Unverified Areas
 
-- Package license and public package names are not selected.
 - Google Chat app configuration is still manual for new workspaces.
-- Production token storage and external multi-instance idempotency stores remain
-  product/backend decisions.
+- Production token storage, tenant authorization, and selection/configuration
+  of a multi-instance durable idempotency store remain application decisions;
+  the injected Firestore reference store is available as a starting point.
 - App-auth space creation is diagnostic-only and should not become the default
   chatbot install model.
 - Direct `spaces.spaceEvents.list` is currently blocked by Google API `500`

@@ -7,10 +7,11 @@ status: implemented
 
 # Evidence Tooling
 
-`chat:evidence` is the public developer surface for turning local or live Chat
-debugging into redacted, replayable evidence. It is designed for SDK developers
-who need to prove behavior across Node and Python without committing private
-messages, tokens, sender emails, form values, URLs, or attachment bytes.
+`chat:evidence` is repository-maintainer tooling for turning local or guarded
+live Chat debugging into redacted, replayable evidence. Package users can
+inspect and replay already-sanitized fixtures with
+`npx googlechatai@next inspect` and `npx googlechatai@next replay`; raw live
+recording stays behind this stricter repository privacy boundary.
 
 ## Dry-Run Collection Plan
 

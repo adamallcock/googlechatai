@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .._file_state import atomic_write_bytes, atomic_write_text, file_state_lock
+
 
 DEFAULT_CACHE_TTL_MS = 24 * 60 * 60 * 1000
 
@@ -226,42 +228,42 @@ class FileArtifactCache:
         ttl_ms: int | None = None,
     ) -> dict[str, Any]:
         normalized_key = _key(key)
-        effective_now = _now(now_ms)
-        effective_ttl = _ttl(ttl_ms)
-        bytes_data = _bytes(bytes_value)
-        blob = f"{hash_bytes(bytes_data)}.bin"
-        blob_dir = self.directory / "blobs"
-        blob_dir.mkdir(parents=True, exist_ok=True)
-        (blob_dir / blob).write_bytes(bytes_data)
-        self._write_metadata(
-            normalized_key,
-            {
-                "version": 1,
-                "kind": "artifact",
-                "key": normalized_key,
-                "metadata": dict(metadata or {}),
-                "blob": blob,
-                "createdAt": _iso(effective_now),
-                "expiresAt": _iso(effective_now + effective_ttl),
-            },
-        )
-        return self.get(normalized_key, now_ms=effective_now)
+        with file_state_lock(self._metadata_path(normalized_key)):
+            effective_now = _now(now_ms)
+            effective_ttl = _ttl(ttl_ms)
+            bytes_data = _bytes(bytes_value)
+            blob = f"{hash_bytes(bytes_data)}.bin"
+            atomic_write_bytes(self.directory / "blobs" / blob, bytes_data)
+            self._write_metadata(
+                normalized_key,
+                {
+                    "version": 1,
+                    "kind": "artifact",
+                    "key": normalized_key,
+                    "metadata": dict(metadata or {}),
+                    "blob": blob,
+                    "createdAt": _iso(effective_now),
+                    "expiresAt": _iso(effective_now + effective_ttl),
+                },
+            )
+            return self.get(normalized_key, now_ms=effective_now)
 
     def put_negative(self, entry: Mapping[str, Any]) -> dict[str, Any]:
         normalized_key = _key(str(entry.get("key")))
-        self._write_metadata(
-            normalized_key,
-            {
-                "version": 1,
-                "kind": "negative",
-                "key": normalized_key,
-                "reason": entry.get("reason"),
-                "sourceId": entry.get("sourceId"),
-                "createdAt": entry.get("createdAt"),
-                "expiresAt": entry.get("expiresAt"),
-            },
-        )
-        return dict(entry)
+        with file_state_lock(self._metadata_path(normalized_key)):
+            self._write_metadata(
+                normalized_key,
+                {
+                    "version": 1,
+                    "kind": "negative",
+                    "key": normalized_key,
+                    "reason": entry.get("reason"),
+                    "sourceId": entry.get("sourceId"),
+                    "createdAt": entry.get("createdAt"),
+                    "expiresAt": entry.get("expiresAt"),
+                },
+            )
+            return dict(entry)
 
     def _metadata_path(self, key: str) -> Path:
         return self.directory / "metadata" / f"{_hash_string(key)}.json"
@@ -273,11 +275,9 @@ class FileArtifactCache:
         return json.loads(path.read_text("utf-8"))
 
     def _write_metadata(self, key: str, metadata: Mapping[str, Any]) -> None:
-        metadata_dir = self.directory / "metadata"
-        metadata_dir.mkdir(parents=True, exist_ok=True)
-        self._metadata_path(key).write_text(
+        atomic_write_text(
+            self._metadata_path(key),
             f"{json.dumps(dict(metadata), indent=2)}\n",
-            "utf-8",
         )
 
 

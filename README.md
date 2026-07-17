@@ -12,14 +12,14 @@ kept behaviorally identical through shared fixtures and a cross-language
 conformance suite.
 
 ```bash
-npm install googlechatai        # Node.js 22+
-pip install googlechatai        # Python 3.10+ (stdlib only)
+npm install googlechatai@next       # Node.js 22+
+pip install --pre googlechatai      # Python 3.10+ (stdlib only)
 ```
 
-Status: early development (0.0.x). The local, dry-run, and verification
-surfaces are extensively tested; live-API wrappers are exercised against a
-private test tenant. APIs may change between minor versions while the SDK
-stabilizes.
+Status: `0.1.0-beta.1` public-beta release candidate (PyPI normalizes the
+version to `0.1.0b1`). The local, dry-run, and verification surfaces are
+extensively tested; live-API wrappers are exercised against a private test
+tenant. APIs may change before the stable `0.1.0` release.
 
 ## Why
 
@@ -44,77 +44,74 @@ intent-level primitives instead:
   patch cadence, message-size truncate/split, cancellation (including
   cross-process stop buttons), failure degradation, and resume.
 - **Stay aligned across languages.** The Node and Python packages implement
-  the same contracts, pinned by 180+ shared conformance cases that run both
-  runtimes against identical fixtures on every change.
+  the same contracts, pinned by shared conformance cases that run both runtimes
+  against identical fixtures on every change.
 
-## Quickstart: a verified webhook that streams replies
+## First success in five minutes
 
-Node.js:
+Generate and exercise a Node app without credentials or a Google Workspace:
 
-```ts
-import {
-  GoogleChatAI,
-  createChatRequestVerifier,
-  createChatRequestApplier,
-  executeChatPlan,
-  hydratePlaceholderResponseHandle,
-  planPlaceholderResponse,
-  streamChatReply,
-} from "googlechatai";
-
-const auth = { getAccessToken: async () => ({ accessToken: await appToken() }) };
-
-const chat = new GoogleChatAI({
-  appUser: { name: "users/YOUR_APP_USER_ID" },
-  verifier: createChatRequestVerifier({ audience: "YOUR_PROJECT_NUMBER" }),
-});
-
-chat.onMention(async (event, ctx) => {
-  // Acknowledge instantly, then stream the model's answer by editing
-  // one placeholder message.
-  const plan = planPlaceholderResponse({ event });
-  const created = await executeChatPlan(plan, { mode: "live", auth });
-  const handle = hydratePlaceholderResponseHandle(
-    plan.placeholder.handle,
-    created.createdMessages[0],
-  );
-
-  void streamChatReply(handle, model.stream(event.message.argumentText), {
-    apply: createChatRequestApplier({ auth }),
-  });
-
-  return ctx.json({}); // empty 200 — the placeholder already answered
-});
-
-export default { fetch: (request: Request) => chat.fetch(request) };
+```bash
+npx googlechatai@next init my-chat-app --language node --install
+cd my-chat-app
+npm test
+npm run fixture
+npm run inspect
+npm run card
+npm run doctor
 ```
 
-Python:
+Or generate the matching Python app:
 
-```python
-from googlechatai import (
-    GoogleChatAI,
-    create_chat_request_applier,
-    create_google_chat_token_verifier,
-    stream_chat_reply,
-)
-from googlechatai.adapters.asgi import ASGIAdapter
-
-chat = GoogleChatAI(app_user={"name": "users/YOUR_APP_USER_ID"})
-
-@chat.on_mention
-def handle(context):
-    return {"text": f"You said: {context.event['message']['argumentText']}"}
-
-app = ASGIAdapter(
-    chat,
-    verifier=create_google_chat_token_verifier(audience="YOUR_PROJECT_NUMBER"),
-)
+```bash
+npx googlechatai@next init my-python-chat-app --language python --install
+cd my-python-chat-app
+.venv/bin/python -m unittest
+npx googlechatai@next card lint fixtures/card.json
+npx googlechatai@next replay fixtures/mention.json \
+  --language python \
+  --python .venv/bin/python \
+  --handler app.py \
+  --expect-text "You said"
 ```
 
-Every write in the SDK is inspectable before it happens — call any
-`plan*` function without an executor and you get the exact requests,
-required scopes, and safety notes as JSON.
+The generated handler is intentionally small:
+
+```js
+import { GoogleChatAI } from "googlechatai";
+
+export const chat = new GoogleChatAI();
+
+chat.onMention((event, ctx) =>
+  ctx.reply.text(`You said: ${event.message?.argumentText ?? "hello"}`),
+);
+```
+
+Scaffolds include a verified callback server, one sanitized fixture, a test,
+an environment template, and a dedicated-space smoke metadata example. Local
+tests do not use credentials or send Chat traffic.
+
+Google Cloud project creation, Chat API app registration, OAuth/admin approval,
+deployment, and installation remain explicit operator steps. Run `doctor`
+before deployment; run `smoke` in dry-run mode before deliberately enabling its
+guarded live write.
+
+## CLI workflow
+
+| Command | Purpose | Default side effect |
+|---|---|---|
+| `init` | Generate a Node or Python starter | Local files only |
+| `inspect` | Normalize an event and expose reply/context decisions | None |
+| `replay` | Execute a sanitized fixture through a handler | None |
+| `plan` | Show exact requests, auth, and safety for a Chat intent | None |
+| `card lint` | Validate a Chat card or action response | None |
+| `doctor` | Diagnose local config, endpoint, auth shape, and smoke metadata | Read-only; endpoint probe is opt-in |
+| `smoke` | Prove mention delivery and thread routing in a dedicated space | Dry-run unless `--live` plus guards |
+
+Run `npx googlechatai@next <command> --help` for exact options. For advanced
+placeholder/edit streaming, continue with the
+[Live Streaming guide](docs/guides/2026-07-06-live-streaming.md). Every SDK
+write is also available as a dry-run plan before execution.
 
 ## Feature Overview
 
@@ -126,22 +123,29 @@ required scopes, and safety notes as JSON.
 | Streaming | `streamChatReply` / `stream_chat_reply` / `astream_chat_reply` with shared scheduler semantics, final-card attachment, cancellation registries, resumable state |
 | Cards and dialogs | Typed builders (approval, progress, error, sources, thinking, tool status, feedback), card lint/translation, action-state round-tripping, dialog helpers |
 | Attachments | Metadata normalization, download/upload plans, policy gates, parser hooks, Drive export plans, optional OpenAI/Gemini voice transcription providers |
-| Context for AI | Thread/space readers, recursive quoted-message context, identity resolution with explicit unavailability, system notes for attachments/quotes/actions |
+| Context for AI | Thread/space readers, recursive quoted-message context, identity resolution with explicit unavailability, plus a model-safe projection with provenance/trust labels, cursor exclusion, and default email redaction |
 | Reactions and pins | Reaction planners with feedback mapping, message pin planners (docs-listed) |
-| Transport | Retry/backoff with Retry-After, 401 refresh-and-replay, idempotency stores, token stores (file, Secret Manager), queue adapters (Cloud Tasks, Pub/Sub, file) |
+| Transport | Retry/backoff with Retry-After, 401 refresh-and-replay, structural idempotency stores including injected Firestore reference stores, token stores (file, Secret Manager), queue adapters (Cloud Tasks, Pub/Sub, file) |
 | Capabilities | `explainChatCapability`, permission plans, and error explainers for 401/403/404/429/5xx remediation |
 
 ## Current State
 
 Implemented and conformance-tested: everything in the feature overview above.
-Both packages pass 180+ shared conformance cases, 890+ unit tests, export and
-router-method parity checks, and a strict release gate on every change.
+Both packages pass shared cross-language conformance cases, unit and coverage
+suites, export and router-method parity checks, and a strict release gate.
 
-Scaffolded: Cloud Run webhook example, recursive `ai_context` schema
-contracts, cloud project runbooks.
+Implemented: a package-routed Cloud Run reference with verified Fetch routing
+and bounded bodies; the older Cloud Run webhook remains a smoke scaffold.
 
-Planned: custom emoji management, admin/import operations, scheduled
-idempotency/retention runners, richer live parser/provider harnesses.
+Implemented but externally gated: Cloud Run staging deploy/certification and
+Firestore idempotency monitor Job/Scheduler/alert tooling. Applying either
+requires the named Cloud IAM, capacity-budget, notification-channel, and
+dedicated-smoke-space guards; no tenant deployment is implied by the checked-in
+tooling.
+
+Planned: custom emoji management, admin/import operations, retention-policy
+automation beyond the guarded idempotency monitor, richer live parser/provider
+harnesses.
 
 Gated: docs-listed Google surfaces (message pins, message search,
 replaceCards) ship as planners with explicit warnings until verified live;
@@ -160,12 +164,13 @@ corepack pnpm test             # tools + Node + Python test suites
 corepack pnpm conformance      # cross-language conformance runner
 corepack pnpm validate         # conformance + parity + static + tests + build
 corepack pnpm release:check    # full release gate
-corepack pnpm cli --help       # repo CLI: doctor, card-lint, evidence, drift
+corepack pnpm cli --help       # packaged public CLI from the local build
 ```
 
-None of these send live Google Chat traffic. Live smokes are explicitly
-guarded (`RUN_LIVE_CHAT_SMOKE=1`, a dedicated smoke space, per-user OAuth)
-and target only a dedicated test space — see
+None of these send live Google Chat traffic. The packaged smoke uses
+`RUN_LIVE_GOOGLECHATAI_SMOKE=1`; repository-maintainer smokes use
+`RUN_LIVE_CHAT_SMOKE=1`. Both require a dedicated smoke space and user
+authorization — see
 [Live Smoke Safety](docs/guides/2026-06-29-live-smoke-safety.md) and the
 [Live Chat Smoke Harness](docs/runbooks/2026-06-29-live-chat-smoke-harness.md).
 Tenant-specific live QA ledgers are maintained privately outside this
@@ -176,6 +181,7 @@ repository.
 Start here:
 
 - [Docs Index](docs/README.md)
+- [Public CLI And First App](docs/guides/2026-07-16-public-cli-and-first-app.md)
 - [Architecture Overview](docs/guides/2026-06-29-architecture-overview.md)
 - [Local Fixture Tests Quickstart](docs/guides/2026-06-29-local-fixture-tests-quickstart.md)
 
@@ -211,7 +217,9 @@ Product background:
 - `examples/python-local/` — dependency-free Python runtime
   ([walkthrough](docs/examples/2026-06-29-python-fixture-normalizer.md)).
 - `examples/python-fastapi/` — the optional FastAPI adapter.
-- `examples/cloud-run-node/` — a scaffolded Cloud Run webhook.
+- `examples/cloud-run-node-sdk/` — package-routed, verified, bounded-body
+  Cloud Run reference ([guide](docs/guides/2026-07-10-production-hardening.md)).
+- `examples/cloud-run-node/` — smoke-only Cloud Run webhook scaffold.
 
 ## Contributing
 
@@ -240,7 +248,7 @@ conformance/         Cross-language behavior cases
 discovery/           Curated Google Chat discovery metadata
 tools/               Repository tooling (conformance, release gates, CLI)
 docs/                Guides, specs, research, and architecture notes
-examples/            Runnable local runtimes and a Cloud Run scaffold
+examples/            Runnable local runtimes, Cloud Run reference, and smoke scaffold
 ```
 
 ## Trademark Note

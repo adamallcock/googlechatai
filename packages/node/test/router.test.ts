@@ -600,6 +600,24 @@ describe("GoogleChatAI router", () => {
     );
   });
 
+  it("accepts an application-owned structural idempotency store", async () => {
+    const raw = readJson("fixtures/events/message-created/basic.json");
+    const delegate = new InMemoryIdempotencyStore();
+    const store = {
+      claim: (input: Parameters<InMemoryIdempotencyStore["claim"]>[0]) => delegate.claim(input),
+    };
+    const chat = new GoogleChatAI({ source: "fixture", dedupe: { store } });
+    const handler = vi.fn((_event, context) => context.reply.text("handled once"));
+    chat.onMessage(handler);
+
+    const first = await chat.fetch(postJson(raw));
+    const second = await chat.fetch(postJson(raw));
+
+    await expect(first.json()).resolves.toEqual({ text: "handled once" });
+    await expect(second.json()).resolves.toEqual({ status: "duplicate_event_ignored" });
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
   it("returns the fallback response and logs late completion when the deadline is exceeded", async () => {
     const raw = readJson("fixtures/events/message-created/basic.json");
     const logger = {

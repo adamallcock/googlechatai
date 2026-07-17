@@ -7,9 +7,12 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 import json
 from pathlib import Path
+import threading
 import time
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Literal, Protocol, runtime_checkable
 from urllib.parse import urlencode
+
+from .._file_state import atomic_write_text, file_state_lock
 
 
 RetryAction = Literal["retry", "refresh_auth", "fail"]
@@ -66,6 +69,28 @@ class IdempotencyClaim:
     expires_at: str
     seen_count: int
     metadata: dict[str, Any] | None = None
+
+
+@runtime_checkable
+class IdempotencyStore(Protocol):
+    """Durable duplicate-delivery contract used by the router.
+
+    Implementations may use a local file, a database transaction, or an
+    application-owned atomic create primitive. The SDK intentionally accepts
+    this structural protocol rather than requiring one of its built-in stores.
+    Generic synchronous stores retain their caller thread by default; async
+    applications can opt into bounded worker execution through the router's
+    ``dedupe={"offload_sync": True}`` option when the store is thread-safe.
+    """
+
+    def claim(
+        self,
+        key: str,
+        *,
+        ttl_ms: int | None = None,
+        now_ms: int | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> IdempotencyClaim: ...
 
 
 @dataclass
@@ -363,6 +388,7 @@ class InMemoryIdempotencyStore:
         self.max_entries = _positive_integer(max_entries, DEFAULT_IDEMPOTENCY_MAX_ENTRIES)
         self.default_ttl_ms = _positive_ms(default_ttl_ms, DEFAULT_IDEMPOTENCY_TTL_MS)
         self._entries: dict[str, _StoredIdempotencyEntry] = {}
+        self._lock = threading.RLock()
 
     def claim(
         self,
@@ -372,15 +398,16 @@ class InMemoryIdempotencyStore:
         now_ms: int | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> IdempotencyClaim:
-        return _claim_in_entries(
-            self._entries,
-            key,
-            ttl_ms=ttl_ms,
-            now_ms=now_ms,
-            metadata=metadata,
-            default_ttl_ms=self.default_ttl_ms,
-            max_entries=self.max_entries,
-        )
+        with self._lock:
+            return _claim_in_entries(
+                self._entries,
+                key,
+                ttl_ms=ttl_ms,
+                now_ms=now_ms,
+                metadata=metadata,
+                default_ttl_ms=self.default_ttl_ms,
+                max_entries=self.max_entries,
+            )
 
 
 class FileIdempotencyStore:
@@ -403,18 +430,19 @@ class FileIdempotencyStore:
         now_ms: int | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> IdempotencyClaim:
-        entries = self._read_entries()
-        claim = _claim_in_entries(
-            entries,
-            key,
-            ttl_ms=ttl_ms,
-            now_ms=now_ms,
-            metadata=metadata,
-            default_ttl_ms=self.default_ttl_ms,
-            max_entries=self.max_entries,
-        )
-        self._write_entries(entries)
-        return claim
+        with file_state_lock(self.file_path):
+            entries = self._read_entries()
+            claim = _claim_in_entries(
+                entries,
+                key,
+                ttl_ms=ttl_ms,
+                now_ms=now_ms,
+                metadata=metadata,
+                default_ttl_ms=self.default_ttl_ms,
+                max_entries=self.max_entries,
+            )
+            self._write_entries(entries)
+            return claim
 
     def _read_entries(self) -> dict[str, _StoredIdempotencyEntry]:
         if not self.file_path.exists():
@@ -435,7 +463,6 @@ class FileIdempotencyStore:
         self,
         entries: dict[str, _StoredIdempotencyEntry],
     ) -> None:
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {
             "version": 1,
             "entries": {
@@ -449,9 +476,7 @@ class FileIdempotencyStore:
                 for key, entry in entries.items()
             },
         }
-        temp_path = self.file_path.with_suffix(f"{self.file_path.suffix}.tmp")
-        temp_path.write_text(f"{json.dumps(payload, indent=2)}\n", "utf8")
-        temp_path.replace(self.file_path)
+        atomic_write_text(self.file_path, f"{json.dumps(payload, indent=2)}\n")
 
 
 def _token_value(lease: dict[str, Any]) -> str:
@@ -710,7 +735,7 @@ def _event_metadata(event: dict[str, Any]) -> dict[str, Any]:
 def guard_duplicate_event_delivery(
     event: dict[str, Any],
     *,
-    store: InMemoryIdempotencyStore | FileIdempotencyStore,
+    store: IdempotencyStore,
     ttl_ms: int | None = None,
     now_ms: int | None = None,
     metadata: dict[str, Any] | None = None,
@@ -731,6 +756,7 @@ def guard_duplicate_event_delivery(
 __all__ = [
     "FileIdempotencyStore",
     "IdempotencyClaim",
+    "IdempotencyStore",
     "InMemoryIdempotencyStore",
     "DuplicateEventGuardResult",
     "RetryDecision",

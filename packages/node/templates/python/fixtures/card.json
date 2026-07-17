@@ -1,0 +1,26 @@
+{
+  "fallbackText": "Beta setup is ready.",
+  "text": "Beta setup is ready.",
+  "cardsV2": [
+    {
+      "cardId": "beta-ready",
+      "card": {
+        "header": {
+          "title": "Google Chat app",
+          "subtitle": "Local fixture"
+        },
+        "sections": [
+          {
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "The local handler and fixture replay passed."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

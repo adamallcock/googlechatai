@@ -6,14 +6,14 @@ import asyncio
 import inspect
 import logging
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
 from googlechatai.events import normalize_event
 from googlechatai.transport import (
-    FileIdempotencyStore,
-    InMemoryIdempotencyStore,
+    IdempotencyStore,
     guard_duplicate_event_delivery,
 )
 
@@ -25,7 +25,105 @@ HandlerResult = str | Mapping[str, Any] | ChatResponse | None
 Handler = Callable[[HandlerContext], HandlerResult | Awaitable[HandlerResult]]
 Predicate = Callable[[Mapping[str, Any]], bool]
 
-IdempotencyStore = InMemoryIdempotencyStore | FileIdempotencyStore
+# Deadline-managed delivery must not let an arbitrary number of synchronous
+# handlers or durable-store calls create threads. Work that cannot be
+# cancelled (for example a blocking application callback) is bounded globally
+# and runs on this shared executor; overload is surfaced to the HTTP boundary
+# for a retry instead of silently accepting an unprotected delivery.
+_BLOCKING_WORKERS = 8
+_BLOCKING_WORK_CAPACITY = 16
+_blocking_executor = ThreadPoolExecutor(
+    max_workers=_BLOCKING_WORKERS,
+    thread_name_prefix="googlechatai-blocking",
+)
+_blocking_work_slots = threading.BoundedSemaphore(_BLOCKING_WORK_CAPACITY)
+
+_deadline_supervisor_lock = threading.Lock()
+_deadline_supervisor_loop: asyncio.AbstractEventLoop | None = None
+_deadline_supervisor_thread: threading.Thread | None = None
+
+
+class DeliveryCapacityError(RuntimeError):
+    """A retryable inbound delivery could not enter bounded blocking work."""
+
+
+class _BlockingWorkSaturatedError(DeliveryCapacityError):
+    """Raised when bounded off-loop work cannot be admitted safely."""
+
+
+def _sync_deadline_supervisor_loop() -> asyncio.AbstractEventLoop:
+    """Return the one daemon loop that preserves late sync-dispatch work.
+
+    ``dispatch()`` cannot use ``asyncio.run`` when a deadline deliberately
+    leaves an async handler running for late-result logging: ``asyncio.run``
+    cancels that task on return. A single long-lived supervisor prevents the
+    old one-thread/one-loop-per-delivery leak while retaining that behavior.
+    """
+
+    global _deadline_supervisor_loop, _deadline_supervisor_thread
+    with _deadline_supervisor_lock:
+        if (
+            _deadline_supervisor_loop is not None
+            and _deadline_supervisor_thread is not None
+            and _deadline_supervisor_thread.is_alive()
+        ):
+            return _deadline_supervisor_loop
+
+        loop = asyncio.new_event_loop()
+        ready = threading.Event()
+
+        def runner() -> None:
+            asyncio.set_event_loop(loop)
+            ready.set()
+            loop.run_forever()
+
+        thread = threading.Thread(
+            target=runner,
+            name="googlechatai-deadline-supervisor",
+            daemon=True,
+        )
+        _deadline_supervisor_loop = loop
+        _deadline_supervisor_thread = thread
+        thread.start()
+        ready.wait()
+        return loop
+
+
+async def _run_bounded_blocking(
+    function: Callable[..., Any],
+    /,
+    *args: Any,
+    **kwargs: Any,
+) -> Any:
+    """Execute unavoidable synchronous work off the active event loop.
+
+    The semaphore bounds both running and queued work. A blocking handler may
+    outlive the Chat deadline, but it cannot cause an unbounded thread or work
+    queue build-up under repeated deliveries.
+    """
+
+    if not _blocking_work_slots.acquire(blocking=False):
+        raise _BlockingWorkSaturatedError(
+            "Google Chat synchronous work capacity is exhausted."
+        )
+
+    def invoke() -> Any:
+        try:
+            return function(*args, **kwargs)
+        finally:
+            _blocking_work_slots.release()
+
+    loop = asyncio.get_running_loop()
+    try:
+        future = loop.run_in_executor(_blocking_executor, invoke)
+    except BaseException:
+        _blocking_work_slots.release()
+        raise
+    # A cancelled waiter must not cancel a queued executor callback: if it did,
+    # `invoke()` would never run and the reserved semaphore slot would leak.
+    # The work itself remains bounded and releases its slot exactly once.
+    return await asyncio.shield(future)
+
 
 KNOWN_EVENT_KINDS: frozenset[str] = frozenset(
     {
@@ -180,21 +278,32 @@ def _slash_command_name_for_event(event: Mapping[str, Any]) -> str | None:
 
 def _normalize_dedupe_option(
     dedupe: Any,
-) -> tuple[IdempotencyStore, int | None] | None:
+) -> tuple[IdempotencyStore, int | None, bool] | None:
     if dedupe is None:
         return None
 
-    if isinstance(dedupe, (InMemoryIdempotencyStore, FileIdempotencyStore)):
-        return dedupe, None
+    if isinstance(dedupe, IdempotencyStore):
+        return dedupe, None, bool(getattr(dedupe, "requires_thread_offload", False))
 
     if isinstance(dedupe, Mapping):
         store = dedupe.get("store")
-        if not isinstance(store, (InMemoryIdempotencyStore, FileIdempotencyStore)):
+        if not isinstance(store, IdempotencyStore):
             raise TypeError(
                 "dedupe requires a 'store' entry that is an IdempotencyStore."
             )
         ttl_ms = dedupe.get("ttl_ms")
-        return store, ttl_ms
+        configured_offload = dedupe.get("offload_sync")
+        if configured_offload is not None and not isinstance(configured_offload, bool):
+            raise TypeError("dedupe 'offload_sync' must be a boolean when provided.")
+        return (
+            store,
+            ttl_ms,
+            bool(
+                configured_offload
+                if configured_offload is not None
+                else getattr(store, "requires_thread_offload", False)
+            ),
+        )
 
     raise TypeError(
         "dedupe must be a mapping with a 'store' entry, or an IdempotencyStore."
@@ -510,18 +619,35 @@ class GoogleChatAI:
         try:
             asyncio.get_running_loop()
         except RuntimeError:
-            return asyncio.run(
-                self.dispatch_async(
-                    payload,
-                    source=source,
-                    received_at=received_at,
-                )
+            coroutine = self._dispatch_async(
+                payload,
+                source=source,
+                received_at=received_at,
+                # Preserve the caller's thread for the ordinary synchronous
+                # fixture/application path. Deadline dispatch needs off-loop
+                # work so its budget remains meaningful.
+                offload_sync_dedupe=self._deadline is not None,
             )
+            if self._deadline is None:
+                return asyncio.run(coroutine)
+            return self._run_deadline_dispatch_sync(coroutine)
 
         raise RuntimeError(
             "GoogleChatAI.dispatch() cannot run inside an active event loop. "
             "Use dispatch_async()."
         )
+
+    def _run_deadline_dispatch_sync(
+        self,
+        coroutine: Awaitable[dict[str, Any]],
+    ) -> dict[str, Any]:
+        """Run deadline dispatch on the shared late-work supervisor loop."""
+
+        future = asyncio.run_coroutine_threadsafe(
+            coroutine,
+            _sync_deadline_supervisor_loop(),
+        )
+        return future.result()
 
     async def dispatch_async(
         self,
@@ -532,60 +658,68 @@ class GoogleChatAI:
     ) -> dict[str, Any]:
         """Asynchronously dispatch a local Chat event payload."""
 
+        return await self._dispatch_async(
+            payload,
+            source=source,
+            received_at=received_at,
+            offload_sync_dedupe=True,
+        )
+
+    async def _dispatch_async(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        source: str,
+        received_at: str | None,
+        offload_sync_dedupe: bool,
+    ) -> dict[str, Any]:
+        """Internal dispatch with an explicit sync-store execution policy."""
+
         raw_event = self._copy_mapping(payload)
         event = self._normalize_payload(raw_event, source=source, received_at=received_at)
-        idempotency_key = event.get("idempotencyKey")
 
-        if (
-            self._dedupe is not None
-            and isinstance(idempotency_key, str)
-            and idempotency_key.strip() != ""
-        ):
-            store, ttl_ms = self._dedupe
-            guard = guard_duplicate_event_delivery(event, store=store, ttl_ms=ttl_ms)
-            if guard["duplicate"]:
-                self._logger.info(
-                    "chat.event.duplicate",
-                    extra={
-                        "event_id": event.get("eventId"),
-                        "event_kind": event.get("kind"),
-                    },
-                )
-                return {"status": "duplicate_event_ignored"}
-
-        return await self._dispatch_with_deadline(event, raw_event)
+        return await self._dispatch_with_deadline(
+            event,
+            raw_event,
+            offload_sync_dedupe=offload_sync_dedupe,
+        )
 
     async def _dispatch_with_deadline(
         self,
         event: dict[str, Any],
         raw_event: Mapping[str, Any],
+        *,
+        offload_sync_dedupe: bool,
     ) -> dict[str, Any]:
-        """Run dispatch on a worker thread and race it against the deadline
-        budget, exactly like the Node runtime races the middleware+handler
-        chain against a `setTimeout`. Keeping the no-deadline path free of
-        any threading keeps its behavior and performance unchanged.
+        """Race cooperative handler work against a deadline without blocking
+        the caller's event loop.
+
+        ``asyncio.wait`` leaves the handler task running when the timeout wins,
+        so the caller can receive the Chat fallback while the underlying work
+        finishes and is logged. This matches the Node runtime's non-cancelling
+        ``Promise.race`` behavior without moving async handlers to a second
+        event loop.
         """
 
         if self._deadline is None:
-            return await self._dispatch_event(event, raw_event)
+            return await self._dispatch_delivery(
+                event,
+                raw_event,
+                offload_sync_dedupe=offload_sync_dedupe,
+            )
 
         budget_ms = self._deadline.budget_ms
-        result_box: dict[str, Any] = {}
+        task = asyncio.create_task(
+            self._dispatch_delivery(
+                event,
+                raw_event,
+                offload_sync_dedupe=offload_sync_dedupe,
+            )
+        )
 
-        def worker() -> None:
-            try:
-                result_box["value"] = asyncio.run(self._dispatch_event(event, raw_event))
-            except BaseException as exc:  # noqa: BLE001 - reported via logging below, not raised
-                result_box["error"] = exc
-
-        thread = threading.Thread(target=worker, daemon=True)
-        thread.start()
-        thread.join(budget_ms / 1000)
-
-        if not thread.is_alive():
-            if "error" in result_box:
-                raise result_box["error"]
-            return result_box["value"]
+        done, _ = await asyncio.wait({task}, timeout=budget_ms / 1000)
+        if task in done:
+            return task.result()
 
         self._logger.warning(
             "chat.event.deadline_exceeded",
@@ -595,15 +729,16 @@ class GoogleChatAI:
             },
         )
 
-        def log_late_completion() -> None:
-            thread.join()
-            if "error" in result_box:
+        def log_late_completion(completed: asyncio.Task[dict[str, Any]]) -> None:
+            try:
+                completed.result()
+            except BaseException as exc:  # noqa: BLE001 - log detached task failure
                 self._logger.error(
                     "chat.event.late_failure",
                     extra={
                         "event_id": event.get("eventId"),
                         "event_kind": event.get("kind"),
-                        "error_message": str(result_box["error"]),
+                        "error_message": str(exc),
                     },
                 )
             else:
@@ -615,7 +750,7 @@ class GoogleChatAI:
                     },
                 )
 
-        threading.Thread(target=log_late_completion, daemon=True).start()
+        task.add_done_callback(log_late_completion)
 
         on_deadline = self._deadline.on_deadline
         if on_deadline is not None:
@@ -626,12 +761,78 @@ class GoogleChatAI:
                 context_loader=self._context_loader,
                 reply_routing=self._reply_routing,
             )
-            result = on_deadline(context)
-            if inspect.isawaitable(result):
-                result = await result
-            return normalize_handler_response(result)
+            try:
+                return normalize_handler_response(
+                    await self._invoke_handler(on_deadline, context)
+                )
+            except _BlockingWorkSaturatedError:
+                self._logger.error(
+                    "chat.event.deadline_callback_capacity_exhausted",
+                    extra={
+                        "event_id": event.get("eventId"),
+                        "event_kind": event.get("kind"),
+                    },
+                )
 
         return json_response(text="Still working on it...")
+
+    async def _dispatch_delivery(
+        self,
+        event: dict[str, Any],
+        raw_event: Mapping[str, Any],
+        *,
+        offload_sync_dedupe: bool,
+    ) -> dict[str, Any]:
+        """Run duplicate protection and the handler within the deadline task."""
+
+        idempotency_key = event.get("idempotencyKey")
+        if (
+            self._dedupe is not None
+            and isinstance(idempotency_key, str)
+            and idempotency_key.strip() != ""
+        ):
+            store, ttl_ms, configured_offload = self._dedupe
+            if self._deadline is not None or (
+                offload_sync_dedupe and configured_offload
+            ):
+                guard = await _run_bounded_blocking(
+                    guard_duplicate_event_delivery,
+                    event,
+                    store=store,
+                    ttl_ms=ttl_ms,
+                )
+            else:
+                guard = guard_duplicate_event_delivery(
+                    event,
+                    store=store,
+                    ttl_ms=ttl_ms,
+                )
+            if guard["duplicate"]:
+                self._logger.info(
+                    "chat.event.duplicate",
+                    extra={
+                        "event_id": event.get("eventId"),
+                        "event_kind": event.get("kind"),
+                    },
+                )
+                return {"status": "duplicate_event_ignored"}
+
+        return await self._dispatch_event(event, raw_event)
+
+    async def _invoke_handler(
+        self,
+        handler: Handler,
+        context: HandlerContext,
+    ) -> HandlerResult:
+        """Invoke handlers without letting sync code defeat a configured deadline."""
+
+        if self._deadline is not None and not inspect.iscoroutinefunction(handler):
+            result = await _run_bounded_blocking(handler, context)
+        else:
+            result = handler(context)
+        if inspect.isawaitable(result):
+            return await result
+        return result
 
     async def _dispatch_event(
         self,
@@ -661,10 +862,17 @@ class GoogleChatAI:
         )
 
         try:
-            result = handler(context)
-            if inspect.isawaitable(result):
-                result = await result
-            return normalize_handler_response(result)
+            return normalize_handler_response(await self._invoke_handler(handler, context))
+        except _BlockingWorkSaturatedError:
+            self._logger.error(
+                "googlechatai.router.blocking_work_capacity_exhausted",
+                extra={
+                    "event_id": event.get("eventId"),
+                    "event_kind": event.get("kind"),
+                    "handler_name": getattr(handler, "__name__", repr(handler)),
+                },
+            )
+            raise
         except Exception:
             self._logger.exception(
                 "googlechatai.router.handler_error",
@@ -767,4 +975,10 @@ class GoogleChatAI:
         return dict(value)
 
 
-__all__ = ["GoogleChatAI", "HandlerContext", "ChatResponse", "json_response"]
+__all__ = [
+    "ChatResponse",
+    "DeliveryCapacityError",
+    "GoogleChatAI",
+    "HandlerContext",
+    "json_response",
+]

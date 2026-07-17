@@ -1,8 +1,27 @@
 # Changelog
 
 All notable changes to googlechatai are documented here. The project follows
-semantic versioning once it reaches 0.1.0; during 0.0.x, minor surface
-changes may occur between releases.
+semantic versioning from 0.1.0 onward. Prerelease APIs may still change before
+the stable 0.1.0 release.
+
+## 0.1.0-beta.1 — 2026-07-16
+
+- Ship a dependency-free `googlechatai` CLI with project scaffolding,
+  configuration diagnostics, sanitized event inspection, cross-language
+  fixture replay, dry-run request planning, card linting, and a guarded
+  dedicated-space smoke command.
+- Add minimal Node.js and Python starter apps with verified inbound requests,
+  bounded request bodies, sanitized local fixtures, tests, environment
+  templates, and explicit Google Chat registration steps.
+- Add model-safe context projections with provenance/trust labels and
+  default email redaction, plus public-type and cross-language parity checks.
+- Harden production routing, retries, idempotency, queues, token stores,
+  streaming state, and optional Firestore-backed reference stores.
+- Add a package-routed Cloud Run reference, staging certification and
+  idempotency-monitor tooling, all guarded from accidental tenant writes.
+- Publish prerelease-aware OIDC workflow policy: npm prereleases use the
+  `next` tag, PyPI's normalized prerelease version is verified correctly, and
+  exact immutable artifact hashes make partial-release recovery idempotent.
 
 ## 0.0.2 — 2026-07-07
 

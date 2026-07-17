@@ -6,7 +6,10 @@ import {
   EXIT_DRIFT,
   EXIT_FETCH_ERROR,
   EXIT_OK,
+  canonicalMethodSignature,
+  canonicalReachableSchema,
   diffDiscovery,
+  extractMethodSignatures,
   extractSortedMethods,
   fetchLiveDiscoveryDocument,
   formatReport,
@@ -17,6 +20,7 @@ import {
 const baselineFixture = {
   revision: "20260623",
   methods: ["spaces.create", "spaces.get", "spaces.messages.create"],
+  methodSignatures: extractMethodSignatures(discoveryDocumentFixture()),
 };
 
 function discoveryDocumentFixture(overrides = {}) {
@@ -139,6 +143,104 @@ test("diffDiscovery treats a revision-only change as informational, not drift", 
   assert.equal(diff.baselineRevision, "20260623");
 });
 
+test("diffDiscovery detects a request-contract signature change without method-name drift", () => {
+  const baseline = {
+    ...baselineFixture,
+    methodSignatures: extractMethodSignatures(discoveryDocumentFixture()),
+  };
+  const document = discoveryDocumentFixture({
+    resources: {
+      spaces: {
+        methods: {
+          create: {},
+          get: {
+            httpMethod: "POST",
+            path: "v1/{+name}",
+            parameters: { name: { location: "path", type: "string", required: true } },
+          },
+        },
+        resources: { messages: { methods: { create: {} } } },
+      },
+    },
+  });
+
+  const diff = diffDiscovery(baseline, document);
+
+  assert.equal(diff.ok, false);
+  assert.deepEqual(diff.added, []);
+  assert.deepEqual(diff.removed, []);
+  assert.deepEqual(diff.changed.map((change) => change.method), ["spaces.get"]);
+});
+
+test("canonicalMethodSignature ignores discovery prose but retains method contract fields", () => {
+  const first = canonicalMethodSignature({
+    id: "chat.spaces.get",
+    httpMethod: "GET",
+    path: "v1/{+name}",
+    description: "first prose",
+    parameters: { name: { location: "path", type: "string", required: true } },
+  });
+  const second = canonicalMethodSignature({
+    ...first,
+    description: "rewritten prose",
+    parameters: { name: { location: "path", type: "string", required: true } },
+  });
+
+  assert.deepEqual(first, second);
+  assert.equal(first.parameters.name.required, true);
+});
+
+test("canonical reachable schemas detect nested field contract changes behind an unchanged ref", () => {
+  const first = discoveryDocumentFixture({
+    schemas: {
+      Message: {
+        type: "object",
+        properties: {
+          text: { type: "string", enum: ["one", "two"] },
+        },
+      },
+    },
+    resources: {
+      spaces: {
+        methods: {
+          create: { request: { $ref: "Message" } },
+          get: {},
+        },
+        resources: { messages: { methods: { create: {} } } },
+      },
+    },
+  });
+  const changed = structuredClone(first);
+  changed.schemas.Message.properties.text.enum = ["one", "three"];
+  const baseline = {
+    ...baselineFixture,
+    methodSignatures: extractMethodSignatures(first),
+  };
+
+  const diff = diffDiscovery(baseline, changed);
+
+  assert.deepEqual(diff.changed.map((entry) => entry.method), ["spaces.create"]);
+  assert.notDeepEqual(
+    canonicalReachableSchema({ $ref: "Message" }, first.schemas),
+    canonicalReachableSchema({ $ref: "Message" }, changed.schemas),
+  );
+});
+
+test("diffDiscovery fails closed when a baseline omits method signatures", () => {
+  const baseline = {
+    ...baselineFixture,
+    methodSignatures: { "spaces.create": baselineFixture.methodSignatures["spaces.create"] },
+  };
+
+  const diff = diffDiscovery(baseline, discoveryDocumentFixture());
+
+  assert.equal(diff.ok, false);
+  assert.deepEqual(diff.missingBaselineSignatures, [
+    "spaces.get",
+    "spaces.messages.create",
+  ]);
+});
+
 test("diffDiscovery does not flag revision change when either revision is missing", () => {
   const diff = diffDiscovery(
     { methods: baselineFixture.methods },
@@ -174,6 +276,23 @@ test("formatReport renders added/removed/revision drift details", () => {
   assert.match(report, /\+ spaces\.patch/);
   assert.match(report, /- spaces\.get/);
   assert.match(report, /- spaces\.messages\.create/);
+});
+
+test("formatReport renders changed method signature details", () => {
+  const baseline = {
+    ...baselineFixture,
+    methodSignatures: extractMethodSignatures(discoveryDocumentFixture()),
+  };
+  const document = discoveryDocumentFixture({
+    resources: {
+      spaces: {
+        methods: { create: {}, get: { httpMethod: "POST" } },
+        resources: { messages: { methods: { create: {} } } },
+      },
+    },
+  });
+
+  assert.match(formatReport(diffDiscovery(baseline, document)), /Changed method signatures/);
 });
 
 test("fetchLiveDiscoveryDocument returns parsed JSON on success", async () => {

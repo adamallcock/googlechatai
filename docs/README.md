@@ -20,8 +20,11 @@ reports as current state.
   target and capability inventory. This is not a shipped-feature claim.
 - `guides/2026-06-29-architecture-overview.md`: contributor-oriented architecture
   map and current implementation boundaries.
-- `guides/2026-07-04-chat-doctor.md`: public setup, setup-bundle, endpoint,
-  auth, interaction, and log-correlation diagnostic command.
+- `guides/2026-07-16-public-cli-and-first-app.md`: package-installed Node and
+  Python first-success workflow, offline inspect/replay/plan/card commands,
+  generic doctor, manual Google boundary, and guarded dedicated-space smoke.
+- `guides/2026-07-04-chat-doctor.md`: repository-maintainer setup-bundle,
+  endpoint, auth, interaction, and log-correlation diagnostics.
 - `guides/2026-07-04-capability-error-explainers.md`: public app-vs-user auth,
   scope, retry, idempotency, and error-remediation explainers.
 - `guides/2026-07-04-card-lint-and-translation.md`: profile-aware Chat card
@@ -40,8 +43,8 @@ reports as current state.
   queue handoff planner for long-running AI responses.
 - `guides/2026-07-04-passive-ingestion.md`: direct, Workspace Events push/pull,
   and polling fallback ingestion planning with polling snapshot processing.
-- `guides/2026-07-04-evidence-tooling.md`: redacted evidence collection
-  planning, fixture recording, and Node/Python replay parity checks.
+- `guides/2026-07-04-evidence-tooling.md`: repository-maintainer redacted
+  evidence collection, fixture recording, and Node/Python replay parity checks.
 - `guides/2026-07-04-placeholder-responses.md`: agent placeholder-response
   create/hydrate/complete flow for editing the same Chat message.
 - `guides/2026-07-05-reply-routing-policy.md`: configurable event reply
@@ -62,6 +65,31 @@ reports as current state.
 - `guides/2026-07-06-router-event-coverage.md`: router registrations for
   slash commands, space/reaction/membership/message events, plus
   dedupe/deadline/verifier options and dispatch precedence.
+- `guides/2026-07-10-production-hardening.md`: verified framework boundaries,
+  local-versus-durable state, Firestore idempotency reference stores,
+  model-safe context, attachment scanner seams, Cloud Run reference, discovery
+  contract fingerprints, coverage floors, additive public Python contracts,
+  and the strict Pyright public-API gate.
+- `guides/2026-07-10-capability-lifecycle.md`: separate local, dry-run,
+  guarded-live, and production-supported capability labels with promotion rules.
+- `plans/2026-07-10-release-pilot-certification.md`: current public-beta,
+  Cloud Run reference, staging certification, and idempotency-monitor
+  completion plan, including external approval boundaries.
+- `plans/2026-07-16-public-beta-developer-workflow-implementation-plan.md`:
+  current implementation plan for the packaged CLI, Node/Python scaffolds,
+  first-success documentation, guarded smoke, clean-install validation, and
+  publication gates.
+- `research/2026-07-10-googlechatai-architecture-and-capability-assessment.md`:
+  historical pre-hardening assessment of product intent, sufficiency, and
+  remaining application responsibilities; its implementation-status section
+  records the completed remediation.
+- `research/2026-07-16-googlechatai-developer-experience-reassessment.md`:
+  current product and viability decision after hands-on comparison with the
+  official Google clients, Google Workspace CLI, and Vercel Chat SDK. It
+  supersedes the narrower July 15 market recommendation.
+- `reports/2026-07-16-public-beta-release-readiness.md`: implemented CLI and
+  scaffold surface, full validation and installed-artifact evidence, current
+  registry/GitHub state, and exact external publication blockers.
 - `research/2026-07-05-google-chat-link-retrieval-research.md`: current research
   on Google Chat URL shapes, `chatSpaceLinkData`, API retrieval routes, and
   parse-confidence boundaries.
@@ -74,6 +102,18 @@ reports as current state.
   visible user-auth thumbs-up/down reaction planners.
 - `runbooks/2026-06-29-live-chat-smoke-harness.md`: canonical live Chat smoke
   safety and command runbook.
+- `runbooks/2026-07-10-publication-handoff.md`: public-beta npm/PyPI release
+  policy, GitHub OIDC trusted publishing, provenance, registry verification,
+  and the account-level approval boundaries.
+- `runbooks/2026-07-16-five-developer-beta.md`: external five-person
+  recruitment, task script, privacy boundary, redacted scorecard, and stable
+  release decision gates; participant slots remain explicitly unclaimed until
+  real sessions occur.
+- `runbooks/2026-07-10-staging-certification.md`: isolated package-routed
+  Cloud Run deployment, read-only health certification, and guarded staging
+  callback smoke procedure.
+- `runbooks/2026-07-10-idempotency-monitor-operations.md`: scheduler, alert,
+  notification-channel, and safe escalation procedure for durable delivery.
 - `guides/2026-07-02-production-auth-retry-idempotency.md`: current transport,
   retry, auth-refresh, and idempotency guidance.
 - `../tools/release/2026-06-29-release-hygiene.md`: release, secret, generated

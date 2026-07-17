@@ -83,6 +83,11 @@ from .cards import (
     with_card_action_state,
 )
 from .events import InvalidChatEventError, normalize_event
+from .firestore import (
+    FirestoreIdempotencyStore,
+    FirestoreIdempotencyStoreError,
+    FirestoreTransport,
+)
 from .identity import (
     DIRECTORY_USER_READONLY_SCOPE,
     FileIdentityCache,
@@ -136,12 +141,14 @@ from .threads import (
     build_conversation_context_with_identity,
     plan_read_space_context,
     plan_read_thread_context,
+    project_model_context,
     render_ai_context,
 )
 from .transport import (
     DuplicateEventGuardResult,
     FileIdempotencyStore,
     IdempotencyClaim,
+    IdempotencyStore,
     InMemoryIdempotencyStore,
     RetryDecision,
     RetryDecisionInput,
@@ -273,9 +280,13 @@ __all__ = [
     "FileIdentityCache",
     "FileWorkspaceEventsCheckpointStore",
     "FileIdempotencyStore",
+    "FirestoreIdempotencyStore",
+    "FirestoreIdempotencyStoreError",
+    "FirestoreTransport",
     "GoogleChatAI",
     "HandlerContext",
     "IdempotencyClaim",
+    "IdempotencyStore",
     "InMemoryArtifactCache",
     "InMemoryIdentityCache",
     "InMemoryIdempotencyStore",
@@ -371,6 +382,7 @@ __all__ = [
     "plan_placeholder_response",
     "plan_read_space_context",
     "plan_read_thread_context",
+    "project_model_context",
     "plan_reply_in_thread",
     "plan_reply_to_event",
     "plan_send_to_space",

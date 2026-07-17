@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { Buffer } from "node:buffer";
 
 export type MediaKind =
   | "text"
@@ -127,8 +128,31 @@ export type AttachmentParsers = Partial<
   Record<"text" | "json" | "pdf" | "image" | "audio", AttachmentParser>
 >;
 
+export interface AttachmentSafetyScanInput {
+  attachment: NormalizedAttachment;
+  data: unknown;
+}
+
+export interface AttachmentSafetyScanResult {
+  status: "allowed" | "blocked";
+  reason?: string | null;
+}
+
+/**
+ * Application-owned content scanner hook. The SDK does not bundle a malware
+ * or DLP engine, so deployments decide which scanner and tenant policy apply.
+ */
+export type AttachmentSafetyScanner = (
+  input: AttachmentSafetyScanInput,
+) => AttachmentSafetyScanResult | Promise<AttachmentSafetyScanResult>;
+
 export interface ParseAttachmentOptions {
   parsers?: AttachmentParsers;
+  scanner?: AttachmentSafetyScanner;
+  /** Maximum byte length passed to a parser when the input is byte-like. */
+  maxParseBytes?: number;
+  /** Maximum extracted text characters retained in model-adjacent metadata. */
+  maxExtractedChars?: number;
 }
 
 export interface AttachmentContextPart {
@@ -403,6 +427,16 @@ function dataBytes(value: unknown): Uint8Array | null {
   }
   if (typeof value === "string") {
     return new TextEncoder().encode(value);
+  }
+  return null;
+}
+
+function dataByteLength(value: unknown): number | null {
+  if (value instanceof Uint8Array || value instanceof ArrayBuffer) {
+    return value.byteLength;
+  }
+  if (typeof value === "string") {
+    return Buffer.byteLength(value, "utf8");
   }
   return null;
 }
@@ -2316,6 +2350,48 @@ export async function parseAttachmentContent(
     return attachment;
   }
 
+  const maxParseBytes = options.maxParseBytes;
+  if (
+    maxParseBytes !== undefined &&
+    (!Number.isSafeInteger(maxParseBytes) || maxParseBytes <= 0)
+  ) {
+    throw new TypeError("maxParseBytes must be a positive safe integer.");
+  }
+  const maxExtractedChars = options.maxExtractedChars;
+  if (
+    maxExtractedChars !== undefined &&
+    (!Number.isSafeInteger(maxExtractedChars) || maxExtractedChars <= 0)
+  ) {
+    throw new TypeError("maxExtractedChars must be a positive safe integer.");
+  }
+  const inputByteLength = dataByteLength(data);
+  if (
+    inputByteLength !== null &&
+    maxParseBytes !== undefined &&
+    inputByteLength > maxParseBytes
+  ) {
+    return withExtraction(attachment, {
+      status: "blocked",
+      parser: null,
+      text: null,
+      reason: `Attachment parser input exceeds the ${maxParseBytes} byte limit.`,
+    });
+  }
+  if (options.scanner) {
+    const scan = await options.scanner({ attachment, data });
+    if (!scan || (scan.status !== "allowed" && scan.status !== "blocked")) {
+      throw new TypeError("Attachment scanner must return an allowed or blocked status.");
+    }
+    if (scan.status === "blocked") {
+      return withExtraction(attachment, {
+        status: "blocked",
+        parser: null,
+        text: null,
+        reason: scan.reason ?? "Attachment was blocked by the configured safety scanner.",
+      });
+    }
+  }
+
   const parserKind = parserKindFor(attachment);
   const parser = parserKind ? options.parsers?.[parserKind] : undefined;
 
@@ -2330,7 +2406,22 @@ export async function parseAttachmentContent(
     });
   }
 
-  return withExtraction(attachment, await parser({ attachment, data }));
+  const result = await parser({ attachment, data });
+  if (
+    maxExtractedChars !== undefined &&
+    typeof result.text === "string" &&
+    result.text.length > maxExtractedChars
+  ) {
+    return withExtraction(attachment, {
+      ...result,
+      status: "partial",
+      text: result.text.slice(0, maxExtractedChars),
+      reason: [result.reason, `Extracted text was truncated at ${maxExtractedChars} characters.`]
+        .filter((item): item is string => typeof item === "string" && item.length > 0)
+        .join(" "),
+    });
+  }
+  return withExtraction(attachment, result);
 }
 
 function filenamePhrase(attachment: NormalizedAttachment): string {

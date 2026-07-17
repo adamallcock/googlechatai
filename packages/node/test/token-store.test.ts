@@ -172,6 +172,22 @@ describe("FileTokenStore", () => {
     const entries = await fs.readdir(dir);
     expect(entries).toEqual(["tokens.json"]);
   });
+
+  it("serializes concurrent saves for distinct principals", async () => {
+    const dir = await makeTempDir();
+    const filePath = path.join(dir, "tokens.json");
+    const store = new FileTokenStore({ filePath });
+
+    await Promise.all(
+      Array.from({ length: 12 }, (_, index) =>
+        store.save({ principalId: `users/${index}`, accessToken: `token-${index}` }),
+      ),
+    );
+
+    expect((await store.list()).sort()).toEqual(
+      Array.from({ length: 12 }, (_, index) => `users/${index}`).sort(),
+    );
+  });
 });
 
 interface CapturedRequest {

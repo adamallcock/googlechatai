@@ -10,13 +10,14 @@ from __future__ import annotations
 
 import base64
 import json
-import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Protocol
 from urllib.parse import quote, urlencode
+
+from .._file_state import atomic_write_text, file_state_lock
 
 
 DEFAULT_SECRET_PREFIX = "chat-token-"
@@ -155,18 +156,20 @@ class FileTokenStore:
             getattr(record, "principal_id", None),
             "Expected record.principal_id to be a non-empty string.",
         )
-        records = self._read_records()
-        records[key] = record.clone()
-        self._write_records(records)
+        with file_state_lock(self.file_path):
+            records = self._read_records()
+            records[key] = record.clone()
+            self._write_records(records)
 
     def delete(self, principal_id: str) -> None:
         key = _required_non_empty_string(
             principal_id,
             "Expected principal_id to be a non-empty string.",
         )
-        records = self._read_records()
-        if records.pop(key, None) is not None:
-            self._write_records(records)
+        with file_state_lock(self.file_path):
+            records = self._read_records()
+            if records.pop(key, None) is not None:
+                self._write_records(records)
 
     def list(self) -> list[str]:
         return list(self._read_records().keys())
@@ -181,19 +184,11 @@ class FileTokenStore:
         }
 
     def _write_records(self, records: dict[str, TokenRecord]) -> None:
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {
             "version": 1,
             "records": {key: record.to_dict() for key, record in records.items()},
         }
-        temp_path = self.file_path.with_name(f"{self.file_path.name}.{os.getpid()}.{time.time_ns()}.tmp")
-        temp_path.write_text(f"{json.dumps(payload, indent=2)}\n", "utf8")
-        os.replace(temp_path, self.file_path)
-        try:
-            os.chmod(self.file_path, 0o600)
-        except OSError:
-            # Some platforms reject POSIX chmod bits; best-effort only.
-            pass
+        atomic_write_text(self.file_path, f"{json.dumps(payload, indent=2)}\n")
 
 
 def _secret_manager_base_url(base_url: str | None) -> str:

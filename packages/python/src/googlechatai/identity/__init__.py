@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
+from .._file_state import atomic_write_text, file_state_lock
+
 
 DIRECTORY_USER_READONLY_SCOPE = (
     "https://www.googleapis.com/auth/admin.directory.user.readonly"
@@ -180,13 +182,13 @@ class FileIdentityCache:
         return self._load().list()
 
     def put_many(self, records: list[Mapping[str, Any]]) -> None:
-        cache = self._load()
-        cache.put_many(records)
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
-        self.file_path.write_text(
-            f"{json.dumps({'version': 1, 'records': cache.list()}, indent=2)}\n",
-            "utf-8",
-        )
+        with file_state_lock(self.file_path):
+            cache = self._load()
+            cache.put_many(records)
+            atomic_write_text(
+                self.file_path,
+                f"{json.dumps({'version': 1, 'records': cache.list()}, indent=2)}\n",
+            )
 
     def _load(self) -> InMemoryIdentityCache:
         cache = InMemoryIdentityCache()

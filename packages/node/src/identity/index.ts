@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import path from "node:path";
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 
 export const DIRECTORY_USER_READONLY_SCOPE =
   "https://www.googleapis.com/auth/admin.directory.user.readonly";
@@ -221,16 +221,17 @@ export class FileIdentityCache implements IdentityCache {
   }
 
   async putMany(records: HumanIdentity[]): Promise<void> {
-    const cache = await this.#load();
-    await cache.putMany(records);
-    await fs.mkdir(path.dirname(this.#filePath), { recursive: true, mode: 0o700 });
-    const payload: SerializedIdentityCache = {
-      version: 1,
-      records: await cache.list(),
-    };
-    await fs.writeFile(this.#filePath, `${JSON.stringify(payload, null, 2)}\n`, {
-      encoding: "utf8",
-      mode: 0o600,
+    await withFileStateLock(this.#filePath, async () => {
+      const cache = await this.#load();
+      await cache.putMany(records);
+      const payload: SerializedIdentityCache = {
+        version: 1,
+        records: await cache.list(),
+      };
+      await writeFileAtomically(
+        this.#filePath,
+        `${JSON.stringify(payload, null, 2)}\n`,
+      );
     });
   }
 

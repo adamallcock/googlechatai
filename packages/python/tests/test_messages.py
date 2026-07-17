@@ -25,6 +25,7 @@ from googlechatai import (
     plan_read_space_context,
     plan_read_thread_context,
     plan_reply_in_thread,
+    project_model_context,
     plan_send_to_space,
     plan_send_to_user,
     plan_start_thread,
@@ -838,6 +839,27 @@ class ContextReaderTests(unittest.TestCase):
                     build_conversation_context(test_case["input"], responses),
                     test_case["expect"]["context"],
                 )
+
+    def test_model_projection_bounds_deeply_nested_quotes_iteratively(self) -> None:
+        message: dict[str, object] = {
+            "plainTextForModel": "leaf",
+            "attachments": [],
+            "quotedMessages": [],
+        }
+        for index in range(1_100):
+            message = {
+                "plainTextForModel": f"quote-{index}",
+                "attachments": [],
+                "quotedMessages": [message],
+            }
+
+        projected = project_model_context(
+            {"kind": "chat.context", "messages": [message]},
+            max_quote_depth=8,
+        )
+
+        self.assertTrue(projected["projection"]["quoteDepthLimited"])
+        self.assertEqual(len(projected["fragments"]), 10)  # policy plus root and eight quotes
 
     def test_trims_model_context_by_estimated_token_budget(self) -> None:
         input_payload = {

@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import path from "node:path";
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 
 import type { AccessTokenLease, GetAccessTokenInput } from "../transport/index.js";
 
@@ -143,9 +143,11 @@ export class FileTokenStore implements TokenStore {
       record?.principalId,
       "Expected record.principalId to be a non-empty string.",
     );
-    const records = await this.#readRecords();
-    records.set(key, cloneRecord(record));
-    await this.#writeRecords(records);
+    await withFileStateLock(this.#filePath, async () => {
+      const records = await this.#readRecords();
+      records.set(key, cloneRecord(record));
+      await this.#writeRecords(records);
+    });
   }
 
   async delete(principalId: string): Promise<void> {
@@ -153,10 +155,12 @@ export class FileTokenStore implements TokenStore {
       principalId,
       "Expected principalId to be a non-empty string.",
     );
-    const records = await this.#readRecords();
-    if (records.delete(key)) {
-      await this.#writeRecords(records);
-    }
+    await withFileStateLock(this.#filePath, async () => {
+      const records = await this.#readRecords();
+      if (records.delete(key)) {
+        await this.#writeRecords(records);
+      }
+    });
   }
 
   async list(): Promise<string[]> {
@@ -188,18 +192,10 @@ export class FileTokenStore implements TokenStore {
       version: 1,
       records: Object.fromEntries(records.entries()),
     };
-    await fs.mkdir(path.dirname(this.#filePath), { recursive: true, mode: 0o700 });
-    const tempPath = `${this.#filePath}.${process.pid}.${Date.now()}.tmp`;
-    await fs.writeFile(tempPath, `${JSON.stringify(payload, null, 2)}\n`, {
-      encoding: "utf8",
-      mode: 0o600,
-    });
-    await fs.rename(tempPath, this.#filePath);
-    try {
-      await fs.chmod(this.#filePath, 0o600);
-    } catch {
-      // Some platforms (e.g. Windows) reject POSIX chmod bits; ignore.
-    }
+    await writeFileAtomically(
+      this.#filePath,
+      `${JSON.stringify(payload, null, 2)}\n`,
+    );
   }
 }
 

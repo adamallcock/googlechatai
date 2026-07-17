@@ -1,0 +1,12 @@
+{
+  "include": [
+    "packages/python/src/googlechatai/public_types.py",
+    "packages/python/typecheck"
+  ],
+  "extraPaths": [
+    "packages/python/src"
+  ],
+  "pythonVersion": "3.10",
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": "none"
+}

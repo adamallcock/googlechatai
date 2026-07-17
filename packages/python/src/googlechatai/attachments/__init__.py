@@ -52,6 +52,7 @@ _DEFAULT_BLOCKED_EXTENSIONS = {
 
 RawMapping = Mapping[str, Any]
 Parser = Callable[[dict[str, Any], Any], dict[str, Any]]
+SafetyScanner = Callable[[dict[str, Any], Any], Mapping[str, Any]]
 
 
 def _data_bytes(value: Any) -> bytes | None:
@@ -59,6 +60,31 @@ def _data_bytes(value: Any) -> bytes | None:
         return bytes(value)
     if isinstance(value, str):
         return value.encode("utf-8")
+    return None
+
+
+def _data_byte_length(value: Any) -> int | None:
+    if isinstance(value, (bytes, bytearray)):
+        return len(value)
+    if isinstance(value, memoryview):
+        return value.nbytes
+    if isinstance(value, str):
+        total = 0
+        for character in value:
+            codepoint = ord(character)
+            if 0xD800 <= codepoint <= 0xDFFF:
+                # Preserve the standard encoder's error for malformed Unicode
+                # without allocating for normal large input strings.
+                value.encode("utf-8")
+            if codepoint <= 0x7F:
+                total += 1
+            elif codepoint <= 0x7FF:
+                total += 2
+            elif codepoint <= 0xFFFF:
+                total += 3
+            else:
+                total += 4
+        return total
     return None
 
 
@@ -1790,9 +1816,53 @@ def parse_attachment_content(
     data: Any,
     *,
     parsers: Mapping[str, Parser] | None = None,
+    scanner: SafetyScanner | None = None,
+    max_parse_bytes: int | None = None,
+    max_extracted_chars: int | None = None,
 ) -> dict[str, Any]:
     if (_as_mapping(attachment.get("policy")) or {}).get("status") == "blocked":
         return dict(attachment)
+
+    if max_parse_bytes is not None and (
+        not isinstance(max_parse_bytes, int) or max_parse_bytes <= 0
+    ):
+        raise TypeError("max_parse_bytes must be a positive integer.")
+    if max_extracted_chars is not None and (
+        not isinstance(max_extracted_chars, int) or max_extracted_chars <= 0
+    ):
+        raise TypeError("max_extracted_chars must be a positive integer.")
+    input_byte_length = _data_byte_length(data)
+    if (
+        input_byte_length is not None
+        and max_parse_bytes is not None
+        and input_byte_length > max_parse_bytes
+    ):
+        return _with_extraction(
+            attachment,
+            {
+                "status": "blocked",
+                "parser": None,
+                "text": None,
+                "reason": f"Attachment parser input exceeds the {max_parse_bytes} byte limit.",
+            },
+        )
+    if scanner is not None:
+        scan = _as_mapping(scanner(dict(attachment), data))
+        status = scan.get("status") if scan is not None else None
+        if status not in {"allowed", "blocked"}:
+            raise TypeError("Attachment scanner must return an allowed or blocked status.")
+        if status == "blocked":
+            reason = _as_string(scan.get("reason"))
+            return _with_extraction(
+                attachment,
+                {
+                    "status": "blocked",
+                    "parser": None,
+                    "text": None,
+                    "reason": reason
+                    or "Attachment was blocked by the configured safety scanner.",
+                },
+            )
 
     parser_kind = _parser_kind_for(attachment)
     parser = parsers.get(parser_kind) if parsers and parser_kind else None
@@ -1812,7 +1882,31 @@ def parse_attachment_content(
             },
         )
 
-    return _with_extraction(attachment, parser(dict(attachment), data))
+    result = parser(dict(attachment), data)
+    text = result.get("text") if isinstance(result, Mapping) else None
+    if (
+        max_extracted_chars is not None
+        and isinstance(text, str)
+        and len(text) > max_extracted_chars
+    ):
+        reason = _as_string(result.get("reason"))
+        return _with_extraction(
+            attachment,
+            {
+                **result,
+                "status": "partial",
+                "text": text[:max_extracted_chars],
+                "reason": " ".join(
+                    part
+                    for part in (
+                        reason,
+                        f"Extracted text was truncated at {max_extracted_chars} characters.",
+                    )
+                    if part
+                ),
+            },
+        )
+    return _with_extraction(attachment, result)
 
 
 def _filename_phrase(attachment: Mapping[str, Any]) -> str:

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
-import path from "node:path";
 
+import { withFileStateLock, writeFileAtomically } from "../internal/file-state.js";
 import {
   createRetryingChatClient,
   type AccessTokenLease,
@@ -588,22 +588,18 @@ export class FileStreamCancellationRegistry
   }
 
   async #write(data: SerializedCancellationFile): Promise<void> {
-    const directory = path.dirname(this.#filePath);
-    await fs.mkdir(directory, { recursive: true });
-    const temporary = `${this.#filePath}.tmp-${process.pid}-${Date.now()}`;
-    await fs.writeFile(temporary, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-    await fs.rename(temporary, this.#filePath);
-    try {
-      await fs.chmod(this.#filePath, 0o600);
-    } catch {
-      // Best effort on platforms without POSIX permissions.
-    }
+    await writeFileAtomically(
+      this.#filePath,
+      `${JSON.stringify(data, null, 2)}\n`,
+    );
   }
 
   async cancel(streamId: string, reason = "cancelled"): Promise<void> {
-    const data = await this.#read();
-    data.cancelled[streamId] = reason;
-    await this.#write(data);
+    await withFileStateLock(this.#filePath, async () => {
+      const data = await this.#read();
+      data.cancelled[streamId] = reason;
+      await this.#write(data);
+    });
   }
 
   async isCancelled(streamId: string): Promise<boolean> {
@@ -617,11 +613,13 @@ export class FileStreamCancellationRegistry
   }
 
   async clear(streamId: string): Promise<void> {
-    const data = await this.#read();
-    if (Object.hasOwn(data.cancelled, streamId)) {
-      delete data.cancelled[streamId];
-      await this.#write(data);
-    }
+    await withFileStateLock(this.#filePath, async () => {
+      const data = await this.#read();
+      if (Object.hasOwn(data.cancelled, streamId)) {
+        delete data.cancelled[streamId];
+        await this.#write(data);
+      }
+    });
   }
 }
 

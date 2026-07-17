@@ -129,4 +129,34 @@ describe("identity directory enrichment", () => {
       await fs.rm(dir, { recursive: true, force: true });
     }
   });
+
+  it("serializes concurrent identity cache updates for one file", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "chat-identity-"));
+    const filePath = path.join(dir, "identities.json");
+    try {
+      const cache = new FileIdentityCache({ filePath });
+      await Promise.all(
+        Array.from({ length: 12 }, (_, index) =>
+          cache.putMany([
+            {
+              id: `${index}`,
+              name: `users/${index}`,
+              email: `person-${index}@example.com`,
+              displayName: `Person ${index}`,
+              aliases: [],
+              source: "directory_cache",
+              directoryStatus: "active",
+              stale: false,
+              lastSeenAt: "2026-07-10T00:00:00.000Z",
+              lastDirectorySyncAt: "2026-07-10T00:00:00.000Z",
+              access: { status: "available", reason: null },
+            },
+          ]),
+        ),
+      );
+      expect(await cache.list()).toHaveLength(12);
+    } finally {
+      await fs.rm(dir, { recursive: true, force: true });
+    }
+  });
 });

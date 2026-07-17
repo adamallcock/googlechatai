@@ -1,0 +1,7 @@
+{
+  "name": "googlechatai-cloud-run-reference",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Package-routed Google Chat AI SDK Cloud Run reference."
+}

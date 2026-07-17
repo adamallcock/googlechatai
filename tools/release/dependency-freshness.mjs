@@ -16,6 +16,7 @@ const dockerfilePath = path.join(root, "examples/cloud-run-node/Dockerfile");
 const expectedRootVersions = new Map([
   ["packageManager", "pnpm@11.9.0"],
   ["@types/node", "26.0.1"],
+  ["pyright", "1.1.411"],
   ["typescript", "6.0.3"],
   ["vitest", "4.1.9"],
 ]);
@@ -135,6 +136,7 @@ const liveChecks = [
   ["npm", ["view", "typescript", "version"]],
   ["npm", ["view", "vitest", "version"]],
   ["npm", ["view", "@types/node", "version"]],
+  ["npm", ["view", "pyright", "version"]],
   ["npm", ["view", "openai", "version"]],
   ["npm", ["view", "@google/genai", "version"]],
   ["npm", ["view", "pdf-parse", "version"]],
@@ -151,16 +153,37 @@ const liveChecks = [
 ];
 
 for (const [command, args] of liveChecks) {
-  const result = spawnSync(command, args, {
+  let result = spawnSync(command, args, {
     cwd: root,
     encoding: "utf8",
     stdio: "pipe",
   });
+  let label = `${command} ${args.join(" ")}`;
+
+  // Docker Desktop installations can omit the buildx plugin while still
+  // supporting the registry-only manifest command. The fallback preserves a
+  // networked base-image inspection without requiring a local daemon.
+  if (
+    result.status !== 0 &&
+    command === "docker" &&
+    args.join(" ") === "buildx imagetools inspect node:22-slim"
+  ) {
+    const fallbackArgs = ["manifest", "inspect", "node:22-slim"];
+    const fallback = spawnSync("docker", fallbackArgs, {
+      cwd: root,
+      encoding: "utf8",
+      stdio: "pipe",
+    });
+    if (fallback.status === 0) {
+      result = fallback;
+      label = `docker ${fallbackArgs.join(" ")}`;
+    }
+  }
 
   if (result.status !== 0) {
-    fail(`Live registry check failed: ${command} ${args.join(" ")}\n${result.stderr.trim()}`);
+    fail(`Live registry check failed: ${label}\n${result.stderr.trim()}`);
   }
 
   const firstLine = result.stdout.split("\n").find((line) => line.trim()) ?? "ok";
-  console.log(`${command} ${args.join(" ")}: ${firstLine.trim()}`);
+  console.log(`${label}: ${firstLine.trim()}`);
 }

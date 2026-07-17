@@ -93,12 +93,13 @@ queue.enqueue({"kind": "chat.async_response_task", "taskId": "task-1"})
 - **`InMemoryTokenStore`** — backed by a `Map`/`dict`, for tests and local
   runs. Deep-clones records on save and load so callers can't mutate internal
   state through references they hold.
-- **`FileTokenStore`** — persists to a single JSON file. Writes are atomic: it
-  writes to a uniquely named temp file (`<path>.<pid>.<timestamp>.tmp`) in the
-  same directory, then renames it onto the real path, then best-effort
-  `chmod`s the file to `0600`. Node also creates parent directories with mode
-  `0700`. A missing file is treated as empty rather than an error. The file
-  format is the cross-language contract:
+- **`FileTokenStore`** — persists to a single JSON file. Same-runtime
+  read-modify-write operations are serialized per path; writes use a randomly
+  named sibling temp file and atomic replacement, followed by best-effort
+  `chmod` to `0600`. Node also creates parent directories with mode `0700`.
+  A missing file is treated as empty rather than an error. This remains a
+  local/single-host helper, not a cross-process or multi-instance lock. The
+  file format is the cross-language contract:
 
   ```json
   {
@@ -181,10 +182,10 @@ is a plain synchronous function returning a `TokenRecord`.
 `InMemoryAsyncResponseQueue` used by the async response kit — these adapters
 back real queue services.
 
-- **`FileAsyncResponseQueue`** — a JSON-file FIFO with the same atomic
-  write/rename/`0600` discipline as `FileTokenStore`, using a
-  `{ "version": 1, "tasks": [...] }` file shape. Fully supports
-  `enqueue`/`dequeue`/`list`/`drain` since it's a real local queue.
+- **`FileAsyncResponseQueue`** — a JSON-file FIFO with the same same-runtime
+  lock, atomic replacement, and `0600` discipline as `FileTokenStore`, using
+  a `{ "version": 1, "tasks": [...] }` file shape. Fully supports
+  `enqueue`/`dequeue`/`list`/`drain` for local use.
 - **`CloudTasksQueueAdapter`** — `enqueue` POSTs to
   `{baseUrl}/v2/{queuePath}/tasks` with the task body base64-encoded into
   `task.httpRequest.body`, targeting `targetUrl`. Supplying
@@ -231,9 +232,9 @@ Implemented:
 - Node/Python `AsyncResponseQueue` parity: file FIFO, Cloud Tasks push
   adapter, Pub/Sub publish adapter, with consistent pull-methods-throw
   semantics on the two push adapters.
-- Atomic file writes and `0600` permission enforcement for both file-backed
-  stores.
+- Same-runtime serialized file writes, random temporary files, atomic
+  replacement, and `0600` permission enforcement for both file-backed stores.
 
-Cross-language note: Node's parent-directory creation for file-backed stores
-sets mode `0700`; Python's directory creation does not pass an explicit mode.
-The files themselves end up `0600` in both languages regardless.
+Cross-language note: Node and Python create parent directories with `0700`
+where the platform honors POSIX modes. The files themselves end up `0600` in
+both languages regardless.

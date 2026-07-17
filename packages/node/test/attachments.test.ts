@@ -897,6 +897,46 @@ describe("attachments", () => {
     );
   });
 
+  it("blocks unsafe parser input and bounds extracted attachment text", async () => {
+    const attachment = normalizeAttachment({
+      name: "spaces/AAA/messages/root/attachments/note",
+      contentName: "note.txt",
+      contentType: "text/plain",
+    });
+    expect(attachment).not.toBeNull();
+    const parser = async () => ({
+      status: "complete" as const,
+      parser: "fixture-text",
+      text: "abcdefgh",
+    });
+
+    const scannerBlocked = await parseAttachmentContent(attachment!, "safe", {
+      scanner: async () => ({ status: "blocked", reason: "scanner policy" }),
+      parsers: { text: parser },
+    });
+    expect(scannerBlocked.processing.extraction).toMatchObject({
+      status: "blocked",
+      reason: "scanner policy",
+      text: null,
+    });
+
+    const inputBlocked = await parseAttachmentContent(attachment!, "too long", {
+      maxParseBytes: 3,
+      parsers: { text: parser },
+    });
+    expect(inputBlocked.processing.extraction.status).toBe("blocked");
+
+    const bounded = await parseAttachmentContent(attachment!, "safe", {
+      maxExtractedChars: 4,
+      parsers: { text: parser },
+    });
+    expect(bounded.processing.extraction).toMatchObject({
+      status: "partial",
+      text: "abcd",
+    });
+    expect(bounded.processing.extraction.reason).toContain("truncated at 4");
+  });
+
   it("keeps OpenAI and Gemini transcription providers optional and auth-explicit", () => {
     expect(() => createOpenAITranscriptionProvider({})).toThrow(
       "OpenAI transcription requires an explicit apiKey or client.",

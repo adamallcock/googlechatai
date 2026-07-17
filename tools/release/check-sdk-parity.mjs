@@ -59,6 +59,8 @@ const intentionalPythonOnly = new Map([
   ["DuplicateEventGuardResult", "Python transport dataclass."],
   ["HandlerContext", "Python router context type."],
   ["IdempotencyClaim", "Python transport dataclass."],
+  ["IdempotencyStore", "Python structural protocol; Node exports this as a type only."],
+  ["FirestoreTransport", "Python Firestore transport type alias; Node exports this as a type only."],
   ["ReplyBuilder", "Python router helper type."],
   ["RetryDecision", "Python transport dataclass."],
   ["RetryDecisionInput", "Python transport type alias."],
