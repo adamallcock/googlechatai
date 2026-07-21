@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install
@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Set reproducible artifact timestamp
