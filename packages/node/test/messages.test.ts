@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildBufferedStreamPatches,
+  buildSearchMessagesContext,
+  buildSearchMessagesFilter,
   planReplaceCards,
   planSearchMessages,
   buildConversationContext,
@@ -14,6 +16,7 @@ import {
   hydratePlaceholderResponseHandle,
   InMemoryAsyncResponseQueue,
   InMemoryIdentityCache,
+  normalizeSearchMessagesResponse,
   planBufferedPlaceholderCompletion,
   planBufferedStreamMessage,
   planAsyncResponse,
@@ -864,6 +867,18 @@ describe("thread and space context readers", () => {
     });
   }
 
+  it("requests Markdown message syntax when explicitly selected", () => {
+    const plan = planReadSpaceContext({
+      space: "spaces/AAA",
+      markupSyntax: "MARKUP_SYNTAX_MARKDOWN",
+    });
+    expect(plan.requests[0]?.query.markupSyntax).toBe("MARKUP_SYNTAX_MARKDOWN");
+    expect(plan.reader.markupSyntax).toBe("MARKUP_SYNTAX_MARKDOWN");
+    expect(() =>
+      planReadSpaceContext({ space: "spaces/AAA", markupSyntax: "HTML" }),
+    ).toThrow(/markupSyntax/);
+  });
+
   it("bounds deeply nested quoted context without recursive traversal", () => {
     let message: Record<string, unknown> = {
       plainTextForModel: "leaf",
@@ -1138,22 +1153,196 @@ describe("thread and space context readers", () => {
   });
 });
 
-describe("docs-listed message planners", () => {
-  it("plans message search with clamped page size and docs-listed warning", () => {
+describe("Developer Preview message search", () => {
+  it("plans the live POST contract with bounded paging and user auth", () => {
     const plan = planSearchMessages({
       space: "spaces/AAA",
       query: "hello",
       pageSize: 5000,
     });
-    expect(plan.requests[0]?.query.pageSize).toBe(1000);
-    expect(plan.requests[0]?.path).toBe("/v1/spaces/AAA/messages:search");
-    expect(plan.warnings[0]).toContain("docs-listed");
+    expect(plan.requests[0]).toMatchObject({
+      method: "POST",
+      path: "/v1/spaces/-/messages:search",
+      query: {},
+      body: {
+        filter: '(hello) AND space.name = "spaces/AAA"',
+        pageSize: 100,
+        view: "SEARCH_MESSAGES_VIEW_BASIC",
+      },
+    });
+    expect(plan.capability).toMatchObject({
+      ok: true,
+      authMode: "user",
+      requiredScopes: ["https://www.googleapis.com/auth/chat.messages.readonly"],
+    });
+    expect(plan.warnings.join("\n")).toContain("Developer Preview");
+    expect(plan.warnings.join("\n")).toContain("compatibility alias");
   });
 
-  it("rejects searches without a query", () => {
-    expect(() => planSearchMessages({ space: "spaces/AAA" } as never)).toThrow(
-      /query/,
+  it("builds safe semantic filters and full-view scopes", () => {
+    const input = {
+      filters: {
+        text: "roadmap review",
+        spaces: ["spaces/AAA", "spaces/BBB"],
+        senders: ["users/123", "users/456"],
+        startTime: "2026-08-01T00:00:00Z",
+        endTime: "2026-08-11T00:00:00Z",
+        unread: true,
+        hasAttachments: true,
+        mentions: ["users/me"],
+        hasLinks: true,
+      },
+      orderBy: "relevance desc",
+      view: "SEARCH_MESSAGES_VIEW_FULL",
+    } as const;
+    const filter = buildSearchMessagesFilter(input);
+    const plan = planSearchMessages(input);
+
+    expect(filter).toContain('"roadmap review"');
+    expect(filter).toContain('create_time >= "2026-08-01T00:00:00Z"');
+    expect(filter).toContain('space.name = "spaces/AAA" OR space.name = "spaces/BBB"');
+    expect(filter).toContain("attachment:*");
+    expect(filter).toContain("is_unread()");
+    expect(plan.requests[0]?.body).toMatchObject({
+      filter,
+      orderBy: "relevance desc",
+      view: "SEARCH_MESSAGES_VIEW_FULL",
+    });
+    expect(plan.capability.requiredScopes).toEqual([
+      "https://www.googleapis.com/auth/chat.messages.readonly",
+      "https://www.googleapis.com/auth/chat.users.readstate.readonly",
+      "https://www.googleapis.com/auth/chat.users.spacesettings",
+    ]);
+  });
+
+  it("rejects ambiguous, unsafe, and unsupported search inputs", () => {
+    expect(() => planSearchMessages({})).toThrow(/at least one/);
+    expect(() => planSearchMessages({ filter: "hello", query: "world" })).toThrow(
+      /only one/,
     );
+    expect(() =>
+      planSearchMessages({ filters: { spaces: ['spaces/AAA" OR true'] } }),
+    ).toThrow(/safe spaces resource/);
+    expect(() =>
+      planSearchMessages({
+        filter: "hello",
+        filters: {
+          startTime: "2026-08-11T00:00:00Z",
+          endTime: "2026-08-10T00:00:00Z",
+        },
+      }),
+    ).toThrow(/earlier/);
+    expect(() => planSearchMessages({ filter: "hello", orderBy: "create_time asc" })).toThrow(
+      /orderBy/,
+    );
+    expect(() =>
+      planSearchMessages({ filters: { text: "hello", unread: "yes" as never } }),
+    ).toThrow(/boolean/);
+    expect(() => planSearchMessages({ filter: "x".repeat(1_001) })).toThrow(
+      /1000 characters/,
+    );
+    expect(planSearchMessages({ filter: "x".repeat(1_000) }).requests[0]?.body).toMatchObject({
+      filter: "x".repeat(1_000),
+    });
+    expect(() =>
+      planSearchMessages({
+        filters: { text: "hello", startTime: "2026-08-10T12:00:00" },
+      }),
+    ).toThrow(/RFC 3339/);
+    expect(() =>
+      planSearchMessages({
+        filters: { text: "hello", startTime: "2026-02-30T12:00:00Z" },
+      }),
+    ).toThrow(/RFC 3339/);
+  });
+
+  it("reports filter-dependent scopes for BASIC searches", () => {
+    expect(
+      planSearchMessages({ filters: { text: "hello", unread: true } }).capability
+        .requiredScopes,
+    ).toEqual([
+      "https://www.googleapis.com/auth/chat.messages.readonly",
+      "https://www.googleapis.com/auth/chat.users.readstate.readonly",
+    ]);
+    expect(
+      planSearchMessages({ filter: "space.display_name:Project" }).capability
+        .requiredScopes,
+    ).toEqual([
+      "https://www.googleapis.com/auth/chat.messages.readonly",
+      "https://www.googleapis.com/auth/chat.spaces.readonly",
+    ]);
+  });
+
+  it("reports app auth as unavailable instead of emitting a false capability", () => {
+    const plan = planSearchMessages({ filter: "hello", authMode: "app" });
+    expect(plan.capability.ok).toBe(false);
+    expect(plan.capability.reasons).toContain(
+      "spaces.messages.search requires user authentication.",
+    );
+  });
+
+  it("normalizes and bounds search results without retaining raw payloads", () => {
+    const response = readJson<Record<string, unknown>>(
+      "fixtures/api-responses/messages/search-page.json",
+    );
+    const normalized = normalizeSearchMessagesResponse(response, { maxResults: 1 });
+    const context = buildSearchMessagesContext(response, { maxResults: 1 });
+
+    expect(normalized).toMatchObject({
+      returnedResults: 1,
+      omittedResults: 1,
+      nextPageToken: "search-page-2",
+      partial: true,
+      truncated: true,
+      inaccessible: false,
+      privacy: { maxResults: 1, rawIncluded: false },
+    });
+    expect(normalized.results[0]).toMatchObject({
+      read: false,
+      spaceMuteSetting: "MUTED",
+      message: {
+        ref: { name: "spaces/AAA/messages/search-1" },
+        text: "Roadmap review is ready.",
+        markupSyntax: "MARKUP_SYNTAX_MARKDOWN",
+      },
+    });
+    expect(normalized.results[0]?.plainTextForModel).toContain(
+      "System Note: Message spaces/AAA/messages/search-1",
+    );
+    expect(normalized.results[0]?.plainTextForModel.endsWith("Roadmap review is ready.")).toBe(
+      true,
+    );
+    expect(normalized.results[0]).not.toHaveProperty("raw");
+    expect(context).toMatchObject({
+      kind: "chat.message_search_context",
+      returnedResults: 1,
+      truncated: true,
+      privacy: {
+        maxResults: 1,
+        rawIncluded: false,
+        emailRedacted: true,
+      },
+    });
+    expect(JSON.stringify(context)).not.toContain("ada@example.com");
+    expect(JSON.stringify(context)).toContain("[redacted-email]");
+  });
+
+  it("keeps malformed results explicit and raw payload access opt-in", () => {
+    const normalized = normalizeSearchMessagesResponse(
+      { results: [{ read: true }] },
+      { includeRaw: true },
+    );
+    expect(normalized.results[0]).toMatchObject({
+      message: null,
+      read: true,
+      raw: { read: true },
+    });
+    expect(normalized.results[0]?.systemNotes.join("\n")).toContain(
+      "did not include an accessible Message",
+    );
+    expect(() =>
+      normalizeSearchMessagesResponse({}, { maxResults: 0 }),
+    ).toThrow(/positive integer/);
   });
 
   it("plans replaceCards and rejects empty card lists", () => {

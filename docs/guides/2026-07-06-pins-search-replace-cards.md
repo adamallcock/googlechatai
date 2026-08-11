@@ -1,18 +1,18 @@
 ---
 title: Pins, Search, And Replace Cards
 date: 2026-07-06
+last_updated: 2026-08-10
 type: guide
 status: implemented
 ---
 
 # Pins, Search, And Replace Cards
 
-Three planner families target Google Chat API surfaces that appear in
-Google's documentation but that this SDK has not yet exercised against a live
-Chat API call: pinning/unpinning messages, searching messages in a space, and
-replacing a message's cards. Every plan these planners return carries an
-explicit "docs-listed" warning so callers know to verify live behavior before
-depending on it in production.
+This guide covers three Google Chat API families with different maturity
+levels. Message search now appears in the live discovery document as a Google
+Workspace Developer Preview method. Message pins and `replaceCards` remain
+docs-listed surfaces that require separate live verification. Every plan is a
+dry run by default and preserves the relevant maturity warning.
 
 ## Node
 
@@ -22,6 +22,7 @@ import {
   planUnpinMessage,
   planListMessagePins,
   planEnsureMessagePinned,
+  buildSearchMessagesContext,
   planSearchMessages,
   planReplaceCards,
 } from "googlechatai";
@@ -35,8 +36,21 @@ console.log(pinPlan.warnings);
 // ["spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."]
 
 const searchPlan = planSearchMessages({
-  space: "spaces/AAA",
-  query: "from:ada@example.com attachment:drive",
+  filters: {
+    text: "roadmap review",
+    spaces: ["spaces/AAA"],
+    senders: ["users/123"],
+    unread: true,
+    hasAttachments: true,
+  },
+  pageSize: 25,
+  view: "SEARCH_MESSAGES_VIEW_FULL",
+});
+
+// After executing the plan, normalize the raw API response into bounded,
+// provenance-rich context. Raw payloads are omitted and emails redacted.
+const searchContext = buildSearchMessagesContext(rawSearchResponse, {
+  maxResults: 25,
 });
 
 const replaceCardsPlan = planReplaceCards({
@@ -53,6 +67,7 @@ from googlechatai import (
     plan_unpin_message,
     plan_list_message_pins,
     plan_ensure_message_pinned,
+    build_search_messages_context,
     plan_search_messages,
     plan_replace_cards,
 )
@@ -65,9 +80,18 @@ pin_plan = plan_pin_message({
 print(pin_plan["warnings"])
 
 search_plan = plan_search_messages({
-    "space": "spaces/AAA",
-    "query": "from:ada@example.com attachment:drive",
+    "filters": {
+        "text": "roadmap review",
+        "spaces": ["spaces/AAA"],
+        "senders": ["users/123"],
+        "unread": True,
+        "hasAttachments": True,
+    },
+    "pageSize": 25,
+    "view": "SEARCH_MESSAGES_VIEW_FULL",
 })
+
+search_context = build_search_messages_context(raw_search_response, max_results=25)
 
 replace_cards_plan = plan_replace_cards({
     "message": "spaces/AAA/messages/BBB",
@@ -98,37 +122,53 @@ Every pin plan requires the
 `spaces.messagePins.* is a docs-listed surface; verify live support before
 relying on it.`.
 
-## Search And Replace Cards Planners
+## Message Search
 
-- **`planSearchMessages` / `plan_search_messages`** — one request,
-  `GET spaces.messages.search` at `/v1/{space}/messages:search`, with
-  `query` required, `pageSize` clamped between 1 and 1000 (default 25), and
-  optional `pageToken`/`orderBy`. Carries the warning
-  `spaces.messages.search is a docs-listed surface; verify live support
-  before relying on it.`.
+- **`planSearchMessages` / `plan_search_messages`** emits one user-authorized
+  `POST spaces.messages.search` request at `/v1/spaces/-/messages:search`.
+  `pageSize` is clamped between 1 and 100 (default 25); `pageToken`,
+  `orderBy` (`create_time desc` or `relevance desc`), and BASIC/FULL `view`
+  are optional.
+- `filter` accepts Google's raw filter syntax. The old `query` name remains a
+  compatibility alias and adds a warning.
+- `filters` safely composes common intent fields: text, spaces, senders, time
+  range, unread status, attachments, mentions, and links. The legacy `space`
+  shortcut becomes a `space.name` filter because Google requires the request
+  parent to be `spaces/-`.
+- BASIC view requires `chat.messages.readonly`. FULL view also reports the
+  read-state and space-settings scopes needed for `read` and
+  `spaceMuteSetting` metadata. BASIC searches using `is_unread()` or
+  `space.display_name` also report the additional read-state or space-read
+  scope required by Google's filter contract.
+- `normalizeSearchMessagesResponse` / `normalize_search_messages_response`
+  preserves normalized messages plus read/mute metadata and provenance. Raw
+  result objects are retained only with explicit opt-in.
+- `buildSearchMessagesContext` / `build_search_messages_context` adds a local
+  result bound, untrusted-content notes, default email redaction, and each
+  message's `plainTextForModel` representation.
+
+Message search remains experimental while Google labels it Developer Preview.
+The plan warns about tenant enrollment, availability, and the privacy impact of
+reading user-visible conversations.
+
+## Replace Cards Planner
+
 - **`planReplaceCards` / `plan_replace_cards`** — one request,
   `POST spaces.messages.replaceCards` at `/v1/{message}:replaceCards`, with
   `cardsV2` required to be a non-empty array. Carries the warning
   `spaces.messages.replaceCards is a docs-listed surface; verify live
   support before relying on it.`.
 
-Both planners require the standard
-`https://www.googleapis.com/auth/chat.bot` scope, unlike the pin planners'
-dedicated pin scope.
+`replaceCards` requires the standard `chat.bot` scope. Message search is
+user-auth only; explicitly selecting app auth returns `capability.ok: false`.
 
-## The "Docs-Listed" Warning Is Advisory, Not A Gate
+## Warning And Capability Boundaries
 
-The warning lives purely in the plan's `warnings` array — there is no
-separate `docsListed` boolean or execution-blocking field anywhere in the
-code. `executeChatPlan` / `execute_chat_plan` never inspects warning text; it
-threads `plan.warnings` straight through into the execution report's own
-`warnings` array. Concretely, this means pin/search/replaceCards plans are
-**not** blocked from live execution: they carry `capability.ok: true` and
-`safety.directMessage: false` like any other plan, so passing `mode: "live"`
-with valid auth would send the real HTTP request. The warning exists to tell
-you, the caller, to verify Google's actual behavior for these particular
-methods before relying on them in production — it is not a safety net that
-stops you from trying.
+Warnings remain advisory and flow into execution reports. Capability checks
+are structural: message search fails capability planning for app auth, while a
+user-auth plan reports its exact scopes. Live execution still requires the
+normal executor opt-in and credentials. Applications must add their own
+consent, retention, DLP, and model-data policy before using search results.
 
 ## Production Boundary
 
@@ -141,15 +181,15 @@ Implemented:
 - Shared conformance for every planner's dry-run shape
   (`conformance/cases/pins.call-plans.json`,
   `conformance/cases/messages.extras.json`).
-- The docs-listed warning attached to every plan these six planners produce.
+- Developer Preview search normalization/context fixtures and the guarded,
+  read-only dedicated-space smoke request.
+- Maturity and privacy warnings attached to every applicable plan.
 
 Blocked:
 
-- Live verification against the real Google Chat API for
-  `spaces.messagePins.*`, `spaces.messages.search`, and
-  `spaces.messages.replaceCards` has not been performed. Treat these planners
-  as implemented-and-conformance-tested, not production-proven, until a
-  guarded live smoke run (see
-  [Live Chat Smoke Harness](../runbooks/2026-06-29-live-chat-smoke-harness.md))
-  confirms Google's actual request/response shapes match what these planners
-  assume.
+- Pins and `replaceCards` remain separately unverified. Message search passed a
+  guarded, read-only dedicated-space smoke on 2026-08-10 with HTTP 200, user
+  OAuth, BASIC view, and a next-page token. This confirms the current request
+  and response shape but does not remove Google's Developer Preview stability
+  boundary (see
+  [Live Chat Smoke Harness](../runbooks/2026-06-29-live-chat-smoke-harness.md)).

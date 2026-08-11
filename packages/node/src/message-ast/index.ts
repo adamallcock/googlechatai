@@ -55,6 +55,7 @@ export interface NormalizedMessageAst {
   };
   privateMessageViewer: ChatIdentity | null;
   text: string;
+  markupSyntax?: string;
   formattedText: string | null;
   argumentText: string | null;
   segments: RawRecord[];
@@ -923,6 +924,9 @@ function buildMessageAst(
     },
     privateMessageViewer,
     text,
+    ...(asString(raw.markupSyntax)
+      ? { markupSyntax: asString(raw.markupSyntax)! }
+      : {}),
     formattedText: asString(raw.formattedText),
     argumentText: asString(raw.argumentText),
     segments,

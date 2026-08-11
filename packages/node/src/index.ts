@@ -454,7 +454,13 @@ export type {
   FileAsyncResponseQueueOptions,
   PubSubQueueAdapterOptions,
 } from "./queues/index.js";
-export { planReplaceCards, planSearchMessages } from "./messages/index.js";
+export {
+  buildSearchMessagesContext,
+  buildSearchMessagesFilter,
+  normalizeSearchMessagesResponse,
+  planReplaceCards,
+  planSearchMessages,
+} from "./messages/index.js";
 export type {
   AsyncResponsePlan,
   BufferedPlaceholderCompletionInput,
@@ -473,6 +479,9 @@ export type {
   FindOrSetupDmInput,
   MessageIdempotencyInput,
   MissingThreadMode,
+  NormalizedSearchMessageResult,
+  NormalizedSearchMessagesResponse,
+  NormalizeSearchMessagesOptions,
   PlaceholderResponseHandle,
   PlaceholderResponseInput,
   PlaceholderTextInput,
@@ -486,6 +495,9 @@ export type {
   ReplyToEventInput,
   ResolveReplyTargetInput,
   SearchMessagesInput,
+  SearchMessagesFilterInput,
+  SearchMessagesContextOptions,
+  SearchMessagesView,
   SendToSpaceInput,
   SendToUserInput,
   StartThreadInput,

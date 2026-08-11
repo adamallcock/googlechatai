@@ -122,6 +122,14 @@ def _model_token_budget_config(input_value: Mapping[str, Any]) -> JsonObject | N
 
 def _reader_config(input_value: Mapping[str, Any], scope: str) -> JsonObject:
     limit = _optional_number(input_value, "limit", 50)
+    markup_syntax = _optional_string(input_value, "markupSyntax")
+    if markup_syntax and markup_syntax not in {
+        "MARKUP_SYNTAX_CHAT",
+        "MARKUP_SYNTAX_MARKDOWN",
+    }:
+        raise TypeError(
+            "Expected markupSyntax to be MARKUP_SYNTAX_CHAT or MARKUP_SYNTAX_MARKDOWN."
+        )
     reader: JsonObject = {
         "scope": scope,
         "space": _required_string(input_value, "space"),
@@ -134,6 +142,8 @@ def _reader_config(input_value: Mapping[str, Any], scope: str) -> JsonObject:
         "endTime": _optional_string(input_value, "endTime"),
         "maxQuoteDepth": _optional_number(input_value, "maxQuoteDepth", 1),
     }
+    if markup_syntax:
+        reader["markupSyntax"] = markup_syntax
     budget = _model_token_budget_config(input_value)
     if budget:
         reader["modelTokenBudget"] = budget
@@ -169,6 +179,8 @@ def _plan_reader(input_value: Mapping[str, Any], scope: str) -> JsonObject:
         query["pageToken"] = page_token
     if filter_value:
         query["filter"] = filter_value
+    if _as_string(reader.get("markupSyntax")):
+        query["markupSyntax"] = reader["markupSyntax"]
     query["orderBy"] = f"createTime {reader['order']}"
 
     return {

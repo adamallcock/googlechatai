@@ -87,6 +87,7 @@ test("dry-run plan is read-only and redacted", async (t) => {
 test("runPreviewSurfacesSmoke records allowed blocked surfaces without raw payloads", async (t) => {
   const metadataPath = await writeMetadata(t);
   const writes = [];
+  const requests = [];
   const config = await loadPreviewSurfacesSmokeConfig({
     argv: [
       "node",
@@ -103,21 +104,24 @@ test("runPreviewSurfacesSmoke records allowed blocked surfaces without raw paylo
     writeFile: async (_path, data) => {
       writes.push(data);
     },
-    chatRequestWithUserAuthImpl: async ({ url, init }) => ({
-      ok: false,
-      status: 404,
-      attempts: 1,
-      refreshed: false,
-      replayedAfter401: false,
-      retryDecisions: [],
-      headers: {},
-      json: {
-        error: {
-          status: "NOT_FOUND",
-          message: `missing ${url} ${init.body ?? ""} secret text`,
+    chatRequestWithUserAuthImpl: async ({ url, init }) => {
+      requests.push({ url, init });
+      return {
+        ok: false,
+        status: 404,
+        attempts: 1,
+        refreshed: false,
+        replayedAfter401: false,
+        retryDecisions: [],
+        headers: {},
+        json: {
+          error: {
+            status: "NOT_FOUND",
+            message: `missing ${url} ${init.body ?? ""} secret text`,
+          },
         },
-      },
-    }),
+      };
+    },
     now: () => new Date("2026-07-02T18:30:00Z"),
   });
   const serialized = JSON.stringify(result);
@@ -130,6 +134,20 @@ test("runPreviewSurfacesSmoke records allowed blocked surfaces without raw paylo
     true,
   );
   assert.equal(writes.length, 1);
+  assert.deepEqual(requests[0], {
+    url: "https://chat.googleapis.com/v1/spaces/-/messages:search",
+    init: {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        filter: 'space.name = "spaces/AAAA-smoke"',
+        pageSize: 2,
+        orderBy: "create_time desc",
+        view: "SEARCH_MESSAGES_VIEW_BASIC",
+      }),
+      idempotent: true,
+    },
+  });
   assert.equal(serialized.includes("secret text"), false);
   assert.equal(serialized.includes("spaces/AAAA-smoke"), false);
   assert.equal(serialized.includes("missing https://"), false);

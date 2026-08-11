@@ -1,11 +1,11 @@
 [
   {
     "id": "messages.search.basic",
-    "description": "Plan a docs-listed message search with defaults.",
+    "description": "Plan a Developer Preview message search through the compatibility query alias.",
     "operation": "messages.search",
     "input": {
       "space": "spaces/AAA",
-      "query": "from:ada@example.com attachment:drive"
+      "query": "\"project brief\" AND attachment:*"
     },
     "expect": {
       "kind": "chat.call_plan",
@@ -13,22 +13,23 @@
       "dryRun": true,
       "capability": {
         "ok": true,
-        "authMode": "app",
+        "authMode": "user",
         "requiredScopes": [
-          "https://www.googleapis.com/auth/chat.bot"
+          "https://www.googleapis.com/auth/chat.messages.readonly"
         ],
         "reasons": []
       },
       "requests": [
         {
           "resource": "spaces.messages.search",
-          "method": "GET",
-          "path": "/v1/spaces/AAA/messages:search",
-          "query": {
-            "query": "from:ada@example.com attachment:drive",
-            "pageSize": 25
-          },
-          "body": null
+          "method": "POST",
+          "path": "/v1/spaces/-/messages:search",
+          "query": {},
+          "body": {
+            "filter": "(\"project brief\" AND attachment:*) AND space.name = \"spaces/AAA\"",
+            "pageSize": 25,
+            "view": "SEARCH_MESSAGES_VIEW_BASIC"
+          }
         }
       ],
       "idempotency": {
@@ -36,11 +37,14 @@
         "clientMessageId": null
       },
       "search": {
-        "space": "spaces/AAA",
-        "query": "from:ada@example.com attachment:drive",
+        "parent": "spaces/-",
+        "filter": "(\"project brief\" AND attachment:*) AND space.name = \"spaces/AAA\"",
+        "filterSource": "query_alias",
         "pageSize": 25,
         "pageToken": null,
-        "orderBy": null
+        "orderBy": null,
+        "view": "SEARCH_MESSAGES_VIEW_BASIC",
+        "developerPreview": true
       },
       "safety": {
         "liveAllowed": false,
@@ -50,20 +54,28 @@
         ]
       },
       "warnings": [
-        "spaces.messages.search is a docs-listed surface; verify live support before relying on it."
+        "spaces.messages.search is a Google Workspace Developer Preview surface; verify tenant enrollment and availability before relying on it.",
+        "Message search reads user-visible conversations; execute only with explicit user authorization and bounded filters.",
+        "query is a compatibility alias for filter; prefer filter for raw Google Chat search expressions."
       ]
     }
   },
   {
     "id": "messages.search.paged",
-    "description": "Plan a paged, ordered message search.",
+    "description": "Plan a bounded, paged semantic search with full result metadata.",
     "operation": "messages.search",
     "input": {
-      "space": "spaces/AAA",
-      "query": "topic",
+      "filters": {
+        "text": "topic",
+        "spaces": [
+          "spaces/AAA"
+        ],
+        "unread": true
+      },
       "pageSize": 5000,
       "pageToken": "tok-2",
-      "orderBy": "createTime desc"
+      "orderBy": "create_time desc",
+      "view": "SEARCH_MESSAGES_VIEW_FULL"
     },
     "expect": {
       "kind": "chat.call_plan",
@@ -71,24 +83,27 @@
       "dryRun": true,
       "capability": {
         "ok": true,
-        "authMode": "app",
+        "authMode": "user",
         "requiredScopes": [
-          "https://www.googleapis.com/auth/chat.bot"
+          "https://www.googleapis.com/auth/chat.messages.readonly",
+          "https://www.googleapis.com/auth/chat.users.readstate.readonly",
+          "https://www.googleapis.com/auth/chat.users.spacesettings"
         ],
         "reasons": []
       },
       "requests": [
         {
           "resource": "spaces.messages.search",
-          "method": "GET",
-          "path": "/v1/spaces/AAA/messages:search",
-          "query": {
-            "query": "topic",
-            "pageSize": 1000,
+          "method": "POST",
+          "path": "/v1/spaces/-/messages:search",
+          "query": {},
+          "body": {
+            "filter": "\"topic\" AND space.name = \"spaces/AAA\" AND is_unread()",
+            "pageSize": 100,
             "pageToken": "tok-2",
-            "orderBy": "createTime desc"
-          },
-          "body": null
+            "orderBy": "create_time desc",
+            "view": "SEARCH_MESSAGES_VIEW_FULL"
+          }
         }
       ],
       "idempotency": {
@@ -96,11 +111,14 @@
         "clientMessageId": null
       },
       "search": {
-        "space": "spaces/AAA",
-        "query": "topic",
-        "pageSize": 1000,
+        "parent": "spaces/-",
+        "filter": "\"topic\" AND space.name = \"spaces/AAA\" AND is_unread()",
+        "filterSource": "semantic_filters",
+        "pageSize": 100,
         "pageToken": "tok-2",
-        "orderBy": "createTime desc"
+        "orderBy": "create_time desc",
+        "view": "SEARCH_MESSAGES_VIEW_FULL",
+        "developerPreview": true
       },
       "safety": {
         "liveAllowed": false,
@@ -110,8 +128,25 @@
         ]
       },
       "warnings": [
-        "spaces.messages.search is a docs-listed surface; verify live support before relying on it."
+        "spaces.messages.search is a Google Workspace Developer Preview surface; verify tenant enrollment and availability before relying on it.",
+        "Message search reads user-visible conversations; execute only with explicit user authorization and bounded filters."
       ]
+    }
+  },
+  {
+    "id": "messages.search.normalize",
+    "description": "Normalize and privacy-bound a Developer Preview message-search response.",
+    "operation": "messages.search.normalize",
+    "input": {
+      "maxResults": 1
+    },
+    "apiResponses": [
+      {
+        "fixture": "fixtures/api-responses/messages/search-page.json"
+      }
+    ],
+    "expect": {
+      "fixture": "fixtures/expected/messages/search-response.normalized.json"
     }
   },
   {

@@ -380,6 +380,10 @@ export interface NormalizedMessage {
   isPrivate: boolean;
   privateViewer: ChatUserRef | null;
   text: string;
+  markupSyntax?:
+    | "MARKUP_SYNTAX_UNSPECIFIED"
+    | "MARKUP_SYNTAX_CHAT"
+    | "MARKUP_SYNTAX_MARKDOWN";
   formattedText: string | null;
   argumentText: string | null;
   plainTextForModel: string;
@@ -1490,12 +1494,12 @@ This table maps the live discovery surface checked on 2026-06-29 to package modu
 | `users.spaces.threads.getThreadReadState` | `readState` | Thread unread state |
 | `users.spaces.updateSpaceReadState` | `readState` | Mark space read |
 
-Docs-listed surfaces to verify and wrap:
+Discovery-listed Developer Preview and docs-listed surfaces to verify and wrap:
 
 | Docs-listed method | SDK module | Status |
 |---|---|---|
 | `spaces.messages.replaceCards` | `cards` | Public REST docs list it; verify live support and generated client support |
-| `spaces.messages.search` | `messages.search` | Public REST docs list it; verify live support, scopes, and result shape |
+| `spaces.messages.search` | `messages.search` | **Implemented, experimental:** live discovery exposes POST search; Node/Python planners, semantic filters, bounded normalization/context, and shared conformance ship; a guarded read-only tenant smoke returned HTTP 200 on 2026-08-10, while Developer Preview remains an external stability boundary |
 | `spaces.messagePins.create` | `pins` | Public REST docs list it; verify live support and scopes |
 | `spaces.messagePins.delete` | `pins` | Public REST docs list it; verify live support and scopes |
 | `spaces.messagePins.list` | `pins` | Public REST docs list it; verify live support and scopes |
@@ -1929,7 +1933,6 @@ This split gives us resilience to Google API drift without surrendering the deve
 ## Open Verification Tasks
 
 - Live-smoke `spaces.messages.replaceCards`.
-- Live-smoke `spaces.messages.search`.
 - Live-smoke message pins create/list/delete.
 - Confirm which card widgets are accepted in Chat messages versus add-ons/dialogs.
 - Confirm exact app-auth/user-auth boundaries for patching attachments and cards in practice.
