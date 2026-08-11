@@ -19,7 +19,8 @@ surface is safe for every tenant or ready for a multi-tenant production service.
 | Long-running AI delivery / worker queue | Queue adapters and planners | Yes | Depends on host setup | Application-owned; no end-to-end worker reference is supplied |
 | Model-safe context and attachment policy seams | Shared Node/Python conformance | N/A | Requires application data review | SDK foundation only; tenant DLP, retention, and injection policy remain host responsibilities |
 | Workspace Events subscriptions and `spaces.spaceEvents.list` | Synthetic parser and setup harness | Yes | Blocked by tenant policy or upstream behavior in the current environment | Not production supported until an approved tenant verifies it |
-| Pins and message search | Planner/fixture coverage | Yes | Current tenant probes remain unavailable | Do not expose as stable primitives until discovery and live support align |
+| Message search | Planner, normalization, context, and shared fixtures | Yes, user-auth only | Read-only dedicated-space HTTP 200 on 2026-08-10 | Experimental Developer Preview; verified in the current test tenant but not a stable-production claim |
+| Message pins | Planner/fixture coverage | Yes | Current tenant probes remain unavailable | Do not expose as stable primitives until discovery and live support align |
 
 ## Promotion Rules
 

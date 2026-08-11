@@ -194,7 +194,7 @@ function buildSearchBody(space, pageSize) {
   return {
     filter: `space.name = "${space}"`,
     pageSize,
-    orderBy: "createTime desc",
+    orderBy: "create_time desc",
     view: "SEARCH_MESSAGES_VIEW_BASIC",
   };
 }
@@ -426,7 +426,7 @@ function printHelp() {
   console.log([
     "Usage: pnpm live:chat-preview-surfaces-smoke [-- --dry-run] [-- --allow-blocked]",
     "",
-    "Read-only smoke for docs-listed Google Chat surfaces that can drift ahead of the discovery document.",
+    "Read-only smoke for Developer Preview and docs-listed Google Chat surfaces.",
     "",
     "Environment:",
     "  RUN_LIVE_CHAT_PREVIEW_SURFACES_SMOKE=1  Required unless --dry-run is used.",

@@ -58,7 +58,7 @@ function jsonResponse(payload, status = 200) {
 test("current repository publication policy is internally coherent", () => {
   const result = evaluatePublicationPolicy(loadPublicationPolicyInput());
   assert.equal(result.ok, true);
-  assert.equal(result.localVersion, "0.1.0-beta.1");
+  assert.equal(result.localVersion, "0.1.0-beta.2");
 });
 
 test("publication policy rejects an unpublished Node package configuration", () => {

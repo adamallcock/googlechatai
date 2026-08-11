@@ -153,6 +153,16 @@ function nodeMessageOperationResult(conformanceCase) {
       return nodeSdk.planBufferedPlaceholderCompletion(input);
     case "messages.search":
       return nodeSdk.planSearchMessages(input);
+    case "messages.search.normalize":
+      return nodeSdk.normalizeSearchMessagesResponse(
+        conformanceCase.apiResponses.map((item) => readJson(item.fixture))[0],
+        input,
+      );
+    case "messages.search.context":
+      return nodeSdk.buildSearchMessagesContext(
+        conformanceCase.apiResponses.map((item) => readJson(item.fixture))[0],
+        input,
+      );
     case "messages.replaceCards":
       return nodeSdk.planReplaceCards(input);
     case "threads.readContext": {
@@ -679,6 +689,8 @@ import json
 import sys
 from googlechatai import (
     build_conversation_context,
+    build_search_messages_context,
+    normalize_search_messages_response,
     plan_delete_app_message,
     plan_edit_message,
     plan_find_or_setup_dm,
@@ -731,6 +743,18 @@ elif operation == "messages.placeholder.bufferedComplete":
     result = plan_buffered_placeholder_completion(input_data)
 elif operation == "messages.search":
     result = plan_search_messages(input_data)
+elif operation == "messages.search.normalize":
+    result = normalize_search_messages_response(
+        responses[0],
+        max_results=input_data.get("maxResults", 25),
+        include_raw=input_data.get("includeRaw", False),
+    )
+elif operation == "messages.search.context":
+    result = build_search_messages_context(
+        responses[0],
+        max_results=input_data.get("maxResults", 25),
+        redact_emails=input_data.get("redactEmails", True),
+    )
 elif operation == "messages.replaceCards":
     result = plan_replace_cards(input_data)
 elif operation == "threads.readContext":

@@ -54,6 +54,7 @@ reports/live/
 # Generated discovery snapshots can be large. Commit curated snapshots only.
 discovery/snapshots/*.json
 !discovery/snapshots/.gitkeep
+!discovery/snapshots/google-chat-v1-20260705.methods.json
 
 # Private tenant-specific live ledgers stay local-only.
 docs/private/

@@ -135,6 +135,15 @@ function modelTokenBudgetConfig(input: JsonObject): JsonObject | null {
 
 function readerConfig(input: JsonObject, scope: "thread" | "space"): JsonObject {
   const limit = optionalNumber(input, "limit", 50);
+  const markupSyntax = optionalString(input, "markupSyntax");
+  if (
+    markupSyntax &&
+    !["MARKUP_SYNTAX_CHAT", "MARKUP_SYNTAX_MARKDOWN"].includes(markupSyntax)
+  ) {
+    throw new TypeError(
+      "Expected markupSyntax to be MARKUP_SYNTAX_CHAT or MARKUP_SYNTAX_MARKDOWN.",
+    );
+  }
   const reader: JsonObject = {
     scope,
     space: requiredString(input, "space"),
@@ -147,6 +156,9 @@ function readerConfig(input: JsonObject, scope: "thread" | "space"): JsonObject 
     endTime: optionalString(input, "endTime"),
     maxQuoteDepth: optionalNumber(input, "maxQuoteDepth", 1),
   };
+  if (markupSyntax) {
+    reader.markupSyntax = markupSyntax;
+  }
   const budget = modelTokenBudgetConfig(input);
   if (budget) {
     reader.modelTokenBudget = budget;
@@ -187,6 +199,9 @@ function planReader(input: JsonObject, scope: "thread" | "space"): JsonObject {
   }
   if (filter) {
     query.filter = filter;
+  }
+  if (asString(reader.markupSyntax)) {
+    query.markupSyntax = reader.markupSyntax;
   }
   query.orderBy = `createTime ${reader.order}`;
 

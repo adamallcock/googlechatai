@@ -7,12 +7,15 @@ from googlechatai import (
     build_buffered_stream_patches,
     build_conversation_context,
     build_conversation_context_with_identity,
+    build_search_messages_context,
+    build_search_messages_filter,
     build_update_mask,
     generate_client_message_id,
     generate_request_id,
     hydrate_placeholder_response_handle,
     InMemoryAsyncResponseQueue,
     InMemoryIdentityCache,
+    normalize_search_messages_response,
     plan_buffered_placeholder_completion,
     plan_buffered_stream_message,
     plan_async_response,
@@ -840,6 +843,18 @@ class ContextReaderTests(unittest.TestCase):
                     test_case["expect"]["context"],
                 )
 
+    def test_reader_requests_markdown_message_syntax_when_selected(self) -> None:
+        plan = plan_read_space_context(
+            {"space": "spaces/AAA", "markupSyntax": "MARKUP_SYNTAX_MARKDOWN"}
+        )
+        self.assertEqual(
+            plan["requests"][0]["query"]["markupSyntax"],
+            "MARKUP_SYNTAX_MARKDOWN",
+        )
+        self.assertEqual(plan["reader"]["markupSyntax"], "MARKUP_SYNTAX_MARKDOWN")
+        with self.assertRaises(TypeError):
+            plan_read_space_context({"space": "spaces/AAA", "markupSyntax": "HTML"})
+
     def test_model_projection_bounds_deeply_nested_quotes_iteratively(self) -> None:
         message: dict[str, object] = {
             "plainTextForModel": "leaf",
@@ -1129,20 +1144,211 @@ if __name__ == "__main__":
     unittest.main()
 
 
-class DocsListedPlannersTest(unittest.TestCase):
-    def test_search_clamps_page_size_and_warns(self) -> None:
+class DeveloperPreviewMessageSearchTest(unittest.TestCase):
+    def test_search_plans_live_post_contract_with_user_auth(self) -> None:
         plan = plan_search_messages(
             {"space": "spaces/AAA", "query": "hello", "pageSize": 5000}
         )
-        self.assertEqual(plan["requests"][0]["query"]["pageSize"], 1000)
         self.assertEqual(
-            plan["requests"][0]["path"], "/v1/spaces/AAA/messages:search"
+            plan["requests"][0],
+            {
+                "resource": "spaces.messages.search",
+                "method": "POST",
+                "path": "/v1/spaces/-/messages:search",
+                "query": {},
+                "body": {
+                    "filter": '(hello) AND space.name = "spaces/AAA"',
+                    "pageSize": 100,
+                    "view": "SEARCH_MESSAGES_VIEW_BASIC",
+                },
+            },
         )
-        self.assertIn("docs-listed", plan["warnings"][0])
+        self.assertEqual(
+            plan["capability"],
+            {
+                "ok": True,
+                "authMode": "user",
+                "requiredScopes": [
+                    "https://www.googleapis.com/auth/chat.messages.readonly"
+                ],
+                "reasons": [],
+            },
+        )
+        self.assertIn("Developer Preview", "\n".join(plan["warnings"]))
+        self.assertIn("compatibility alias", "\n".join(plan["warnings"]))
 
-    def test_search_requires_query(self) -> None:
+    def test_search_builds_safe_semantic_filters_and_full_view_scopes(self) -> None:
+        input_value = {
+            "filters": {
+                "text": "roadmap review",
+                "spaces": ["spaces/AAA", "spaces/BBB"],
+                "senders": ["users/123", "users/456"],
+                "startTime": "2026-08-01T00:00:00Z",
+                "endTime": "2026-08-11T00:00:00Z",
+                "unread": True,
+                "hasAttachments": True,
+                "mentions": ["users/me"],
+                "hasLinks": True,
+            },
+            "orderBy": "relevance desc",
+            "view": "SEARCH_MESSAGES_VIEW_FULL",
+        }
+        search_filter = build_search_messages_filter(input_value)
+        plan = plan_search_messages(input_value)
+
+        self.assertIn('"roadmap review"', search_filter)
+        self.assertIn('create_time >= "2026-08-01T00:00:00Z"', search_filter)
+        self.assertIn(
+            'space.name = "spaces/AAA" OR space.name = "spaces/BBB"',
+            search_filter,
+        )
+        self.assertIn("attachment:*", search_filter)
+        self.assertIn("is_unread()", search_filter)
+        self.assertEqual(plan["requests"][0]["body"]["filter"], search_filter)
+        self.assertEqual(
+            plan["capability"]["requiredScopes"],
+            [
+                "https://www.googleapis.com/auth/chat.messages.readonly",
+                "https://www.googleapis.com/auth/chat.users.readstate.readonly",
+                "https://www.googleapis.com/auth/chat.users.spacesettings",
+            ],
+        )
+
+    def test_search_rejects_ambiguous_unsafe_and_unsupported_inputs(self) -> None:
         with self.assertRaises(TypeError):
-            plan_search_messages({"space": "spaces/AAA"})
+            plan_search_messages({})
+        with self.assertRaises(TypeError):
+            plan_search_messages({"filter": "hello", "query": "world"})
+        with self.assertRaises(TypeError):
+            plan_search_messages(
+                {"filters": {"spaces": ['spaces/AAA" OR true']}}
+            )
+        with self.assertRaises(TypeError):
+            plan_search_messages(
+                {
+                    "filter": "hello",
+                    "filters": {
+                        "startTime": "2026-08-11T00:00:00Z",
+                        "endTime": "2026-08-10T00:00:00Z",
+                    },
+                }
+            )
+        with self.assertRaises(TypeError):
+            plan_search_messages(
+                {
+                    "filters": {
+                        "text": "hello",
+                        "startTime": "2026-02-30T12:00:00Z",
+                    }
+                }
+            )
+        with self.assertRaises(TypeError):
+            plan_search_messages({"filter": "hello", "orderBy": "create_time asc"})
+        with self.assertRaises(TypeError):
+            plan_search_messages(
+                {"filters": {"text": "hello", "unread": "yes"}}
+            )
+        with self.assertRaises(TypeError):
+            plan_search_messages({"filter": "x" * 1001})
+        self.assertEqual(
+            plan_search_messages({"filter": "x" * 1000})["requests"][0]["body"][
+                "filter"
+            ],
+            "x" * 1000,
+        )
+        with self.assertRaises(TypeError):
+            plan_search_messages(
+                {
+                    "filters": {
+                        "text": "hello",
+                        "startTime": "2026-08-10T12:00:00",
+                    }
+                }
+            )
+
+    def test_search_reports_filter_dependent_scopes_for_basic_view(self) -> None:
+        self.assertEqual(
+            plan_search_messages(
+                {"filters": {"text": "hello", "unread": True}}
+            )["capability"]["requiredScopes"],
+            [
+                "https://www.googleapis.com/auth/chat.messages.readonly",
+                "https://www.googleapis.com/auth/chat.users.readstate.readonly",
+            ],
+        )
+        self.assertEqual(
+            plan_search_messages({"filter": "space.display_name:Project"})[
+                "capability"
+            ]["requiredScopes"],
+            [
+                "https://www.googleapis.com/auth/chat.messages.readonly",
+                "https://www.googleapis.com/auth/chat.spaces.readonly",
+            ],
+        )
+
+    def test_search_reports_app_auth_as_unavailable(self) -> None:
+        plan = plan_search_messages({"filter": "hello", "authMode": "app"})
+        self.assertFalse(plan["capability"]["ok"])
+        self.assertIn(
+            "spaces.messages.search requires user authentication.",
+            plan["capability"]["reasons"],
+        )
+
+    def test_search_normalizes_and_bounds_results_without_raw_payloads(self) -> None:
+        response = read_json("fixtures/api-responses/messages/search-page.json")
+        normalized = normalize_search_messages_response(response, max_results=1)
+        context = build_search_messages_context(response, max_results=1)
+
+        self.assertEqual(normalized["returnedResults"], 1)
+        self.assertEqual(normalized["omittedResults"], 1)
+        self.assertEqual(normalized["nextPageToken"], "search-page-2")
+        self.assertTrue(normalized["partial"])
+        self.assertTrue(normalized["truncated"])
+        self.assertFalse(normalized["inaccessible"])
+        self.assertEqual(
+            normalized["privacy"], {"maxResults": 1, "rawIncluded": False}
+        )
+        self.assertEqual(normalized["results"][0]["read"], False)
+        self.assertEqual(normalized["results"][0]["spaceMuteSetting"], "MUTED")
+        self.assertEqual(
+            normalized["results"][0]["message"]["markupSyntax"],
+            "MARKUP_SYNTAX_MARKDOWN",
+        )
+        self.assertIn(
+            "System Note: Message spaces/AAA/messages/search-1",
+            normalized["results"][0]["plainTextForModel"],
+        )
+        self.assertTrue(
+            normalized["results"][0]["plainTextForModel"].endswith(
+                "Roadmap review is ready."
+            )
+        )
+        self.assertNotIn("raw", normalized["results"][0])
+        self.assertEqual(context["kind"], "chat.message_search_context")
+        self.assertTrue(context["truncated"])
+        self.assertEqual(
+            context["privacy"],
+            {
+                "maxResults": 1,
+                "rawIncluded": False,
+                "emailRedacted": True,
+            },
+        )
+        self.assertNotIn("ada@example.com", json.dumps(context))
+        self.assertIn("[redacted-email]", json.dumps(context))
+
+    def test_search_handles_malformed_results_and_raw_opt_in(self) -> None:
+        normalized = normalize_search_messages_response(
+            {"results": [{"read": True}]}, include_raw=True
+        )
+        self.assertIsNone(normalized["results"][0]["message"])
+        self.assertEqual(normalized["results"][0]["raw"], {"read": True})
+        self.assertIn(
+            "did not include an accessible Message",
+            "\n".join(normalized["results"][0]["systemNotes"]),
+        )
+        with self.assertRaises(TypeError):
+            normalize_search_messages_response({}, max_results=0)
 
     def test_replace_cards_plans_and_validates(self) -> None:
         plan = plan_replace_cards(

@@ -55,7 +55,7 @@ Layer 1: raw and typed Google Chat client.
   retry/idempotency helpers scaffolded.
 - Purpose: expose typed request/response objects, pagination, retries,
   scope-aware errors, discovery version reporting, and passthrough access.
-- Current repo evidence: `discovery/google-chat-v1-20260705.methods.json` and
+- Current repo evidence: `discovery/google-chat-v1-20260804.methods.json` and
   `tools/discovery/check-methods.mjs`.
 - Auth and retry boundary: see
   [Auth Principal And Resilient Transport](../architecture/2026-06-30-auth-principal-resilience.md).

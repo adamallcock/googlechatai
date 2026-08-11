@@ -1,0 +1,46 @@
+{
+  "results": [
+    {
+      "message": {
+        "name": "spaces/AAA/messages/search-1",
+        "space": {
+          "name": "spaces/AAA",
+          "displayName": "Smoke Space",
+          "type": "SPACE"
+        },
+        "thread": {
+          "name": "spaces/AAA/threads/thread-1"
+        },
+        "sender": {
+          "name": "users/123",
+          "displayName": "Ada Example",
+          "email": "ada@example.com",
+          "type": "HUMAN"
+        },
+        "createTime": "2026-08-10T12:00:00Z",
+        "text": "Roadmap review is ready.",
+        "markupSyntax": "MARKUP_SYNTAX_MARKDOWN"
+      },
+      "spaceMuteSetting": "MUTED",
+      "read": false
+    },
+    {
+      "message": {
+        "name": "spaces/BBB/messages/search-2",
+        "space": {
+          "name": "spaces/BBB",
+          "displayName": "Second Space",
+          "type": "SPACE"
+        },
+        "sender": {
+          "name": "users/456",
+          "displayName": "Grace Example",
+          "type": "HUMAN"
+        },
+        "createTime": "2026-08-10T11:00:00Z",
+        "text": "The launch checklist is complete."
+      }
+    }
+  ],
+  "nextPageToken": "search-page-2"
+}

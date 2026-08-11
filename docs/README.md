@@ -58,8 +58,9 @@ reports as current state.
 - `guides/2026-07-06-live-streaming.md`: shared cross-language streaming
   scheduler and Node/Python drivers for cadence, truncate/split, cancel, and
   resume.
-- `guides/2026-07-06-pins-search-replace-cards.md`: docs-listed message pin,
-  search, and replace-cards planners pending live verification.
+- `guides/2026-07-06-pins-search-replace-cards.md`: Developer Preview message
+  search planning/normalization/context plus docs-listed message pin and
+  replace-cards planners.
 - `guides/2026-07-06-token-stores-and-queues.md`: Node/Python token store and
   async response queue adapters, including the shared file formats.
 - `guides/2026-07-06-router-event-coverage.md`: router registrations for
@@ -87,6 +88,10 @@ reports as current state.
   current product and viability decision after hands-on comparison with the
   official Google clients, Google Workspace CLI, and Vercel Chat SDK. It
   supersedes the narrower July 15 market recommendation.
+- `research/2026-08-10-google-chat-discovery-drift-review.md`: exact review of
+  discovery revision `20260804`, including message search, markup syntax,
+  space-search response, organization-wide event scopes, and availability
+  scope decisions.
 - `reports/2026-07-16-public-beta-release-readiness.md`: implemented CLI and
   scaffold surface, full validation and installed-artifact evidence, current
   registry/GitHub state, and exact external publication blockers.

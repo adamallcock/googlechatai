@@ -862,6 +862,11 @@ def _build_message_ast(raw: RawMapping, relationship: str) -> dict[str, Any]:
         },
         "privateMessageViewer": private_message_viewer,
         "text": text,
+        **(
+            {"markupSyntax": _as_string(raw.get("markupSyntax"))}
+            if _as_string(raw.get("markupSyntax"))
+            else {}
+        ),
         "formattedText": _as_string(raw.get("formattedText")),
         "argumentText": _as_string(raw.get("argumentText")),
         "segments": segments,

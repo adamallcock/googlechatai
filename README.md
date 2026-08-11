@@ -16,8 +16,8 @@ npm install googlechatai@next       # Node.js 22+
 pip install --pre googlechatai      # Python 3.10+ (stdlib only)
 ```
 
-Status: `0.1.0-beta.1` public-beta release candidate (PyPI normalizes the
-version to `0.1.0b1`). The local, dry-run, and verification surfaces are
+Status: `0.1.0-beta.2` public-beta release candidate (PyPI normalizes the
+version to `0.1.0b2`). The local, dry-run, and verification surfaces are
 extensively tested; live-API wrappers are exercised against a private test
 tenant. APIs may change before the stable `0.1.0` release.
 
@@ -119,11 +119,11 @@ write is also available as a dry-run plan before execution.
 |---|---|
 | Event handling | One normalized envelope for HTTP, Pub/Sub, and Workspace Events payloads; router registrations for messages, mentions, slash commands (by name), cards, dialogs, reactions, memberships, space add/remove, widget updates, and link previews; dedupe and deadline options |
 | Request verification | Chat app bearer JWTs and Pub/Sub push OIDC tokens, JWKS caching, offline test fixtures |
-| Messages | Send/reply/thread/edit/delete planners with typed inputs, reply-target routing policies, placeholder responses, async response handoff, message search and replace-cards (docs-listed) |
+| Messages | Send/reply/thread/edit/delete planners with typed inputs, reply-target routing policies, placeholder responses, async response handoff, Developer Preview message search, and docs-listed replace-cards |
 | Streaming | `streamChatReply` / `stream_chat_reply` / `astream_chat_reply` with shared scheduler semantics, final-card attachment, cancellation registries, resumable state |
 | Cards and dialogs | Typed builders (approval, progress, error, sources, thinking, tool status, feedback), card lint/translation, action-state round-tripping, dialog helpers |
 | Attachments | Metadata normalization, download/upload plans, policy gates, parser hooks, Drive export plans, optional OpenAI/Gemini voice transcription providers |
-| Context for AI | Thread/space readers, recursive quoted-message context, identity resolution with explicit unavailability, plus a model-safe projection with provenance/trust labels, cursor exclusion, and default email redaction |
+| Context for AI | Thread/space readers, recursive quoted-message context, identity resolution with explicit unavailability, bounded message-search context, plus model-safe projection with provenance/trust labels, cursor exclusion, and default email redaction |
 | Reactions and pins | Reaction planners with feedback mapping, message pin planners (docs-listed) |
 | Transport | Retry/backoff with Retry-After, 401 refresh-and-replay, structural idempotency stores including injected Firestore reference stores, token stores (file, Secret Manager), queue adapters (Cloud Tasks, Pub/Sub, file) |
 | Capabilities | `explainChatCapability`, permission plans, and error explainers for 401/403/404/429/5xx remediation |
@@ -147,9 +147,15 @@ Planned: custom emoji management, admin/import operations, retention-policy
 automation beyond the guarded idempotency monitor, richer live parser/provider
 harnesses.
 
-Gated: docs-listed Google surfaces (message pins, message search,
-replaceCards) ship as planners with explicit warnings until verified live;
-live smokes require a dedicated test space and explicit env guards; a
+Experimental: `spaces.messages.search` now ships with its live-discovery POST
+contract, semantic filters, user-auth scope analysis, bounded normalization,
+and privacy-safe model context. A read-only dedicated-space smoke returned HTTP
+200 on 2026-08-10. It remains Google Workspace Developer Preview, so this is a
+current-tenant verification rather than a stable-production claim.
+
+Gated: docs-listed Google surfaces (message pins and replaceCards) ship as
+planners with explicit warnings until verified live; live smokes require a
+dedicated test space and explicit env guards; a
 `spaces.spaceEvents.list` 500-level issue observed in our private live tenant
 is tracked for re-verification.
 
