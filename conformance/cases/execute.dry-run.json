@@ -347,8 +347,8 @@
     }
   },
   {
-    "id": "execute.dryRun.unpin-seeded-placeholder",
-    "description": "Dry-run execution resolves a seeded messagePin placeholder.",
+    "id": "execute.dryRun.legacy-unpin-seeded-placeholder",
+    "description": "Dry-run execution preserves placeholder resolution for legacy call plans.",
     "operation": "execute.dryRun",
     "input": {
       "plan": {

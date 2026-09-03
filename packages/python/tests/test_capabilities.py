@@ -26,6 +26,35 @@ class CapabilitiesTest(unittest.TestCase):
         self.assertIn("unsupported_principal", plan["reasons"])
         self.assertIn("submitting user's OAuth token", " ".join(plan["remediation"]))
 
+    def test_describes_message_pins_as_user_authorized_developer_preview(self):
+        readable = explain_chat_capability("pins.list", {"principal": "user"})
+        writable = plan_chat_permission(
+            "spaces.messagePins.create", {"principal": "app"}
+        )
+
+        self.assertEqual(readable["intent"], "pins.list")
+        self.assertEqual(readable["googleMethod"], "spaces.messagePins.list")
+        self.assertTrue(readable["ok"])
+        self.assertEqual(readable["principal"], "user")
+        self.assertEqual(
+            readable["requiredScopes"],
+            ["https://www.googleapis.com/auth/chat.spaces.pins.readonly"],
+        )
+        self.assertTrue(readable["liveSafe"])
+        self.assertIn(
+            "Message pins are a Google Workspace Developer Preview surface.",
+            readable["knownLimitations"],
+        )
+        self.assertEqual(writable["intent"], "pins.create")
+        self.assertFalse(writable["ok"])
+        self.assertEqual(writable["principal"], "app")
+        self.assertEqual(writable["supportedPrincipals"], ["user"])
+        self.assertEqual(
+            writable["requiredScopes"],
+            ["https://www.googleapis.com/auth/chat.spaces.pins"],
+        )
+        self.assertIn("calling user's OAuth token", " ".join(writable["remediation"]))
+
     def test_classifies_insufficient_scopes(self):
         explanation = explain_google_chat_error(
             {

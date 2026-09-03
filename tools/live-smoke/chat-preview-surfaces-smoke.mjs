@@ -36,8 +36,8 @@ const SURFACES = {
       "https://developers.google.com/workspace/chat/api/reference/rest/v1/spaces.messagePins/list",
     method: "GET",
     pathTemplate: "/v1/{parent=spaces/*}/messagePins",
-    scopes: ["https://www.googleapis.com/auth/chat.spaces.readonly"],
-    docsStatus: "docs_listed",
+    scopes: ["https://www.googleapis.com/auth/chat.spaces.pins.readonly"],
+    docsStatus: "developer_preview",
   },
 };
 
@@ -426,7 +426,7 @@ function printHelp() {
   console.log([
     "Usage: pnpm live:chat-preview-surfaces-smoke [-- --dry-run] [-- --allow-blocked]",
     "",
-    "Read-only smoke for Developer Preview and docs-listed Google Chat surfaces.",
+    "Read-only smoke for selected Google Chat Developer Preview surfaces.",
     "",
     "Environment:",
     "  RUN_LIVE_CHAT_PREVIEW_SURFACES_SMOKE=1  Required unless --dry-run is used.",
@@ -436,7 +436,7 @@ function printHelp() {
     "",
     "Options:",
     "  --dry-run                 Print the read-only plan without API calls.",
-    "  --allow-blocked           Save 403/404/5xx docs-listed surface failures as blocked evidence.",
+    "  --allow-blocked           Save 403/404/5xx preview-surface failures as blocked evidence.",
     "  --metadata <path>         Smoke space metadata JSON.",
     "  --evidence <path>         Evidence output path.",
     "  --page-size <n>           Page size for read probes. Default: 3.",

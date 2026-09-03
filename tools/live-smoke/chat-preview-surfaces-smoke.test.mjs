@@ -80,6 +80,13 @@ test("dry-run plan is read-only and redacted", async (t) => {
     result.plan.every((surface) => surface.authPrincipal === "user"),
     true,
   );
+  const messagePins = result.plan.find(
+    (surface) => surface.surface === "spaces.messagePins.list",
+  );
+  assert.equal(messagePins.docsStatus, "developer_preview");
+  assert.deepEqual(messagePins.scopes, [
+    "https://www.googleapis.com/auth/chat.spaces.pins.readonly",
+  ]);
   assert.equal(serialized.includes("spaces/AAAA-smoke"), false);
   assert.equal(serialized.includes(`${SMOKE_SPACE_PREFIX} Unit Test`), false);
 });

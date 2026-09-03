@@ -155,6 +155,95 @@ export const DEFAULT_PLACEHOLDER_RESOLVERS: Record<string, PlaceholderResolver> 
   resolvedMessagePin: messagePinResolver,
 };
 
+type RequestConditionResult =
+  | { action: "execute" }
+  | { action: "skip"; skippedReason: string }
+  | { action: "fail"; error: { name: string; message: string } };
+
+function messageNameForPin(pin: JsonObject): string | null {
+  return asString(pin.message) ?? asString(asRecord(pin.message)?.name);
+}
+
+function lastMessagePinsListResponse(
+  steps: ChatPlanExecutionStep[],
+): JsonObject | null {
+  for (let index = steps.length - 1; index >= 0; index -= 1) {
+    const step = steps[index]!;
+    if (
+      step.resource === "spaces.messagePins.list" &&
+      step.status === "executed"
+    ) {
+      return asRecord(step.response);
+    }
+  }
+  return null;
+}
+
+function evaluateRequestCondition(
+  request: JsonObject,
+  steps: ChatPlanExecutionStep[],
+): RequestConditionResult {
+  const condition = asRecord(request.condition);
+  if (!condition) {
+    return { action: "execute" };
+  }
+
+  if (asString(condition.kind) !== "message_pin_absent") {
+    return {
+      action: "fail",
+      error: {
+        name: "ConditionEvaluationError",
+        message: "The plan contains an unsupported request condition.",
+      },
+    };
+  }
+
+  const targetMessage = asString(condition.message);
+  if (!targetMessage) {
+    return {
+      action: "fail",
+      error: {
+        name: "ConditionEvaluationError",
+        message: "message_pin_absent requires a message resource name.",
+      },
+    };
+  }
+
+  const listResponse = lastMessagePinsListResponse(steps);
+  if (!listResponse) {
+    return {
+      action: "fail",
+      error: {
+        name: "ConditionEvaluationError",
+        message: "message_pin_absent requires a successful spaces.messagePins.list response.",
+      },
+    };
+  }
+
+  if (
+    condition.requiresCompleteList === true &&
+    asString(listResponse.nextPageToken)
+  ) {
+    return {
+      action: "fail",
+      error: {
+        name: "ConditionEvaluationError",
+        message:
+          "Cannot safely ensure a message pin because spaces.messagePins.list returned a nextPageToken.",
+      },
+    };
+  }
+
+  const alreadyPinned = asArray(listResponse.messagePins).some((rawPin) => {
+    const pin = asRecord(rawPin);
+    return pin !== null && messageNameForPin(pin) === targetMessage;
+  });
+
+  return alreadyPinned
+    ? { action: "skip", skippedReason: "already_pinned" }
+    : { action: "execute" };
+}
+
 function placeholderNames(path: string): string[] {
   const names: string[] = [];
   for (const match of path.matchAll(PLACEHOLDER_PATTERN)) {
@@ -411,6 +500,21 @@ async function executePlanInternal(
         name: "UnresolvedPlaceholderError",
         message: `Could not resolve path placeholder in ${step.path}.`,
       };
+      failed = true;
+      options.onStep?.(step);
+      break;
+    }
+
+    const condition = evaluateRequestCondition(request, steps);
+    if (condition.action === "skip") {
+      step.status = "skipped";
+      step.skippedReason = condition.skippedReason;
+      options.onStep?.(step);
+      continue;
+    }
+    if (condition.action === "fail") {
+      step.status = "failed";
+      step.error = condition.error;
       failed = true;
       options.onStep?.(step);
       break;

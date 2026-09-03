@@ -30,6 +30,35 @@ describe("capability and error explainers", () => {
     expect(plan.remediation.join(" ")).toContain("submitting user's OAuth token");
   });
 
+  it("describes message pins as a user-authorized Developer Preview surface", () => {
+    const readable = explainChatCapability("pins.list", { principal: "user" });
+    const writable = planChatPermission("spaces.messagePins.create", {
+      principal: "app",
+    });
+
+    expect(readable).toMatchObject({
+      intent: "pins.list",
+      googleMethod: "spaces.messagePins.list",
+      ok: true,
+      principal: "user",
+      requiredScopes: [
+        "https://www.googleapis.com/auth/chat.spaces.pins.readonly",
+      ],
+      liveSafe: true,
+    });
+    expect(readable.knownLimitations).toContain(
+      "Message pins are a Google Workspace Developer Preview surface.",
+    );
+    expect(writable).toMatchObject({
+      intent: "pins.create",
+      ok: false,
+      principal: "app",
+      supportedPrincipals: ["user"],
+      requiredScopes: ["https://www.googleapis.com/auth/chat.spaces.pins"],
+    });
+    expect(writable.remediation.join(" ")).toContain("calling user's OAuth token");
+  });
+
   it("classifies insufficient scopes without suggesting domain-wide delegation", () => {
     const explanation = explainGoogleChatError(
       {

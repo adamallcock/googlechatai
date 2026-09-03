@@ -264,13 +264,15 @@ topic. Keep this path separate from normal direct interaction handling.
 
 ## Google Endpoint Drift Probes
 
-Some docs-listed or emerging read surfaces are intentionally tracked as live
-drift probes:
+Some emerging read surfaces are intentionally tracked as live drift probes:
 
 - `spaces.spaceEvents.list` reached Google in the private live test tenant but
   returned HTTP 500 after bounded retries.
-- `spaces.messages.search` and `spaces.messagePins.list` returned HTTP 404 and
-  were not present in the current discovery method set.
+- A historical July 2026 probe found `spaces.messages.search` and
+  `spaces.messagePins.list` unavailable. Search later passed its guarded
+  read-only smoke on 2026-08-10, and discovery revision `20260828` includes all
+  three message-pin methods. The pin list probe should be re-run only through
+  the dedicated smoke-space harness; no live pin write is implied.
 
 Treat those outcomes as endpoint availability/rollout mismatches, not ordinary
 token refresh failures. Permission problems normally surface as `401` or `403`

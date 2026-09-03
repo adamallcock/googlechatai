@@ -7,6 +7,7 @@ from googlechatai.messages import (
     plan_send_to_user,
     plan_stream_message,
 )
+from googlechatai.pins import plan_ensure_message_pinned
 from googlechatai.transport import InMemoryIdempotencyStore
 
 
@@ -97,6 +98,103 @@ class ExecuteDryRunTest(unittest.TestCase):
 
 
 class ExecuteLiveTest(unittest.TestCase):
+    def test_skips_ensure_pinned_creation_when_target_is_already_pinned(self) -> None:
+        plan = plan_ensure_message_pinned(
+            {
+                "space": "spaces/AAA",
+                "message": "spaces/AAA/messages/BBB",
+                "authMode": "user",
+            }
+        )
+        send = FakeSend(
+            lambda request, index: (
+                200,
+                {
+                    "messagePins": [
+                        {
+                            "name": "spaces/AAA/messagePins/BBB",
+                            "message": "spaces/AAA/messages/BBB",
+                        }
+                    ]
+                },
+            )
+        )
+
+        execution = execute_chat_plan(
+            plan, mode="live", auth=get_access_token, send=send
+        )
+
+        self.assertTrue(execution["ok"])
+        self.assertEqual(len(send.calls), 1)
+        self.assertEqual(
+            [step["status"] for step in execution["steps"]],
+            ["executed", "skipped"],
+        )
+        self.assertEqual(execution["steps"][1]["skippedReason"], "already_pinned")
+
+    def test_creates_message_pin_when_complete_list_does_not_contain_target(self) -> None:
+        plan = plan_ensure_message_pinned(
+            {
+                "space": "spaces/AAA",
+                "message": "spaces/AAA/messages/BBB",
+                "authMode": "user",
+            }
+        )
+
+        def respond(request, index):
+            if index == 0:
+                return 200, {"messagePins": []}
+            return 200, {
+                "name": "spaces/AAA/messagePins/BBB",
+                "message": "spaces/AAA/messages/BBB",
+            }
+
+        send = FakeSend(respond)
+        execution = execute_chat_plan(
+            plan, mode="live", auth=get_access_token, send=send
+        )
+
+        self.assertTrue(execution["ok"])
+        self.assertEqual(len(send.calls), 2)
+        self.assertEqual(send.calls[1]["method"], "POST")
+        self.assertEqual(
+            send.calls[1]["body"], {"message": "spaces/AAA/messages/BBB"}
+        )
+        self.assertEqual(
+            [step["status"] for step in execution["steps"]],
+            ["executed", "executed"],
+        )
+
+    def test_fails_closed_when_ensure_pinned_list_is_not_complete(self) -> None:
+        plan = plan_ensure_message_pinned(
+            {
+                "space": "spaces/AAA",
+                "message": "spaces/AAA/messages/BBB",
+                "authMode": "user",
+            }
+        )
+        send = FakeSend(
+            lambda request, index: (200, {"messagePins": [], "nextPageToken": "more-pins"})
+        )
+
+        execution = execute_chat_plan(
+            plan, mode="live", auth=get_access_token, send=send
+        )
+
+        self.assertFalse(execution["ok"])
+        self.assertEqual(len(send.calls), 1)
+        self.assertEqual(execution["steps"][1]["status"], "failed")
+        self.assertEqual(
+            execution["steps"][1]["error"],
+            {
+                "name": "ConditionEvaluationError",
+                "message": (
+                    "Cannot safely ensure a message pin because "
+                    "spaces.messagePins.list returned a nextPageToken."
+                ),
+            },
+        )
+
     def test_executes_and_captures_created_messages(self) -> None:
         send = FakeSend(
             lambda request, index: (200, {"name": "spaces/AAA/messages/BBB"})

@@ -4,9 +4,9 @@
   "dryRun": true,
   "capability": {
     "ok": true,
-    "authMode": "app",
+    "authMode": "user",
     "requiredScopes": [
-      "https://www.googleapis.com/auth/chat.messages"
+      "https://www.googleapis.com/auth/chat.spaces.pins.readonly"
     ],
     "reasons": []
   },
@@ -39,6 +39,6 @@
     ]
   },
   "warnings": [
-    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+    "Message pins are a Google Workspace Developer Preview, user-authorized surface."
   ]
 }

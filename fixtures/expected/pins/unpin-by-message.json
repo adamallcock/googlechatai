@@ -4,26 +4,17 @@
   "dryRun": true,
   "capability": {
     "ok": true,
-    "authMode": "app",
+    "authMode": "user",
     "requiredScopes": [
-      "https://www.googleapis.com/auth/chat.messages"
+      "https://www.googleapis.com/auth/chat.spaces.pins"
     ],
     "reasons": []
   },
   "requests": [
     {
-      "resource": "spaces.messagePins.list",
-      "method": "GET",
-      "path": "/v1/spaces/AAA/messagePins",
-      "query": {
-        "pageSize": 100
-      },
-      "body": null
-    },
-    {
       "resource": "spaces.messagePins.delete",
       "method": "DELETE",
-      "path": "/v1/{resolvedMessagePin}",
+      "path": "/v1/spaces/AAA/messagePins/BBB",
       "query": {},
       "body": null
     }
@@ -34,10 +25,10 @@
   },
   "pin": {
     "action": "unpin",
-    "strategy": "list-then-delete",
+    "strategy": "derived-from-message",
     "space": "spaces/AAA",
     "message": "spaces/AAA/messages/BBB",
-    "resolvedMessagePinPlaceholder": "/v1/{resolvedMessagePin}"
+    "name": "spaces/AAA/messagePins/BBB"
   },
   "safety": {
     "liveAllowed": false,
@@ -47,7 +38,6 @@
     ]
   },
   "warnings": [
-    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
-    "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+    "Message pins are a Google Workspace Developer Preview, user-authorized surface."
   ]
 }

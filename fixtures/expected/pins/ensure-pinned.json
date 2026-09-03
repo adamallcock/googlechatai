@@ -4,9 +4,9 @@
   "dryRun": true,
   "capability": {
     "ok": true,
-    "authMode": "app",
+    "authMode": "user",
     "requiredScopes": [
-      "https://www.googleapis.com/auth/chat.messages"
+      "https://www.googleapis.com/auth/chat.spaces.pins"
     ],
     "reasons": []
   },
@@ -26,9 +26,12 @@
       "path": "/v1/spaces/AAA/messagePins",
       "query": {},
       "body": {
-        "messagePin": {
-          "message": "spaces/AAA/messages/BBB"
-        }
+        "message": "spaces/AAA/messages/BBB"
+      },
+      "condition": {
+        "kind": "message_pin_absent",
+        "message": "spaces/AAA/messages/BBB",
+        "requiresCompleteList": true
       }
     }
   ],
@@ -37,8 +40,9 @@
     "clientMessageId": null
   },
   "ensure": {
-    "strategy": "list-then-pin",
-    "alreadyPinnedAction": "skip"
+    "strategy": "list-then-pin-if-absent",
+    "alreadyPinnedAction": "skip",
+    "requiresCompleteList": true
   },
   "pin": {
     "action": "ensurePinned",
@@ -55,6 +59,6 @@
     ]
   },
   "warnings": [
-    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+    "Message pins are a Google Workspace Developer Preview, user-authorized surface."
   ]
 }

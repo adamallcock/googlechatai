@@ -2,23 +2,38 @@
 
 from __future__ import annotations
 
+import math
+import re
 from collections.abc import Mapping
 from typing import Any
 
 
 JsonObject = dict[str, Any]
 
-PIN_MESSAGES_SCOPE = "https://www.googleapis.com/auth/chat.messages"
-
-CHAT_PIN_DOCS_LISTED_NOTE = (
-    "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."
+CHAT_SPACES_PINS_SCOPE = "https://www.googleapis.com/auth/chat.spaces.pins"
+CHAT_SPACES_PINS_READONLY_SCOPE = (
+    "https://www.googleapis.com/auth/chat.spaces.pins.readonly"
 )
 
+# Deprecated compatibility alias. Prefer CHAT_SPACES_PINS_SCOPE.
+PIN_MESSAGES_SCOPE = CHAT_SPACES_PINS_SCOPE
+
+MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE = (
+    "Message pins are a Google Workspace Developer Preview, user-authorized surface."
+)
+
+# Deprecated compatibility alias. Prefer MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE.
+CHAT_PIN_DOCS_LISTED_NOTE = MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE
+
 DRY_RUN_NOTE = "Dry run only; no Google Chat API call was executed."
+USER_AUTH_REQUIRED_REASON = (
+    "Google Chat message pins require user authentication; app authentication is not supported."
+)
 DEFAULT_PAGE_SIZE = 100
 MIN_PAGE_SIZE = 1
-MAX_PAGE_SIZE = 1000
-RESOLVED_MESSAGE_PIN_PLACEHOLDER = "/v1/{resolvedMessagePin}"
+MAX_PAGE_SIZE = 100
+MESSAGE_RESOURCE_PATTERN = re.compile(r"^(spaces/[^/]+)/messages/([^/]+)$")
+MESSAGE_PIN_RESOURCE_PATTERN = re.compile(r"^spaces/[^/]+/messagePins/[^/]+$")
 
 
 def _as_string(value: Any) -> str | None:
@@ -26,7 +41,9 @@ def _as_string(value: Any) -> str | None:
 
 
 def _as_number(value: Any) -> int | float | None:
-    return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return value if math.isfinite(value) else None
+    return None
 
 
 def _required_string(input_value: Mapping[str, Any], key: str) -> str:
@@ -36,8 +53,39 @@ def _required_string(input_value: Mapping[str, Any], key: str) -> str:
     return value
 
 
+def _message_parts(message: str) -> tuple[str, str]:
+    match = MESSAGE_RESOURCE_PATTERN.fullmatch(message)
+    if not match:
+        raise TypeError(
+            "Expected message to use the resource name format spaces/{space}/messages/{message}."
+        )
+    return match.group(1), match.group(2)
+
+
+def _message_for_space(input_value: Mapping[str, Any], space: str) -> str:
+    message = _required_string(input_value, "message")
+    message_space, _message_id = _message_parts(message)
+    if message_space != space:
+        raise TypeError("Expected message to belong to the supplied space.")
+    return message
+
+
+def _message_pin_name_for_message(message: str) -> str:
+    space, message_id = _message_parts(message)
+    return f"{space}/messagePins/{message_id}"
+
+
+def _required_message_pin(input_value: Mapping[str, Any]) -> str:
+    message_pin = _required_string(input_value, "messagePin")
+    if not MESSAGE_PIN_RESOURCE_PATTERN.fullmatch(message_pin):
+        raise TypeError(
+            "Expected messagePin to use the resource name format spaces/{space}/messagePins/{messagePin}."
+        )
+    return message_pin
+
+
 def _auth_mode(input_value: Mapping[str, Any]) -> str:
-    return _as_string(input_value.get("authMode")) or "app"
+    return _as_string(input_value.get("authMode")) or "user"
 
 
 def _chat_path(resource_name: str) -> str:
@@ -58,11 +106,16 @@ def _capability(
     ok: bool = True,
     reasons: list[str] | None = None,
 ) -> JsonObject:
+    mode = _auth_mode(input_value)
+    user_auth_ok = mode == "user"
+
     return {
-        "ok": ok,
-        "authMode": _auth_mode(input_value),
+        "ok": ok and user_auth_ok,
+        "authMode": mode,
         "requiredScopes": required_scopes,
-        "reasons": reasons or [],
+        "reasons": (reasons or [])
+        if user_auth_ok
+        else [*(reasons or []), USER_AUTH_REQUIRED_REASON],
     }
 
 
@@ -96,7 +149,7 @@ def _call_plan(
     if extra:
         plan.update(extra)
     plan["safety"] = _safety()
-    plan["warnings"] = [CHAT_PIN_DOCS_LISTED_NOTE, *(warnings or [])]
+    plan["warnings"] = [MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE, *(warnings or [])]
     return plan
 
 
@@ -115,6 +168,19 @@ def _list_query(input_value: Mapping[str, Any]) -> JsonObject:
     return query
 
 
+def _complete_pin_list_query(input_value: Mapping[str, Any]) -> JsonObject:
+    if _as_string(input_value.get("pageToken")):
+        raise TypeError(
+            "planEnsureMessagePinned does not accept pageToken because it must inspect the complete pin collection."
+        )
+    requested_page_size = _as_number(input_value.get("pageSize"))
+    if requested_page_size is not None and requested_page_size != MAX_PAGE_SIZE:
+        raise TypeError(
+            "planEnsureMessagePinned requires pageSize 100 so it can inspect the complete pin collection."
+        )
+    return {"pageSize": MAX_PAGE_SIZE}
+
+
 def _list_message_pins_request(space: str, query: JsonObject) -> JsonObject:
     return {
         "resource": "spaces.messagePins.list",
@@ -125,23 +191,25 @@ def _list_message_pins_request(space: str, query: JsonObject) -> JsonObject:
     }
 
 
+def _create_message_pin_request(space: str, message: str) -> JsonObject:
+    return {
+        "resource": "spaces.messagePins.create",
+        "method": "POST",
+        "path": _chat_path(f"{space}/messagePins"),
+        "query": {},
+        "body": {"message": message},
+    }
+
+
 def plan_pin_message(input_value: Mapping[str, Any]) -> JsonObject:
     space = _required_string(input_value, "space")
-    message = _required_string(input_value, "message")
+    message = _message_for_space(input_value, space)
 
     return _call_plan(
         "pins.pin",
         input_value,
-        [PIN_MESSAGES_SCOPE],
-        [
-            {
-                "resource": "spaces.messagePins.create",
-                "method": "POST",
-                "path": _chat_path(f"{space}/messagePins"),
-                "query": {},
-                "body": {"messagePin": {"message": message}},
-            }
-        ],
+        [CHAT_SPACES_PINS_SCOPE],
+        [_create_message_pin_request(space, message)],
         extra={
             "pin": {
                 "action": "pin",
@@ -158,15 +226,16 @@ def plan_unpin_message(input_value: Mapping[str, Any]) -> JsonObject:
     message = _as_string(input_value.get("message"))
 
     if message_pin:
+        name = _required_message_pin(input_value)
         return _call_plan(
             "pins.unpin",
             input_value,
-            [PIN_MESSAGES_SCOPE],
+            [CHAT_SPACES_PINS_SCOPE],
             [
                 {
                     "resource": "spaces.messagePins.delete",
                     "method": "DELETE",
-                    "path": _chat_path(message_pin),
+                    "path": _chat_path(name),
                     "query": {},
                     "body": None,
                 }
@@ -175,36 +244,34 @@ def plan_unpin_message(input_value: Mapping[str, Any]) -> JsonObject:
                 "pin": {
                     "action": "unpin",
                     "strategy": "direct",
-                    "name": message_pin,
+                    "name": name,
                 }
             },
         )
 
     if space and message:
+        validated_message = _message_for_space(input_value, space)
+        name = _message_pin_name_for_message(validated_message)
         return _call_plan(
             "pins.unpin",
             input_value,
-            [PIN_MESSAGES_SCOPE],
+            [CHAT_SPACES_PINS_SCOPE],
             [
-                _list_message_pins_request(space, _list_query(input_value)),
                 {
                     "resource": "spaces.messagePins.delete",
                     "method": "DELETE",
-                    "path": RESOLVED_MESSAGE_PIN_PLACEHOLDER,
+                    "path": _chat_path(name),
                     "query": {},
                     "body": None,
-                },
-            ],
-            warnings=[
-                "The message pin name is not derivable from space and message alone; list message pins first and resolve the matching messagePin name before deleting."
+                }
             ],
             extra={
                 "pin": {
                     "action": "unpin",
-                    "strategy": "list-then-delete",
+                    "strategy": "derived-from-message",
                     "space": space,
-                    "message": message,
-                    "resolvedMessagePinPlaceholder": RESOLVED_MESSAGE_PIN_PLACEHOLDER,
+                    "message": validated_message,
+                    "name": name,
                 }
             },
         )
@@ -221,7 +288,7 @@ def plan_list_message_pins(input_value: Mapping[str, Any]) -> JsonObject:
     return _call_plan(
         "pins.list",
         input_value,
-        [PIN_MESSAGES_SCOPE],
+        [CHAT_SPACES_PINS_READONLY_SCOPE],
         [_list_message_pins_request(space, query)],
         extra={
             "pin": {
@@ -236,34 +303,33 @@ def plan_list_message_pins(input_value: Mapping[str, Any]) -> JsonObject:
 
 def plan_ensure_message_pinned(input_value: Mapping[str, Any]) -> JsonObject:
     space = _required_string(input_value, "space")
-    message = _required_string(input_value, "message")
-    query = _list_query(input_value)
+    message = _message_for_space(input_value, space)
+    query = _complete_pin_list_query(input_value)
+
+    create_request = _create_message_pin_request(space, message)
+    create_request["condition"] = {
+        "kind": "message_pin_absent",
+        "message": message,
+        "requiresCompleteList": True,
+    }
 
     return _call_plan(
         "pins.ensurePinned",
         input_value,
-        [PIN_MESSAGES_SCOPE],
-        [
-            _list_message_pins_request(space, query),
-            {
-                "resource": "spaces.messagePins.create",
-                "method": "POST",
-                "path": _chat_path(f"{space}/messagePins"),
-                "query": {},
-                "body": {"messagePin": {"message": message}},
-            },
-        ],
+        [CHAT_SPACES_PINS_SCOPE],
+        [_list_message_pins_request(space, query), create_request],
         extra={
             "ensure": {
-                "strategy": "list-then-pin",
+                "strategy": "list-then-pin-if-absent",
                 "alreadyPinnedAction": "skip",
+                "requiresCompleteList": True,
             },
             "pin": {
                 "action": "ensurePinned",
                 "space": space,
                 "message": message,
-                "pageSize": _as_number(query.get("pageSize")),
-                "pageToken": _as_string(query.get("pageToken")),
+                "pageSize": MAX_PAGE_SIZE,
+                "pageToken": None,
             },
         },
     )
