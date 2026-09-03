@@ -172,6 +172,9 @@ from .execute import (
 )
 from .pins import (
     CHAT_PIN_DOCS_LISTED_NOTE,
+    CHAT_SPACES_PINS_READONLY_SCOPE,
+    CHAT_SPACES_PINS_SCOPE,
+    MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE,
     PIN_MESSAGES_SCOPE,
     plan_ensure_message_pinned,
     plan_list_message_pins,
@@ -228,6 +231,9 @@ __all__ = [
     "DEFAULT_PLACEHOLDER_RESOLVERS",
     "execute_chat_plan",
     "CHAT_PIN_DOCS_LISTED_NOTE",
+    "CHAT_SPACES_PINS_READONLY_SCOPE",
+    "CHAT_SPACES_PINS_SCOPE",
+    "MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE",
     "PIN_MESSAGES_SCOPE",
     "plan_ensure_message_pinned",
     "plan_list_message_pins",

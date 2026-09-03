@@ -10,6 +10,7 @@ import {
   planSendToUser,
   planStreamMessage,
 } from "../src/messages/index.js";
+import { planEnsureMessagePinned } from "../src/pins/index.js";
 import { InMemoryIdempotencyStore } from "../src/transport/index.js";
 
 const auth = {
@@ -102,6 +103,92 @@ describe("executeChatPlan dry runs", () => {
 });
 
 describe("executeChatPlan live", () => {
+  it("skips ensure-pinned creation when the target message is already pinned", async () => {
+    const plan = planEnsureMessagePinned({
+      space: "spaces/AAA",
+      message: "spaces/AAA/messages/BBB",
+      authMode: "user",
+    });
+    const { fetch, calls } = fakeFetch(() => ({
+      status: 200,
+      body: {
+        messagePins: [
+          {
+            name: "spaces/AAA/messagePins/BBB",
+            message: "spaces/AAA/messages/BBB",
+          },
+        ],
+      },
+    }));
+
+    const execution = await executeChatPlan(plan, { mode: "live", auth, fetch });
+
+    expect(execution.ok).toBe(true);
+    expect(calls).toHaveLength(1);
+    expect(execution.steps.map((step) => step.status)).toEqual([
+      "executed",
+      "skipped",
+    ]);
+    expect(execution.steps[1]?.skippedReason).toBe("already_pinned");
+  });
+
+  it("creates a message pin when a complete list does not contain the target", async () => {
+    const plan = planEnsureMessagePinned({
+      space: "spaces/AAA",
+      message: "spaces/AAA/messages/BBB",
+      authMode: "user",
+    });
+    const { fetch, calls } = fakeFetch((_call, index) =>
+      index === 0
+        ? { status: 200, body: { messagePins: [] } }
+        : {
+            status: 200,
+            body: {
+              name: "spaces/AAA/messagePins/BBB",
+              message: "spaces/AAA/messages/BBB",
+            },
+          },
+    );
+
+    const execution = await executeChatPlan(plan, { mode: "live", auth, fetch });
+
+    expect(execution.ok).toBe(true);
+    expect(calls).toHaveLength(2);
+    expect(calls[1]).toMatchObject({
+      method: "POST",
+      body: JSON.stringify({ message: "spaces/AAA/messages/BBB" }),
+    });
+    expect(execution.steps.map((step) => step.status)).toEqual([
+      "executed",
+      "executed",
+    ]);
+  });
+
+  it("fails closed when ensure-pinned cannot inspect the entire pin collection", async () => {
+    const plan = planEnsureMessagePinned({
+      space: "spaces/AAA",
+      message: "spaces/AAA/messages/BBB",
+      authMode: "user",
+    });
+    const { fetch, calls } = fakeFetch(() => ({
+      status: 200,
+      body: { messagePins: [], nextPageToken: "more-pins" },
+    }));
+
+    const execution = await executeChatPlan(plan, { mode: "live", auth, fetch });
+
+    expect(execution.ok).toBe(false);
+    expect(calls).toHaveLength(1);
+    expect(execution.steps[1]).toMatchObject({
+      status: "failed",
+      error: {
+        name: "ConditionEvaluationError",
+        message:
+          "Cannot safely ensure a message pin because spaces.messagePins.list returned a nextPageToken.",
+      },
+    });
+  });
+
   it("executes requests sequentially and captures created messages", async () => {
     const { fetch, calls } = fakeFetch(() => ({
       status: 200,

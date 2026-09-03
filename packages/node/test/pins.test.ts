@@ -4,6 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   CHAT_PIN_DOCS_LISTED_NOTE,
+  CHAT_SPACES_PINS_READONLY_SCOPE,
+  CHAT_SPACES_PINS_SCOPE,
+  MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE,
   PIN_MESSAGES_SCOPE,
   planEnsureMessagePinned,
   planListMessagePins,
@@ -46,7 +49,7 @@ describe("message pin dry-run call plans", () => {
       planPinMessage({
         space: "spaces/AAA",
         message: "spaces/AAA/messages/BBB",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
@@ -56,7 +59,7 @@ describe("message pin dry-run call plans", () => {
     expect(
       planUnpinMessage({
         messagePin: "spaces/AAA/messagePins/CCC",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
@@ -67,7 +70,7 @@ describe("message pin dry-run call plans", () => {
       planUnpinMessage({
         space: "spaces/AAA",
         message: "spaces/AAA/messages/BBB",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
@@ -77,7 +80,7 @@ describe("message pin dry-run call plans", () => {
     expect(
       planListMessagePins({
         space: "spaces/AAA",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
@@ -89,7 +92,7 @@ describe("message pin dry-run call plans", () => {
         space: "spaces/AAA",
         pageSize: 25,
         pageToken: "next-page",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
@@ -100,19 +103,23 @@ describe("message pin dry-run call plans", () => {
       planEnsureMessagePinned({
         space: "spaces/AAA",
         message: "spaces/AAA/messages/BBB",
-        authMode: "app",
+        authMode: "user",
       }),
     ).toEqual(fixture);
   });
 
-  it("exports the messages scope and docs-listed note constants", () => {
-    expect(PIN_MESSAGES_SCOPE).toBe("https://www.googleapis.com/auth/chat.messages");
-    expect(CHAT_PIN_DOCS_LISTED_NOTE).toBe(
-      "spaces.messagePins.* is a docs-listed surface; verify live support before relying on it.",
+  it("exports least-privilege pin scopes and backwards-compatible aliases", () => {
+    expect(CHAT_SPACES_PINS_SCOPE).toBe(
+      "https://www.googleapis.com/auth/chat.spaces.pins",
     );
+    expect(CHAT_SPACES_PINS_READONLY_SCOPE).toBe(
+      "https://www.googleapis.com/auth/chat.spaces.pins.readonly",
+    );
+    expect(PIN_MESSAGES_SCOPE).toBe(CHAT_SPACES_PINS_SCOPE);
+    expect(CHAT_PIN_DOCS_LISTED_NOTE).toBe(MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE);
   });
 
-  it("carries the docs-listed warning on every planned operation", () => {
+  it("carries the Developer Preview warning on every planned operation", () => {
     const plans = [
       planPinMessage({ space: "spaces/AAA", message: "spaces/AAA/messages/BBB" }),
       planUnpinMessage({ messagePin: "spaces/AAA/messagePins/CCC" }),
@@ -122,74 +129,91 @@ describe("message pin dry-run call plans", () => {
     ];
 
     for (const plan of plans) {
-      expect((plan as { warnings: string[] }).warnings).toContain(CHAT_PIN_DOCS_LISTED_NOTE);
+      expect((plan as { warnings: string[] }).warnings).toContain(
+        MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE,
+      );
     }
   });
 
-  it("uses the resolvedMessagePin placeholder path for the unpin-by-message two-step plan", () => {
+  it("derives a direct message-pin delete path from a message resource name", () => {
     const plan = planUnpinMessage({
       space: "spaces/AAA",
       message: "spaces/AAA/messages/BBB",
     }) as {
       requests: Array<{ resource: string; method: string; path: string }>;
+      pin: { strategy: string; name: string };
     };
 
-    expect(plan.requests).toHaveLength(2);
-    expect(plan.requests[0]).toMatchObject({
-      resource: "spaces.messagePins.list",
-      method: "GET",
-      path: "/v1/spaces/AAA/messagePins",
-    });
-    expect(plan.requests[1]).toMatchObject({
-      resource: "spaces.messagePins.delete",
-      method: "DELETE",
-      path: "/v1/{resolvedMessagePin}",
+    expect(plan.requests).toEqual([
+      {
+        resource: "spaces.messagePins.delete",
+        method: "DELETE",
+        path: "/v1/spaces/AAA/messagePins/BBB",
+        query: {},
+        body: null,
+      },
+    ]);
+    expect(plan.pin).toMatchObject({
+      strategy: "derived-from-message",
+      name: "spaces/AAA/messagePins/BBB",
     });
   });
 
-  it("requires a non-empty space for planPinMessage", () => {
+  it("blocks plans with app auth without silently changing their principal", () => {
+    const plan = planPinMessage({
+      space: "spaces/AAA",
+      message: "spaces/AAA/messages/BBB",
+      authMode: "app",
+    }) as {
+      capability: { ok: boolean; authMode: string; reasons: string[] };
+    };
+    expect(plan.capability).toEqual({
+      ok: false,
+      authMode: "app",
+      requiredScopes: [CHAT_SPACES_PINS_SCOPE],
+      reasons: [
+        "Google Chat message pins require user authentication; app authentication is not supported.",
+      ],
+    });
+  });
+
+  it("requires well-formed, same-space message and pin resource names", () => {
+    expect(() =>
+      planPinMessage({
+        space: "spaces/AAA",
+        message: "spaces/BBB/messages/CCC",
+      }),
+    ).toThrow("Expected message to belong to the supplied space.");
+    expect(() =>
+      planPinMessage({ space: "spaces/AAA", message: "not-a-message" }),
+    ).toThrow("Expected message to use the resource name format");
+    expect(() => planUnpinMessage({ messagePin: "spaces/AAA/messages/BBB" })).toThrow(
+      "Expected messagePin to use the resource name format",
+    );
+  });
+
+  it("requires the basic planner inputs", () => {
     expect(() => planPinMessage({ message: "spaces/AAA/messages/BBB" })).toThrow(
       "Expected space to be a non-empty string.",
     );
-  });
-
-  it("requires a non-empty message for planPinMessage", () => {
     expect(() => planPinMessage({ space: "spaces/AAA" })).toThrow(
       "Expected message to be a non-empty string.",
     );
-  });
-
-  it("requires a non-empty space for planListMessagePins", () => {
     expect(() => planListMessagePins({})).toThrow(
       "Expected space to be a non-empty string.",
     );
-  });
-
-  it("requires a non-empty space for planEnsureMessagePinned", () => {
     expect(() => planEnsureMessagePinned({ message: "spaces/AAA/messages/BBB" })).toThrow(
       "Expected space to be a non-empty string.",
     );
-  });
-
-  it("requires a non-empty message for planEnsureMessagePinned", () => {
     expect(() => planEnsureMessagePinned({ space: "spaces/AAA" })).toThrow(
       "Expected message to be a non-empty string.",
     );
-  });
-
-  it("requires messagePin or space+message for planUnpinMessage", () => {
     expect(() => planUnpinMessage({})).toThrow(
       "Expected messagePin, or both space and message, to be non-empty strings.",
     );
-    expect(() => planUnpinMessage({ space: "spaces/AAA" })).toThrow(
-      "Expected messagePin, or both space and message, to be non-empty strings.",
-    );
-    expect(() => planUnpinMessage({ message: "spaces/AAA/messages/BBB" })).toThrow(
-      "Expected messagePin, or both space and message, to be non-empty strings.",
-    );
   });
 
-  it("clamps pageSize to the 1..1000 range and floors fractional values", () => {
+  it("clamps list pageSize to the documented 1..100 range and floors fractional values", () => {
     expect(
       (planListMessagePins({ space: "spaces/AAA", pageSize: 0 }) as {
         requests: Array<{ query: { pageSize: number } }>;
@@ -199,26 +223,41 @@ describe("message pin dry-run call plans", () => {
       (planListMessagePins({ space: "spaces/AAA", pageSize: 5000 }) as {
         requests: Array<{ query: { pageSize: number } }>;
       }).requests[0]!.query.pageSize,
-    ).toBe(1000);
+    ).toBe(100);
     expect(
       (planListMessagePins({ space: "spaces/AAA", pageSize: 12.9 }) as {
         requests: Array<{ query: { pageSize: number } }>;
       }).requests[0]!.query.pageSize,
     ).toBe(12);
+    expect(
+      (planListMessagePins({ space: "spaces/AAA", pageSize: Number.NaN }) as {
+        requests: Array<{ query: { pageSize: number } }>;
+      }).requests[0]!.query.pageSize,
+    ).toBe(100);
   });
 
-  it("defaults pageSize to 100 when not provided", () => {
-    const plan = planListMessagePins({ space: "spaces/AAA" }) as {
-      requests: Array<{ query: { pageSize: number } }>;
-    };
-    expect(plan.requests[0]!.query.pageSize).toBe(100);
+  it("requires a complete first page for ensure-pinned", () => {
+    expect(() =>
+      planEnsureMessagePinned({
+        space: "spaces/AAA",
+        message: "spaces/AAA/messages/BBB",
+        pageSize: 99,
+      }),
+    ).toThrow("requires pageSize 100");
+    expect(() =>
+      planEnsureMessagePinned({
+        space: "spaces/AAA",
+        message: "spaces/AAA/messages/BBB",
+        pageToken: "next-page",
+      }),
+    ).toThrow("does not accept pageToken");
   });
 
-  it("defaults authMode to app", () => {
+  it("defaults pin planners to installed-user authentication", () => {
     const plan = planPinMessage({
       space: "spaces/AAA",
       message: "spaces/AAA/messages/BBB",
-    }) as { capability: { authMode: string } };
-    expect(plan.capability.authMode).toBe("app");
+    }) as { capability: { authMode: string; ok: boolean } };
+    expect(plan.capability).toMatchObject({ authMode: "user", ok: true });
   });
 });

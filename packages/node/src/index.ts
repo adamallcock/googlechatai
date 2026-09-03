@@ -423,6 +423,9 @@ export type {
 } from "./streaming/index.js";
 export {
   CHAT_PIN_DOCS_LISTED_NOTE,
+  CHAT_SPACES_PINS_READONLY_SCOPE,
+  CHAT_SPACES_PINS_SCOPE,
+  MESSAGE_PINS_DEVELOPER_PREVIEW_NOTE,
   PIN_MESSAGES_SCOPE,
   planEnsureMessagePinned,
   planListMessagePins,

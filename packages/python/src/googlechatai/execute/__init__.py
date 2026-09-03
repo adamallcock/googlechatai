@@ -74,6 +74,89 @@ DEFAULT_PLACEHOLDER_RESOLVERS: dict[str, Callable[[JsonObject], str | None]] = {
 }
 
 
+def _message_name_for_pin(pin: JsonObject) -> str | None:
+    direct = _as_string(pin.get("message"))
+    if direct is not None:
+        return direct
+    nested = _as_record(pin.get("message"))
+    return _as_string(nested.get("name")) if nested else None
+
+
+def _last_message_pins_list_response(steps: list[JsonObject]) -> JsonObject | None:
+    for step in reversed(steps):
+        if (
+            step.get("resource") == "spaces.messagePins.list"
+            and step.get("status") == "executed"
+        ):
+            return _as_record(step.get("response"))
+    return None
+
+
+def _evaluate_request_condition(
+    request: JsonObject, steps: list[JsonObject]
+) -> JsonObject:
+    condition = _as_record(request.get("condition"))
+    if condition is None:
+        return {"action": "execute"}
+
+    if _as_string(condition.get("kind")) != "message_pin_absent":
+        return {
+            "action": "fail",
+            "error": {
+                "name": "ConditionEvaluationError",
+                "message": "The plan contains an unsupported request condition.",
+            },
+        }
+
+    target_message = _as_string(condition.get("message"))
+    if not target_message:
+        return {
+            "action": "fail",
+            "error": {
+                "name": "ConditionEvaluationError",
+                "message": "message_pin_absent requires a message resource name.",
+            },
+        }
+
+    list_response = _last_message_pins_list_response(steps)
+    if list_response is None:
+        return {
+            "action": "fail",
+            "error": {
+                "name": "ConditionEvaluationError",
+                "message": (
+                    "message_pin_absent requires a successful "
+                    "spaces.messagePins.list response."
+                ),
+            },
+        }
+
+    if condition.get("requiresCompleteList") is True and _as_string(
+        list_response.get("nextPageToken")
+    ):
+        return {
+            "action": "fail",
+            "error": {
+                "name": "ConditionEvaluationError",
+                "message": (
+                    "Cannot safely ensure a message pin because "
+                    "spaces.messagePins.list returned a nextPageToken."
+                ),
+            },
+        }
+
+    already_pinned = any(
+        (pin := _as_record(raw_pin)) is not None
+        and _message_name_for_pin(pin) == target_message
+        for raw_pin in _as_array(list_response.get("messagePins"))
+    )
+    return (
+        {"action": "skip", "skippedReason": "already_pinned"}
+        if already_pinned
+        else {"action": "execute"}
+    )
+
+
 def _placeholder_names(path: str) -> list[str]:
     return _PLACEHOLDER_PATTERN.findall(path)
 
@@ -332,6 +415,21 @@ def execute_chat_plan(
                 "name": "UnresolvedPlaceholderError",
                 "message": f"Could not resolve path placeholder in {step['path']}.",
             }
+            failed = True
+            if on_step:
+                on_step(step)
+            break
+
+        condition_result = _evaluate_request_condition(request, steps)
+        if condition_result["action"] == "skip":
+            step["status"] = "skipped"
+            step["skippedReason"] = condition_result["skippedReason"]
+            if on_step:
+                on_step(step)
+            continue
+        if condition_result["action"] == "fail":
+            step["status"] = "failed"
+            step["error"] = condition_result["error"]
             failed = True
             if on_step:
                 on_step(step)

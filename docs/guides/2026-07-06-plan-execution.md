@@ -19,7 +19,8 @@ The executor does not know or care which planner produced the plan. It only
 understands the shared `chat.call_plan` envelope (`kind`, `operation`,
 `capability`, `requests[]`, `idempotency`, `safety`, `warnings`), so it works
 identically for message sends, thread replies, streaming patches, pin/unpin
-operations, and the docs-listed search/replaceCards planners.
+operations, Developer Preview search/pin planners, and the docs-listed
+replaceCards planner.
 
 ## Node
 
@@ -154,13 +155,26 @@ is never sent twice, even across separate `executeChatPlan` calls that share
 the same store (for example, a retried Cloud Run request for an event that was
 already processed).
 
+## Conditional Requests
+
+Some plans carry a conditional request that the executor evaluates after prior
+steps have completed. `planEnsureMessagePinned` / `plan_ensure_message_pinned`
+uses `message_pin_absent`: after a successful `spaces.messagePins.list`, the
+following `POST` is skipped as `already_pinned` if the target message is in the
+response. If the response has a `nextPageToken`, the executor fails the
+condition before writing, because it cannot prove the message is absent.
+
+The condition is evaluated only in explicit live mode. Dry runs retain both
+requests as planned so callers can inspect the complete intended sequence.
+
 ## Placeholder Resolution
 
 Some plans have multi-step requests where a later request's `path` references
 a value that is only known after an earlier request's response comes back —
 for example `planSendToUser`'s second request path is literally
-`/v1/{resolvedDirectMessageSpace}/messages`, and `planUnpinMessage`'s
-list-then-delete path is `/v1/{resolvedMessagePin}`.
+`/v1/{resolvedDirectMessageSpace}/messages`. The current message-pin planner
+does not need a placeholder: a pin resource's ID is derived from the message
+resource's ID.
 
 `executeChatPlan` resolves `{name}` tokens in a step's path by checking, in
 order: an already-resolved value (seeded from `placeholderValues` or cached
@@ -170,20 +184,14 @@ from an earlier step), then a resolver function. Two resolvers are built in
 - `resolvedDirectMessageSpace` — scans prior responses in reverse for the most
   recent object whose `name` starts with `spaces/`.
 - `resolvedMessagePin` — reads the plan's target message name and scans prior
-  responses in reverse for a matching `messagePins[]` entry's `name`.
+  responses in reverse for a matching `messagePins[]` entry's `name`. It is
+  retained for compatibility with older persisted call plans; new pin planners
+  do not emit it.
 
 Supply `placeholderResolvers` to add or override resolvers by name, or supply
 `placeholderValues` as a flat seed map when you already know a value and don't
-need a resolver function at all:
-
-```ts
-await executeChatPlan(unpinPlan, {
-  mode: "live",
-  auth,
-  fetch,
-  placeholderValues: { resolvedMessagePin: "spaces/AAA/messagePins/CCC" },
-});
-```
+need a resolver function at all. This remains useful for application-defined
+multi-step plans and older persisted plans.
 
 If a live-mode step's placeholder can't be resolved, the plan fails with an
 unresolved-placeholder error and halts; in dry-run mode the step is marked
@@ -250,6 +258,7 @@ Implemented:
 - Capability, direct-message, and missing-auth safety gates.
 - Shared transport client reuse for retry/backoff/refresh.
 - RequestId idempotency-store dedupe.
+- Conditional request evaluation, including safe `message_pin_absent` handling.
 - Built-in and custom placeholder resolution, plus a `placeholderValues` seed.
 - Placeholder-patch-to-new-message fallback.
 - Shared conformance for dry-run execution shapes

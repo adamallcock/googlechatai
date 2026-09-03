@@ -36,6 +36,10 @@ const CHAT_REACTIONS_SCOPE =
   "https://www.googleapis.com/auth/chat.messages.reactions";
 const CHAT_REACTIONS_READONLY_SCOPE =
   "https://www.googleapis.com/auth/chat.messages.reactions.readonly";
+const CHAT_SPACES_PINS_SCOPE =
+  "https://www.googleapis.com/auth/chat.spaces.pins";
+const CHAT_SPACES_PINS_READONLY_SCOPE =
+  "https://www.googleapis.com/auth/chat.spaces.pins.readonly";
 const CHAT_MEMBERSHIPS_READONLY_SCOPE =
   "https://www.googleapis.com/auth/chat.memberships.readonly";
 const CHAT_CUSTOM_EMOJIS_READONLY_SCOPE =
@@ -55,6 +59,11 @@ const WORKSPACE_EVENTS_SCOPE =
 const REACTION_USER_AUTH_REMEDIATION = [
   `Use the submitting user's OAuth token with ${CHAT_REACTIONS_SCOPE}.`,
   "Keep visible feedback reactions user-owned; do not silently create them as the app.",
+];
+
+const MESSAGE_PIN_USER_AUTH_REMEDIATION = [
+  `Use the calling user's OAuth token with ${CHAT_SPACES_PINS_SCOPE}.`,
+  "Message pins are user-authenticated; do not silently fall back to Chat app authentication.",
 ];
 
 const CAPABILITIES: CapabilityRecord[] = [
@@ -217,6 +226,61 @@ const CAPABILITIES: CapabilityRecord[] = [
     retryPolicy: "retry_replay_safe_only",
     liveSafe: false,
     unsupportedPrincipalRemediation: REACTION_USER_AUTH_REMEDIATION,
+  },
+  {
+    intent: "pins.create",
+    aliases: ["spaces.messagePins.create"],
+    googleMethod: "spaces.messagePins.create",
+    defaultPrincipal: "user",
+    supportedPrincipals: ["user"],
+    requiredScopes: [CHAT_SPACES_PINS_SCOPE],
+    adminApproval: "user_consent_required",
+    membership: "user_must_have_access",
+    readWriteRisk: "write",
+    idempotency: "not_idempotent",
+    retryPolicy: "retry_reads_or_idempotent_writes_only",
+    liveSafe: false,
+    knownLimitations: [
+      "Message pins are a Google Workspace Developer Preview surface.",
+      "Only existing messages visible to the calling user can be pinned.",
+    ],
+    unsupportedPrincipalRemediation: MESSAGE_PIN_USER_AUTH_REMEDIATION,
+  },
+  {
+    intent: "pins.list",
+    aliases: ["spaces.messagePins.list"],
+    googleMethod: "spaces.messagePins.list",
+    defaultPrincipal: "user",
+    supportedPrincipals: ["user"],
+    requiredScopes: [CHAT_SPACES_PINS_READONLY_SCOPE],
+    adminApproval: "user_consent_required",
+    membership: "user_must_have_access",
+    readWriteRisk: "read",
+    idempotency: "read_only",
+    retryPolicy: "retry_reads",
+    liveSafe: true,
+    knownLimitations: [
+      "Message pins are a Google Workspace Developer Preview surface.",
+    ],
+    unsupportedPrincipalRemediation: MESSAGE_PIN_USER_AUTH_REMEDIATION,
+  },
+  {
+    intent: "pins.delete",
+    aliases: ["spaces.messagePins.delete"],
+    googleMethod: "spaces.messagePins.delete",
+    defaultPrincipal: "user",
+    supportedPrincipals: ["user"],
+    requiredScopes: [CHAT_SPACES_PINS_SCOPE],
+    adminApproval: "user_consent_required",
+    membership: "user_must_have_access",
+    readWriteRisk: "write",
+    idempotency: "target_resource_idempotent",
+    retryPolicy: "retry_replay_safe_only",
+    liveSafe: false,
+    knownLimitations: [
+      "Message pins are a Google Workspace Developer Preview surface.",
+    ],
+    unsupportedPrincipalRemediation: MESSAGE_PIN_USER_AUTH_REMEDIATION,
   },
   {
     intent: "memberships.list",

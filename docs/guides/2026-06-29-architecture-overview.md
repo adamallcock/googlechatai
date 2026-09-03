@@ -55,7 +55,7 @@ Layer 1: raw and typed Google Chat client.
   retry/idempotency helpers scaffolded.
 - Purpose: expose typed request/response objects, pagination, retries,
   scope-aware errors, discovery version reporting, and passthrough access.
-- Current repo evidence: `discovery/google-chat-v1-20260804.methods.json` and
+- Current repo evidence: `discovery/google-chat-v1-20260828.methods.json` and
   `tools/discovery/check-methods.mjs`.
 - Auth and retry boundary: see
   [Auth Principal And Resilient Transport](../architecture/2026-06-30-auth-principal-resilience.md).
@@ -133,9 +133,10 @@ handler, or orchestration behavior should add or update fixture coverage.
   chatbot install model.
 - Direct `spaces.spaceEvents.list` is currently blocked by Google API `500`
   responses in the private live test tenant.
-- Docs-listed methods such as replace cards, search, and message pins still
-  need generated-client and live verification before being called shipped SDK
-  features.
+- `replaceCards` remains docs-listed. Message search and message pins are
+  implemented Developer Preview surfaces, but message pins have no
+  post-discovery live-write verification and must not be described as stable
+  production features.
 - Voice-note transcription has disabled-by-default helper coverage and optional
   provider hooks, but real provider package calls need explicit model/API
   approval and separate live harnesses.

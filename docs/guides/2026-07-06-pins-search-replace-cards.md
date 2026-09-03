@@ -1,7 +1,7 @@
 ---
 title: Pins, Search, And Replace Cards
 date: 2026-07-06
-last_updated: 2026-08-10
+last_updated: 2026-09-03
 type: guide
 status: implemented
 ---
@@ -10,9 +10,10 @@ status: implemented
 
 This guide covers three Google Chat API families with different maturity
 levels. Message search now appears in the live discovery document as a Google
-Workspace Developer Preview method. Message pins and `replaceCards` remain
-docs-listed surfaces that require separate live verification. Every plan is a
-dry run by default and preserves the relevant maturity warning.
+Workspace Developer Preview method. Message pins are also a Google Workspace
+Developer Preview surface in live discovery; `replaceCards` remains
+docs-listed and requires separate live verification. Every plan is a dry run
+by default and preserves the relevant maturity warning.
 
 ## Node
 
@@ -30,10 +31,10 @@ import {
 const pinPlan = planPinMessage({
   space: "spaces/AAA",
   message: "spaces/AAA/messages/BBB",
-  authMode: "app",
+  authMode: "user",
 });
 console.log(pinPlan.warnings);
-// ["spaces.messagePins.* is a docs-listed surface; verify live support before relying on it."]
+// ["Message pins are a Google Workspace Developer Preview, user-authorized surface."]
 
 const searchPlan = planSearchMessages({
   filters: {
@@ -75,7 +76,7 @@ from googlechatai import (
 pin_plan = plan_pin_message({
     "space": "spaces/AAA",
     "message": "spaces/AAA/messages/BBB",
-    "authMode": "app",
+    "authMode": "user",
 })
 print(pin_plan["warnings"])
 
@@ -104,23 +105,30 @@ replace_cards_plan = plan_replace_cards({
 Four planners target the `spaces.messagePins` sub-resource:
 
 - **`planPinMessage` / `plan_pin_message`** — one request,
-  `POST spaces.messagePins.create` at `/v1/{space}/messagePins`.
-- **`planUnpinMessage` / `plan_unpin_message`** — two shapes depending on
-  input: pass `messagePin` (the full pin resource name) for a single
-  `DELETE spaces.messagePins.delete`; pass `space` and `message` instead for a
-  two-step list-then-delete plan (`GET spaces.messagePins.list` then
-  `DELETE` against the placeholder path `/v1/{resolvedMessagePin}`, since the
-  pin's own resource name isn't derivable from the message name alone).
+  `POST spaces.messagePins.create` at `/v1/{space}/messagePins`, with the
+  flat `MessagePin` body `{ message: "spaces/{space}/messages/{message}" }`.
+- **`planUnpinMessage` / `plan_unpin_message`** — one `DELETE
+  spaces.messagePins.delete` request. Pass `messagePin` (the full pin resource
+  name), or pass `space` and `message`; the latter derives
+  `spaces/{space}/messagePins/{message}` because Google specifies that the pin
+  resource ID matches the message resource ID.
 - **`planListMessagePins` / `plan_list_message_pins`** — one request,
-  `GET spaces.messagePins.list`, page size clamped between 1 and 1000
+  `GET spaces.messagePins.list`, page size clamped between 1 and 100
   (default 100).
 - **`planEnsureMessagePinned` / `plan_ensure_message_pinned`** — a
-  list-then-pin plan that skips pinning if the message is already pinned.
+  full first-page list (`pageSize: 100`) followed by a conditional pin. The
+  generic executor skips the `POST` if the message is already present; it fails
+  closed rather than pinning if the list response has a `nextPageToken`.
+  Consequently this planner rejects a `pageToken` or a page size other than
+  100.
 
-Every pin plan requires the
-`https://www.googleapis.com/auth/chat.messages` scope and carries the warning
-`spaces.messagePins.* is a docs-listed surface; verify live support before
-relying on it.`.
+All pin planners require installed-user authentication. Create, delete, and
+ensure use `https://www.googleapis.com/auth/chat.spaces.pins`; list uses the
+narrower `https://www.googleapis.com/auth/chat.spaces.pins.readonly` scope.
+Selecting app authentication leaves the dry-run request visible but sets
+`capability.ok: false`; the SDK does not silently substitute a user token.
+Each plan carries the warning `Message pins are a Google Workspace Developer
+Preview, user-authorized surface.`.
 
 ## Message Search
 
@@ -165,10 +173,11 @@ user-auth only; explicitly selecting app auth returns `capability.ok: false`.
 ## Warning And Capability Boundaries
 
 Warnings remain advisory and flow into execution reports. Capability checks
-are structural: message search fails capability planning for app auth, while a
-user-auth plan reports its exact scopes. Live execution still requires the
-normal executor opt-in and credentials. Applications must add their own
-consent, retention, DLP, and model-data policy before using search results.
+are structural: message search and message pins fail capability planning for
+app auth, while a user-auth plan reports its exact scopes. Live execution still
+requires the normal executor opt-in and credentials. Applications must add
+their own consent, retention, DLP, and model-data policy before using search
+results.
 
 ## Production Boundary
 
@@ -178,6 +187,8 @@ Implemented:
   replace-cards, each dry-run by default and directly executable through
   `executeChatPlan` / `execute_chat_plan` exactly like any other plan (see
   [Plan Execution](2026-07-06-plan-execution.md)).
+- Pin execution tests for the safe branches: existing pin skips the create,
+  absent pin creates it, and a paginated list fails before writing.
 - Shared conformance for every planner's dry-run shape
   (`conformance/cases/pins.call-plans.json`,
   `conformance/cases/messages.extras.json`).
@@ -187,8 +198,10 @@ Implemented:
 
 Blocked:
 
-- Pins and `replaceCards` remain separately unverified. Message search passed a
-  guarded, read-only dedicated-space smoke on 2026-08-10 with HTTP 200, user
+- No message-pin write was sent from this repository for this upgrade. Pin
+  create/delete remain Developer Preview and require an operator-approved,
+  dedicated smoke-space run before any live-write claim. Message search passed
+  a guarded, read-only dedicated-space smoke on 2026-08-10 with HTTP 200, user
   OAuth, BASIC view, and a next-page token. This confirms the current request
   and response shape but does not remove Google's Developer Preview stability
   boundary (see
