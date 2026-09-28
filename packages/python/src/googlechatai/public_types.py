@@ -24,6 +24,7 @@ class ChatUser(TypedDict, total=False):
     name: str
     displayName: str | None
     email: str | None
+    avatarUrl: str | None
     type: str | None
     isApp: bool
     access: IdentityAccess

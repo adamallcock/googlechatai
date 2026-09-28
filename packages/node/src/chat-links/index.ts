@@ -37,6 +37,7 @@ export interface ChatLinkContextRef {
 export interface ChatLinkSenderIdentity {
   displayName: string | null;
   email: string | null;
+  avatarUrl?: string | null;
   resourceName: string | null;
   type: string | null;
   accessState: "available" | "resource_only" | "partial" | "anonymous" | "unknown";
@@ -631,12 +632,14 @@ function senderIdentityFromValue(value: JsonObject | null): ChatLinkSenderIdenti
   }
 
   const resourceName = asString(raw.resourceName) ?? asString(raw.name);
-  const displayName = asString(raw.displayName);
-  const email = asString(raw.email);
+  const anonymous = raw.isAnonymous === true || raw.type === "ANONYMOUS";
+  const displayName = anonymous ? null : asString(raw.displayName);
+  const email = anonymous ? null : asString(raw.email);
+  const avatarUrl = anonymous ? null : asString(raw.avatarUrl);
   const type = asString(raw.type);
   const hasHumanReadable = displayName !== null || email !== null;
   const accessState =
-    type === "ANONYMOUS"
+    anonymous || type === "ANONYMOUS"
       ? "anonymous"
       : resourceName && hasHumanReadable
         ? "available"
@@ -656,6 +659,7 @@ function senderIdentityFromValue(value: JsonObject | null): ChatLinkSenderIdenti
   return {
     displayName,
     email,
+    ...(avatarUrl ? { avatarUrl } : {}),
     resourceName,
     type,
     accessState,

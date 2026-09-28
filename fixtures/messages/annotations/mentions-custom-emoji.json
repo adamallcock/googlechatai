@@ -8,7 +8,8 @@
     "name": "users/111",
     "displayName": "Ada Lovelace",
     "email": "ada@example.com",
-    "type": "HUMAN"
+    "type": "HUMAN",
+    "avatarUrl": "https://example.invalid/ada.png"
   },
   "space": {
     "name": "spaces/AAA",
@@ -25,7 +26,8 @@
           "name": "users/222",
           "displayName": "Grace Hopper",
           "email": "grace@example.com",
-          "type": "HUMAN"
+          "type": "HUMAN",
+          "avatarUrl": "https://example.invalid/grace.png"
         },
         "type": "MENTION"
       }

@@ -152,18 +152,24 @@ def _normalize_user(value: Any) -> dict[str, Any] | None:
     if not raw or not name:
         return None
 
-    display_name = _as_string(raw.get("displayName"))
-    email = _as_string(raw.get("email")) or _as_string(raw.get("emailAddress"))
+    anonymous = raw.get("isAnonymous") is True or raw.get("type") == "ANONYMOUS"
+    display_name = None if anonymous else _as_string(raw.get("displayName"))
+    email = (
+        None
+        if anonymous
+        else _as_string(raw.get("email")) or _as_string(raw.get("emailAddress"))
+    )
+    avatar_url = None if anonymous else _as_string(raw.get("avatarUrl"))
     user_type = _as_string(raw.get("type"))
     is_app = user_type in {"BOT", "APP"} or raw.get("isBot") is True
     raw_access_state = _as_string(raw.get("accessState"))
-    if raw_access_state in {"resource_only", "unknown"}:
+    if anonymous or raw_access_state == "anonymous":
+        access = {"status": "access_limited", "reason": "anonymous_user"}
+    elif raw_access_state in {"resource_only", "unknown"}:
         access = {
             "status": "access_limited",
             "reason": "display_name_or_email_unavailable",
         }
-    elif raw_access_state == "anonymous":
-        access = {"status": "access_limited", "reason": "anonymous_user"}
     elif display_name or email:
         access = {"status": "available", "reason": None}
     else:
@@ -176,6 +182,7 @@ def _normalize_user(value: Any) -> dict[str, Any] | None:
         "name": name,
         "displayName": display_name,
         "email": email,
+        **({"avatarUrl": avatar_url} if avatar_url else {}),
         "type": user_type,
         "isApp": is_app,
         "access": access,

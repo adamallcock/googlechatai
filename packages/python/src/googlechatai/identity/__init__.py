@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 from typing import Any
 from urllib.parse import urlencode
 
@@ -242,21 +243,51 @@ def resolve_human_identity(
     cache: InMemoryIdentityCache | FileIdentityCache,
 ) -> dict[str, Any]:
     user_id = _id_from_ref(ref)
-    if user_id:
-        found = cache.get_by_id(user_id)
-        if found:
-            return found
-    if isinstance(ref.get("email"), str):
-        found = cache.get_by_email(ref["email"])
-        if found:
-            return found
-    if ref.get("displayName") or ref.get("email"):
+    raw_display_name = ref.get("displayName")
+    display_name = (
+        raw_display_name
+        if isinstance(raw_display_name, str)
+        and raw_display_name != ref.get("name")
+        and raw_display_name != "Unknown sender"
+        and not re.fullmatch(r"users/\S+", raw_display_name)
+        else None
+    )
+    email = ref.get("email") if isinstance(ref.get("email"), str) else None
+    if display_name and email:
         return {
             "id": user_id,
             "name": ref.get("name") or (f"users/{user_id}" if user_id else None),
-            "email": ref.get("email"),
+            "email": email,
             "aliases": [],
-            "displayName": ref.get("displayName") or ref.get("email"),
+            "displayName": display_name,
+            "source": "chat_payload",
+            "directoryStatus": "unavailable",
+            "stale": False,
+            "lastSeenAt": None,
+            "lastDirectorySyncAt": None,
+            "access": {"status": "available", "reason": None},
+        }
+    found = cache.get_by_id(user_id) if user_id else None
+    if found is None and email:
+        found = cache.get_by_email(email)
+    if found:
+        return {
+            **found,
+            "displayName": display_name or found.get("displayName"),
+            "email": email or found.get("email"),
+            "source": (
+                "chat_payload_and_directory_cache"
+                if display_name or email
+                else found.get("source")
+            ),
+        }
+    if display_name or email:
+        return {
+            "id": user_id,
+            "name": ref.get("name") or (f"users/{user_id}" if user_id else None),
+            "email": email,
+            "aliases": [],
+            "displayName": display_name or email,
             "source": "chat_payload",
             "directoryStatus": "unavailable",
             "stale": False,

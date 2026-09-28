@@ -1,6 +1,6 @@
 {
   "name": "googlechatai",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "Node.js package for the Google Chat AI SDK.",
   "license": "Apache-2.0",
   "author": "Adam Allcock",

@@ -134,6 +134,73 @@
     }
   },
   {
+    "id": "messages.search.space-types",
+    "description": "Plan a bounded semantic search across Chat space types with the required space-read scope.",
+    "operation": "messages.search",
+    "input": {
+      "filters": {
+        "text": "update",
+        "spaceTypes": [
+          "DIRECT_MESSAGE",
+          "GROUP_CHAT",
+          "DIRECT_MESSAGE"
+        ]
+      }
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.search",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.messages.readonly",
+          "https://www.googleapis.com/auth/chat.spaces.readonly"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.search",
+          "method": "POST",
+          "path": "/v1/spaces/-/messages:search",
+          "query": {},
+          "body": {
+            "filter": "\"update\" AND (space.space_type = \"DIRECT_MESSAGE\" OR space.space_type = \"GROUP_CHAT\")",
+            "pageSize": 25,
+            "view": "SEARCH_MESSAGES_VIEW_BASIC"
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "search": {
+        "parent": "spaces/-",
+        "filter": "\"update\" AND (space.space_type = \"DIRECT_MESSAGE\" OR space.space_type = \"GROUP_CHAT\")",
+        "filterSource": "semantic_filters",
+        "pageSize": 25,
+        "pageToken": null,
+        "orderBy": null,
+        "view": "SEARCH_MESSAGES_VIEW_BASIC",
+        "developerPreview": true
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": [
+        "spaces.messages.search is a Google Workspace Developer Preview surface; verify tenant enrollment and availability before relying on it.",
+        "Message search reads user-visible conversations; execute only with explicit user authorization and bounded filters."
+      ]
+    }
+  },
+  {
     "id": "messages.search.normalize",
     "description": "Normalize and privacy-bound a Developer Preview message-search response.",
     "operation": "messages.search.normalize",

@@ -12,6 +12,7 @@
   "sender": {
     "displayName": "Ada Lovelace",
     "email": "ada@example.com",
+    "avatarUrl": "https://example.invalid/ada.png",
     "resourceName": "users/111",
     "type": "HUMAN",
     "accessState": "available",
@@ -70,6 +71,7 @@
       "user": {
         "displayName": "Grace Hopper",
         "email": "grace@example.com",
+        "avatarUrl": "https://example.invalid/grace.png",
         "resourceName": "users/222",
         "type": "HUMAN",
         "accessState": "available",
@@ -133,6 +135,7 @@
     "sender": {
       "displayName": "Ada Lovelace",
       "email": "ada@example.com",
+      "avatarUrl": "https://example.invalid/ada.png",
       "resourceName": "users/111",
       "type": "HUMAN",
       "accessState": "available",

@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const repoRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const baselinePath = path.join(
   repoRoot,
-  "discovery/google-chat-v1-20260828.methods.json",
+  "discovery/google-chat-v1-20260920.methods.json",
 );
 const discoveryUrl = "https://chat.googleapis.com/$discovery/rest?version=v1";
 

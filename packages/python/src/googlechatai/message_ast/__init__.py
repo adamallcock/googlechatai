@@ -36,12 +36,14 @@ def _normalize_identity(value: Any) -> dict[str, Any] | None:
         return None
 
     resource_name = _as_string(raw.get("name"))
-    display_name = _as_string(raw.get("displayName"))
-    email = _as_string(raw.get("email"))
+    anonymous = raw.get("isAnonymous") is True or raw.get("type") == "ANONYMOUS"
+    display_name = None if anonymous else _as_string(raw.get("displayName"))
+    email = None if anonymous else _as_string(raw.get("email"))
+    avatar_url = None if anonymous else _as_string(raw.get("avatarUrl"))
     user_type = _as_string(raw.get("type"))
     has_human_readable = display_name is not None or email is not None
 
-    if user_type == "ANONYMOUS":
+    if anonymous or user_type == "ANONYMOUS":
         access_state = "anonymous"
     elif resource_name and has_human_readable:
         access_state = "available"
@@ -62,6 +64,7 @@ def _normalize_identity(value: Any) -> dict[str, Any] | None:
     return {
         "displayName": display_name,
         "email": email,
+        **({"avatarUrl": avatar_url} if avatar_url else {}),
         "resourceName": resource_name,
         "type": user_type,
         "accessState": access_state,

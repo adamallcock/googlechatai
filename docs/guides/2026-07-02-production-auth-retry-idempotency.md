@@ -229,6 +229,13 @@ surface now plans `users.list` against the Admin SDK Directory API using:
 - `projection=BASIC`;
 - user-auth mode, not domain-wide delegation.
 
+When a Chat response provides both a human-readable display name and email,
+identity resolution uses those values without a Directory lookup. Partial
+Chat identity is filled from the optional cache when available; a resource-name
+placeholder is not treated as a human-readable display name. Mixed identity
+records report `source: chat_payload_and_directory_cache`. Avatar URLs remain
+structured UI metadata and are omitted from model-context projections.
+
 This is an Admin SDK endpoint name, but the `domain_public` view asks only for
 fields visible within the domain. Tenants can still block the scope or require
 admin approval. A `403`, `401`, `404`, or unavailable Directory API must be

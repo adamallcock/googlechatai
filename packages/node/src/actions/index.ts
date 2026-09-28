@@ -48,9 +48,16 @@ function normalizeUser(value: unknown): ChatUserRef | null {
     return null;
   }
 
+  const anonymous = raw.isAnonymous === true || raw.type === "ANONYMOUS";
   return {
     name,
-    displayName: asString(raw.displayName),
+    displayName: anonymous ? null : asString(raw.displayName),
+    ...(anonymous || !asString(raw.email)
+      ? {}
+      : { email: asString(raw.email) }),
+    ...(anonymous || !asString(raw.avatarUrl)
+      ? {}
+      : { avatarUrl: asString(raw.avatarUrl) }),
     type: asString(raw.type),
   };
 }

@@ -261,6 +261,17 @@ function normalizeIdentity(value: unknown): JsonObject {
     };
   }
 
+  if (raw.isAnonymous === true || raw.type === "ANONYMOUS") {
+    return {
+      name: asString(raw.name),
+      displayName: "Unknown sender",
+      email: null,
+      type: asString(raw.type) ?? "UNKNOWN",
+      access: "inaccessible",
+      anonymous: true,
+    };
+  }
+
   return {
     name: asString(raw.name),
     displayName: asString(raw.displayName) ?? asString(raw.name) ?? "Unknown sender",
@@ -1554,6 +1565,7 @@ function senderFromHumanIdentity(
 function shouldAppendIdentityNote(identity: HumanIdentity): boolean {
   return (
     identity.source === "directory_cache" ||
+    identity.source === "chat_payload_and_directory_cache" ||
     identity.stale ||
     identity.access.status === "access_limited"
   );
@@ -1564,6 +1576,15 @@ async function enrichContextMessageIdentity(
   identityCache: IdentityCache,
 ): Promise<JsonObject> {
   const sender = asRecord(message.sender) ?? normalizeIdentity(null);
+  const quotedMessages = await Promise.all(
+    asArray(message.quotedMessages)
+      .map((item) => asRecord(item))
+      .filter((item): item is JsonObject => item !== null)
+      .map((item) => enrichContextMessageIdentity(item, identityCache)),
+  );
+  if (sender.anonymous === true) {
+    return { ...message, sender, quotedMessages };
+  }
   const identity = await resolveHumanIdentity(identityRefFromSender(sender), {
     cache: identityCache,
   });
@@ -1571,12 +1592,6 @@ async function enrichContextMessageIdentity(
     .map(asString)
     .filter((item): item is string => item !== null);
   const identityNote = renderIdentitySystemNote(identity, { role: "sender" });
-  const quotedMessages = await Promise.all(
-    asArray(message.quotedMessages)
-      .map((item) => asRecord(item))
-      .filter((item): item is JsonObject => item !== null)
-      .map((item) => enrichContextMessageIdentity(item, identityCache)),
-  );
 
   return {
     ...message,

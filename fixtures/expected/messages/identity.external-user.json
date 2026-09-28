@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/EXTERNAL"
+  },
+  "space": null,
+  "thread": null,
+  "sender": {
+    "displayName": null,
+    "email": "external@example.org",
+    "avatarUrl": "https://example.invalid/external.png",
+    "resourceName": "users/external@example.org",
+    "type": "HUMAN",
+    "accessState": "available",
+    "ambiguityState": "unambiguous"
+  },
+  "createdAt": "2026-09-28T12:01:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "Hello from outside",
+  "formattedText": null,
+  "argumentText": null,
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 18,
+      "text": "Hello from outside"
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/EXTERNAL from external@example.org (HUMAN, users/external@example.org) created at 2026-09-28T12:01:00Z."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/EXTERNAL"
+    },
+    "sender": {
+      "displayName": null,
+      "email": "external@example.org",
+      "avatarUrl": "https://example.invalid/external.png",
+      "resourceName": "users/external@example.org",
+      "type": "HUMAN",
+      "accessState": "available",
+      "ambiguityState": "unambiguous"
+    },
+    "createdAt": "2026-09-28T12:01:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "Hello from outside",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/EXTERNAL from external@example.org (HUMAN, users/external@example.org) created at 2026-09-28T12:01:00Z."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/EXTERNAL from external@example.org (HUMAN, users/external@example.org) created at 2026-09-28T12:01:00Z.\nHello from outside"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/EXTERNAL from external@example.org (HUMAN, users/external@example.org) created at 2026-09-28T12:01:00Z.\nHello from outside"
+}

@@ -4,6 +4,19 @@ All notable changes to googlechatai are documented here. The project follows
 semantic versioning from 0.1.0 onward. Prerelease APIs may still change before
 the stable 0.1.0 release.
 
+## 0.1.0-beta.4 — 2026-09-28
+
+- Adopt the reviewed Google Chat discovery revision `20260920` after the
+  September `Space` and `User` schema additions. The live drift check now
+  matches all 54 method signatures.
+- Add semantic message search by space type (`DIRECT_MESSAGE`, `GROUP_CHAT`,
+  or `SPACE`) with correct space-read scope planning in Node.js and Python.
+- Preserve optional Chat identity email and avatar URL in structured events,
+  actions, messages, memberships, reactions, and links. Prefer complete Chat
+  identity over Directory cache data, and keep anonymous identity inaccessible.
+- Omit avatar URLs from search model context and retain default email
+  redaction. Add shared fixtures and cross-language conformance coverage.
+
 ## 0.1.0-beta.1 — 2026-07-16
 
 - Ship a dependency-free `googlechatai` CLI with project scaffolding,

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/AAA/messages/ANONYMOUS"
+  },
+  "space": null,
+  "thread": null,
+  "sender": {
+    "displayName": null,
+    "email": null,
+    "resourceName": "users/hidden",
+    "type": "HUMAN",
+    "accessState": "anonymous",
+    "ambiguityState": "unresolved"
+  },
+  "createdAt": "2026-09-28T12:00:00Z",
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "A message from an inaccessible user",
+  "formattedText": null,
+  "argumentText": null,
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 35,
+      "text": "A message from an inaccessible user"
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/AAA/messages/ANONYMOUS from users/hidden (HUMAN, users/hidden) created at 2026-09-28T12:00:00Z."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/AAA/messages/ANONYMOUS"
+    },
+    "sender": {
+      "displayName": null,
+      "email": null,
+      "resourceName": "users/hidden",
+      "type": "HUMAN",
+      "accessState": "anonymous",
+      "ambiguityState": "unresolved"
+    },
+    "createdAt": "2026-09-28T12:00:00Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "A message from an inaccessible user",
+    "systemNotes": [
+      "System Note: Message spaces/AAA/messages/ANONYMOUS from users/hidden (HUMAN, users/hidden) created at 2026-09-28T12:00:00Z."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/ANONYMOUS from users/hidden (HUMAN, users/hidden) created at 2026-09-28T12:00:00Z.\nA message from an inaccessible user"
+  },
+  "plainTextForModel": "System Note: Message spaces/AAA/messages/ANONYMOUS from users/hidden (HUMAN, users/hidden) created at 2026-09-28T12:00:00Z.\nA message from an inaccessible user"
+}

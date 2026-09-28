@@ -1285,6 +1285,36 @@ class DeveloperPreviewMessageSearchTest(unittest.TestCase):
                 "https://www.googleapis.com/auth/chat.spaces.readonly",
             ],
         )
+        self.assertEqual(
+            plan_search_messages({"filter": 'space.space_type = "DIRECT_MESSAGE"'})[
+                "capability"
+            ]["requiredScopes"],
+            [
+                "https://www.googleapis.com/auth/chat.messages.readonly",
+                "https://www.googleapis.com/auth/chat.spaces.readonly",
+            ],
+        )
+
+    def test_search_composes_validated_space_types(self) -> None:
+        input_value = {
+            "filters": {
+                "text": "update",
+                "spaceTypes": ["DIRECT_MESSAGE", "GROUP_CHAT", "DIRECT_MESSAGE"],
+            }
+        }
+        self.assertEqual(
+            build_search_messages_filter(input_value),
+            '"update" AND (space.space_type = "DIRECT_MESSAGE" OR space.space_type = "GROUP_CHAT")',
+        )
+        self.assertEqual(
+            plan_search_messages(input_value)["capability"]["requiredScopes"],
+            [
+                "https://www.googleapis.com/auth/chat.messages.readonly",
+                "https://www.googleapis.com/auth/chat.spaces.readonly",
+            ],
+        )
+        with self.assertRaisesRegex(TypeError, r"filters.spaceTypes\[0\]"):
+            build_search_messages_filter({"filters": {"spaceTypes": ["EVERYTHING"]}})
 
     def test_search_reports_app_auth_as_unavailable(self) -> None:
         plan = plan_search_messages({"filter": "hello", "authMode": "app"})
@@ -1324,6 +1354,10 @@ class DeveloperPreviewMessageSearchTest(unittest.TestCase):
             )
         )
         self.assertNotIn("raw", normalized["results"][0])
+        self.assertEqual(
+            normalized["results"][0]["message"]["sender"]["avatarUrl"],
+            "https://example.invalid/ada.png",
+        )
         self.assertEqual(context["kind"], "chat.message_search_context")
         self.assertTrue(context["truncated"])
         self.assertEqual(
@@ -1336,6 +1370,11 @@ class DeveloperPreviewMessageSearchTest(unittest.TestCase):
         )
         self.assertNotIn("ada@example.com", json.dumps(context))
         self.assertIn("[redacted-email]", json.dumps(context))
+        self.assertNotIn("avatarUrl", json.dumps(context))
+        self.assertNotIn(
+            "avatarUrl",
+            json.dumps(build_search_messages_context(response, redact_emails=False)),
+        )
 
     def test_search_handles_malformed_results_and_raw_opt_in(self) -> None:
         normalized = normalize_search_messages_response(
@@ -1349,6 +1388,31 @@ class DeveloperPreviewMessageSearchTest(unittest.TestCase):
         )
         with self.assertRaises(TypeError):
             normalize_search_messages_response({}, max_results=0)
+
+    def test_anonymous_sender_does_not_use_directory_cache(self) -> None:
+        cache = InMemoryIdentityCache()
+        sync_directory_users_to_cache(
+            [
+                {
+                    "id": "hidden",
+                    "primaryEmail": "hidden@example.com",
+                    "name": {"fullName": "Hidden Person"},
+                }
+            ],
+            cache=cache,
+        )
+        context = build_conversation_context_with_identity(
+            {"space": "spaces/AAA", "authMode": "user"},
+            [{"messages": [read_json("fixtures/messages/identity/anonymous-user.json")]}],
+            identity_cache=cache,
+        )
+        sender = context["messages"][0]["sender"]
+        self.assertEqual(sender["displayName"], "Unknown sender")
+        self.assertIsNone(sender["email"])
+        self.assertEqual(sender["access"], "inaccessible")
+        self.assertTrue(sender["anonymous"])
+        self.assertNotIn("hidden@example.com", json.dumps(context))
+        self.assertNotIn("Hidden Person", json.dumps(context))
 
     def test_replace_cards_plans_and_validates(self) -> None:
         plan = plan_replace_cards(

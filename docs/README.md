@@ -80,6 +80,9 @@ reports as current state.
   current implementation plan for the packaged CLI, Node/Python scaffolds,
   first-success documentation, guarded smoke, clean-install validation, and
   publication gates.
+- `plans/2026-09-28-discovery-drift-upgrade-plan.md`: implemented Node/Python
+  response to September Chat discovery changes, with search, identity,
+  snapshot-review evidence, and the remaining space-permission decision.
 - `research/2026-07-10-googlechatai-architecture-and-capability-assessment.md`:
   historical pre-hardening assessment of product intent, sufficiency, and
   remaining application responsibilities; its implementation-status section

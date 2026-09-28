@@ -14,7 +14,8 @@
         "name": "users/777",
         "displayName": "Katherine Johnson",
         "email": "katherine@example.com",
-        "type": "HUMAN"
+        "type": "HUMAN",
+        "avatarUrl": "https://example.invalid/katherine.png"
       },
       "createTime": "2026-06-29T18:35:00Z"
     },

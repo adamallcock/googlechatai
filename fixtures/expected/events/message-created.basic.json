@@ -7,7 +7,8 @@
   "actor": {
     "name": "users/123",
     "displayName": "Ada Lovelace",
-    "email": null,
+    "email": "ada@example.com",
+    "avatarUrl": "https://example.invalid/ada.png",
     "type": "HUMAN",
     "isApp": false,
     "access": {
@@ -43,7 +44,8 @@
     },
     "sender": {
       "displayName": "Ada Lovelace",
-      "email": null,
+      "email": "ada@example.com",
+      "avatarUrl": "https://example.invalid/ada.png",
       "resourceName": "users/123",
       "type": "HUMAN",
       "accessState": "available",
@@ -113,7 +115,7 @@
     "cards": [],
     "reactions": [],
     "systemNotes": [
-      "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
+      "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
       "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
     ],
     "contextNode": {
@@ -124,7 +126,8 @@
       },
       "sender": {
         "displayName": "Ada Lovelace",
-        "email": null,
+        "email": "ada@example.com",
+        "avatarUrl": "https://example.invalid/ada.png",
         "resourceName": "users/123",
         "type": "HUMAN",
         "accessState": "available",
@@ -136,7 +139,7 @@
       "accessState": "available",
       "text": "@Ada Lovelace deploy staging https://example.com",
       "systemNotes": [
-        "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
+        "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z.",
         "System Note: This message is a thread reply in spaces/AAA/threads/thread-1."
       ],
       "children": [
@@ -156,9 +159,9 @@
           "plainTextForModel": "System Note: The user attached report.pdf (application/pdf) with this message."
         }
       ],
-      "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
+      "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
     },
-    "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
+    "plainTextForModel": "System Note: Message spaces/AAA/messages/BBB from Ada Lovelace <ada@example.com> (HUMAN, users/123) created at 2026-06-29T18:00:00Z.\nSystem Note: This message is a thread reply in spaces/AAA/threads/thread-1.\n@Ada Lovelace deploy staging https://example.com\nSystem Note: The user attached report.pdf (application/pdf) with this message."
   },
   "action": null,
   "dialog": null,
@@ -216,7 +219,9 @@
     "user": {
       "name": "users/123",
       "displayName": "Ada Lovelace",
-      "type": "HUMAN"
+      "type": "HUMAN",
+      "email": "ada@example.com",
+      "avatarUrl": "https://example.invalid/ada.png"
     },
     "message": {
       "name": "spaces/AAA/messages/BBB",
@@ -227,7 +232,9 @@
       "sender": {
         "name": "users/123",
         "displayName": "Ada Lovelace",
-        "type": "HUMAN"
+        "type": "HUMAN",
+        "email": "ada@example.com",
+        "avatarUrl": "https://example.invalid/ada.png"
       },
       "space": {
         "name": "spaces/AAA",

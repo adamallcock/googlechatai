@@ -78,5 +78,25 @@
     "expect": {
       "fixture": "fixtures/expected/messages/gifs.attached-gif.json"
     }
+  },
+  {
+    "id": "messages.identity.anonymous-user",
+    "description": "Keep inaccessible user identity out of normalized message content.",
+    "input": {
+      "fixture": "fixtures/messages/identity/anonymous-user.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/identity.anonymous-user.json"
+    }
+  },
+  {
+    "id": "messages.identity.external-user",
+    "description": "Preserve an accessible external user with email and optional avatar but no display name.",
+    "input": {
+      "fixture": "fixtures/messages/identity/external-user.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/identity.external-user.json"
+    }
   }
 ]
