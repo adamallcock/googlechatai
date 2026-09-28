@@ -15,6 +15,7 @@
           "name": "users/123",
           "displayName": "Ada Example",
           "email": "ada@example.com",
+          "avatarUrl": "https://example.invalid/ada.png",
           "type": "HUMAN"
         },
         "createTime": "2026-08-10T12:00:00Z",

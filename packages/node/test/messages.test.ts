@@ -1271,6 +1271,34 @@ describe("Developer Preview message search", () => {
       "https://www.googleapis.com/auth/chat.messages.readonly",
       "https://www.googleapis.com/auth/chat.spaces.readonly",
     ]);
+    expect(
+      planSearchMessages({ filter: 'space.space_type = "DIRECT_MESSAGE"' }).capability
+        .requiredScopes,
+    ).toEqual([
+      "https://www.googleapis.com/auth/chat.messages.readonly",
+      "https://www.googleapis.com/auth/chat.spaces.readonly",
+    ]);
+  });
+
+  it("composes validated space types without duplicate clauses", () => {
+    const input = {
+      filters: {
+        text: "update",
+        spaceTypes: ["DIRECT_MESSAGE", "GROUP_CHAT", "DIRECT_MESSAGE"] as Array<
+          "DIRECT_MESSAGE" | "GROUP_CHAT"
+        >,
+      },
+    };
+    expect(buildSearchMessagesFilter(input)).toBe(
+      '"update" AND (space.space_type = "DIRECT_MESSAGE" OR space.space_type = "GROUP_CHAT")',
+    );
+    expect(planSearchMessages(input).capability.requiredScopes).toEqual([
+      "https://www.googleapis.com/auth/chat.messages.readonly",
+      "https://www.googleapis.com/auth/chat.spaces.readonly",
+    ]);
+    expect(() =>
+      buildSearchMessagesFilter({ filters: { spaceTypes: ["EVERYTHING" as never] } }),
+    ).toThrow(/filters.spaceTypes\[0\]/);
   });
 
   it("reports app auth as unavailable instead of emitting a false capability", () => {
@@ -1313,6 +1341,9 @@ describe("Developer Preview message search", () => {
       true,
     );
     expect(normalized.results[0]).not.toHaveProperty("raw");
+    expect(normalized.results[0]?.message?.sender?.avatarUrl).toBe(
+      "https://example.invalid/ada.png",
+    );
     expect(context).toMatchObject({
       kind: "chat.message_search_context",
       returnedResults: 1,
@@ -1325,6 +1356,32 @@ describe("Developer Preview message search", () => {
     });
     expect(JSON.stringify(context)).not.toContain("ada@example.com");
     expect(JSON.stringify(context)).toContain("[redacted-email]");
+    expect(JSON.stringify(context)).not.toContain("avatarUrl");
+    expect(JSON.stringify(buildSearchMessagesContext(response, { redactEmails: false }))).not.toContain(
+      "avatarUrl",
+    );
+  });
+
+  it("does not enrich an anonymous sender from the Directory cache", async () => {
+    const cache = new InMemoryIdentityCache();
+    await syncDirectoryUsersToCache(
+      [{ id: "hidden", primaryEmail: "hidden@example.com", name: { fullName: "Hidden Person" } }],
+      { cache },
+    );
+    const context = await buildConversationContextWithIdentity(
+      { space: "spaces/AAA", authMode: "user" },
+      [{ messages: [readJson("fixtures/messages/identity/anonymous-user.json")] }],
+      { identityCache: cache },
+    );
+    const sender = (context.messages as Array<Record<string, unknown>>)[0]?.sender;
+    expect(sender).toMatchObject({
+      displayName: "Unknown sender",
+      email: null,
+      access: "inaccessible",
+      anonymous: true,
+    });
+    expect(JSON.stringify(context)).not.toContain("hidden@example.com");
+    expect(JSON.stringify(context)).not.toContain("Hidden Person");
   });
 
   it("keeps malformed results explicit and raw payload access opt-in", () => {

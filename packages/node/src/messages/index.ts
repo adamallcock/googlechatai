@@ -322,6 +322,7 @@ export interface SearchMessagesInput extends MessageIdempotencyInput {
 export interface SearchMessagesFilterInput {
   text?: string;
   spaces?: string[];
+  spaceTypes?: Array<"DIRECT_MESSAGE" | "GROUP_CHAT" | "SPACE">;
   senders?: string[];
   startTime?: string;
   endTime?: string;
@@ -2383,6 +2384,24 @@ export function buildSearchMessagesFilter(input: SearchMessagesInput): string {
     clauses.push(spaceClause);
   }
 
+  const spaceTypes = [
+    ...new Set(searchFilterStringArray(filters.spaceTypes, "filters.spaceTypes")),
+  ];
+  const allowedSpaceTypes = new Set(["DIRECT_MESSAGE", "GROUP_CHAT", "SPACE"]);
+  const spaceTypeClause = orSearchClauses(
+    spaceTypes.map((spaceType, index) => {
+      if (!allowedSpaceTypes.has(spaceType)) {
+        throw new TypeError(
+          `Expected filters.spaceTypes[${index}] to be DIRECT_MESSAGE, GROUP_CHAT, or SPACE.`,
+        );
+      }
+      return `space.space_type = ${quotedSearchValue(spaceType)}`;
+    }),
+  );
+  if (spaceTypeClause) {
+    clauses.push(spaceTypeClause);
+  }
+
   if (searchFilterBoolean(filters.hasAttachments, "filters.hasAttachments") === true) {
     clauses.push("attachment:*");
   }
@@ -2460,7 +2479,7 @@ export function planSearchMessages(input: SearchMessagesInput): ChatCallPlan {
   if (view === "SEARCH_MESSAGES_VIEW_FULL") {
     requiredScopes.push(CHAT_USERS_SPACESETTINGS_SCOPE);
   }
-  if (/\bspace\.display_name\s*:/i.test(filter)) {
+  if (/\bspace\.display_name\s*:/i.test(filter) || /\bspace\.space_type\s*=/i.test(filter)) {
     requiredScopes.push(CHAT_SPACES_READONLY_SCOPE);
   }
   const warnings = [SEARCH_DEVELOPER_PREVIEW_NOTE, SEARCH_PRIVACY_NOTE];
@@ -2612,11 +2631,9 @@ export function buildSearchMessagesContext(
     includeRaw: false,
   });
   const redactEmails = options.redactEmails !== false;
-  const results = redactEmails
-    ? (normalized.results.map((result) =>
-        redactSearchContextValue(result),
-      ) as NormalizedSearchMessageResult[])
-    : normalized.results;
+  const results = normalized.results.map((result) =>
+    projectSearchContextValue(result, redactEmails),
+  ) as NormalizedSearchMessageResult[];
   return {
     kind: "chat.message_search_context",
     schemaVersion: 1,
@@ -2637,23 +2654,23 @@ export function buildSearchMessagesContext(
   };
 }
 
-function redactSearchContextValue(value: unknown): unknown {
+function projectSearchContextValue(value: unknown, redactEmails: boolean): unknown {
   if (typeof value === "string") {
-    return value.replace(SEARCH_EMAIL_PATTERN, "[redacted-email]");
+    return redactEmails ? value.replace(SEARCH_EMAIL_PATTERN, "[redacted-email]") : value;
   }
   if (Array.isArray(value)) {
-    return value.map(redactSearchContextValue);
+    return value.map((item) => projectSearchContextValue(item, redactEmails));
   }
   const record = asRecord(value);
   if (!record) {
     return value;
   }
   return Object.fromEntries(
-    Object.entries(record).map(([key, item]) => [
+    Object.entries(record).filter(([key]) => key !== "avatarUrl").map(([key, item]) => [
       key,
-      key === "email" && typeof item === "string"
+      redactEmails && key === "email" && typeof item === "string"
         ? null
-        : redactSearchContextValue(item),
+        : projectSearchContextValue(item, redactEmails),
     ]),
   );
 }

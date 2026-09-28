@@ -111,6 +111,7 @@
     "actor": {
       "name": "users/123",
       "displayName": "Ada Lovelace",
+      "email": "ada@example.com",
       "type": "HUMAN"
     },
     "eventTime": "2026-06-29T18:12:00Z",

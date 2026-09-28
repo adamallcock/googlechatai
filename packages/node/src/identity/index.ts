@@ -27,7 +27,7 @@ export interface HumanIdentity {
   email: string | null;
   aliases: string[];
   displayName: string | null;
-  source: "directory_cache" | "chat_payload" | "unresolved";
+  source: "directory_cache" | "chat_payload" | "chat_payload_and_directory_cache" | "unresolved";
   directoryStatus: DirectoryStatus;
   stale: boolean;
   lastSeenAt: string | null;
@@ -306,25 +306,51 @@ export async function resolveHumanIdentity(
   options: { cache: IdentityCache },
 ): Promise<HumanIdentity> {
   const id = idFromRef(ref);
-  if (id) {
-    const found = await options.cache.getById(id);
-    if (found) {
-      return found;
-    }
-  }
-  if (ref.email) {
-    const found = await options.cache.getByEmail(ref.email);
-    if (found) {
-      return found;
-    }
-  }
-  if (ref.displayName || ref.email) {
+  const displayName =
+    ref.displayName &&
+    ref.displayName !== ref.name &&
+    ref.displayName !== "Unknown sender" &&
+    !/^users\/\S+$/.test(ref.displayName)
+      ? ref.displayName
+      : null;
+  const email = ref.email ?? null;
+  if (displayName && email) {
     return {
       id,
       name: ref.name ?? (id ? `users/${id}` : null),
-      email: ref.email ?? null,
+      email,
       aliases: [],
-      displayName: ref.displayName ?? ref.email ?? null,
+      displayName,
+      source: "chat_payload",
+      directoryStatus: "unavailable",
+      stale: false,
+      lastSeenAt: null,
+      lastDirectorySyncAt: null,
+      access: { status: "available", reason: null },
+    };
+  }
+  let found: HumanIdentity | null = null;
+  if (id) {
+    found = await options.cache.getById(id);
+  }
+  if (!found && email) {
+    found = await options.cache.getByEmail(email);
+  }
+  if (found) {
+    return {
+      ...found,
+      displayName: displayName ?? found.displayName,
+      email: email ?? found.email,
+      source: displayName || email ? "chat_payload_and_directory_cache" : found.source,
+    };
+  }
+  if (displayName || email) {
+    return {
+      id,
+      name: ref.name ?? (id ? `users/${id}` : null),
+      email,
+      aliases: [],
+      displayName: displayName ?? email,
       source: "chat_payload",
       directoryStatus: "unavailable",
       stale: false,

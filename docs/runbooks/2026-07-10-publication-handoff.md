@@ -1,7 +1,7 @@
 ---
 title: Public Beta Publication Handoff
 date: 2026-07-10
-last_updated: 2026-09-03
+last_updated: 2026-09-28
 type: runbook
 status: implemented
 ---
@@ -9,8 +9,8 @@ status: implemented
 # Public Beta Publication Handoff
 
 `googlechatai` is a public-beta, polyglot Apache-2.0 package. Version `0.0.2`
-is the current stable release on npm and PyPI; `0.1.0-beta.2` is published
-under the prerelease channel, and `0.1.0-beta.3` is the checked-in release
+is the current stable release on npm and PyPI; `0.1.0-beta.3` is published
+under the prerelease channel, and `0.1.0-beta.4` is the checked-in release
 candidate. The root workspace remains private; only `packages/node` and
 `packages/python` are release artifacts. Versions are immutable: never
 republish or replace an existing version on either registry.
@@ -23,8 +23,8 @@ before either registry is contacted, then publishes those prevalidated artifacts
 from the protected `release` environment.
 
 For prereleases, npm publishes under the `next` dist-tag rather than replacing
-`latest`. PyPI normalizes the shared source version `0.1.0-beta.3` to
-`0.1.0b3`; the registry verification command recognizes that canonical form.
+`latest`. PyPI normalizes the shared source version `0.1.0-beta.4` to
+`0.1.0b4`; the registry verification command recognizes that canonical form.
 
 ## Repository-Controlled Checks
 
@@ -84,7 +84,7 @@ package, so review any existing publisher before replacing it.
    as appropriate.
 2. Run the local checks above and inspect the package dry-run contents.
 3. Merge the release commit, create an immutable matching tag such as
-   `v0.1.0-beta.3`, and push the tag only after the repository is clean and
+   `v0.1.0-beta.4`, and push the tag only after the repository is clean and
    reviewed.
 4. In GitHub Actions, run **Publish public packages**, entering that exact tag.
    The `release` environment approval is the deliberate human release gate.

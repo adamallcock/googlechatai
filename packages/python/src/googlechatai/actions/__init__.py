@@ -39,9 +39,14 @@ def _normalize_user(value: Any) -> dict[str, Any] | None:
     if not raw or not name:
         return None
 
+    anonymous = raw.get("isAnonymous") is True or raw.get("type") == "ANONYMOUS"
+    email = None if anonymous else _as_string(raw.get("email"))
+    avatar_url = None if anonymous else _as_string(raw.get("avatarUrl"))
     return {
         "name": name,
-        "displayName": _as_string(raw.get("displayName")),
+        "displayName": None if anonymous else _as_string(raw.get("displayName")),
+        **({"email": email} if email else {}),
+        **({"avatarUrl": avatar_url} if avatar_url else {}),
         "type": _as_string(raw.get("type")),
     }
 

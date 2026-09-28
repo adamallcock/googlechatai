@@ -40,6 +40,7 @@ export interface ChatUserRef {
   name: string;
   displayName: string | null;
   email?: string | null;
+  avatarUrl?: string | null;
   type: string | null;
   isApp?: boolean;
   access?: IdentityAccessState;

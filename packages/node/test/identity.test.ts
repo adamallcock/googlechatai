@@ -92,6 +92,36 @@ describe("identity directory enrichment", () => {
     });
   });
 
+  it("uses complete Chat identity before stale Directory data and fills partial Chat identity", async () => {
+    const cache = new InMemoryIdentityCache();
+    await syncDirectoryUsersToCache(
+      [{ id: "123", primaryEmail: "old@example.com", name: { fullName: "Old Name" } }],
+      { cache, nowMs: 1_000 },
+    );
+
+    expect(
+      await resolveHumanIdentity(
+        { name: "users/123", displayName: "Current Name", email: "current@example.com" },
+        { cache },
+      ),
+    ).toMatchObject({
+      displayName: "Current Name",
+      email: "current@example.com",
+      source: "chat_payload",
+      stale: false,
+    });
+    expect(
+      await resolveHumanIdentity({ name: "users/123", displayName: "Current Name" }, { cache }),
+    ).toMatchObject({
+      displayName: "Current Name",
+      email: "old@example.com",
+      source: "chat_payload_and_directory_cache",
+    });
+    expect(
+      await resolveHumanIdentity({ name: "users/123", displayName: "users/123" }, { cache }),
+    ).toMatchObject({ displayName: "Old Name", source: "directory_cache" });
+  });
+
   it("persists identity cache entries and renders inaccessible identity notes", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "chat-identity-"));
     const filePath = path.join(dir, "identities.json");

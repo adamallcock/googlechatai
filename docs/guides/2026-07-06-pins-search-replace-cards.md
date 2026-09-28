@@ -1,7 +1,7 @@
 ---
 title: Pins, Search, And Replace Cards
 date: 2026-07-06
-last_updated: 2026-09-03
+last_updated: 2026-09-28
 type: guide
 status: implemented
 ---
@@ -42,6 +42,7 @@ const searchPlan = planSearchMessages({
     spaces: ["spaces/AAA"],
     senders: ["users/123"],
     unread: true,
+    spaceTypes: ["SPACE", "GROUP_CHAT"],
     hasAttachments: true,
   },
   pageSize: 25,
@@ -86,6 +87,7 @@ search_plan = plan_search_messages({
         "spaces": ["spaces/AAA"],
         "senders": ["users/123"],
         "unread": True,
+        "spaceTypes": ["SPACE", "GROUP_CHAT"],
         "hasAttachments": True,
     },
     "pageSize": 25,
@@ -139,21 +141,25 @@ Preview, user-authorized surface.`.
   are optional.
 - `filter` accepts Google's raw filter syntax. The old `query` name remains a
   compatibility alias and adds a warning.
-- `filters` safely composes common intent fields: text, spaces, senders, time
-  range, unread status, attachments, mentions, and links. The legacy `space`
+- `filters` safely composes common intent fields: text, spaces, space types,
+  senders, time range, unread status, attachments, mentions, and links. Space
+  types accept `DIRECT_MESSAGE`, `GROUP_CHAT`, and `SPACE`, with OR between
+  multiple values. The legacy `space`
   shortcut becomes a `space.name` filter because Google requires the request
   parent to be `spaces/-`.
 - BASIC view requires `chat.messages.readonly`. FULL view also reports the
   read-state and space-settings scopes needed for `read` and
   `spaceMuteSetting` metadata. BASIC searches using `is_unread()` or
-  `space.display_name` also report the additional read-state or space-read
-  scope required by Google's filter contract.
+  `space.display_name` or `space.space_type` also report the additional
+  read-state or space-read scope required by Google's filter contract.
 - `normalizeSearchMessagesResponse` / `normalize_search_messages_response`
   preserves normalized messages plus read/mute metadata and provenance. Raw
-  result objects are retained only with explicit opt-in.
+  result objects are retained only with explicit opt-in. Normalized identities
+  preserve Chat-provided avatar URLs as optional structured metadata.
 - `buildSearchMessagesContext` / `build_search_messages_context` adds a local
   result bound, untrusted-content notes, default email redaction, and each
-  message's `plainTextForModel` representation.
+  message's `plainTextForModel` representation. Avatar URLs are omitted from
+  this model context even when email redaction is disabled.
 
 Message search remains experimental while Google labels it Developer Preview.
 The plan warns about tenant enrollment, availability, and the privacy impact of

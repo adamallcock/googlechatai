@@ -13,7 +13,8 @@
         "name": "users/456",
         "displayName": "Grace Hopper",
         "email": "grace@example.com",
-        "type": "HUMAN"
+        "type": "HUMAN",
+        "avatarUrl": "https://example.invalid/grace.png"
       },
       "emoji": {
         "unicode": "👍"

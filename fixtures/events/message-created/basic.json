@@ -9,7 +9,9 @@
   "user": {
     "name": "users/123",
     "displayName": "Ada Lovelace",
-    "type": "HUMAN"
+    "type": "HUMAN",
+    "email": "ada@example.com",
+    "avatarUrl": "https://example.invalid/ada.png"
   },
   "message": {
     "name": "spaces/AAA/messages/BBB",
@@ -20,7 +22,9 @@
     "sender": {
       "name": "users/123",
       "displayName": "Ada Lovelace",
-      "type": "HUMAN"
+      "type": "HUMAN",
+      "email": "ada@example.com",
+      "avatarUrl": "https://example.invalid/ada.png"
     },
     "space": {
       "name": "spaces/AAA",

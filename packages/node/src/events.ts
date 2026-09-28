@@ -167,23 +167,22 @@ function normalizeUser(value: unknown): ChatUserRef | null {
     return null;
   }
 
-  const displayName = asString(raw.displayName);
-  const email = asString(raw.email) ?? asString(raw.emailAddress);
+  const anonymous = raw.isAnonymous === true || raw.type === "ANONYMOUS";
+  const displayName = anonymous ? null : asString(raw.displayName);
+  const email = anonymous ? null : (asString(raw.email) ?? asString(raw.emailAddress));
+  const avatarUrl = anonymous ? null : asString(raw.avatarUrl);
   const type = asString(raw.type);
   const isApp = type === "BOT" || type === "APP" || raw.isBot === true;
   const rawAccessState = asString(raw.accessState);
   const access =
-    rawAccessState === "resource_only" || rawAccessState === "unknown"
+    anonymous || rawAccessState === "anonymous"
+      ? { status: "access_limited", reason: "anonymous_user" }
+      : rawAccessState === "resource_only" || rawAccessState === "unknown"
       ? {
           status: "access_limited",
           reason: "display_name_or_email_unavailable",
         }
-      : rawAccessState === "anonymous"
-        ? {
-            status: "access_limited",
-            reason: "anonymous_user",
-          }
-        : displayName || email
+      : displayName || email
           ? { status: "available", reason: null }
           : {
               status: "access_limited",
@@ -194,6 +193,7 @@ function normalizeUser(value: unknown): ChatUserRef | null {
     name,
     displayName,
     email,
+    ...(avatarUrl ? { avatarUrl } : {}),
     type,
     isApp,
     access,

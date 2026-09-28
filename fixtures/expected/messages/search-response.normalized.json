@@ -28,6 +28,7 @@
         "sender": {
           "displayName": "Ada Example",
           "email": "ada@example.com",
+          "avatarUrl": "https://example.invalid/ada.png",
           "resourceName": "users/123",
           "type": "HUMAN",
           "accessState": "available",
@@ -76,6 +77,7 @@
           "sender": {
             "displayName": "Ada Example",
             "email": "ada@example.com",
+            "avatarUrl": "https://example.invalid/ada.png",
             "resourceName": "users/123",
             "type": "HUMAN",
             "accessState": "available",

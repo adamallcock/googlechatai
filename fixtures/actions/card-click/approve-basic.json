@@ -9,7 +9,9 @@
   "user": {
     "name": "users/123",
     "displayName": "Ada Lovelace",
-    "type": "HUMAN"
+    "type": "HUMAN",
+    "email": "ada@example.com",
+    "avatarUrl": "https://example.invalid/ada.png"
   },
   "message": {
     "name": "spaces/AAA/messages/APPROVAL",
@@ -44,12 +46,16 @@
     "formInputs": {
       "comment": {
         "stringInputs": {
-          "value": ["Looks good"]
+          "value": [
+            "Looks good"
+          ]
         }
       },
       "notify": {
         "stringInputs": {
-          "value": ["true"]
+          "value": [
+            "true"
+          ]
         }
       }
     }

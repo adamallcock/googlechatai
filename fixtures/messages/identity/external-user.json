@@ -1,0 +1,11 @@
+{
+  "name": "spaces/AAA/messages/EXTERNAL",
+  "text": "Hello from outside",
+  "createTime": "2026-09-28T12:01:00Z",
+  "sender": {
+    "name": "users/external@example.org",
+    "email": "external@example.org",
+    "avatarUrl": "https://example.invalid/external.png",
+    "type": "HUMAN"
+  }
+}

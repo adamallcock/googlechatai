@@ -86,6 +86,41 @@ class IdentityDirectoryTests(unittest.TestCase):
         self.assertEqual(grace["directoryStatus"], "stale")
         self.assertTrue(grace["stale"])
 
+    def test_uses_complete_chat_identity_and_fills_partial_identity(self) -> None:
+        cache = InMemoryIdentityCache()
+        sync_directory_users_to_cache(
+            [
+                {
+                    "id": "123",
+                    "primaryEmail": "old@example.com",
+                    "name": {"fullName": "Old Name"},
+                }
+            ],
+            cache=cache,
+            now_ms=1_000,
+        )
+        complete = resolve_human_identity(
+            {
+                "name": "users/123",
+                "displayName": "Current Name",
+                "email": "current@example.com",
+            },
+            cache=cache,
+        )
+        self.assertEqual(complete["displayName"], "Current Name")
+        self.assertEqual(complete["email"], "current@example.com")
+        self.assertEqual(complete["source"], "chat_payload")
+        partial = resolve_human_identity(
+            {"name": "users/123", "displayName": "Current Name"}, cache=cache
+        )
+        self.assertEqual(partial["displayName"], "Current Name")
+        self.assertEqual(partial["email"], "old@example.com")
+        self.assertEqual(partial["source"], "chat_payload_and_directory_cache")
+        placeholder = resolve_human_identity(
+            {"name": "users/123", "displayName": "users/123"}, cache=cache
+        )
+        self.assertEqual(placeholder["displayName"], "Old Name")
+
     def test_file_cache_and_inaccessible_identity_note(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "identities.json"

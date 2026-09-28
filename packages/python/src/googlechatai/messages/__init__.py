@@ -1980,6 +1980,21 @@ def build_search_messages_filter(input_value: Mapping[str, Any]) -> str:
     if space_clause:
         clauses.append(space_clause)
 
+    space_types = list(
+        dict.fromkeys(_search_filter_string_list(filters.get("spaceTypes"), "filters.spaceTypes"))
+    )
+    allowed_space_types = {"DIRECT_MESSAGE", "GROUP_CHAT", "SPACE"}
+    space_type_clauses = []
+    for index, space_type in enumerate(space_types):
+        if space_type not in allowed_space_types:
+            raise TypeError(
+                f"Expected filters.spaceTypes[{index}] to be DIRECT_MESSAGE, GROUP_CHAT, or SPACE."
+            )
+        space_type_clauses.append(f"space.space_type = {_quoted_search_value(space_type)}")
+    space_type_clause = _or_search_clauses(space_type_clauses)
+    if space_type_clause:
+        clauses.append(space_type_clause)
+
     if _search_filter_boolean(filters.get("hasAttachments"), "filters.hasAttachments") is True:
         clauses.append("attachment:*")
     mentions = list(
@@ -2045,7 +2060,9 @@ def plan_search_messages(input_value: Mapping[str, Any]) -> JsonObject:
         required_scopes.append(CHAT_USERS_READSTATE_READONLY_SCOPE)
     if view == "SEARCH_MESSAGES_VIEW_FULL":
         required_scopes.append(CHAT_USERS_SPACESETTINGS_SCOPE)
-    if re.search(r"\bspace\.display_name\s*:", search_filter, re.IGNORECASE):
+    if re.search(r"\bspace\.display_name\s*:", search_filter, re.IGNORECASE) or re.search(
+        r"\bspace\.space_type\s*=", search_filter, re.IGNORECASE
+    ):
         required_scopes.append(CHAT_SPACES_READONLY_SCOPE)
     warnings = [_SEARCH_DEVELOPER_PREVIEW_NOTE, _SEARCH_PRIVACY_NOTE]
     if _as_string(input_value.get("query")):
@@ -2203,11 +2220,10 @@ def build_search_messages_context(
         max_results=max_results,
         include_raw=False,
     )
-    results = (
-        [_redact_search_context_value(result) for result in normalized["results"]]
-        if redact_emails
-        else normalized["results"]
-    )
+    results = [
+        _project_search_context_value(result, redact_emails=redact_emails)
+        for result in normalized["results"]
+    ]
     return {
         "kind": "chat.message_search_context",
         "schemaVersion": 1,
@@ -2228,17 +2244,22 @@ def build_search_messages_context(
     }
 
 
-def _redact_search_context_value(value: Any, *, key: str | None = None) -> Any:
-    if key == "email" and isinstance(value, str):
+def _project_search_context_value(
+    value: Any, *, redact_emails: bool, key: str | None = None
+) -> Any:
+    if redact_emails and key == "email" and isinstance(value, str):
         return None
     if isinstance(value, str):
-        return SEARCH_EMAIL_PATTERN.sub("[redacted-email]", value)
+        return SEARCH_EMAIL_PATTERN.sub("[redacted-email]", value) if redact_emails else value
     if isinstance(value, list):
-        return [_redact_search_context_value(item) for item in value]
+        return [_project_search_context_value(item, redact_emails=redact_emails) for item in value]
     if isinstance(value, Mapping):
         return {
-            item_key: _redact_search_context_value(item, key=str(item_key))
+            item_key: _project_search_context_value(
+                item, redact_emails=redact_emails, key=str(item_key)
+            )
             for item_key, item in value.items()
+            if str(item_key) != "avatarUrl"
         }
     return value
 

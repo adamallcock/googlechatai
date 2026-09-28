@@ -16,10 +16,10 @@ npm install googlechatai@next       # Node.js 22+
 pip install --pre googlechatai      # Python 3.10+ (stdlib only)
 ```
 
-Status: `0.1.0-beta.3` public-beta release candidate (PyPI normalizes the
-version to `0.1.0b3`). The local, dry-run, and verification surfaces are
-extensively tested; live-API wrappers are exercised against a private test
-tenant. APIs may change before the stable `0.1.0` release.
+Status: this checkout targets the `0.1.0-beta.4` public-beta release (PyPI
+normalizes the version to `0.1.0b4`). The local, dry-run, and verification
+surfaces are extensively tested; live-API wrappers are exercised against a
+private test tenant. APIs may change before the stable `0.1.0` release.
 
 ## Why
 

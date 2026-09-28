@@ -1,0 +1,13 @@
+{
+  "name": "spaces/AAA/messages/ANONYMOUS",
+  "text": "A message from an inaccessible user",
+  "createTime": "2026-09-28T12:00:00Z",
+  "sender": {
+    "name": "users/hidden",
+    "displayName": "Must Not Surface",
+    "email": "hidden@example.com",
+    "avatarUrl": "https://example.invalid/hidden.png",
+    "type": "HUMAN",
+    "isAnonymous": true
+  }
+}

@@ -233,6 +233,16 @@ def _normalize_identity(value: Any) -> JsonObject:
             "access": "inaccessible",
         }
 
+    if raw.get("isAnonymous") is True or raw.get("type") == "ANONYMOUS":
+        return {
+            "name": _as_string(raw.get("name")),
+            "displayName": "Unknown sender",
+            "email": None,
+            "type": _as_string(raw.get("type")) or "UNKNOWN",
+            "access": "inaccessible",
+            "anonymous": True,
+        }
+
     return {
         "name": _as_string(raw.get("name")),
         "displayName": _as_string(raw.get("displayName"))
@@ -1631,7 +1641,7 @@ def _sender_from_human_identity(
 def _should_append_identity_note(identity: Mapping[str, Any]) -> bool:
     access = _as_mapping(identity.get("access")) or {}
     return (
-        identity.get("source") == "directory_cache"
+        identity.get("source") in {"directory_cache", "chat_payload_and_directory_cache"}
         or identity.get("stale") is True
         or access.get("status") == "access_limited"
     )
@@ -1642,6 +1652,15 @@ def _enrich_context_message_identity(
     identity_cache: Any,
 ) -> JsonObject:
     sender = _as_mapping(message.get("sender")) or _normalize_identity(None)
+    quoted_messages = [
+        _enrich_context_message_identity(quoted, identity_cache)
+        for quoted in (
+            _as_mapping(item) for item in _as_list(message.get("quotedMessages"))
+        )
+        if quoted is not None
+    ]
+    if sender.get("anonymous") is True:
+        return {**message, "sender": dict(sender), "quotedMessages": quoted_messages}
     identity = resolve_human_identity(
         _identity_ref_from_sender(sender),
         cache=identity_cache,
@@ -1652,13 +1671,6 @@ def _enrich_context_message_identity(
         if note is not None
     ]
     identity_note = render_identity_system_note(identity, role="sender")
-    quoted_messages = [
-        _enrich_context_message_identity(quoted, identity_cache)
-        for quoted in (
-            _as_mapping(item) for item in _as_list(message.get("quotedMessages"))
-        )
-        if quoted is not None
-    ]
 
     return {
         **message,
