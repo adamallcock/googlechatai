@@ -8,6 +8,7 @@ from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import TYPE_CHECKING, Any, cast
 
+from ..message_ast import _normalize_elements, _elements_system_notes
 from ..identity import render_identity_system_note, resolve_human_identity
 
 if TYPE_CHECKING:
@@ -746,6 +747,9 @@ def _normalize_context_message(
         )
 
     system_notes.extend(_reaction_notes(raw))
+    elements = _normalize_elements(raw.get("elements"))
+    if "deletionMetadata" not in raw and "deleteTime" not in raw:
+        system_notes.extend(_elements_system_notes(elements))
 
     return {
         "ref": {"name": name},
@@ -756,6 +760,7 @@ def _normalize_context_message(
         "relationship": relationship,
         "text": text,
         "plainTextForModel": text,
+        **({"elements": elements} if elements is not None and "deletionMetadata" not in raw and "deleteTime" not in raw else {}),
         "attachments": attachments,
         "quotedMessages": quoted_messages,
         "systemNotes": system_notes,

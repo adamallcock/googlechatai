@@ -98,5 +98,25 @@
     "expect": {
       "fixture": "fixtures/expected/messages/identity.external-user.json"
     }
+  },
+  {
+    "id": "messages.elements.structured-citations",
+    "description": "Normalize inline citation IDs and general sources with snippet image and attribution metadata.",
+    "input": {
+      "fixture": "fixtures/messages/elements/structured-citations.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/elements.structured-citations.json"
+    }
+  },
+  {
+    "id": "messages.elements.malformed-citations",
+    "description": "Skip invalid citation IDs and non-object sources while normalizing malformed metadata without raw passthrough.",
+    "input": {
+      "fixture": "fixtures/messages/elements/malformed-citations.json"
+    },
+    "expect": {
+      "fixture": "fixtures/expected/messages/elements.malformed-citations.json"
+    }
   }
 ]

@@ -60,7 +60,7 @@ reports as current state.
   resume.
 - `guides/2026-07-06-pins-search-replace-cards.md`: Developer Preview message
   search planning/normalization/context and user-authorized message-pin
-  planners, plus docs-listed replace-cards planning.
+  planners, plus discovery-backed replace-cards and explicit card removal.
 - `guides/2026-07-06-token-stores-and-queues.md`: Node/Python token store and
   async response queue adapters, including the shared file formats.
 - `guides/2026-07-06-router-event-coverage.md`: router registrations for
@@ -98,6 +98,9 @@ reports as current state.
 - `research/2026-09-03-google-chat-message-pins-discovery-review.md`: current
   review of discovery revision `20260828`, the three message-pin methods, and
   their user-authenticated SDK contract and live-write boundary.
+- `research/2026-11-09-google-chat-discovery-drift-review.md`: reviewed November
+  discovery changes, structured citations, replace-cards removal semantics,
+  conservative authentication boundaries, and deterministic CI checks.
 - `reports/2026-07-16-public-beta-release-readiness.md`: implemented CLI and
   scaffold surface, full validation and installed-artifact evidence, current
   registry/GitHub state, and exact external publication blockers.

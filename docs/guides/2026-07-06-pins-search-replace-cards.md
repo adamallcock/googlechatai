@@ -1,7 +1,7 @@
 ---
 title: Pins, Search, And Replace Cards
 date: 2026-07-06
-last_updated: 2026-09-28
+last_updated: 2026-11-09
 type: guide
 status: implemented
 ---
@@ -11,9 +11,10 @@ status: implemented
 This guide covers three Google Chat API families with different maturity
 levels. Message search now appears in the live discovery document as a Google
 Workspace Developer Preview method. Message pins are also a Google Workspace
-Developer Preview surface in live discovery; `replaceCards` remains
-docs-listed and requires separate live verification. Every plan is a dry run
-by default and preserves the relevant maturity warning.
+Developer Preview surface in live discovery. `replaceCards` is now present in
+discovery revision `20261107`; its request contract is covered by offline
+tests, but live writes still require separate verification. Every plan is a
+dry run by default and preserves the relevant capability or safety warning.
 
 ## Node
 
@@ -59,6 +60,12 @@ const replaceCardsPlan = planReplaceCards({
   message: "spaces/AAA/messages/BBB",
   cardsV2: [{ cardId: "summary", card: { sections: [] } }],
 });
+
+// Explicit removal. On a human-created message, the app cannot add cards back.
+const removeCardsPlan = planReplaceCards({
+  message: "spaces/AAA/messages/BBB",
+  cardsV2: [],
+});
 ```
 
 ## Python
@@ -99,6 +106,12 @@ search_context = build_search_messages_context(raw_search_response, max_results=
 replace_cards_plan = plan_replace_cards({
     "message": "spaces/AAA/messages/BBB",
     "cardsV2": [{"cardId": "summary", "card": {"sections": []}}],
+})
+
+# Explicit removal. On a human-created message, the app cannot add cards back.
+remove_cards_plan = plan_replace_cards({
+    "message": "spaces/AAA/messages/BBB",
+    "cardsV2": [],
 })
 ```
 
@@ -169,18 +182,25 @@ reading user-visible conversations.
 
 - **`planReplaceCards` / `plan_replace_cards`** — one request,
   `POST spaces.messages.replaceCards` at `/v1/{message}:replaceCards`, with
-  `cardsV2` required to be a non-empty array. Carries the warning
-  `spaces.messages.replaceCards is a docs-listed surface; verify live
-  support before relying on it.`.
+  `cardsV2` required to be an explicit array. A populated array replaces the
+  cards; `[]` removes them. Missing, null, or non-array input is rejected so
+  malformed input cannot silently remove existing cards.
+- For a human-created message, Google permits replacement only when the message
+  already has cards created by the calling app. After removing those cards,
+  the app cannot add cards back to that message. Empty-list plans carry this
+  warning; checking the original message and card ownership is the caller's
+  responsibility.
+- The API returns an empty response object, not an updated Message.
 
-`replaceCards` requires the standard `chat.bot` scope. Message search is
-user-auth only; explicitly selecting app auth returns `capability.ok: false`.
+`replaceCards` requires app authentication and the standard `chat.bot` scope;
+explicitly selecting user auth returns `capability.ok: false`. Message search
+is user-auth only; explicitly selecting app auth also fails capability planning.
 
 ## Warning And Capability Boundaries
 
 Warnings remain advisory and flow into execution reports. Capability checks
 are structural: message search and message pins fail capability planning for
-app auth, while a user-auth plan reports its exact scopes. Live execution still
+app auth, while replace-cards fails it for user auth. Live execution still
 requires the normal executor opt-in and credentials. Applications must add
 their own consent, retention, DLP, and model-data policy before using search
 results.
@@ -204,6 +224,9 @@ Implemented:
 
 Blocked:
 
+- No replace-cards live write was performed for the November compatibility
+  update. Discovery support and offline conformance do not prove a particular
+  tenant's live behavior.
 - No message-pin write was sent from this repository for this upgrade. Pin
   create/delete remain Developer Preview and require an operator-approved,
   dedicated smoke-space run before any live-write claim. Message search passed

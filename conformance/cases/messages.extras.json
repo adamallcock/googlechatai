@@ -218,7 +218,7 @@
   },
   {
     "id": "messages.replaceCards.basic",
-    "description": "Plan a docs-listed replaceCards call.",
+    "description": "Plan a discovery-backed replaceCards call.",
     "operation": "messages.replaceCards",
     "input": {
       "message": "spaces/AAA/messages/BBB",
@@ -276,9 +276,124 @@
           "Dry run only; no Google Chat API call was executed."
         ]
       },
+      "warnings": []
+    }
+  },
+  {
+    "id": "messages.replaceCards.clear",
+    "description": "Explicitly remove cards while warning about irreversible human-message card removal.",
+    "operation": "messages.replaceCards",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "cardsV2": []
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replaceCards",
+      "dryRun": true,
+      "capability": {
+        "ok": true,
+        "authMode": "app",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": []
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.replaceCards",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/BBB:replaceCards",
+          "query": {},
+          "body": {
+            "cardsV2": []
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "replaceCards": {
+        "message": "spaces/AAA/messages/BBB",
+        "cardCount": 0
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
       "warnings": [
-        "spaces.messages.replaceCards is a docs-listed surface; verify live support before relying on it."
+        "An empty cardsV2 list removes the cards. After removing cards from a human-created message, the app cannot add cards back to that message."
       ]
+    }
+  },
+  {
+    "id": "messages.replaceCards.userAuthBlocked",
+    "description": "Keep the dry-run visible but fail capability planning for unsupported user authentication.",
+    "operation": "messages.replaceCards",
+    "input": {
+      "message": "spaces/AAA/messages/BBB",
+      "cardsV2": [
+        {
+          "cardId": "summary",
+          "card": {
+            "sections": []
+          }
+        }
+      ],
+      "authMode": "user"
+    },
+    "expect": {
+      "kind": "chat.call_plan",
+      "operation": "messages.replaceCards",
+      "dryRun": true,
+      "capability": {
+        "ok": false,
+        "authMode": "user",
+        "requiredScopes": [
+          "https://www.googleapis.com/auth/chat.bot"
+        ],
+        "reasons": [
+          "spaces.messages.replaceCards requires app authentication."
+        ]
+      },
+      "requests": [
+        {
+          "resource": "spaces.messages.replaceCards",
+          "method": "POST",
+          "path": "/v1/spaces/AAA/messages/BBB:replaceCards",
+          "query": {},
+          "body": {
+            "cardsV2": [
+              {
+                "cardId": "summary",
+                "card": {
+                  "sections": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "idempotency": {
+        "requestId": null,
+        "clientMessageId": null
+      },
+      "replaceCards": {
+        "message": "spaces/AAA/messages/BBB",
+        "cardCount": 1
+      },
+      "safety": {
+        "liveAllowed": false,
+        "directMessage": false,
+        "notes": [
+          "Dry run only; no Google Chat API call was executed."
+        ]
+      },
+      "warnings": []
     }
   }
 ]

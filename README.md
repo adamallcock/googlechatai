@@ -16,8 +16,8 @@ npm install googlechatai@next       # Node.js 22+
 pip install --pre googlechatai      # Python 3.10+ (stdlib only)
 ```
 
-Status: this checkout targets the `0.1.0-beta.4` public-beta release (PyPI
-normalizes the version to `0.1.0b4`). The local, dry-run, and verification
+Status: this checkout targets the `0.1.0-beta.5` public-beta release (PyPI
+normalizes the version to `0.1.0b5`). The local, dry-run, and verification
 surfaces are extensively tested; live-API wrappers are exercised against a
 private test tenant. APIs may change before the stable `0.1.0` release.
 
@@ -119,11 +119,11 @@ write is also available as a dry-run plan before execution.
 |---|---|
 | Event handling | One normalized envelope for HTTP, Pub/Sub, and Workspace Events payloads; router registrations for messages, mentions, slash commands (by name), cards, dialogs, reactions, memberships, space add/remove, widget updates, and link previews; dedupe and deadline options |
 | Request verification | Chat app bearer JWTs and Pub/Sub push OIDC tokens, JWKS caching, offline test fixtures |
-| Messages | Send/reply/thread/edit/delete planners with typed inputs, reply-target routing policies, placeholder responses, async response handoff, Developer Preview message search, and docs-listed replace-cards |
+| Messages | Send/reply/thread/edit/delete planners with typed inputs, reply-target routing policies, placeholder responses, async response handoff, Developer Preview message search, and discovery-backed replace-cards including explicit removal |
 | Streaming | `streamChatReply` / `stream_chat_reply` / `astream_chat_reply` with shared scheduler semantics, final-card attachment, cancellation registries, resumable state |
 | Cards and dialogs | Typed builders (approval, progress, error, sources, thinking, tool status, feedback), card lint/translation, action-state round-tripping, dialog helpers |
 | Attachments | Metadata normalization, download/upload plans, policy gates, parser hooks, Drive export plans, optional OpenAI/Gemini voice transcription providers |
-| Context for AI | Thread/space readers, recursive quoted-message context, identity resolution with explicit unavailability, bounded message-search context, plus model-safe projection with provenance/trust labels, cursor exclusion, and default email redaction |
+| Context for AI | Thread/space readers, recursive quoted-message context, structured inline/footer citations, identity resolution with explicit unavailability, bounded message-search context, plus model-safe projection with provenance/trust labels, cursor exclusion, and default email redaction |
 | Reactions and pins | Reaction planners with feedback mapping, user-authorized Developer Preview message-pin planners |
 | Transport | Retry/backoff with Retry-After, 401 refresh-and-replay, structural idempotency stores including injected Firestore reference stores, token stores (file, Secret Manager), queue adapters (Cloud Tasks, Pub/Sub, file) |
 | Capabilities | `explainChatCapability`, permission plans, and error explainers for 401/403/404/429/5xx remediation |
@@ -153,8 +153,10 @@ and privacy-safe model context. A read-only dedicated-space smoke returned HTTP
 200 on 2026-08-10. It remains Google Workspace Developer Preview, so this is a
 current-tenant verification rather than a stable-production claim.
 
-Gated: Developer Preview message pins and docs-listed `replaceCards` ship as
-planners with explicit warnings; message-pin writes have not been verified live.
+Gated: Developer Preview message pins and discovery-backed `replaceCards` ship
+as dry-run planners. Message-pin and replace-cards writes have not been verified
+live for the current compatibility update. Empty replace-cards plans warn that
+removed cards cannot be added back to a human-created message.
 Live smokes require a dedicated test space and explicit env guards; a
 `spaces.spaceEvents.list` 500-level issue observed in our private live tenant
 is tracked for re-verification.
@@ -181,6 +183,12 @@ authorization — see
 [Live Chat Smoke Harness](docs/runbooks/2026-06-29-live-chat-smoke-harness.md).
 Tenant-specific live QA ledgers are maintained privately outside this
 repository.
+
+Ordinary CI validates the pinned discovery baseline offline with
+`node tools/discovery/check-baseline.mjs`. To check for new upstream API drift,
+run `corepack pnpm discovery:check`; the weekly/manual discovery workflow also
+runs this strict live check. Upstream changes or temporary discovery outages
+therefore do not block unrelated pull requests.
 
 ## Documentation
 

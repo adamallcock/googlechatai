@@ -142,6 +142,11 @@ scopes, and media upload contract. An incomplete baseline signature set fails
 closed. A revision-only change remains informational because Google can roll
 revisions without behavior changes.
 
+Ordinary pull-request CI instead runs
+`node tools/discovery/check-baseline.mjs`, an offline integrity check against
+the reviewed, pinned discovery document. The weekly/manual discovery workflow
+retains the strict live comparison and reports upstream drift separately.
+
 `corepack pnpm test:coverage` now enforces Node aggregate floors:
 
 | Metric | Minimum |

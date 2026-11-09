@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/EXAMPLE/messages/citations"
+  },
+  "space": null,
+  "thread": null,
+  "sender": null,
+  "createdAt": null,
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "A supported claim references source ID report1.",
+  "markupSyntax": "MARKDOWN",
+  "elements": {
+    "citations": [
+      {
+        "id": "report1",
+        "citedSources": [
+          {
+            "title": "Public report",
+            "uri": "https://example.com/report",
+            "snippet": {
+              "text": "Contact editor@example.com for context.",
+              "imagePreview": {
+                "imageUri": "https://example.com/preview.png"
+              }
+            },
+            "footer": {
+              "text": "Research team"
+            }
+          },
+          {
+            "title": "Related report",
+            "uri": "https://example.com/related"
+          }
+        ]
+      },
+      {
+        "id": "noSources",
+        "citedSources": []
+      }
+    ],
+    "citedSources": [
+      {
+        "title": "General background",
+        "uri": "https://example.com/background",
+        "footer": {
+          "text": "Background attribution"
+        }
+      }
+    ]
+  },
+  "formattedText": null,
+  "argumentText": null,
+  "segments": [
+    {
+      "kind": "text",
+      "startIndex": 0,
+      "length": 47,
+      "text": "A supported claim references source ID report1."
+    }
+  ],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/EXAMPLE/messages/citations from Unknown sender (unknown access) created at unknown time.",
+    "System Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.",
+    "System Note: Citation ID report1: Public report (https://example.com/report); Snippet: Contact editor@example.com for context.; Image: https://example.com/preview.png; Attribution: Research team | Related report (https://example.com/related).",
+    "System Note: Citation ID noSources: no source metadata.",
+    "System Note: Cited source: General background (https://example.com/background); Attribution: Background attribution."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/EXAMPLE/messages/citations"
+    },
+    "sender": null,
+    "createdAt": null,
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "A supported claim references source ID report1.",
+    "elements": {
+      "citations": [
+        {
+          "id": "report1",
+          "citedSources": [
+            {
+              "title": "Public report",
+              "uri": "https://example.com/report",
+              "snippet": {
+                "text": "Contact editor@example.com for context.",
+                "imagePreview": {
+                  "imageUri": "https://example.com/preview.png"
+                }
+              },
+              "footer": {
+                "text": "Research team"
+              }
+            },
+            {
+              "title": "Related report",
+              "uri": "https://example.com/related"
+            }
+          ]
+        },
+        {
+          "id": "noSources",
+          "citedSources": []
+        }
+      ],
+      "citedSources": [
+        {
+          "title": "General background",
+          "uri": "https://example.com/background",
+          "footer": {
+            "text": "Background attribution"
+          }
+        }
+      ]
+    },
+    "systemNotes": [
+      "System Note: Message spaces/EXAMPLE/messages/citations from Unknown sender (unknown access) created at unknown time.",
+      "System Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.",
+      "System Note: Citation ID report1: Public report (https://example.com/report); Snippet: Contact editor@example.com for context.; Image: https://example.com/preview.png; Attribution: Research team | Related report (https://example.com/related).",
+      "System Note: Citation ID noSources: no source metadata.",
+      "System Note: Cited source: General background (https://example.com/background); Attribution: Background attribution."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/EXAMPLE/messages/citations from Unknown sender (unknown access) created at unknown time.\nSystem Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.\nSystem Note: Citation ID report1: Public report (https://example.com/report); Snippet: Contact editor@example.com for context.; Image: https://example.com/preview.png; Attribution: Research team | Related report (https://example.com/related).\nSystem Note: Citation ID noSources: no source metadata.\nSystem Note: Cited source: General background (https://example.com/background); Attribution: Background attribution.\nA supported claim references source ID report1."
+  },
+  "plainTextForModel": "System Note: Message spaces/EXAMPLE/messages/citations from Unknown sender (unknown access) created at unknown time.\nSystem Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.\nSystem Note: Citation ID report1: Public report (https://example.com/report); Snippet: Contact editor@example.com for context.; Image: https://example.com/preview.png; Attribution: Research team | Related report (https://example.com/related).\nSystem Note: Citation ID noSources: no source metadata.\nSystem Note: Cited source: General background (https://example.com/background); Attribution: Background attribution.\nA supported claim references source ID report1."
+}

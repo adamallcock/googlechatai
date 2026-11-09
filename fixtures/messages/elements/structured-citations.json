@@ -1,0 +1,44 @@
+{
+  "name": "spaces/EXAMPLE/messages/citations",
+  "markupSyntax": "MARKDOWN",
+  "text": "A supported claim references source ID report1.",
+  "elements": {
+    "citations": [
+      {
+        "id": "report1",
+        "citedSources": [
+          {
+            "title": "Public report",
+            "uri": "https://example.com/report",
+            "snippet": {
+              "text": "Contact editor@example.com for context.",
+              "imagePreview": {
+                "imageUri": "https://example.com/preview.png"
+              }
+            },
+            "footer": {
+              "text": "Research team"
+            }
+          },
+          {
+            "title": "Related report",
+            "uri": "https://example.com/related"
+          }
+        ]
+      },
+      {
+        "id": "noSources",
+        "citedSources": []
+      }
+    ],
+    "citedSources": [
+      {
+        "title": "General background",
+        "uri": "https://example.com/background",
+        "footer": {
+          "text": "Background attribution"
+        }
+      }
+    ]
+  }
+}

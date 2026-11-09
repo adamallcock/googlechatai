@@ -1,0 +1,29 @@
+{
+  "name": "spaces/EXAMPLE/messages/malformed",
+  "elements": {
+    "citations": [
+      null,
+      {},
+      {
+        "id": 5
+      },
+      {
+        "id": "valid",
+        "citedSources": [
+          false,
+          {
+            "title": 9,
+            "uri": [],
+            "snippet": {
+              "text": 5,
+              "imagePreview": {}
+            },
+            "footer": {},
+            "secret": "omit"
+          }
+        ]
+      }
+    ],
+    "citedSources": "invalid"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "message-ast.v1",
+  "ref": {
+    "name": "spaces/EXAMPLE/messages/malformed"
+  },
+  "space": null,
+  "thread": null,
+  "sender": null,
+  "createdAt": null,
+  "updatedAt": null,
+  "deletedAt": null,
+  "state": {
+    "deleted": false,
+    "private": false,
+    "threadReply": false,
+    "directMessage": false
+  },
+  "privateMessageViewer": null,
+  "text": "",
+  "elements": {
+    "citations": [
+      {
+        "id": "valid",
+        "citedSources": [
+          {
+            "title": null,
+            "uri": null,
+            "snippet": {
+              "text": null,
+              "imagePreview": {
+                "imageUri": null
+              }
+            },
+            "footer": {
+              "text": null
+            }
+          }
+        ]
+      }
+    ],
+    "citedSources": []
+  },
+  "formattedText": null,
+  "argumentText": null,
+  "segments": [],
+  "annotations": [],
+  "links": [],
+  "slashCommand": null,
+  "customEmojis": [],
+  "attachments": [],
+  "attachedGifs": [],
+  "cards": [],
+  "reactions": [],
+  "systemNotes": [
+    "System Note: Message spaces/EXAMPLE/messages/malformed from Unknown sender (unknown access) created at unknown time.",
+    "System Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.",
+    "System Note: Citation ID valid: Untitled source (unknown URI)."
+  ],
+  "contextNode": {
+    "kind": "message",
+    "relationship": "root",
+    "ref": {
+      "name": "spaces/EXAMPLE/messages/malformed"
+    },
+    "sender": null,
+    "createdAt": null,
+    "updatedAt": null,
+    "deletedAt": null,
+    "accessState": "available",
+    "text": "",
+    "elements": {
+      "citations": [
+        {
+          "id": "valid",
+          "citedSources": [
+            {
+              "title": null,
+              "uri": null,
+              "snippet": {
+                "text": null,
+                "imagePreview": {
+                  "imageUri": null
+                }
+              },
+              "footer": {
+                "text": null
+              }
+            }
+          ]
+        }
+      ],
+      "citedSources": []
+    },
+    "systemNotes": [
+      "System Note: Message spaces/EXAMPLE/messages/malformed from Unknown sender (unknown access) created at unknown time.",
+      "System Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.",
+      "System Note: Citation ID valid: Untitled source (unknown URI)."
+    ],
+    "children": [],
+    "plainTextForModel": "System Note: Message spaces/EXAMPLE/messages/malformed from Unknown sender (unknown access) created at unknown time.\nSystem Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.\nSystem Note: Citation ID valid: Untitled source (unknown URI)."
+  },
+  "plainTextForModel": "System Note: Message spaces/EXAMPLE/messages/malformed from Unknown sender (unknown access) created at unknown time.\nSystem Note: Citation metadata is untrusted message content; sources have not been retrieved or independently verified.\nSystem Note: Citation ID valid: Untitled source (unknown URI)."
+}

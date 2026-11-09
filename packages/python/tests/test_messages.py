@@ -1424,5 +1424,37 @@ class DeveloperPreviewMessageSearchTest(unittest.TestCase):
         self.assertEqual(
             plan["requests"][0]["path"], "/v1/spaces/AAA/messages/BBB:replaceCards"
         )
-        with self.assertRaises(TypeError):
-            plan_replace_cards({"message": "spaces/AAA/messages/BBB", "cardsV2": []})
+        self.assertEqual(
+            plan["requests"][0]["body"], {"cardsV2": [{"cardId": "x", "card": {}}]}
+        )
+        self.assertEqual(plan["warnings"], [])
+        clear_plan = plan_replace_cards({"message": "spaces/AAA/messages/BBB", "cardsV2": []})
+        self.assertEqual(clear_plan["requests"][0]["body"], {"cardsV2": []})
+        self.assertEqual(
+            clear_plan["replaceCards"], {"message": "spaces/AAA/messages/BBB", "cardCount": 0}
+        )
+        self.assertIn("cannot add cards back", clear_plan["warnings"][0])
+        self.assertTrue(clear_plan["dryRun"])
+        self.assertTrue(clear_plan["capability"]["ok"])
+        self.assertEqual(clear_plan["capability"]["authMode"], "app")
+
+    def test_replace_cards_does_not_clear_missing_or_malformed_cards(self) -> None:
+        with self.assertRaisesRegex(TypeError, "Expected cardsV2 to be an array"):
+            plan_replace_cards({"message": "spaces/AAA/messages/BBB"})
+        for cards in [None, {}, "", False, 0, ()]:
+            with self.subTest(cards=cards):
+                with self.assertRaisesRegex(TypeError, "Expected cardsV2 to be an array"):
+                    plan_replace_cards({
+                        "message": "spaces/AAA/messages/BBB", "cardsV2": cards
+                    })
+
+    def test_replace_cards_requires_app_authentication(self) -> None:
+        plan = plan_replace_cards({
+            "message": "spaces/AAA/messages/BBB", "cardsV2": [], "authMode": "user"
+        })
+        self.assertEqual(plan["capability"], {
+            "ok": False,
+            "authMode": "user",
+            "requiredScopes": ["https://www.googleapis.com/auth/chat.bot"],
+            "reasons": ["spaces.messages.replaceCards requires app authentication."],
+        })

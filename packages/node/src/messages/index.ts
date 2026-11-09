@@ -2237,8 +2237,8 @@ const SEARCH_DEVELOPER_PREVIEW_NOTE =
   "spaces.messages.search is a Google Workspace Developer Preview surface; verify tenant enrollment and availability before relying on it.";
 const SEARCH_PRIVACY_NOTE =
   "Message search reads user-visible conversations; execute only with explicit user authorization and bounded filters.";
-const REPLACE_CARDS_DOCS_LISTED_NOTE =
-  "spaces.messages.replaceCards is a docs-listed surface; verify live support before relying on it.";
+const REPLACE_CARDS_CLEAR_NOTE =
+  "An empty cardsV2 list removes the cards. After removing cards from a human-created message, the app cannot add cards back to that message.";
 
 function searchFilterString(value: unknown, key: string): string | null {
   if (value === undefined || value === null) {
@@ -2677,10 +2677,11 @@ function projectSearchContextValue(value: unknown, redactEmails: boolean): unkno
 
 export function planReplaceCards(input: ReplaceCardsInput): ChatCallPlan {
   const message = requiredString(input, "message");
-  const cards = asArray(input.cardsV2);
-  if (cards.length === 0) {
-    throw new TypeError("Expected cardsV2 to include at least one card.");
+  if (!Array.isArray(input.cardsV2)) {
+    throw new TypeError("Expected cardsV2 to be an array; use [] to remove cards.");
   }
+  const cards = input.cardsV2;
+  const requestedAuthMode = authMode(input);
 
   return callPlan(
     "messages.replaceCards",
@@ -2695,7 +2696,12 @@ export function planReplaceCards(input: ReplaceCardsInput): ChatCallPlan {
       },
     ],
     {
-      warnings: [REPLACE_CARDS_DOCS_LISTED_NOTE],
+      capabilityOk: requestedAuthMode === "app",
+      capabilityReasons:
+        requestedAuthMode === "app"
+          ? []
+          : ["spaces.messages.replaceCards requires app authentication."],
+      warnings: cards.length === 0 ? [REPLACE_CARDS_CLEAR_NOTE] : [],
       extra: {
         replaceCards: {
           message,
