@@ -19,6 +19,11 @@ context-free Chat text to a model when metadata is available.
   disabled-by-default voice-note transcription status. Optional Directory cache
   enrichment can now humanize top-level and recursively quoted context senders
   at model handoff.
+- Implemented and fixture-tested: structured `Message.elements` citations and
+  footer sources in Node/Python normalization and recursive context. Citation
+  IDs stay associated with their sources; source titles, URIs, snippet text,
+  image-preview URIs, and footer text are preserved. Model notes label these
+  as untrusted source content, not independently verified evidence.
 - Verified live in the current private live test tenant: user-auth room/thread
   history reads, deleted-message handling, attachment metadata, uploaded media
   download, Drive-backed attachment export, reaction notes, quote hydration, and

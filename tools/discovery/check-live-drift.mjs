@@ -4,9 +4,9 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const repoRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
-const baselinePath = path.join(
+export const baselinePath = path.join(
   repoRoot,
-  "discovery/google-chat-v1-20260920.methods.json",
+  "discovery/google-chat-v1-20261107.methods.json",
 );
 const discoveryUrl = "https://chat.googleapis.com/$discovery/rest?version=v1";
 
@@ -84,7 +84,7 @@ const DISCOVERY_PROSE_KEYS = new Set([
  * `$ref` name. Google can change a field's enum, requiredness, or nested type
  * without changing the method's top-level request/response reference.
  */
-export function canonicalReachableSchema(value, schemas = {}, resolving = new Set()) {
+export function canonicalReachableSchema(value, schemas = {}, resolving = new Set(), propertyMap = false) {
   if (Array.isArray(value)) {
     return value.map((item) => canonicalReachableSchema(item, schemas, resolving));
   }
@@ -93,16 +93,16 @@ export function canonicalReachableSchema(value, schemas = {}, resolving = new Se
   }
 
   const raw = record(value);
-  const ref = stringOrNull(raw.$ref);
+  const ref = propertyMap ? null : stringOrNull(raw.$ref);
   const own = Object.fromEntries(
     Object.entries(raw)
-      .filter(([key]) => !DISCOVERY_PROSE_KEYS.has(key))
+      .filter(([key]) => propertyMap || !DISCOVERY_PROSE_KEYS.has(key))
       .sort(([left], [right]) => left.localeCompare(right))
       .map(([key, item]) => [
         key,
-        key === "$ref"
+        key === "$ref" && !propertyMap
           ? item
-          : canonicalReachableSchema(item, schemas, resolving),
+          : canonicalReachableSchema(item, schemas, resolving, !propertyMap && key === "properties"),
       ]),
   );
 

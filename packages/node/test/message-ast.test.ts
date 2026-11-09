@@ -7,6 +7,8 @@ import { normalizeMessage } from "../src/index.js";
 const root = path.resolve(import.meta.dirname, "../../..");
 
 const cases = [
+  ["elements.malformed-citations", "fixtures/messages/elements/malformed-citations.json"],
+  ["elements.structured-citations", "fixtures/messages/elements/structured-citations.json"],
   ["annotations.mentions-custom-emoji", "fixtures/messages/annotations/mentions-custom-emoji.json"],
   ["commands.slash-command", "fixtures/messages/commands/slash-command.json"],
   ["links.matched-url-rich-link", "fixtures/messages/links/matched-url-rich-link.json"],

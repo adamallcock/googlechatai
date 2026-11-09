@@ -133,7 +133,8 @@ handler, or orchestration behavior should add or update fixture coverage.
   chatbot install model.
 - Direct `spaces.spaceEvents.list` is currently blocked by Google API `500`
   responses in the private live test tenant.
-- `replaceCards` remains docs-listed. Message search and message pins are
+- `replaceCards` is discovery-backed but has no live-write verification for the
+  November compatibility update. Message search and message pins are
   implemented Developer Preview surfaces, but message pins have no
   post-discovery live-write verification and must not be described as stable
   production features.

@@ -4,6 +4,21 @@ All notable changes to googlechatai are documented here. The project follows
 semantic versioning from 0.1.0 onward. Prerelease APIs may still change before
 the stable 0.1.0 release.
 
+## 0.1.0-beta.5 — 2026-11-09
+
+- Allow explicit empty `cardsV2` arrays in Node/Python replace-cards plans,
+  preserving a warning about removing cards from human-created messages.
+  Reject missing or malformed arrays and unsupported user authentication.
+- Normalize structured inline citations and footer sources, including snippet
+  and source metadata, through messages, events, and recursive AI context.
+  Existing messages without citation elements retain their output shape.
+- Review and pin Google Chat discovery revision `20261107`. Retain conservative
+  upload/reaction auth gates where Google scope metadata contradicts its prose.
+- Validate the pinned discovery baseline offline in ordinary CI, keeping the
+  strict live drift check in the weekly/manual workflow and explicit command.
+  Fix schema fingerprints to include properties named `id`, `title`, and
+  `annotations` rather than mistaking them for descriptive metadata.
+
 ## 0.1.0-beta.4 — 2026-09-28
 
 - Adopt the reviewed Google Chat discovery revision `20260920` after the

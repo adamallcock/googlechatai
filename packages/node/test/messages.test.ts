@@ -1402,7 +1402,7 @@ describe("Developer Preview message search", () => {
     ).toThrow(/positive integer/);
   });
 
-  it("plans replaceCards and rejects empty card lists", () => {
+  it("plans replaceCards with populated and explicitly empty card lists", () => {
     const plan = planReplaceCards({
       message: "spaces/AAA/messages/BBB",
       cardsV2: [{ cardId: "x", card: {} }],
@@ -1410,8 +1410,44 @@ describe("Developer Preview message search", () => {
     expect(plan.requests[0]?.path).toBe(
       "/v1/spaces/AAA/messages/BBB:replaceCards",
     );
-    expect(() =>
-      planReplaceCards({ message: "spaces/AAA/messages/BBB", cardsV2: [] }),
-    ).toThrow(/at least one card/);
+    expect(plan.requests[0]?.body).toEqual({ cardsV2: [{ cardId: "x", card: {} }] });
+    expect(plan.warnings).toEqual([]);
+    const clearPlan = planReplaceCards({
+      message: "spaces/AAA/messages/BBB",
+      cardsV2: [],
+    });
+    expect(clearPlan.requests[0]?.body).toEqual({ cardsV2: [] });
+    expect(clearPlan.replaceCards).toEqual({
+      message: "spaces/AAA/messages/BBB",
+      cardCount: 0,
+    });
+    expect(clearPlan.warnings[0]).toContain("cannot add cards back");
+    expect(clearPlan.dryRun).toBe(true);
+    expect(clearPlan.capability).toMatchObject({ ok: true, authMode: "app" });
+  });
+
+  it("does not turn missing or malformed cards into a destructive clear", () => {
+    for (const cardsV2 of [undefined, null, {}, "", false, 0]) {
+      expect(() =>
+        planReplaceCards({
+          message: "spaces/AAA/messages/BBB",
+          cardsV2: cardsV2 as unknown as unknown[],
+        }),
+      ).toThrow(/Expected cardsV2 to be an array/);
+    }
+  });
+
+  it("reports that replaceCards requires app authentication", () => {
+    const plan = planReplaceCards({
+      message: "spaces/AAA/messages/BBB",
+      cardsV2: [],
+      authMode: "user",
+    });
+    expect(plan.capability).toEqual({
+      ok: false,
+      authMode: "user",
+      requiredScopes: ["https://www.googleapis.com/auth/chat.bot"],
+      reasons: ["spaces.messages.replaceCards requires app authentication."],
+    });
   });
 });

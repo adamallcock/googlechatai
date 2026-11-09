@@ -279,6 +279,8 @@ export type {
 } from "./cards/index.js";
 export type {
   ChatIdentity,
+  CitedSource,
+  MessageElements,
   MessageAccessState,
   MessageContextNode,
   NormalizedMessageAst,

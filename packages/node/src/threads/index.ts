@@ -1,3 +1,4 @@
+import { normalizeElements, elementsSystemNotes } from "../message-ast/index.js";
 import {
   renderIdentitySystemNote,
   resolveHumanIdentity,
@@ -770,6 +771,10 @@ function normalizeContextMessage(
   }
 
   systemNotes.push(...reactionNotes(raw));
+  const elements = normalizeElements(raw.elements);
+  if (raw.deletionMetadata === undefined && raw.deleteTime === undefined) {
+    systemNotes.push(...elementsSystemNotes(elements));
+  }
 
   return {
     ref: { name },
@@ -780,6 +785,7 @@ function normalizeContextMessage(
     relationship,
     text,
     plainTextForModel: text,
+    ...(elements && raw.deletionMetadata === undefined && raw.deleteTime === undefined ? { elements } : {}),
     attachments,
     quotedMessages,
     systemNotes,

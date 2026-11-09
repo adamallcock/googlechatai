@@ -45,7 +45,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Validate
         run: pnpm validate
-      - name: Discovery check
-        run: pnpm discovery:check
+      - name: Validate reviewed discovery baseline (offline)
+        run: node tools/discovery/check-baseline.mjs
       - name: Release hygiene
         run: pnpm release:check

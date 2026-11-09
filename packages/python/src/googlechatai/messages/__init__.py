@@ -1837,9 +1837,9 @@ _SEARCH_PRIVACY_NOTE = (
     "Message search reads user-visible conversations; execute only with explicit "
     "user authorization and bounded filters."
 )
-_REPLACE_CARDS_DOCS_LISTED_NOTE = (
-    "spaces.messages.replaceCards is a docs-listed surface; "
-    "verify live support before relying on it."
+_REPLACE_CARDS_CLEAR_NOTE = (
+    "An empty cardsV2 list removes the cards. After removing cards from a "
+    "human-created message, the app cannot add cards back to that message."
 )
 
 
@@ -2266,9 +2266,10 @@ def _project_search_context_value(
 
 def plan_replace_cards(input_value: Mapping[str, Any]) -> JsonObject:
     message = _required_string(input_value, "message")
-    cards = _as_list(input_value.get("cardsV2"))
-    if len(cards) == 0:
-        raise TypeError("Expected cardsV2 to include at least one card.")
+    cards = input_value.get("cardsV2")
+    if not isinstance(cards, list):
+        raise TypeError("Expected cardsV2 to be an array; use [] to remove cards.")
+    requested_auth_mode = _auth_mode(input_value)
 
     return _call_plan(
         "messages.replaceCards",
@@ -2282,7 +2283,13 @@ def plan_replace_cards(input_value: Mapping[str, Any]) -> JsonObject:
                 "body": {"cardsV2": cards},
             }
         ],
-        warnings=[_REPLACE_CARDS_DOCS_LISTED_NOTE],
+        capability_ok=requested_auth_mode == "app",
+        capability_reasons=(
+            []
+            if requested_auth_mode == "app"
+            else ["spaces.messages.replaceCards requires app authentication."]
+        ),
+        warnings=[_REPLACE_CARDS_CLEAR_NOTE] if len(cards) == 0 else [],
         extra={
             "replaceCards": {
                 "message": message,
